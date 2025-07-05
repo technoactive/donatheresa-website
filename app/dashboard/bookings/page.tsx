@@ -1,8 +1,8 @@
-import * as React from "react"
+import React from "react"
 import { BookingsTable } from "@/components/dashboard/bookings-table"
+import { getBookings, getBookingSettings } from "@/lib/database"
 import type { Booking } from "@/lib/types"
 import { RefreshCw, Users, CalendarCheck, Clock, Users2 } from "lucide-react"
-import { getBookings, getBookingSettings, type BookingWithCustomer } from "@/lib/database"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { revalidatePath } from "next/cache"
@@ -76,113 +76,57 @@ async function refreshBookings() {
   redirect('/dashboard/bookings')
 }
 
+// Force dynamic rendering since this page uses cookies for authentication
+export const dynamic = 'force-dynamic'
+
 export default async function BookingsPage() {
-  let bookingsData: BookingWithCustomer[] = []
-  let bookingSettings = null
-  let error = null
-
+  console.log('[SERVER] Loading bookings page...')
+  
   try {
-    console.log('[SERVER] Loading bookings page...')
-    const results = await Promise.allSettled([
-      getBookings(),
-      getBookingSettings()
+    const [bookingsData, bookingSettings] = await Promise.all([
+      getBookings().catch(error => {
+        console.error('[SERVER] Failed to load bookings:', error);
+        return [];
+      }),
+      getBookingSettings().catch(error => {
+        console.error('[SERVER] Failed to load booking settings:', error);
+        return null;
+      })
     ])
-    
-    if (results[0].status === 'fulfilled') {
-      bookingsData = results[0].value
-      console.log('[SERVER] Bookings loaded:', bookingsData.length)
-    } else {
-      console.error('[SERVER] Failed to load bookings:', results[0].reason)
-      error = 'Failed to load bookings'
-    }
-    
-    if (results[1].status === 'fulfilled') {
-      bookingSettings = results[1].value
-    } else {
-      console.error('[SERVER] Failed to load booking settings:', results[1].reason)
-    }
-  } catch (err) {
-    console.error('[SERVER] Error in bookings page:', err)
-    error = 'Database connection error'
-  }
 
-  // Transform BookingWithCustomer to Booking format for the table
-  const bookings: Booking[] = bookingsData.map(booking => ({
-    id: booking.id,
-    customerName: booking.customer.name,
-    customerEmail: booking.customer.email,
-    partySize: booking.party_size,
-    bookingTime: new Date(`${booking.booking_date}T${booking.booking_time}`),
-    status: booking.status,
-    notes: booking.special_requests || ""
-  }))
+    // Transform BookingWithCustomer to Booking format for the table
+    const bookings: Booking[] = bookingsData.map(booking => ({
+      id: booking.id,
+      customerName: booking.customer.name,
+      customerEmail: booking.customer.email,
+      partySize: booking.party_size,
+      bookingTime: new Date(`${booking.booking_date}T${booking.booking_time}`),
+      status: booking.status as "pending" | "confirmed" | "cancelled",
+      notes: booking.special_requests || ""
+    }))
 
-  // Show error state if data failed to load
-  if (error) {
     return (
-      <div className="w-full max-w-full space-y-4 md:space-y-6 lg:space-y-8">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-          <div className="space-y-1">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold">Booking Management</h1>
-            <p className="text-red-500 text-sm sm:text-base">Error: {error}</p>
-          </div>
-          
-          <form action={refreshBookings}>
-            <Button type="submit" variant="outline" className="w-full sm:w-auto">
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Retry
-            </Button>
-          </form>
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight">Bookings</h2>
+          <p className="text-muted-foreground">
+            Manage all your restaurant reservations.
+          </p>
         </div>
-
-        <Card className="w-full">
-          <CardContent className="p-6 text-center">
-            <p className="text-muted-foreground">Unable to load booking data. Please check your database connection and try again.</p>
-          </CardContent>
-        </Card>
+        <BookingsTable bookings={bookings} />
+      </div>
+    )
+  } catch (error) {
+    console.error('[SERVER] Error in BookingsPage:', error)
+    return (
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight">Bookings</h2>
+          <p className="text-muted-foreground">
+            Unable to load bookings at this time.
+          </p>
+        </div>
       </div>
     )
   }
-
-  return (
-    <div className="w-full max-w-full space-y-4 md:space-y-6 lg:space-y-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-        <div className="space-y-1">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold">Booking Management</h1>
-          <p className="text-muted-foreground text-sm sm:text-base">
-            View and manage reservations ({bookings.length} total)
-          </p>
-        </div>
-        
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <form action={refreshBookings}>
-            <Button
-              type="submit"
-              variant="outline"
-              className="w-full sm:w-auto"
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh
-            </Button>
-          </form>
-          
-          {/* Toggle Bookings Button - TODO: Implement later */}
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="w-full max-w-full space-y-4 md:space-y-6">
-        <ServerDailyStats bookings={bookings} />
-        <Card className="w-full transition-colors hover:bg-accent/5">
-          <CardContent className="p-3 sm:p-4 md:p-6">
-            <BookingsTable
-              bookings={bookings}
-            />
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  )
 }

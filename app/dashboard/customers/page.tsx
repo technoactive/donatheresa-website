@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button"
 import { RefreshCw } from "lucide-react"
 import type { Customer } from "@/lib/types"
 
+// Force dynamic rendering since this page uses cookies for authentication
+export const dynamic = 'force-dynamic'
+
 export default async function CustomersPage() {
   console.log('[SERVER] Loading customers page...')
   
