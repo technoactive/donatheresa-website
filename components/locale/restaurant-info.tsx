@@ -11,6 +11,7 @@ interface RestaurantInfoProps {
 
 export function RestaurantInfo({ type, className, fallback }: RestaurantInfoProps) {
   const [localeSettings, setLocaleSettings] = React.useState<LocaleSettings | null>(null)
+  const [loading, setLoading] = React.useState(true)
 
   React.useEffect(() => {
     const loadSettings = async () => {
@@ -19,20 +20,22 @@ export function RestaurantInfo({ type, className, fallback }: RestaurantInfoProp
         if (response.ok) {
           const settings = await response.json()
           setLocaleSettings(settings)
+        } else {
+          console.warn('Failed to load locale settings from API')
         }
       } catch (error) {
         console.error('Error loading locale settings:', error)
+      } finally {
+        setLoading(false)
       }
     }
 
     loadSettings()
   }, [])
 
-  if (!localeSettings) {
-    return <span className={className}>{fallback || '...'}</span>
-  }
-
   const getValue = () => {
+    if (!localeSettings) return fallback || ''
+    
     switch (type) {
       case 'name':
         return localeSettings.restaurant_name
@@ -51,6 +54,11 @@ export function RestaurantInfo({ type, className, fallback }: RestaurantInfoProp
     }
   }
 
+  // Show loading skeleton only briefly to avoid flash
+  if (loading && !fallback) {
+    return <span className={className}>...</span>
+  }
+
   return <span className={className}>{getValue()}</span>
 }
 
@@ -61,6 +69,7 @@ interface RestaurantPhoneLinkProps {
 
 export function RestaurantPhoneLink({ className, children }: RestaurantPhoneLinkProps) {
   const [phone, setPhone] = React.useState<string | null>(null)
+  const [loading, setLoading] = React.useState(true)
 
   React.useEffect(() => {
     const loadPhone = async () => {
@@ -69,17 +78,25 @@ export function RestaurantPhoneLink({ className, children }: RestaurantPhoneLink
         if (response.ok) {
           const settings = await response.json()
           setPhone(settings.restaurant_phone)
+        } else {
+          console.warn('Failed to load phone from API')
         }
       } catch (error) {
         console.error('Error loading phone:', error)
+      } finally {
+        setLoading(false)
       }
     }
 
     loadPhone()
   }, [])
 
-  if (!phone) {
+  if (loading) {
     return <span className={className}>{children || '...'}</span>
+  }
+
+  if (!phone) {
+    return <span className={className}>{children || 'Phone not available'}</span>
   }
 
   // Convert phone to tel: format (remove spaces and special chars)
