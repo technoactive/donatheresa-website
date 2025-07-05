@@ -45,6 +45,7 @@ export interface BookingSettings {
   booking_enabled: boolean
   max_advance_days: number
   max_party_size: number
+  total_seats: number
   available_times: string[]
   closed_dates: string[]
   closed_days_of_week: number[]

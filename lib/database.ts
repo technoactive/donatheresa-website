@@ -35,6 +35,7 @@ export interface BookingSettings {
   booking_enabled: boolean
   max_advance_days: number
   max_party_size: number
+  total_seats: number
   available_times: string[]
   closed_dates: string[]
   closed_days_of_week: number[]
@@ -426,6 +427,7 @@ export async function getBookingSettings(): Promise<BookingSettings> {
     booking_enabled: true,
     max_advance_days: 30,
     max_party_size: 8,
+    total_seats: 0,
     available_times: [
       "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
       "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30"
@@ -461,6 +463,7 @@ export async function getBookingSettings(): Promise<BookingSettings> {
       booking_enabled: configData.booking_enabled ?? defaultSettings.booking_enabled,
       max_advance_days: configData.max_advance_days ?? defaultSettings.max_advance_days,
       max_party_size: configData.max_party_size ?? defaultSettings.max_party_size,
+      total_seats: configData.total_seats ?? defaultSettings.total_seats,
       available_times: configData.available_times ?? defaultSettings.available_times,
       closed_dates: configData.closed_dates ?? defaultSettings.closed_dates,
       closed_days_of_week: configData.closed_days_of_week ?? defaultSettings.closed_days_of_week,
@@ -487,6 +490,7 @@ export async function updateBookingSettings(settings: Partial<BookingSettings>):
     if (settings.booking_enabled !== undefined) updateData.booking_enabled = settings.booking_enabled
     if (settings.max_advance_days !== undefined) updateData.max_advance_days = settings.max_advance_days
     if (settings.max_party_size !== undefined) updateData.max_party_size = settings.max_party_size
+    if (settings.total_seats !== undefined) updateData.total_seats = settings.total_seats
     if (settings.suspension_message !== undefined) updateData.suspension_message = settings.suspension_message
     if (settings.maintenance_mode !== undefined) updateData.maintenance_mode = settings.maintenance_mode
     
@@ -591,6 +595,9 @@ export async function getDashboardStats() {
     const lastWeek = new Date(today)
     lastWeek.setDate(lastWeek.getDate() - 7)
     
+    // Get booking settings for seating capacity
+    const bookingSettings = await getBookingSettings()
+    
     // Today's bookings
     const { data: todayBookings, error: todayError } = await supabase
       .from('bookings')
@@ -631,6 +638,11 @@ export async function getDashboardStats() {
     // Calculate total guests today
     const totalGuestsToday = todayBookings?.reduce((sum, booking) => sum + booking.party_size, 0) || 0
     
+    // Calculate occupancy percentage
+    const occupancyPercentage = bookingSettings.total_seats > 0 
+      ? Math.min(Math.round((totalGuestsToday / bookingSettings.total_seats) * 100), 100)
+      : 0
+    
     return {
       todayBookings: todayBookings?.length || 0,
       yesterdayBookings: yesterdayCount || 0,
@@ -639,6 +651,8 @@ export async function getDashboardStats() {
       confirmedToday: confirmedToday.length,
       pendingToday: pendingToday.length,
       totalGuestsToday,
+      totalSeats: bookingSettings.total_seats,
+      occupancyPercentage,
       // Calculate percentage changes
       bookingChange: yesterdayCount ? Math.round(((todayBookings?.length || 0) - yesterdayCount) / yesterdayCount * 100) : 0,
       customerGrowth: totalCustomers ? Math.round((newCustomersThisWeek || 0) / (totalCustomers || 1) * 100) : 0
@@ -653,6 +667,8 @@ export async function getDashboardStats() {
       confirmedToday: 0,
       pendingToday: 0,
       totalGuestsToday: 0,
+      totalSeats: 0,
+      occupancyPercentage: 0,
       bookingChange: 0,
       customerGrowth: 0
     }

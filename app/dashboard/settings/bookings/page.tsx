@@ -56,6 +56,7 @@ export default function BookingSettingsPage() {
     booking_enabled: true,
     max_advance_days: 30,
     max_party_size: 8,
+    total_seats: 50,
     available_times: [],
     closed_dates: [],
     closed_days_of_week: [],
@@ -102,7 +103,14 @@ export default function BookingSettingsPage() {
     try {
       setIsLoading(true)
       const settings = await getBookingSettingsAction()
-      setBookingSettings(settings)
+      
+      // Ensure total_seats has a default value
+      const settingsWithDefaults = {
+        ...settings,
+        total_seats: settings.total_seats || 50
+      }
+      
+      setBookingSettings(settingsWithDefaults)
       
       if (settings.service_periods && settings.service_periods.length > 0) {
         const periods = settings.service_periods.map((period: ServicePeriod, index: number) => ({
@@ -243,6 +251,7 @@ export default function BookingSettingsPage() {
       formData.append('suspensionMessage', bookingSettings.suspension_message)
       formData.append('maxPartySize', (bookingSettings.max_party_size || 8).toString())
       formData.append('maxAdvanceDays', (bookingSettings.max_advance_days || 30).toString())
+      formData.append('totalSeats', (bookingSettings.total_seats || 50).toString())
       formData.append('closedDates', JSON.stringify(bookingSettings.closed_dates))
       formData.append('closedDaysOfWeek', JSON.stringify(bookingSettings.closed_days_of_week || []))
       
@@ -340,6 +349,24 @@ export default function BookingSettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="totalSeats">Total Restaurant Seats</Label>
+                <Input
+                  id="totalSeats"
+                  type="number"
+                  min="1"
+                  max="500"
+                  value={bookingSettings.total_seats && bookingSettings.total_seats > 0 ? bookingSettings.total_seats : ''}
+                  onChange={(e) => setBookingSettings(prev => ({
+                    ...prev, 
+                    total_seats: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
+                  }))}
+                  placeholder=""
+                />
+                <p className="text-sm text-muted-foreground">
+                  Total seating capacity for occupancy calculations
+                </p>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="maxAdvanceDays">Maximum Advance Days</Label>
                 <Input
