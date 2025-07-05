@@ -101,7 +101,7 @@ const MobileCustomerCard = React.memo(({
   onEdit: (customer: Customer) => void
   onDelete: (customer: Customer) => void
 }) => (
-  <Card className="w-full">
+  <Card className="w-full mobile-card-touch card-touch swipe-indicator">
     <CardContent className="p-4 space-y-3">
       {/* Header with name */}
       <div className="flex items-start justify-between">
@@ -112,17 +112,17 @@ const MobileCustomerCard = React.memo(({
       </div>
       
       {/* Customer details */}
-      <div className="grid grid-cols-1 gap-3 text-sm">
+      <div className="grid grid-cols-1 gap-3 text-sm touch-spacing">
         <div>
           <p className="text-muted-foreground">Phone</p>
           <p className="font-medium">{formatUKPhoneNumber(customer.phone) || "No phone"}</p>
         </div>
-        <div className="flex justify-end gap-2 pt-2">
-          <Button variant="ghost" size="sm" onClick={() => onEdit(customer)} className="h-8">
+        <div className="flex justify-end gap-2 pt-2 touch-spacing">
+          <Button variant="ghost" size="sm" onClick={() => onEdit(customer)} className="h-8 touch-target card-action-touch">
             <PencilIcon />
             <span className="ml-1">Edit</span>
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => onDelete(customer)} className="h-8 text-red-600 hover:text-red-700">
+          <Button variant="ghost" size="sm" onClick={() => onDelete(customer)} className="h-8 text-red-600 hover:text-red-700 touch-target card-action-touch">
             <Trash2Icon />
             <span className="ml-1">Delete</span>
           </Button>
@@ -169,9 +169,9 @@ export function CustomersTable({ customers }: CustomersTableProps) {
   }
 
   return (
-    <div className="w-full space-y-4">
+    <div className="w-full space-y-4 touch-spacing">
       {/* Mobile view - Card layout for screens smaller than md */}
-      <div className="block md:hidden space-y-3">
+      <div className="block md:hidden space-y-3 touch-spacing">
         {customers.length ? (
           customers.map((customer) => (
             <MobileCustomerCard
@@ -182,7 +182,7 @@ export function CustomersTable({ customers }: CustomersTableProps) {
             />
           ))
         ) : (
-          <Card>
+          <Card className="card-touch">
             <CardContent className="p-6 text-center">
               <p className="text-muted-foreground">No customers found.</p>
             </CardContent>
@@ -192,29 +192,29 @@ export function CustomersTable({ customers }: CustomersTableProps) {
 
       {/* Desktop view - Table layout for md screens and larger */}
       <div className="hidden md:block">
-        <div className="rounded-md border overflow-x-auto">
-          <Table>
+        <div className="rounded-md border overflow-x-auto scroll-area-touch">
+          <Table className="table-touch">
             <TableHeader>
-              <TableRow>
-                <TableHead className="min-w-[150px]">Name</TableHead>
-                <TableHead className="min-w-[200px]">Email</TableHead>
-                <TableHead className="min-w-[140px]">Phone</TableHead>
-                <TableHead className="text-right min-w-[120px]">Actions</TableHead>
+              <TableRow className="table-row">
+                <TableHead className="min-w-[150px] table-cell">Name</TableHead>
+                <TableHead className="min-w-[200px] table-cell">Email</TableHead>
+                <TableHead className="min-w-[140px] table-cell">Phone</TableHead>
+                <TableHead className="text-right min-w-[120px] table-cell">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {customers.length ? (
                 customers.map((customer) => (
-                  <TableRow key={customer.id}>
-                    <TableCell className="font-medium">{customer.name}</TableCell>
-                    <TableCell>{customer.email}</TableCell>
-                    <TableCell>{formatUKPhoneNumber(customer.phone)}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-1">
-                        <Button variant="ghost" size="icon" onClick={() => handleEditClick(customer)} className="h-8 w-8">
+                  <TableRow key={customer.id} className="table-row">
+                    <TableCell className="font-medium table-cell">{customer.name}</TableCell>
+                    <TableCell className="table-cell">{customer.email}</TableCell>
+                    <TableCell className="table-cell">{formatUKPhoneNumber(customer.phone)}</TableCell>
+                    <TableCell className="text-right table-cell">
+                      <div className="flex justify-end gap-1 touch-spacing">
+                        <Button variant="ghost" size="icon" onClick={() => handleEditClick(customer)} className="h-8 w-8 touch-target card-action-touch">
                           <PencilIcon />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(customer)} className="h-8 w-8">
+                        <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(customer)} className="h-8 w-8 touch-target card-action-touch">
                           <Trash2Icon />
                         </Button>
                       </div>
@@ -222,8 +222,8 @@ export function CustomersTable({ customers }: CustomersTableProps) {
                   </TableRow>
                 ))
               ) : (
-                <TableRow>
-                  <TableCell colSpan={4} className="h-24 text-center">
+                <TableRow className="table-row">
+                  <TableCell colSpan={4} className="h-24 text-center table-cell">
                     No customers found.
                   </TableCell>
                 </TableRow>

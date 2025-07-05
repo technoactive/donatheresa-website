@@ -90,7 +90,7 @@ export function EditBookingDialog({ booking, onSave, onOpenChange }: EditBooking
 
   return (
     <Dialog open={true} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] dialog-touch">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Edit Booking</DialogTitle>
@@ -98,63 +98,70 @@ export function EditBookingDialog({ booking, onSave, onOpenChange }: EditBooking
               Make changes to the reservation for {booking.customerName}.
             </DialogDescription>
           </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="customerName" className="text-right">
-                Name *
-              </Label>
-              <Input 
-                id="customerName" 
-                name="customerName" 
-                defaultValue={booking.customerName} 
-                className="col-span-3"
-                required
-              />
+          <div className="grid gap-4 py-4 dialog-content touch-spacing-lg">
+            <div className="grid grid-cols-1 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="customerName">
+                  Name *
+                </Label>
+                <Input 
+                  id="customerName" 
+                  name="customerName" 
+                  defaultValue={booking.customerName} 
+                  className="input-touch"
+                  required
+                />
+              </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="partySize" className="text-right">
-                Party Size *
-              </Label>
-              <Input
-                id="partySize"
-                name="partySize"
-                type="number"
-                min="1"
-                max="12"
-                defaultValue={booking.partySize}
-                className="col-span-3"
-                required
-              />
+            <div className="grid grid-cols-1 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="partySize">
+                  Party Size *
+                </Label>
+                <Input
+                  id="partySize"
+                  name="partySize"
+                  type="number"
+                  min="1"
+                  max="12"
+                  defaultValue={booking.partySize}
+                  className="input-touch"
+                  required
+                />
+              </div>
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="status" className="text-right">
-                Status *
-              </Label>
-              <Select defaultValue={booking.status} name="status" required>
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="confirmed">Confirmed</SelectItem>
-                  <SelectItem value="cancelled">Cancelled</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-1 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="status">
+                  Status *
+                </Label>
+                <Select defaultValue={booking.status} name="status" required>
+                  <SelectTrigger className="dropdown-trigger-touch">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent className="touch-spacing">
+                    <SelectItem value="pending" className="touch-target">Pending</SelectItem>
+                    <SelectItem value="confirmed" className="touch-target">Confirmed</SelectItem>
+                    <SelectItem value="cancelled" className="touch-target">Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="dialog-footer touch-spacing">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isPending}
+              className="btn-touch touch-target"
             >
               Cancel
             </Button>
             <Button 
               type="submit" 
               disabled={isPending}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 btn-touch touch-target"
             >
               {isPending ? (
                 <>

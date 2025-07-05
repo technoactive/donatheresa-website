@@ -20,33 +20,33 @@ export function Sidebar() {
   ]
 
   return (
-    <div className="fixed top-0 left-0 z-40 w-[220px] lg:w-[280px] h-full border-r bg-muted/40 hidden md:block">
+    <div className="fixed top-0 left-0 z-40 w-[220px] lg:w-[280px] sidebar-touch h-full border-r bg-muted/40 hidden md:block">
       <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-          <Link href="/" className="flex items-center gap-2 font-semibold">
+        <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6 header-touch">
+          <Link href="/" className="flex items-center gap-2 font-semibold touch-target active-touch">
             <UtensilsCrossed className="h-6 w-6" />
             <span className=""><RestaurantInfo type="name" fallback="Dona Theresa" /></span>
           </Link>
-          <Button variant="outline" size="icon" className="ml-auto h-8 w-8 bg-transparent">
+          <Button variant="outline" size="icon" className="ml-auto h-8 w-8 bg-transparent touch-target notification-badge-touch">
             <Bell className="h-4 w-4" />
             <span className="sr-only">Toggle notifications</span>
           </Button>
         </div>
-        <div className="flex-1 overflow-auto py-2">
-          <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+        <div className="flex-1 overflow-auto py-2 scroll-area-touch">
+          <nav className="grid items-start px-2 text-sm font-medium lg:px-4 touch-spacing">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary nav-item touch-target active-touch ripple-touch",
                   pathname === link.href && "bg-muted text-primary",
                 )}
               >
-                <link.icon className="h-4 w-4" />
-                {link.label}
+                <link.icon className="h-5 w-5" />
+                <span className="font-medium">{link.label}</span>
                 {link.badge && (
-                  <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
+                  <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full badge-touch">
                     {link.badge}
                   </Badge>
                 )}

@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
-import { Loader2, Globe, MapPin, Clock, DollarSign, Calendar, Phone, Building, RefreshCw, Save } from 'lucide-react'
+import { Globe, MapPin, Clock, DollarSign, Calendar, Phone, Building, RefreshCw, Save } from 'lucide-react'
 import { getLocaleSettings, updateLocaleSettings } from './actions'
 import { commonTimezones, commonCountries, commonLanguages } from '@/lib/locale-utils'
 import { type LocaleSettings } from '@/lib/types'
@@ -104,9 +104,9 @@ export default function LocaleSettingsPage() {
         title="Locale Settings"
         description="Configure location, timezone, currency and formatting preferences"
       >
-        <div className="flex items-center justify-center p-8">
+        <div className="flex items-center justify-center py-12">
           <div className="text-center">
-            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-muted-foreground" />
+            <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-muted-foreground" />
             <p className="text-muted-foreground">Loading settings...</p>
           </div>
         </div>
@@ -134,24 +134,24 @@ export default function LocaleSettingsPage() {
         variant: "outline"
       }}
     >
-      <div className="grid gap-6">
+      <div className="w-full max-w-full space-y-4 md:space-y-6">
         {/* Location & Timezone */}
-        <Card className="bg-zinc-900 border-zinc-800">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-white flex items-center gap-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
               <MapPin className="h-5 w-5" />
               Location & Timezone
             </CardTitle>
-            <CardDescription className="text-zinc-400">
+            <CardDescription>
               Configure your restaurant's location and timezone for accurate booking times
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="country" className="text-sm font-medium text-zinc-300">Country</Label>
+                <Label htmlFor="country">Country</Label>
                 <Select value={localeSettings.country_code} onValueChange={handleCountryChange}>
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                  <SelectTrigger>
                     <SelectValue placeholder="Select country" />
                   </SelectTrigger>
                   <SelectContent>
@@ -165,9 +165,9 @@ export default function LocaleSettingsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="timezone" className="text-sm font-medium text-zinc-300">Timezone</Label>
+                <Label htmlFor="timezone">Timezone</Label>
                 <Select value={localeSettings.restaurant_timezone} onValueChange={handleTimezoneChange}>
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                  <SelectTrigger>
                     <SelectValue placeholder="Select timezone" />
                   </SelectTrigger>
                   <SelectContent>
@@ -182,12 +182,12 @@ export default function LocaleSettingsPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="language" className="text-sm font-medium text-zinc-300">Language</Label>
+              <Label htmlFor="language">Language</Label>
               <Select 
                 value={localeSettings.language_code} 
                 onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, language_code: value }))}
               >
-                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                <SelectTrigger>
                   <SelectValue placeholder="Select language" />
                 </SelectTrigger>
                 <SelectContent>
@@ -203,47 +203,45 @@ export default function LocaleSettingsPage() {
         </Card>
 
         {/* Currency & Number Formatting */}
-        <Card className="bg-zinc-900 border-zinc-800">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-white flex items-center gap-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
               <DollarSign className="h-5 w-5" />
               Currency & Number Formatting
             </CardTitle>
-            <CardDescription className="text-zinc-400">
+            <CardDescription>
               Set currency and number formatting preferences for your locale
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="currency_code" className="text-sm font-medium text-zinc-300">Currency Code</Label>
+                <Label htmlFor="currency_code">Currency Code</Label>
                 <Input
                   id="currency_code"
                   value={localeSettings.currency_code}
                   onChange={(e) => setLocaleSettings(prev => ({ ...prev, currency_code: e.target.value }))}
                   placeholder="GBP"
-                  className="bg-zinc-800 border-zinc-700 text-white"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="currency_symbol" className="text-sm font-medium text-zinc-300">Currency Symbol</Label>
+                <Label htmlFor="currency_symbol">Currency Symbol</Label>
                 <Input
                   id="currency_symbol"
                   value={localeSettings.currency_symbol}
                   onChange={(e) => setLocaleSettings(prev => ({ ...prev, currency_symbol: e.target.value }))}
                   placeholder="£"
-                  className="bg-zinc-800 border-zinc-700 text-white"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="currency_decimal_places" className="text-sm font-medium text-zinc-300">Decimal Places</Label>
+                <Label htmlFor="currency_decimal_places">Decimal Places</Label>
                 <Select 
                   value={localeSettings.currency_decimal_places.toString()} 
                   onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, currency_decimal_places: parseInt(value) }))}
                 >
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                  <SelectTrigger>
                     <SelectValue placeholder="Select decimal places" />
                   </SelectTrigger>
                   <SelectContent>
@@ -258,12 +256,12 @@ export default function LocaleSettingsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="decimal_separator" className="text-sm font-medium text-zinc-300">Decimal Separator</Label>
+                <Label htmlFor="decimal_separator">Decimal Separator</Label>
                 <Select 
                   value={localeSettings.decimal_separator} 
                   onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, decimal_separator: value }))}
                 >
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                  <SelectTrigger>
                     <SelectValue placeholder="Select separator" />
                   </SelectTrigger>
                   <SelectContent>
@@ -274,12 +272,12 @@ export default function LocaleSettingsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="thousands_separator" className="text-sm font-medium text-zinc-300">Thousands Separator</Label>
+                <Label htmlFor="thousands_separator">Thousands Separator</Label>
                 <Select 
                   value={localeSettings.thousands_separator} 
                   onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, thousands_separator: value }))}
                 >
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                  <SelectTrigger>
                     <SelectValue placeholder="Select separator" />
                   </SelectTrigger>
                   <SelectContent>
@@ -295,25 +293,25 @@ export default function LocaleSettingsPage() {
         </Card>
 
         {/* Date & Time Formatting */}
-        <Card className="bg-zinc-900 border-zinc-800">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-white flex items-center gap-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
               Date & Time Formatting
             </CardTitle>
-            <CardDescription className="text-zinc-400">
+            <CardDescription>
               Configure how dates and times are displayed in your system
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="date_format" className="text-sm font-medium text-zinc-300">Date Format</Label>
+                <Label htmlFor="date_format">Date Format</Label>
                 <Select 
                   value={localeSettings.date_format} 
                   onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, date_format: value }))}
                 >
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                  <SelectTrigger>
                     <SelectValue placeholder="Select date format" />
                   </SelectTrigger>
                   <SelectContent>
@@ -326,12 +324,12 @@ export default function LocaleSettingsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="time_format" className="text-sm font-medium text-zinc-300">Time Format</Label>
+                <Label htmlFor="time_format">Time Format</Label>
                 <Select 
                   value={localeSettings.time_format} 
                   onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, time_format: value }))}
                 >
-                  <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                  <SelectTrigger>
                     <SelectValue placeholder="Select time format" />
                   </SelectTrigger>
                   <SelectContent>
@@ -345,12 +343,12 @@ export default function LocaleSettingsPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="first_day_of_week" className="text-sm font-medium text-zinc-300">First Day of Week</Label>
+              <Label htmlFor="first_day_of_week">First Day of Week</Label>
               <Select 
                 value={localeSettings.first_day_of_week.toString()} 
                 onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, first_day_of_week: parseInt(value) }))}
               >
-                <SelectTrigger className="bg-zinc-800 border-zinc-700 text-white">
+                <SelectTrigger>
                   <SelectValue placeholder="Select first day" />
                 </SelectTrigger>
                 <SelectContent>
@@ -368,70 +366,65 @@ export default function LocaleSettingsPage() {
         </Card>
 
         {/* Restaurant Details */}
-        <Card className="bg-zinc-900 border-zinc-800">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-white flex items-center gap-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
               <Building className="h-5 w-5" />
               Restaurant Details
             </CardTitle>
-            <CardDescription className="text-zinc-400">
+            <CardDescription>
               Update your restaurant's contact information and address
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="restaurant_name" className="text-sm font-medium text-zinc-300">Restaurant Name</Label>
+              <Label htmlFor="restaurant_name">Restaurant Name</Label>
               <Input
                 id="restaurant_name"
                 value={localeSettings.restaurant_name}
                 onChange={(e) => setLocaleSettings(prev => ({ ...prev, restaurant_name: e.target.value }))}
                 placeholder="Dona Theresa"
-                className="bg-zinc-800 border-zinc-700 text-white"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="restaurant_phone" className="text-sm font-medium text-zinc-300">Phone Number</Label>
+              <Label htmlFor="restaurant_phone">Phone Number</Label>
               <Input
                 id="restaurant_phone"
                 value={localeSettings.restaurant_phone}
                 onChange={(e) => setLocaleSettings(prev => ({ ...prev, restaurant_phone: e.target.value }))}
                 placeholder="+44 20 8421 5550"
-                className="bg-zinc-800 border-zinc-700 text-white"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="restaurant_address" className="text-sm font-medium text-zinc-300">Address</Label>
+              <Label htmlFor="restaurant_address">Address</Label>
               <Input
                 id="restaurant_address"
                 value={localeSettings.restaurant_address}
                 onChange={(e) => setLocaleSettings(prev => ({ ...prev, restaurant_address: e.target.value }))}
                 placeholder="451 Uxbridge Road, Pinner"
-                className="bg-zinc-800 border-zinc-700 text-white"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="restaurant_city" className="text-sm font-medium text-zinc-300">City</Label>
+                <Label htmlFor="restaurant_city">City</Label>
                 <Input
                   id="restaurant_city"
                   value={localeSettings.restaurant_city}
                   onChange={(e) => setLocaleSettings(prev => ({ ...prev, restaurant_city: e.target.value }))}
                   placeholder="London"
-                  className="bg-zinc-800 border-zinc-700 text-white"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="restaurant_postal_code" className="text-sm font-medium text-zinc-300">Postal Code</Label>
+                <Label htmlFor="restaurant_postal_code">Postal Code</Label>
                 <Input
                   id="restaurant_postal_code"
                   value={localeSettings.restaurant_postal_code}
                   onChange={(e) => setLocaleSettings(prev => ({ ...prev, restaurant_postal_code: e.target.value }))}
                   placeholder="HA5 1AA"
-                  className="bg-zinc-800 border-zinc-700 text-white"
                 />
               </div>
             </div>
