@@ -770,24 +770,6 @@ export async function getBookingTrends(days: number = 7) {
   }
 }
 
-// Get pending bookings count for sidebar badge
-export async function getPendingBookingsCount(): Promise<number> {
-  const supabase = await createClient()
-  
-  try {
-    const { count, error } = await supabase
-      .from('bookings')
-      .select('*', { count: 'exact', head: true })
-      .eq('status', 'pending')
-    
-    if (error) throw error
-    return count || 0
-  } catch (error) {
-    console.error('Error getting pending bookings count:', error)
-    return 0
-  }
-}
-
 // Locale Settings functions
 export async function getLocaleSettings(): Promise<LocaleSettings> {
   const supabase = await createClient()

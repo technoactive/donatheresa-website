@@ -4,54 +4,15 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { RestaurantInfo } from "@/components/locale/restaurant-info"
 import { Bell, Home, Calendar, Users, UtensilsCrossed, Settings } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { useEffect, useState } from "react"
-
-// Client component for pending bookings badge
-function PendingBookingsBadge() {
-  const [pendingCount, setPendingCount] = useState<number | null>(null)
-  
-  useEffect(() => {
-    async function fetchPendingCount() {
-      try {
-        const response = await fetch('/api/pending-bookings-count')
-        if (response.ok) {
-          const data = await response.json()
-          setPendingCount(data.count)
-        }
-      } catch (error) {
-        console.error('Error fetching pending bookings count:', error)
-        setPendingCount(0)
-      }
-    }
-    
-    fetchPendingCount()
-    
-    // Refresh every 30 seconds
-    const interval = setInterval(fetchPendingCount, 30000)
-    
-    return () => clearInterval(interval)
-  }, [])
-  
-  if (pendingCount === null || pendingCount === 0) {
-    return null
-  }
-  
-  return (
-    <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full badge-touch">
-      {pendingCount}
-    </Badge>
-  )
-}
 
 export function Sidebar() {
   const pathname = usePathname()
 
   const navLinks = [
     { href: "/dashboard", label: "Dashboard", icon: Home },
-    { href: "/dashboard/bookings", label: "Bookings", icon: Calendar, showBadge: true },
+    { href: "/dashboard/bookings", label: "Bookings", icon: Calendar },
     { href: "/dashboard/customers", label: "Customers", icon: Users },
     { href: "/dashboard/settings", label: "Settings", icon: Settings },
   ]
@@ -82,7 +43,6 @@ export function Sidebar() {
               >
                 <link.icon className="h-5 w-5" />
                 <span className="font-medium">{link.label}</span>
-                {link.showBadge && <PendingBookingsBadge />}
               </Link>
             ))}
           </nav>
