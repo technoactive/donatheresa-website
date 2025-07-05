@@ -4,13 +4,12 @@ import React from "react"
 import { useActionState } from "react"
 import { createBooking } from "@/app/(public)/reserve/actions"
 import { Button } from "@/components/ui/button"
-import { CalendarIcon, User, Mail, Phone, Users, Clock, MessageSquare, Send, CheckCircle, AlertTriangle, Settings } from "lucide-react"
+import { CalendarIcon, User, Mail, Phone, Users, Clock, MessageSquare, Send, CheckCircle, AlertTriangle, Settings, ChevronUp, ChevronDown } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { enGB } from "date-fns/locale"
-import { motion, AnimatePresence } from "framer-motion"
 import { FormattedDate } from "@/components/locale/formatted-date"
 import { type BookingSettings } from "@/lib/types"
 import { Card, CardContent } from "@/components/ui/card"
@@ -25,6 +24,7 @@ export function BookingForm() {
   const [state, formAction, isPending] = useActionState(createBooking, initialState)
   const [date, setDate] = React.useState<Date>()
   const [selectedTime, setSelectedTime] = React.useState<string>("")
+  const [partySize, setPartySize] = React.useState<number>(1)
   const [bookingSettings, setBookingSettings] = React.useState<BookingSettings | null>(null)
 
   // Load booking settings from API with simple polling (client-side only)
@@ -61,6 +61,7 @@ export function BookingForm() {
     if (state?.success) {
       setDate(undefined)
       setSelectedTime("")
+      setPartySize(1)
       // Reset form inputs
       const form = document.querySelector('form') as HTMLFormElement
       if (form) {
@@ -72,11 +73,11 @@ export function BookingForm() {
   // Show loading state
   if (!bookingSettings) {
     return (
-      <div className="bg-gradient-to-br from-zinc-900/95 to-zinc-800/90 p-8 space-y-8 rounded-3xl">
-        <div className="flex items-center justify-center py-12">
-          <div className="flex items-center gap-2 text-zinc-400">
+      <div className="text-center py-12">
+        <div className="bg-white rounded-lg p-6 shadow-lg">
+          <div className="flex items-center justify-center gap-3 text-gray-600">
             <Settings className="w-5 h-5 animate-spin" />
-            Loading booking system...
+            <span className="text-lg font-medium">Loading reservation system...</span>
           </div>
         </div>
       </div>
@@ -86,255 +87,248 @@ export function BookingForm() {
   // Check if bookings are suspended
   if (!bookingSettings.booking_enabled) {
     return (
-      <div className="bg-gradient-to-br from-zinc-900/95 to-zinc-800/90 p-8 space-y-8 rounded-3xl">
-        <div className="text-center space-y-6">
-          <div className="flex justify-center">
-            <div className="w-16 h-16 bg-gradient-to-r from-amber-500/20 to-yellow-400/20 rounded-full flex items-center justify-center border border-amber-400/30">
-              <AlertTriangle className="w-8 h-8 text-amber-400" />
+      <div className="text-center space-y-6">
+        <div className="bg-white rounded-lg p-8 shadow-lg">
+          <div className="flex justify-center mb-6">
+            <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
+              <AlertTriangle className="w-8 h-8 text-yellow-600" />
             </div>
           </div>
           
           <div className="space-y-3">
-            <h3 className="text-2xl font-bold text-white">Bookings Temporarily Suspended</h3>
-            <p className="text-zinc-300 leading-relaxed max-w-2xl mx-auto">
+            <h3 className="text-2xl font-semibold text-gray-900">Reservations Temporarily Suspended</h3>
+            <p className="text-gray-700 leading-relaxed max-w-2xl mx-auto">
               {bookingSettings.suspension_message}
             </p>
           </div>
 
-                      <Card className="bg-gradient-to-br from-amber-900/20 to-yellow-900/10 border-amber-400/30">
-              <CardContent className="p-6">
-                <div className="flex items-center gap-3 text-amber-300">
-                  <Phone className="w-5 h-5" />
-                  <span className="font-medium">
-                    Call us directly: <RestaurantPhoneLink className="hover:text-amber-200 transition-colors">
-                      <RestaurantInfo type="phone" fallback="020 8421 5550" />
-                    </RestaurantPhoneLink>
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
+          <Card className="bg-yellow-50 border-yellow-200 mt-6">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-3 text-yellow-800">
+                <Phone className="w-5 h-5" />
+                <span className="font-medium">
+                  Call us directly: <RestaurantPhoneLink className="hover:text-yellow-900 transition-colors font-semibold">
+                    <RestaurantInfo type="phone" fallback="020 8421 5550" />
+                  </RestaurantPhoneLink>
+                </span>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     )
   }
 
-  return (
-    <div className="bg-gradient-to-br from-zinc-900/95 to-zinc-800/90 p-8 space-y-8 rounded-3xl">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
-      >
-        <h3 className="text-2xl font-bold text-white mb-2">Complete Your Reservation</h3>
-        <p className="text-zinc-300">Fill in your details below and we'll confirm within 2 hours</p>
-      </motion.div>
+  const incrementPartySize = () => {
+    if (partySize < bookingSettings.max_party_size) {
+      setPartySize(partySize + 1)
+    }
+  }
 
-      <AnimatePresence mode="wait">
-        {state?.success ? (
-          <motion.div
-            key="success"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="text-center space-y-6"
-          >
-            <div className="flex justify-center">
-              <div className="w-16 h-16 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full flex items-center justify-center">
-                <CheckCircle className="w-8 h-8 text-white" />
+  const decrementPartySize = () => {
+    if (partySize > 1) {
+      setPartySize(partySize - 1)
+    }
+  }
+
+  return (
+    <div className="relative isolate">
+      <div className="text-center mb-10">
+        <h3 className="text-4xl font-semibold text-gray-900 mb-4">Make a Reservation</h3>
+        <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+          Book your table now and experience exceptional dining. We'll confirm your reservation within 2 hours.
+        </p>
+      </div>
+
+      {state?.success ? (
+        <div className="text-center space-y-6">
+          <div className="bg-white rounded-lg p-8 shadow-lg">
+            <div className="flex justify-center mb-6">
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-10 h-10 text-green-600" />
               </div>
             </div>
             
             <div className="space-y-3">
-              <h4 className="text-2xl font-bold text-white">{state?.message}</h4>
+              <h4 className="text-2xl font-semibold text-gray-900">{state?.message}</h4>
             </div>
 
             <Button
               onClick={() => window.location.reload()}
-              className="bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-xl px-8 py-3"
+              className="mt-6 bg-gray-900 hover:bg-gray-800 text-white rounded-lg px-8 py-3 font-medium"
             >
               Make Another Reservation
             </Button>
-          </motion.div>
-        ) : (
-          <motion.form
-            key="form"
-            action={formAction}
-            className="space-y-6"
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
+          </div>
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <form action={formAction} className="space-y-8 relative">
             {/* Personal Information */}
             <div className="space-y-6">
+              <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
+                <User className="w-5 h-5 text-yellow-600" />
+                <h4 className="text-xl font-semibold text-gray-900">Personal Information</h4>
+              </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Full Name */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 }}
-                  className="space-y-3"
-                >
-                  <label className="block text-white font-medium text-sm tracking-wide">
+                <div className="space-y-2">
+                  <label className="block text-gray-900 font-medium text-sm">
                     Full Name *
                   </label>
                   <div className="relative">
-                    <User className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-400" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 z-10" />
                     <input
                       id="name"
                       name="name"
                       type="text"
                       placeholder="Enter your full name"
                       required
-                      className="w-full pl-12 pr-4 py-4 bg-zinc-900/50 border border-zinc-700/50 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 backdrop-blur-xl"
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 relative"
                     />
                   </div>
-                </motion.div>
+                </div>
 
-                {/* Email */}
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="space-y-3"
-                >
-                  <label className="block text-white font-medium text-sm tracking-wide">
-                    Email <span className="text-zinc-500">(Optional)</span>
+                <div className="space-y-2">
+                  <label className="block text-gray-900 font-medium text-sm">
+                    Email <span className="text-gray-500">(Optional)</span>
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-400" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 z-10" />
                     <input
                       id="email"
                       name="email"
                       type="email"
                       placeholder="your@email.com"
-                      className="w-full pl-12 pr-4 py-4 bg-zinc-900/50 border border-zinc-700/50 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 backdrop-blur-xl"
+                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 relative"
                     />
                   </div>
-                </motion.div>
+                </div>
               </div>
 
-              {/* Phone Number */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="space-y-3"
-              >
-                <label className="block text-white font-medium text-sm tracking-wide">
+              <div className="space-y-2">
+                <label className="block text-gray-900 font-medium text-sm">
                   Phone Number *
                 </label>
                 <div className="relative">
-                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-400" />
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 z-10" />
                   <input
                     id="phone"
                     name="phone"
                     type="tel"
                     placeholder="Phone number"
                     required
-                    className="w-full pl-12 pr-4 py-4 bg-zinc-900/50 border border-zinc-700/50 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 backdrop-blur-xl"
+                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 relative"
                   />
                 </div>
-              </motion.div>
+              </div>
             </div>
 
             {/* Reservation Details */}
             <div className="space-y-6">
+              <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
+                <Clock className="w-5 h-5 text-yellow-600" />
+                <h4 className="text-xl font-semibold text-gray-900">Reservation Details</h4>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Party Size */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="space-y-3"
-                >
-                  <label className="block text-white font-medium text-sm tracking-wide">
+                <div className="space-y-2">
+                  <label className="block text-gray-900 font-medium text-sm">
                     Party Size *
                   </label>
                   <div className="relative">
-                    <Users className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-400" />
+                    <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 z-10" />
                     <input
                       id="partySize"
                       name="partySize"
-                      type="number"
-                      min={1}
-                      max={bookingSettings.max_party_size}
-                      placeholder="1"
-                      required
-                      className="w-full pl-12 pr-4 py-4 bg-zinc-900/50 border border-zinc-700/50 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 backdrop-blur-xl"
+                      type="text"
+                      value={partySize}
+                      readOnly
+                      className="w-full pl-10 pr-16 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 relative"
                     />
-                  </div>
-                  <p className="text-xs text-zinc-400">
-                    1 - {bookingSettings.max_party_size} guests
-                  </p>
-                </motion.div>
-
-                {/* Date */}
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 }}
-                  className="space-y-3"
-                >
-                  <label className="block text-white font-medium text-sm tracking-wide">
-                    Preferred Date *
-                  </label>
-                  <Popover>
-                    <PopoverTrigger asChild>
+                    <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col z-20">
                       <button
                         type="button"
-                        className={cn(
-                          "w-full pl-12 pr-4 py-4 bg-zinc-900/50 border border-zinc-700/50 rounded-xl text-left transition-all duration-300 backdrop-blur-xl focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent",
-                          !date && "text-zinc-500",
-                          date && "text-white"
-                        )}
+                        onClick={incrementPartySize}
+                        disabled={partySize >= bookingSettings.max_party_size}
+                        className="p-1 hover:bg-yellow-100 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <CalendarIcon className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-amber-400" />
-                        {date ? <FormattedDate date={date} fallback={format(date, "PPP", { locale: enGB })} /> : "Select date"}
+                        <ChevronUp className="w-4 h-4 text-yellow-600" />
                       </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 bg-zinc-900 border-zinc-700">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                        locale={enGB}
-                        disabled={(day) => {
-                          // Note: For proper timezone handling, we should use restaurant timezone
-                          // However, calendar component runs client-side, so we use browser timezone
-                          // Server-side validation will use restaurant timezone for accuracy
-                          
-                          // Normalize today to midnight for accurate date comparison
-                          const today = new Date()
-                          today.setHours(0, 0, 0, 0)
-                          
-                          const maxDate = new Date()
-                          maxDate.setDate(maxDate.getDate() + bookingSettings.max_advance_days)
-                          maxDate.setHours(23, 59, 59, 999)
-                          
-                          // Disable past dates (before today) and dates beyond max advance days
-                          if (day < today || day > maxDate) return true
-                          
-                          // Disable weekly closure days (0 = Sunday, 1 = Monday, etc.)
-                          const dayOfWeek = day.getDay()
-                          if (bookingSettings.closed_days_of_week?.includes(dayOfWeek)) return true
-                          
-                          // Disable specific closed dates
-                          const dateString = format(day, "yyyy-MM-dd")
-                          if (bookingSettings.closed_dates?.includes(dateString)) return true
-                          
-                          return false
-                        }}
-                        className="bg-zinc-900 text-white"
-                      />
-                    </PopoverContent>
-                  </Popover>
+                      <button
+                        type="button"
+                        onClick={decrementPartySize}
+                        disabled={partySize <= 1}
+                        className="p-1 hover:bg-yellow-100 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <ChevronDown className="w-4 h-4 text-yellow-600" />
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-600">
+                    1 - {bookingSettings.max_party_size} guests
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-gray-900 font-medium text-sm">
+                    Preferred Date *
+                  </label>
+                  <div className="relative">
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className={cn(
+                            "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-left focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 relative",
+                            !date && "text-gray-500",
+                            date && "text-gray-900"
+                          )}
+                        >
+                          <CalendarIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 z-10" />
+                          {date ? <FormattedDate date={date} fallback={format(date, "PPP", { locale: enGB })} /> : "Select date"}
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent 
+                        className="w-auto p-0 bg-white border border-gray-300 z-50" 
+                        align="start"
+                        side="bottom"
+                      >
+                        <Calendar
+                          mode="single"
+                          selected={date}
+                          onSelect={setDate}
+                          initialFocus
+                          locale={enGB}
+                          disabled={(day) => {
+                            const today = new Date()
+                            today.setHours(0, 0, 0, 0)
+                            
+                            const maxDate = new Date()
+                            maxDate.setDate(maxDate.getDate() + bookingSettings.max_advance_days)
+                            maxDate.setHours(23, 59, 59, 999)
+                            
+                            if (day < today || day > maxDate) return true
+                            
+                            const dayOfWeek = day.getDay()
+                            if (bookingSettings.closed_days_of_week?.includes(dayOfWeek)) return true
+                            
+                            const dateString = format(day, "yyyy-MM-dd")
+                            if (bookingSettings.closed_dates?.includes(dateString)) return true
+                            
+                            return false
+                          }}
+                          className="text-gray-900"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
                   <div className="space-y-1">
-                    <p className="text-xs text-zinc-400">
+                    <p className="text-xs text-gray-600">
                       Up to {bookingSettings.max_advance_days} days in advance
                     </p>
                     {bookingSettings.closed_days_of_week && bookingSettings.closed_days_of_week.length > 0 && (
-                      <p className="text-xs text-amber-400">
+                      <p className="text-xs text-yellow-600">
                         ⚠️ {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
                           .filter((_, index) => bookingSettings.closed_days_of_week?.includes(index))
                           .join(', ')} - Restaurant closed
@@ -342,17 +336,11 @@ export function BookingForm() {
                     )}
                   </div>
                   <input type="hidden" name="date" value={date ? format(date, "yyyy-MM-dd") : ""} />
-                </motion.div>
+                </div>
               </div>
 
-              {/* Time Selection */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="space-y-3"
-              >
-                <label className="block text-white font-medium text-sm tracking-wide">
+              <div className="space-y-3">
+                <label className="block text-gray-900 font-medium text-sm">
                   Preferred Time *
                 </label>
                 <div className="space-y-3">
@@ -363,62 +351,52 @@ export function BookingForm() {
                         type="button"
                         onClick={() => setSelectedTime(time)}
                         className={cn(
-                          "py-3 px-4 rounded-lg text-sm font-medium transition-all duration-300 border",
+                          "py-3 px-4 rounded-lg text-sm font-medium border transition-all duration-200 relative",
                           selectedTime === time
-                            ? "bg-gradient-to-r from-amber-600 to-yellow-500 text-white border-amber-500 shadow-lg"
-                            : "bg-zinc-900/50 text-zinc-300 border-zinc-700/50 hover:border-amber-400/50 hover:bg-zinc-800/50"
+                            ? "bg-yellow-500 text-black border-yellow-500"
+                            : "bg-gray-50 text-gray-900 border-gray-300 hover:border-yellow-300 hover:bg-yellow-50"
                         )}
                       >
                         {time}
                       </button>
                     ))}
                   </div>
-                  <p className="text-xs text-zinc-400">
-                    Times shown are available booking slots (kitchen stops taking orders at closing time)
+                  <p className="text-xs text-gray-600">
+                    Available reservation times (kitchen closes at service end)
                   </p>
                 </div>
                 <input type="hidden" name="time" value={selectedTime} />
-              </motion.div>
+              </div>
             </div>
 
             {/* Special Requests */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="space-y-3"
-            >
-              <label className="block text-white font-medium text-sm tracking-wide">
-                Special Requests <span className="text-zinc-500">(Optional)</span>
-              </label>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 pb-4 border-b border-gray-200">
+                <MessageSquare className="w-5 h-5 text-yellow-600" />
+                <h4 className="text-xl font-semibold text-gray-900">Special Requests <span className="text-gray-600 font-normal text-base">(Optional)</span></h4>
+              </div>
               <div className="relative">
-                <MessageSquare className="absolute left-4 top-4 h-5 w-5 text-amber-400" />
+                <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-gray-500 z-10" />
                 <textarea
                   id="notes"
                   name="notes"
                   rows={4}
-                  placeholder="Dietary restrictions, special occasions, seating preferences..."
-                  className="w-full pl-12 pr-4 py-4 bg-zinc-900/50 border border-zinc-700/50 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-300 backdrop-blur-xl resize-none"
+                  placeholder="Dietary requirements, allergies, special occasions, seating preferences..."
+                  className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 resize-none relative"
                 />
               </div>
-            </motion.div>
+            </div>
 
-            {/* Submit Button */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8 }}
-              className="pt-4"
-            >
+            <div className="pt-6">
               <Button
                 type="submit"
                 disabled={isPending || !selectedTime || !date}
-                className="w-full py-6 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-xl text-lg font-medium transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                className="w-full py-4 bg-yellow-500 hover:bg-yellow-400 text-black rounded-lg text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg relative z-10"
               >
                 {isPending ? (
                   <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Processing Reservation...
+                    <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                    Confirming Reservation...
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
@@ -427,39 +405,28 @@ export function BookingForm() {
                   </div>
                 )}
               </Button>
-            </motion.div>
+            </div>
 
-            {/* Error Messages */}
             {state?.message && !state?.success && !isPending && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="bg-amber-900/50 text-amber-300 border border-amber-700/50 p-4 rounded-xl text-center font-medium"
-              >
+              <div className="bg-red-50 text-red-700 border border-red-200 p-4 rounded-lg text-center font-medium">
                 {state?.message}
-              </motion.div>
+              </div>
             )}
-          </motion.form>
-        )}
-      </AnimatePresence>
+          </form>
+        </div>
+      )}
 
-      {/* Additional Info */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.9 }}
-        className="text-center space-y-2 pt-6 border-t border-zinc-600/50"
-      >
-        <p className="text-zinc-300 text-sm">
+      <div className="text-center space-y-2 pt-8 border-t border-gray-200 mt-8">
+        <p className="text-gray-700 text-sm">
           Your reservation will be confirmed within 2 hours via phone.
         </p>
-        <p className="text-zinc-400 text-xs">
-          For same-day bookings or groups over {bookingSettings.max_party_size}, please call us directly at{' '}
-          <RestaurantPhoneLink className="hover:text-zinc-300 transition-colors">
+        <p className="text-gray-600 text-xs">
+          For same-day reservations or parties over {bookingSettings.max_party_size}, please call us directly at{' '}
+          <RestaurantPhoneLink className="hover:text-gray-800 transition-colors font-medium text-gray-700">
             <RestaurantInfo type="phone" fallback="020 8421 5550" />
           </RestaurantPhoneLink>
         </p>
-      </motion.div>
+      </div>
     </div>
   )
 }
