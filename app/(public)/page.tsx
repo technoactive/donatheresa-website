@@ -26,7 +26,7 @@ const featuredDishes = [
     category: "ARTISAN",
     description: "Baked pear with red wine sauce and camembert",
     price: "9.90",
-    image: "/dish-pera-al-forno.png",
+    image: "/pasta-carbonara.jpg",
   },
 ]
 
