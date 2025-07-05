@@ -1,10 +1,52 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Calendar, Users, TrendingUp, Clock } from "lucide-react"
+import { Calendar, Users, TrendingUp, Clock, CheckCircle, AlertCircle } from "lucide-react"
+import { getDashboardStats, getRecentBookings } from "@/lib/database"
+import { Badge } from "@/components/ui/badge"
 
 // Force dynamic rendering since this page uses cookies for authentication
 export const dynamic = 'force-dynamic'
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  // Fetch real data from Supabase
+  const [dashboardStats, recentBookings] = await Promise.all([
+    getDashboardStats().catch(error => {
+      console.error('Failed to load dashboard stats:', error)
+      return {
+        todayBookings: 0,
+        yesterdayBookings: 0,
+        totalCustomers: 0,
+        newCustomersThisWeek: 0,
+        confirmedToday: 0,
+        pendingToday: 0,
+        totalGuestsToday: 0,
+        bookingChange: 0,
+        customerGrowth: 0
+      }
+    }),
+    getRecentBookings(5).catch(error => {
+      console.error('Failed to load recent bookings:', error)
+      return []
+    })
+  ])
+
+  // Format change indicators
+  const formatChange = (change: number) => {
+    if (change > 0) return `+${change} from yesterday`
+    if (change < 0) return `${change} from yesterday`
+    return 'No change from yesterday'
+  }
+
+  const formatGrowth = (growth: number) => {
+    if (growth > 0) return `+${growth} new this week`
+    if (growth < 0) return `${Math.abs(growth)} fewer this week`
+    return 'No new customers this week'
+  }
+
+  // Calculate occupancy estimate (simplified - could be enhanced with table capacity)
+  const estimatedOccupancy = dashboardStats.totalGuestsToday > 0 
+    ? Math.min(Math.round((dashboardStats.totalGuestsToday / 50) * 100), 100) // Assuming 50 max capacity
+    : 0
+
   return (
     <div className="space-y-8">
       <div>
@@ -23,47 +65,50 @@ export default function DashboardPage() {
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
+            <div className="text-2xl font-bold">{dashboardStats.todayBookings}</div>
             <p className="text-xs text-muted-foreground">
-              +2 from yesterday
+              {formatChange(dashboardStats.bookingChange)}
             </p>
           </CardContent>
         </Card>
+        
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              Total Customers
+              Total Guests Today
             </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">245</div>
+            <div className="text-2xl font-bold">{dashboardStats.totalGuestsToday}</div>
             <p className="text-xs text-muted-foreground">
-              +8 this week
+              {dashboardStats.totalCustomers} total customers
             </p>
           </CardContent>
         </Card>
+        
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Occupancy Rate</CardTitle>
+            <CardTitle className="text-sm font-medium">Estimated Occupancy</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">85%</div>
+            <div className="text-2xl font-bold">{estimatedOccupancy}%</div>
             <p className="text-xs text-muted-foreground">
-              +5% from last month
+              Based on today's bookings
             </p>
           </CardContent>
         </Card>
+        
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg. Wait Time</CardTitle>
+            <CardTitle className="text-sm font-medium">Booking Status</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">15m</div>
+            <div className="text-2xl font-bold">{dashboardStats.confirmedToday}</div>
             <p className="text-xs text-muted-foreground">
-              -2m from last week
+              Confirmed, {dashboardStats.pendingToday} pending
             </p>
           </CardContent>
         </Card>
@@ -72,17 +117,36 @@ export default function DashboardPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Bookings Overview</CardTitle>
+            <CardTitle>Booking Analytics</CardTitle>
             <CardDescription>
-              Booking trends and analytics coming soon.
+              Key metrics for your restaurant operations.
             </CardDescription>
           </CardHeader>
-          <CardContent className="pl-2">
-            <div className="h-[200px] flex items-center justify-center text-muted-foreground">
-              Chart visualization coming soon
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="h-4 w-4 text-green-600" />
+                <div>
+                  <p className="text-sm font-medium">Confirmed Today</p>
+                  <p className="text-2xl font-bold">{dashboardStats.confirmedToday}</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <AlertCircle className="h-4 w-4 text-yellow-600" />
+                <div>
+                  <p className="text-sm font-medium">Pending Today</p>
+                  <p className="text-2xl font-bold">{dashboardStats.pendingToday}</p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="pt-4 border-t">
+              <p className="text-sm text-muted-foreground">Customer Growth</p>
+              <p className="text-lg font-semibold">{formatGrowth(dashboardStats.newCustomersThisWeek)}</p>
             </div>
           </CardContent>
         </Card>
+        
         <Card className="col-span-3">
           <CardHeader>
             <CardTitle>Recent Bookings</CardTitle>
@@ -91,40 +155,42 @@ export default function DashboardPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-8">
-              <div className="flex items-center">
-                <div className="ml-4 space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    John Smith
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Party of 4 • Tonight 7:30 PM
-                  </p>
+            <div className="space-y-6">
+              {recentBookings.length > 0 ? (
+                recentBookings.map((booking) => (
+                  <div key={booking.id} className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {booking.customer.name}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        Party of {booking.party_size} • {' '}
+                        {new Date(booking.booking_date).toLocaleDateString('en-GB', {
+                          weekday: 'short',
+                          month: 'short',
+                          day: 'numeric'
+                        })} {' '}
+                        {booking.booking_time}
+                      </p>
+                    </div>
+                    <Badge
+                      variant={
+                        booking.status === "confirmed" ? "default" : 
+                        booking.status === "pending" ? "outline" : 
+                        "destructive"
+                      }
+                      className="capitalize"
+                    >
+                      {booking.status}
+                    </Badge>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <p>No recent bookings</p>
+                  <p className="text-sm">New reservations will appear here</p>
                 </div>
-                <div className="ml-auto font-medium">Confirmed</div>
-              </div>
-              <div className="flex items-center">
-                <div className="ml-4 space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    Maria Garcia
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Party of 2 • Tomorrow 6:00 PM
-                  </p>
-                </div>
-                <div className="ml-auto font-medium">Pending</div>
-              </div>
-              <div className="flex items-center">
-                <div className="ml-4 space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    David Johnson
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Party of 6 • Friday 8:00 PM
-                  </p>
-                </div>
-                <div className="ml-auto font-medium">Confirmed</div>
-              </div>
+              )}
             </div>
           </CardContent>
         </Card>
