@@ -241,8 +241,8 @@ export default function BookingSettingsPage() {
       const formData = new FormData()
       formData.append('isBookingEnabled', bookingSettings.booking_enabled ? 'on' : 'off')
       formData.append('suspensionMessage', bookingSettings.suspension_message)
-      formData.append('maxPartySize', bookingSettings.max_party_size.toString())
-      formData.append('maxAdvanceDays', bookingSettings.max_advance_days.toString())
+      formData.append('maxPartySize', (bookingSettings.max_party_size || 8).toString())
+      formData.append('maxAdvanceDays', (bookingSettings.max_advance_days || 30).toString())
       formData.append('closedDates', JSON.stringify(bookingSettings.closed_dates))
       formData.append('closedDaysOfWeek', JSON.stringify(bookingSettings.closed_days_of_week || []))
       
@@ -347,10 +347,10 @@ export default function BookingSettingsPage() {
                   type="number"
                   min="1"
                   max="365"
-                  value={bookingSettings.max_advance_days}
+                  value={bookingSettings.max_advance_days || ''}
                   onChange={(e) => setBookingSettings(prev => ({
                     ...prev, 
-                    max_advance_days: parseInt(e.target.value) || 30
+                    max_advance_days: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
                   }))}
                   placeholder="30"
                 />
@@ -365,10 +365,10 @@ export default function BookingSettingsPage() {
                   type="number"
                   min="1"
                   max="20"
-                  value={bookingSettings.max_party_size}
+                  value={bookingSettings.max_party_size || ''}
                   onChange={(e) => setBookingSettings(prev => ({
                     ...prev, 
-                    max_party_size: parseInt(e.target.value) || 8
+                    max_party_size: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
                   }))}
                   placeholder="8"
                 />
