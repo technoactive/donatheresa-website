@@ -577,6 +577,183 @@ export async function getBookingStats() {
   }
 }
 
+// Enhanced dashboard statistics
+export async function getDashboardStats() {
+  const supabase = await createClient()
+  
+  try {
+    const restaurantDate = await getRestaurantDate()
+    
+    // Get today's date for comparisons
+    const today = new Date(restaurantDate)
+    const yesterday = new Date(today)
+    yesterday.setDate(yesterday.getDate() - 1)
+    const lastWeek = new Date(today)
+    lastWeek.setDate(lastWeek.getDate() - 7)
+    
+    // Today's bookings
+    const { data: todayBookings, error: todayError } = await supabase
+      .from('bookings')
+      .select('party_size, status')
+      .eq('booking_date', restaurantDate)
+      .neq('status', 'cancelled')
+    
+    if (todayError) throw todayError
+    
+    // Yesterday's bookings count
+    const { count: yesterdayCount, error: yesterdayError } = await supabase
+      .from('bookings')
+      .select('*', { count: 'exact', head: true })
+      .eq('booking_date', yesterday.toISOString().split('T')[0])
+      .neq('status', 'cancelled')
+    
+    if (yesterdayError) throw yesterdayError
+    
+    // Total customers
+    const { count: totalCustomers, error: customersError } = await supabase
+      .from('customers')
+      .select('*', { count: 'exact', head: true })
+    
+    if (customersError) throw customersError
+    
+    // New customers this week
+    const { count: newCustomersThisWeek, error: newCustomersError } = await supabase
+      .from('customers')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', lastWeek.toISOString())
+    
+    if (newCustomersError) throw newCustomersError
+    
+    // Confirmed bookings today
+    const confirmedToday = todayBookings?.filter(b => b.status === 'confirmed') || []
+    const pendingToday = todayBookings?.filter(b => b.status === 'pending') || []
+    
+    // Calculate total guests today
+    const totalGuestsToday = todayBookings?.reduce((sum, booking) => sum + booking.party_size, 0) || 0
+    
+    return {
+      todayBookings: todayBookings?.length || 0,
+      yesterdayBookings: yesterdayCount || 0,
+      totalCustomers: totalCustomers || 0,
+      newCustomersThisWeek: newCustomersThisWeek || 0,
+      confirmedToday: confirmedToday.length,
+      pendingToday: pendingToday.length,
+      totalGuestsToday,
+      // Calculate percentage changes
+      bookingChange: yesterdayCount ? Math.round(((todayBookings?.length || 0) - yesterdayCount) / yesterdayCount * 100) : 0,
+      customerGrowth: totalCustomers ? Math.round((newCustomersThisWeek || 0) / (totalCustomers || 1) * 100) : 0
+    }
+  } catch (error) {
+    console.error('Error getting dashboard stats:', error)
+    return {
+      todayBookings: 0,
+      yesterdayBookings: 0,
+      totalCustomers: 0,
+      newCustomersThisWeek: 0,
+      confirmedToday: 0,
+      pendingToday: 0,
+      totalGuestsToday: 0,
+      bookingChange: 0,
+      customerGrowth: 0
+    }
+  }
+}
+
+// Get recent bookings for dashboard
+export async function getRecentBookings(limit: number = 5): Promise<BookingWithCustomer[]> {
+  const supabase = await createClient()
+  
+  try {
+    const { data, error } = await supabase
+      .from('bookings')
+      .select(`
+        id,
+        customer_id,
+        booking_date,
+        booking_time,
+        party_size,
+        status,
+        special_requests,
+        created_at,
+        updated_at,
+        customers (
+          id,
+          name,
+          email,
+          phone,
+          created_at,
+          updated_at
+        )
+      `)
+      .order('created_at', { ascending: false })
+      .limit(limit)
+
+    if (error) throw error
+    
+    // Transform the data to match our interface
+    return (data || []).map(booking => {
+      const customer = Array.isArray(booking.customers) ? booking.customers[0] : booking.customers
+      
+      return {
+        id: booking.id,
+        customer_id: booking.customer_id,
+        booking_date: booking.booking_date,
+        booking_time: booking.booking_time,
+        party_size: booking.party_size,
+        status: booking.status,
+        special_requests: booking.special_requests,
+        created_at: booking.created_at,
+        updated_at: booking.updated_at,
+        customer: {
+          id: customer.id,
+          name: customer.name,
+          email: customer.email,
+          phone: customer.phone,
+          created_at: customer.created_at,
+          updated_at: customer.updated_at
+        }
+      }
+    })
+  } catch (error) {
+    console.error('Error getting recent bookings:', error)
+    return []
+  }
+}
+
+// Get booking trends for charts (future enhancement)
+export async function getBookingTrends(days: number = 7) {
+  const supabase = await createClient()
+  
+  try {
+    const { data, error } = await supabase
+      .from('bookings')
+      .select('booking_date, status, party_size')
+      .gte('booking_date', new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString().split('T')[0])
+      .order('booking_date', { ascending: true })
+    
+    if (error) throw error
+    
+    // Group by date and calculate metrics
+    const trends = data?.reduce((acc, booking) => {
+      const date = booking.booking_date
+      if (!acc[date]) {
+        acc[date] = { date, bookings: 0, guests: 0, confirmed: 0, pending: 0, cancelled: 0 }
+      }
+      
+      acc[date].bookings += 1
+      acc[date].guests += booking.party_size
+      acc[date][booking.status] += 1
+      
+      return acc
+    }, {} as Record<string, any>)
+    
+    return Object.values(trends || {})
+  } catch (error) {
+    console.error('Error getting booking trends:', error)
+    return []
+  }
+}
+
 // Locale Settings functions
 export async function getLocaleSettings(): Promise<LocaleSettings> {
   const supabase = await createClient()
