@@ -148,6 +148,7 @@ export async function updateBookingSettingsAction(formData: FormData): Promise<A
     const suspensionMessage = formData.get("suspensionMessage") as string
     const maxPartySize = parseInt(formData.get("maxPartySize") as string)
     const maxAdvanceDays = parseInt(formData.get("maxAdvanceDays") as string)
+    const totalSeats = parseInt(formData.get("totalSeats") as string)
 
     // Collect closed dates if any
     const closedDates: string[] = []
@@ -182,6 +183,7 @@ export async function updateBookingSettingsAction(formData: FormData): Promise<A
       suspension_message: suspensionMessage,
       max_party_size: maxPartySize,
       max_advance_days: maxAdvanceDays,
+      total_seats: totalSeats,
       closed_dates: closedDates,
       closed_days_of_week: closedDaysOfWeek
       // Note: available_times are now managed by saveServicePeriodsAction

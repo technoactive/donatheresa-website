@@ -19,6 +19,8 @@ export default async function DashboardPage() {
         confirmedToday: 0,
         pendingToday: 0,
         totalGuestsToday: 0,
+        totalSeats: 0,
+        occupancyPercentage: 0,
         bookingChange: 0,
         customerGrowth: 0
       }
@@ -42,10 +44,13 @@ export default async function DashboardPage() {
     return 'No new customers this week'
   }
 
-  // Calculate occupancy estimate (simplified - could be enhanced with table capacity)
-  const estimatedOccupancy = dashboardStats.totalGuestsToday > 0 
-    ? Math.min(Math.round((dashboardStats.totalGuestsToday / 50) * 100), 100) // Assuming 50 max capacity
-    : 0
+  // Format occupancy status
+  const formatOccupancyStatus = () => {
+    if (dashboardStats.totalSeats === 0) {
+      return "Set capacity in settings"
+    }
+    return `${dashboardStats.totalGuestsToday} of ${dashboardStats.totalSeats} seats`
+  }
 
   return (
     <div className="space-y-8">
@@ -93,9 +98,9 @@ export default async function DashboardPage() {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{estimatedOccupancy}%</div>
+            <div className="text-2xl font-bold">{dashboardStats.occupancyPercentage}%</div>
             <p className="text-xs text-muted-foreground">
-              Based on today's bookings
+              {formatOccupancyStatus()}
             </p>
           </CardContent>
         </Card>
