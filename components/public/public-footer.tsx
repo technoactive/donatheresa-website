@@ -26,8 +26,6 @@ const footerLinks = [
   }
 ]
 
-// Contact info now uses locale components dynamically
-
 const socialLinks = [
   { icon: Instagram, href: "#", label: "Instagram" },
   { icon: Facebook, href: "#", label: "Facebook" },
@@ -55,7 +53,7 @@ export function PublicFooter() {
             <div className="lg:col-span-2 space-y-8">
               <div>
                 <div className="text-3xl font-bold bg-gradient-to-r from-white to-zinc-300 bg-clip-text text-transparent tracking-tight">
-                  <RestaurantInfo type="name" fallback="DONA THERESA" className="uppercase" />
+                  <RestaurantInfo type="name" className="uppercase" />
                 </div>
                 <div className="text-sm tracking-[0.3em] text-zinc-400 font-light">
                   CULINARY EXCELLENCE
@@ -75,10 +73,10 @@ export function PublicFooter() {
                   </div>
                   <div>
                     <div className="text-white font-medium">
-                      <RestaurantInfo type="address" fallback="451 Uxbridge Rd" />
+                      <RestaurantInfo type="address" />
                     </div>
                     <div className="text-sm text-zinc-400">
-                      <RestaurantInfo type="city" fallback="Pinner" /> <RestaurantInfo type="postalCode" fallback="HA5 4JR" />
+                      <RestaurantInfo type="city" /> <RestaurantInfo type="postalCode" />
                     </div>
                   </div>
                 </div>
@@ -90,7 +88,7 @@ export function PublicFooter() {
                   <div>
                     <div className="text-white font-medium">
                       <RestaurantPhoneLink className="hover:text-amber-400 transition-colors">
-                        <RestaurantInfo type="phone" fallback="020 8421 5550" />
+                        <RestaurantInfo type="phone" />
                       </RestaurantPhoneLink>
                     </div>
                     <div className="text-sm text-zinc-400">Reservations & Inquiries</div>
@@ -138,7 +136,7 @@ export function PublicFooter() {
           <div className="max-w-7xl mx-auto px-6 py-8">
             <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
               <div className="text-zinc-400 text-sm">
-                © 2025 <RestaurantInfo type="name" fallback="Dona Theresa" />. All rights reserved. Crafted with passion for culinary excellence.
+                © 2025 <RestaurantInfo type="name" />. All rights reserved. Crafted with passion for culinary excellence.
               </div>
               
               <div className="flex items-center gap-6">
