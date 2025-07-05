@@ -81,6 +81,37 @@ export async function cancelBookingAction(bookingId: string) {
   }
 }
 
+export async function updateBookingStatusAction(bookingId: string, status: "pending" | "confirmed" | "cancelled") {
+  if (!bookingId) {
+    return { error: "Booking ID is required." }
+  }
+
+  if (!status || !["pending", "confirmed", "cancelled"].includes(status)) {
+    return { error: "Valid status is required." }
+  }
+
+  try {
+    const updatedBooking = await updateBooking(bookingId, { status })
+    
+    if (!updatedBooking) {
+      return { error: "Booking not found." }
+    }
+
+    revalidatePath("/dashboard/bookings")
+    
+    const statusMessages = {
+      confirmed: "Booking confirmed successfully.",
+      pending: "Booking moved to pending.",
+      cancelled: "Booking cancelled."
+    }
+    
+    return { data: statusMessages[status] }
+  } catch (error) {
+    console.error("Update booking status error:", error)
+    return { error: "Failed to update booking status." }
+  }
+}
+
 // Booking Settings Actions
 export async function getBookingSettingsAction() {
   try {

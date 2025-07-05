@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { DotsHorizontalIcon, Pencil2Icon, Cross2Icon } from "@radix-ui/react-icons"
+import { DotsHorizontalIcon, Pencil2Icon, Cross2Icon, CheckIcon, ClockIcon } from "@radix-ui/react-icons"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -19,6 +19,7 @@ import type { Booking } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { EditBookingDialog } from "./edit-booking-dialog"
 import { toast } from "sonner"
+import { updateBookingStatusAction } from "@/app/dashboard/bookings/actions"
 
 interface BookingsTableProps {
   bookings: Booking[]
@@ -40,22 +41,73 @@ const StatusBadge = React.memo(({ status }: { status: string }) => (
   </Badge>
 ))
 
+// Status Action Buttons Component for iPad-friendly status changes
+const StatusActionButtons = React.memo(({ 
+  booking, 
+  onStatusChange, 
+  isPending 
+}: {
+  booking: Booking
+  onStatusChange: (bookingId: string, status: "pending" | "confirmed" | "cancelled") => void
+  isPending: boolean
+}) => (
+  <div className="flex flex-wrap gap-2 touch-spacing">
+    {booking.status !== "confirmed" && (
+      <Button
+        size="sm"
+        onClick={() => onStatusChange(booking.id, "confirmed")}
+        disabled={isPending}
+        className="touch-target btn-touch bg-green-600 hover:bg-green-700 text-white"
+      >
+        <CheckIcon className="w-4 h-4 mr-1" />
+        Accept
+      </Button>
+    )}
+    {booking.status !== "pending" && (
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={() => onStatusChange(booking.id, "pending")}
+        disabled={isPending}
+        className="touch-target btn-touch border-yellow-400 text-yellow-600 hover:bg-yellow-50"
+      >
+        <ClockIcon className="w-4 h-4 mr-1" />
+        Pending
+      </Button>
+    )}
+    {booking.status !== "cancelled" && (
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={() => onStatusChange(booking.id, "cancelled")}
+        disabled={isPending}
+        className="touch-target btn-touch border-red-400 text-red-600 hover:bg-red-50"
+      >
+        <Cross2Icon className="w-4 h-4 mr-1" />
+        Cancel
+      </Button>
+    )}
+  </div>
+))
+
 // Mobile card component for individual bookings
 const MobileBookingCard = React.memo(({ 
   booking, 
   onEdit, 
   onCancel, 
+  onStatusChange,
   isReadOnly, 
   isPending 
 }: {
   booking: Booking
   onEdit: (booking: Booking) => void
   onCancel: (booking: Booking) => void
+  onStatusChange: (bookingId: string, status: "pending" | "confirmed" | "cancelled") => void
   isReadOnly: boolean
   isPending: boolean
 }) => (
   <Card className="w-full mobile-card-touch card-touch swipe-indicator">
-    <CardContent className="p-4 space-y-3">
+    <CardContent className="p-4 space-y-4">
       {/* Header with name and status */}
       <div className="flex items-start justify-between">
         <div className="space-y-1 flex-1 min-w-0">
@@ -88,39 +140,44 @@ const MobileBookingCard = React.memo(({
             })}
           </p>
         </div>
-        <div>
+        <div className="col-span-2">
           <p className="text-muted-foreground">Party Size</p>
           <p className="font-medium">{booking.partySize} guests</p>
         </div>
-        {!isReadOnly && (
-          <div className="flex justify-end touch-spacing">
+      </div>
+
+      {/* Direct Status Action Buttons for iPad */}
+      {!isReadOnly && (
+        <div className="space-y-3">
+          <div>
+            <p className="text-sm text-muted-foreground mb-2">Quick Actions</p>
+            <StatusActionButtons 
+              booking={booking} 
+              onStatusChange={onStatusChange} 
+              isPending={isPending} 
+            />
+          </div>
+          
+          {/* Additional actions dropdown */}
+          <div className="flex justify-center pt-2 border-t">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0 touch-target card-action-touch">
-                  <span className="sr-only">Open menu</span>
-                  <DotsHorizontalIcon className="h-4 w-4" />
+                <Button variant="ghost" size="sm" className="touch-target card-action-touch">
+                  <DotsHorizontalIcon className="h-4 w-4 mr-2" />
+                  More Actions
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="touch-spacing">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuContent align="center" className="touch-spacing">
+                <DropdownMenuLabel>Additional Actions</DropdownMenuLabel>
                 <DropdownMenuItem onClick={() => onEdit(booking)} className="touch-target card-action-touch">
                   <Pencil2Icon className="mr-2 h-4 w-4" />
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="text-red-600 focus:text-red-600 touch-target card-action-touch"
-                  onClick={() => onCancel(booking)}
-                  disabled={isPending}
-                >
-                  <Cross2Icon className="mr-2 h-4 w-4" />
-                  Cancel Booking
+                  Edit Details
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </CardContent>
   </Card>
 ))
@@ -152,6 +209,21 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
     startTransition(async () => {
       // TODO: Implement Supabase update logic here
       toast.success("Booking cancelled.")
+    })
+  }, [])
+
+  const handleStatusChange = React.useCallback((bookingId: string, status: "pending" | "confirmed" | "cancelled") => {
+    startTransition(async () => {
+      try {
+        const result = await updateBookingStatusAction(bookingId, status)
+        if (result.error) {
+          toast.error(result.error)
+        } else {
+          toast.success(result.data)
+        }
+      } catch (error) {
+        toast.error("Failed to update booking status")
+      }
     })
   }, [])
 
@@ -187,6 +259,7 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
               booking={booking}
               onEdit={handleEdit}
               onCancel={handleCancel}
+              onStatusChange={handleStatusChange}
               isReadOnly={isReadOnly}
               isPending={isPending}
             />
@@ -210,7 +283,8 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                 <TableHead className="min-w-[100px] table-cell">Status</TableHead>
                 <TableHead className="text-right min-w-[140px] table-cell">Booking Time</TableHead>
                 <TableHead className="text-center min-w-[100px] table-cell">Party Size</TableHead>
-                {mounted && !isReadOnly && <TableHead className="text-center min-w-[100px] table-cell">Actions</TableHead>}
+                {mounted && !isReadOnly && <TableHead className="text-center min-w-[200px] table-cell">Quick Actions</TableHead>}
+                {mounted && !isReadOnly && <TableHead className="text-center min-w-[80px] table-cell">More</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -245,7 +319,16 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                       {booking.partySize}
                     </TableCell>
                     {mounted && !isReadOnly && (
-                      <TableCell className="text-center min-w-[100px] table-cell">
+                      <TableCell className="min-w-[200px] table-cell">
+                        <StatusActionButtons 
+                          booking={booking} 
+                          onStatusChange={handleStatusChange} 
+                          isPending={isPending} 
+                        />
+                      </TableCell>
+                    )}
+                    {mounted && !isReadOnly && (
+                      <TableCell className="text-center min-w-[80px] table-cell">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="h-8 w-8 p-0 touch-target card-action-touch">
@@ -254,19 +337,10 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end" className="touch-spacing">
-                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                            <DropdownMenuLabel>More Actions</DropdownMenuLabel>
                             <DropdownMenuItem onClick={() => handleEdit(booking)} className="touch-target card-action-touch">
                               <Pencil2Icon className="mr-2 h-4 w-4" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              className="text-red-600 focus:text-red-600 touch-target card-action-touch"
-                              onClick={() => handleCancel(booking)}
-                              disabled={isPending}
-                            >
-                              <Cross2Icon className="mr-2 h-4 w-4" />
-                              Cancel Booking
+                              Edit Details
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
@@ -276,7 +350,7 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                 ))
               ) : (
                 <TableRow className="table-row">
-                  <TableCell colSpan={mounted && !isReadOnly ? 5 : 4} className="h-24 text-center table-cell">
+                  <TableCell colSpan={mounted && !isReadOnly ? 6 : 4} className="h-24 text-center table-cell">
                     No bookings found.
                   </TableCell>
                 </TableRow>
