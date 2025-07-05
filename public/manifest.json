@@ -1,0 +1,54 @@
+{
+  "name": "Dona Theresa - Fine Italian Restaurant",
+  "short_name": "Dona Theresa",
+  "description": "Experience authentic Italian fine dining at Dona Theresa in Pinner. Award-winning restaurant serving modern Italian cuisine since 2011.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#f59e0b",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en-GB",
+  "dir": "ltr",
+  "categories": ["food", "restaurant", "dining"],
+  "icons": [
+    {
+      "src": "/placeholder-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/placeholder-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Make Reservation",
+      "short_name": "Reserve",
+      "description": "Book a table at Dona Theresa",
+      "url": "/reserve",
+      "icons": [
+        {
+          "src": "/placeholder-logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "View Menu",
+      "short_name": "Menu",
+      "description": "Browse our authentic Italian menu",
+      "url": "/menu",
+      "icons": [
+        {
+          "src": "/placeholder-logo.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
+} 
