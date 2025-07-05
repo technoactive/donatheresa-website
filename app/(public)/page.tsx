@@ -202,8 +202,8 @@ export default function HomePage() {
             <div className="lg:col-span-3 relative">
               <div className="relative group">
             <Image
-              src="/story-ingredients.png"
-                  alt="Fresh ingredients and modern culinary artistry at Dona Theresa restaurant - premium Italian cuisine preparation"
+              src="/tomatoes-table.jpg"
+                  alt="Fresh tomatoes and ingredients showcasing modern culinary artistry at Dona Theresa restaurant - premium Italian cuisine preparation"
                   width={800}
                   height={600}
                   className="relative rounded-2xl object-cover w-full h-[500px] shadow-2xl"
