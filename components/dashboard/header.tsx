@@ -41,6 +41,19 @@ export function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 flex h-14 items-center gap-4 border-b bg-background px-4 lg:h-[60px] lg:px-6 md:pl-[220px] lg:pl-[280px]">
+      {/* Sidebar area overlay with right border to continue the line */}
+      <div className="absolute top-0 left-0 w-[220px] lg:w-[280px] h-full border-r bg-transparent hidden md:block">
+        {/* Restaurant name from locale settings */}
+        <div className="flex h-full items-center px-4 lg:px-6">
+          <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-foreground hover:opacity-80 transition-opacity">
+            <UtensilsCrossed className="h-5 w-5 lg:h-6 lg:w-6" />
+            <span className="truncate">
+              <RestaurantInfo type="name" fallback="Dona Theresa" />
+            </span>
+          </Link>
+        </div>
+      </div>
+      
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="shrink-0 md:hidden bg-transparent">
@@ -79,14 +92,14 @@ export function Header() {
           </nav>
         </SheetContent>
       </Sheet>
-      <div className="w-full flex-1">
+      <div className="w-full flex-1 relative z-10">
         {isMounted && (
           <h1 className="font-semibold text-lg hidden md:block">
             {navLinks.find((link) => link.href === pathname)?.label}
           </h1>
         )}
       </div>
-      <Button variant="outline" size="icon" className="ml-auto h-8 w-8 bg-transparent">
+      <Button variant="outline" size="icon" className="ml-auto h-8 w-8 bg-transparent relative z-10">
         <Bell className="h-4 w-4" />
         <span className="sr-only">Toggle notifications</span>
       </Button>
