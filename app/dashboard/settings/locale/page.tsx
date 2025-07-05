@@ -106,8 +106,8 @@ export default function LocaleSettingsPage() {
       >
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
-            <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-muted-foreground" />
-            <p className="text-muted-foreground">Loading settings...</p>
+            <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-slate-600" />
+            <p className="text-slate-600">Loading settings...</p>
           </div>
         </div>
       </SettingsLayout>
@@ -136,27 +136,29 @@ export default function LocaleSettingsPage() {
     >
       <div className="w-full max-w-full space-y-4 md:space-y-6">
         {/* Location & Timezone */}
-        <Card>
+        <Card className="bg-white border-slate-200 shadow-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <MapPin className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-slate-900">
+              <div className="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                <MapPin className="h-5 w-5 text-blue-600" />
+              </div>
               Location & Timezone
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-slate-600">
               Configure your restaurant's location and timezone for accurate booking times
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="country">Country</Label>
+                <Label htmlFor="country" className="text-slate-900">Country</Label>
                 <Select value={localeSettings.country_code} onValueChange={handleCountryChange}>
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-900">
                     <SelectValue placeholder="Select country" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white border-slate-200">
                     {commonCountries.map(country => (
-                      <SelectItem key={country.code} value={country.code}>
+                      <SelectItem key={country.code} value={country.code} className="text-slate-900">
                         {country.name}
                       </SelectItem>
                     ))}
@@ -165,14 +167,14 @@ export default function LocaleSettingsPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="timezone">Timezone</Label>
+                <Label htmlFor="timezone" className="text-slate-900">Timezone</Label>
                 <Select value={localeSettings.restaurant_timezone} onValueChange={handleTimezoneChange}>
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-900">
                     <SelectValue placeholder="Select timezone" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white border-slate-200">
                     {commonTimezones.map(timezone => (
-                      <SelectItem key={timezone.value} value={timezone.value}>
+                      <SelectItem key={timezone.value} value={timezone.value} className="text-slate-900">
                         {timezone.label}
                       </SelectItem>
                     ))}
@@ -182,17 +184,17 @@ export default function LocaleSettingsPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="language">Language</Label>
+              <Label htmlFor="language" className="text-slate-900">Language</Label>
               <Select 
                 value={localeSettings.language_code} 
                 onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, language_code: value }))}
               >
-                <SelectTrigger>
+                <SelectTrigger className="bg-white border-slate-200 text-slate-900">
                   <SelectValue placeholder="Select language" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border-slate-200">
                   {commonLanguages.map(language => (
-                    <SelectItem key={language.code} value={language.code}>
+                    <SelectItem key={language.code} value={language.code} className="text-slate-900">
                       {language.name}
                     </SelectItem>
                   ))}
@@ -203,52 +205,56 @@ export default function LocaleSettingsPage() {
         </Card>
 
         {/* Currency & Number Formatting */}
-        <Card>
+        <Card className="bg-white border-slate-200 shadow-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <DollarSign className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-slate-900">
+              <div className="h-8 w-8 rounded-lg bg-green-100 flex items-center justify-center">
+                <DollarSign className="h-5 w-5 text-green-600" />
+              </div>
               Currency & Number Formatting
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-slate-600">
               Set currency and number formatting preferences for your locale
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="currency_code">Currency Code</Label>
+                <Label htmlFor="currency_code" className="text-slate-900">Currency Code</Label>
                 <Input
                   id="currency_code"
                   value={localeSettings.currency_code}
                   onChange={(e) => setLocaleSettings(prev => ({ ...prev, currency_code: e.target.value }))}
                   placeholder="GBP"
+                  className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="currency_symbol">Currency Symbol</Label>
+                <Label htmlFor="currency_symbol" className="text-slate-900">Currency Symbol</Label>
                 <Input
                   id="currency_symbol"
                   value={localeSettings.currency_symbol}
                   onChange={(e) => setLocaleSettings(prev => ({ ...prev, currency_symbol: e.target.value }))}
                   placeholder="£"
+                  className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="currency_decimal_places">Decimal Places</Label>
+                <Label htmlFor="currency_decimal_places" className="text-slate-900">Decimal Places</Label>
                 <Select 
                   value={localeSettings.currency_decimal_places.toString()} 
                   onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, currency_decimal_places: parseInt(value) }))}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-900">
                     <SelectValue placeholder="Select decimal places" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0">0</SelectItem>
-                    <SelectItem value="1">1</SelectItem>
-                    <SelectItem value="2">2</SelectItem>
-                    <SelectItem value="3">3</SelectItem>
+                  <SelectContent className="bg-white border-slate-200">
+                    <SelectItem value="0" className="text-slate-900">0</SelectItem>
+                    <SelectItem value="1" className="text-slate-900">1</SelectItem>
+                    <SelectItem value="2" className="text-slate-900">2</SelectItem>
+                    <SelectItem value="3" className="text-slate-900">3</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -256,35 +262,35 @@ export default function LocaleSettingsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="decimal_separator">Decimal Separator</Label>
+                <Label htmlFor="decimal_separator" className="text-slate-900">Decimal Separator</Label>
                 <Select 
                   value={localeSettings.decimal_separator} 
                   onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, decimal_separator: value }))}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-900">
                     <SelectValue placeholder="Select separator" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value=".">. (period)</SelectItem>
-                    <SelectItem value=",">, (comma)</SelectItem>
+                  <SelectContent className="bg-white border-slate-200">
+                    <SelectItem value="." className="text-slate-900">. (period)</SelectItem>
+                    <SelectItem value="," className="text-slate-900">, (comma)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="thousands_separator">Thousands Separator</Label>
+                <Label htmlFor="thousands_separator" className="text-slate-900">Thousands Separator</Label>
                 <Select 
                   value={localeSettings.thousands_separator} 
                   onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, thousands_separator: value }))}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-900">
                     <SelectValue placeholder="Select separator" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value=",">, (comma)</SelectItem>
-                    <SelectItem value=".">. (period)</SelectItem>
-                    <SelectItem value=" "> (space)</SelectItem>
-                    <SelectItem value="'">′ (apostrophe)</SelectItem>
+                  <SelectContent className="bg-white border-slate-200">
+                    <SelectItem value="," className="text-slate-900">, (comma)</SelectItem>
+                    <SelectItem value="." className="text-slate-900">. (period)</SelectItem>
+                    <SelectItem value=" " className="text-slate-900"> (space)</SelectItem>
+                    <SelectItem value="'" className="text-slate-900">′ (apostrophe)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -293,72 +299,74 @@ export default function LocaleSettingsPage() {
         </Card>
 
         {/* Date & Time Formatting */}
-        <Card>
+        <Card className="bg-white border-slate-200 shadow-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calendar className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-slate-900">
+              <div className="h-8 w-8 rounded-lg bg-purple-100 flex items-center justify-center">
+                <Calendar className="h-5 w-5 text-purple-600" />
+              </div>
               Date & Time Formatting
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-slate-600">
               Configure how dates and times are displayed in your system
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="date_format">Date Format</Label>
+                <Label htmlFor="date_format" className="text-slate-900">Date Format</Label>
                 <Select 
                   value={localeSettings.date_format} 
                   onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, date_format: value }))}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-900">
                     <SelectValue placeholder="Select date format" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="dd/MM/yyyy">DD/MM/YYYY (UK)</SelectItem>
-                    <SelectItem value="MM/dd/yyyy">MM/DD/YYYY (US)</SelectItem>
-                    <SelectItem value="yyyy-MM-dd">YYYY-MM-DD (ISO)</SelectItem>
-                    <SelectItem value="dd-MM-yyyy">DD-MM-YYYY</SelectItem>
+                  <SelectContent className="bg-white border-slate-200">
+                    <SelectItem value="dd/MM/yyyy" className="text-slate-900">DD/MM/YYYY (UK)</SelectItem>
+                    <SelectItem value="MM/dd/yyyy" className="text-slate-900">MM/DD/YYYY (US)</SelectItem>
+                    <SelectItem value="yyyy-MM-dd" className="text-slate-900">YYYY-MM-DD (ISO)</SelectItem>
+                    <SelectItem value="dd-MM-yyyy" className="text-slate-900">DD-MM-YYYY</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="time_format">Time Format</Label>
+                <Label htmlFor="time_format" className="text-slate-900">Time Format</Label>
                 <Select 
                   value={localeSettings.time_format} 
                   onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, time_format: value }))}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-white border-slate-200 text-slate-900">
                     <SelectValue placeholder="Select time format" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="HH:mm">24-hour (HH:mm)</SelectItem>
-                    <SelectItem value="HH:mm:ss">24-hour with seconds (HH:mm:ss)</SelectItem>
-                    <SelectItem value="hh:mm a">12-hour (hh:mm AM/PM)</SelectItem>
-                    <SelectItem value="hh:mm:ss a">12-hour with seconds (hh:mm:ss AM/PM)</SelectItem>
+                  <SelectContent className="bg-white border-slate-200">
+                    <SelectItem value="HH:mm" className="text-slate-900">24-hour (HH:mm)</SelectItem>
+                    <SelectItem value="HH:mm:ss" className="text-slate-900">24-hour with seconds (HH:mm:ss)</SelectItem>
+                    <SelectItem value="hh:mm a" className="text-slate-900">12-hour (hh:mm AM/PM)</SelectItem>
+                    <SelectItem value="hh:mm:ss a" className="text-slate-900">12-hour with seconds (hh:mm:ss AM/PM)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="first_day_of_week">First Day of Week</Label>
+              <Label htmlFor="first_day_of_week" className="text-slate-900">First Day of Week</Label>
               <Select 
                 value={localeSettings.first_day_of_week.toString()} 
                 onValueChange={(value) => setLocaleSettings(prev => ({ ...prev, first_day_of_week: parseInt(value) }))}
               >
-                <SelectTrigger>
+                <SelectTrigger className="bg-white border-slate-200 text-slate-900">
                   <SelectValue placeholder="Select first day" />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="0">Sunday</SelectItem>
-                  <SelectItem value="1">Monday</SelectItem>
-                  <SelectItem value="2">Tuesday</SelectItem>
-                  <SelectItem value="3">Wednesday</SelectItem>
-                  <SelectItem value="4">Thursday</SelectItem>
-                  <SelectItem value="5">Friday</SelectItem>
-                  <SelectItem value="6">Saturday</SelectItem>
+                <SelectContent className="bg-white border-slate-200">
+                  <SelectItem value="0" className="text-slate-900">Sunday</SelectItem>
+                  <SelectItem value="1" className="text-slate-900">Monday</SelectItem>
+                  <SelectItem value="2" className="text-slate-900">Tuesday</SelectItem>
+                  <SelectItem value="3" className="text-slate-900">Wednesday</SelectItem>
+                  <SelectItem value="4" className="text-slate-900">Thursday</SelectItem>
+                  <SelectItem value="5" className="text-slate-900">Friday</SelectItem>
+                  <SelectItem value="6" className="text-slate-900">Saturday</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -366,65 +374,72 @@ export default function LocaleSettingsPage() {
         </Card>
 
         {/* Restaurant Details */}
-        <Card>
+        <Card className="bg-white border-slate-200 shadow-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Building className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-slate-900">
+              <div className="h-8 w-8 rounded-lg bg-orange-100 flex items-center justify-center">
+                <Building className="h-5 w-5 text-orange-600" />
+              </div>
               Restaurant Details
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-slate-600">
               Update your restaurant's contact information and address
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="restaurant_name">Restaurant Name</Label>
+              <Label htmlFor="restaurant_name" className="text-slate-900">Restaurant Name</Label>
               <Input
                 id="restaurant_name"
                 value={localeSettings.restaurant_name}
                 onChange={(e) => setLocaleSettings(prev => ({ ...prev, restaurant_name: e.target.value }))}
                 placeholder="Dona Theresa"
+                className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="restaurant_phone">Phone Number</Label>
+              <Label htmlFor="restaurant_phone" className="text-slate-900">Phone Number</Label>
               <Input
                 id="restaurant_phone"
                 value={localeSettings.restaurant_phone}
                 onChange={(e) => setLocaleSettings(prev => ({ ...prev, restaurant_phone: e.target.value }))}
                 placeholder="+44 20 8421 5550"
+                className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="restaurant_address">Address</Label>
+              <Label htmlFor="restaurant_address" className="text-slate-900">Address</Label>
               <Input
                 id="restaurant_address"
                 value={localeSettings.restaurant_address}
                 onChange={(e) => setLocaleSettings(prev => ({ ...prev, restaurant_address: e.target.value }))}
                 placeholder="451 Uxbridge Road, Pinner"
+                className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="restaurant_city">City</Label>
+                <Label htmlFor="restaurant_city" className="text-slate-900">City</Label>
                 <Input
                   id="restaurant_city"
                   value={localeSettings.restaurant_city}
                   onChange={(e) => setLocaleSettings(prev => ({ ...prev, restaurant_city: e.target.value }))}
                   placeholder="London"
+                  className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="restaurant_postal_code">Postal Code</Label>
+                <Label htmlFor="restaurant_postal_code" className="text-slate-900">Postal Code</Label>
                 <Input
                   id="restaurant_postal_code"
                   value={localeSettings.restaurant_postal_code}
                   onChange={(e) => setLocaleSettings(prev => ({ ...prev, restaurant_postal_code: e.target.value }))}
                   placeholder="HA5 1AA"
+                  className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
                 />
               </div>
             </div>

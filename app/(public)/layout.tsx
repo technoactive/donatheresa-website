@@ -8,9 +8,9 @@ export default function PublicLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex min-h-screen flex-col bg-black text-white" style={{ backgroundColor: '#000000' }}>
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
       <PublicHeader />
-      <main className="flex-1 bg-black" style={{ backgroundColor: '#000000' }}>{children}</main>
+      <main className="flex-1 bg-background">{children}</main>
       <PublicFooter />
     </div>
   )

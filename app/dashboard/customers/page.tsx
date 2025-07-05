@@ -29,11 +29,11 @@ export default async function CustomersPage() {
       <div className="w-full max-w-full space-y-4 md:space-y-6 lg:space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-2">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold">Customers</h1>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900">Customers</h1>
             <p className="text-red-500 text-sm sm:text-base">Error: {error}</p>
           </div>
           <form action={refreshCustomersPage}>
-            <Button type="submit" className="w-full sm:w-auto">
+            <Button type="submit" className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white">
               <RefreshCw className="h-4 w-4 mr-2" />
               Retry
             </Button>
@@ -46,14 +46,14 @@ export default async function CustomersPage() {
   return (
     <div className="w-full max-w-full space-y-4 md:space-y-6 lg:space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="space-y-2">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold">Customers</h1>
-          <p className="text-muted-foreground text-sm sm:text-base">View and manage your customer list.</p>
+        <div className="space-y-2 pb-4">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900">Customers</h1>
+          <p className="text-slate-600 text-sm sm:text-base">View and manage your customer list.</p>
         </div>
         
         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
           <form action={refreshCustomersPage} className="w-full sm:w-auto">
-            <Button type="submit" variant="outline" size="sm" className="w-full sm:w-auto flex items-center justify-center gap-2">
+            <Button type="submit" variant="outline" size="sm" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900">
               <RefreshCw className="h-4 w-4" />
               Refresh
             </Button>

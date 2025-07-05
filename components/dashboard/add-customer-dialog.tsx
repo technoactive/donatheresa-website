@@ -55,31 +55,31 @@ export function AddCustomerDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="bg-slate-900 hover:bg-slate-800 text-white">
           + Add Customer
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-white border-slate-200">
         <form ref={formRef} onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Add New Customer</DialogTitle>
-            <DialogDescription>Enter the details for the new customer.</DialogDescription>
+            <DialogTitle className="text-slate-900">Add New Customer</DialogTitle>
+            <DialogDescription className="text-slate-600">Enter the details for the new customer.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
+              <Label htmlFor="name" className="text-right text-slate-900">
                 Name
               </Label>
-              <Input id="name" name="name" required className="col-span-3" />
+              <Input id="name" name="name" required className="col-span-3 bg-white border-slate-200 text-slate-900 placeholder:text-slate-400" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
+              <Label htmlFor="email" className="text-right text-slate-900">
                 Email
               </Label>
-              <Input id="email" name="email" type="email" required className="col-span-3" />
+              <Input id="email" name="email" type="email" required className="col-span-3 bg-white border-slate-200 text-slate-900 placeholder:text-slate-400" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phone" className="text-right">
+              <Label htmlFor="phone" className="text-right text-slate-900">
                 Phone
               </Label>
               <Input 
@@ -87,12 +87,12 @@ export function AddCustomerDialog() {
                 name="phone" 
                 type="tel" 
                 placeholder="07XXX XXXXXX or +44 7XXX XXXXXX"
-                className="col-span-3" 
+                className="col-span-3 bg-white border-slate-200 text-slate-900 placeholder:text-slate-400" 
               />
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting} className="bg-slate-900 hover:bg-slate-800 text-white">
               {isSubmitting ? "Creating..." : "Save Customer"}
             </Button>
           </DialogFooter>

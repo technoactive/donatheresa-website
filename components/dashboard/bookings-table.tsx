@@ -32,9 +32,9 @@ const StatusBadge = React.memo(({ status }: { status: string }) => (
     className={cn(
       "capitalize",
       status === "confirmed" &&
-        "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 border-green-200 dark:border-green-900",
+        "bg-green-100 text-green-800 border-green-200",
       status === "pending" &&
-        "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 border-yellow-200 dark:border-yellow-900",
+        "bg-yellow-100 text-yellow-800 border-yellow-200",
     )}
   >
     {status}
@@ -69,7 +69,7 @@ const StatusActionButtons = React.memo(({
         variant="outline"
         onClick={() => onStatusChange(booking.id, "pending")}
         disabled={isPending}
-        className="touch-target btn-touch border-yellow-400 text-yellow-600 hover:bg-yellow-50"
+        className="touch-target btn-touch border-yellow-400 text-yellow-600 hover:bg-yellow-50 bg-white"
       >
         <ClockIcon className="w-4 h-4 mr-1" />
         Pending
@@ -81,7 +81,7 @@ const StatusActionButtons = React.memo(({
         variant="outline"
         onClick={() => onStatusChange(booking.id, "cancelled")}
         disabled={isPending}
-        className="touch-target btn-touch border-red-400 text-red-600 hover:bg-red-50"
+        className="touch-target btn-touch border-red-400 text-red-600 hover:bg-red-50 bg-white"
       >
         <Cross2Icon className="w-4 h-4 mr-1" />
         Cancel
@@ -106,13 +106,13 @@ const MobileBookingCard = React.memo(({
   isReadOnly: boolean
   isPending: boolean
 }) => (
-  <Card className="w-full mobile-card-touch card-touch swipe-indicator">
+  <Card className="w-full mobile-card-touch card-touch swipe-indicator bg-white border-slate-200 shadow-sm">
     <CardContent className="p-4 space-y-4">
       {/* Header with name and status */}
       <div className="flex items-start justify-between">
         <div className="space-y-1 flex-1 min-w-0">
-          <h3 className="font-semibold text-base leading-tight">{booking.customerName}</h3>
-          <p className="text-sm text-muted-foreground truncate">{booking.customerEmail}</p>
+          <h3 className="font-semibold text-base leading-tight text-slate-900">{booking.customerName}</h3>
+          <p className="text-sm text-slate-600 truncate">{booking.customerEmail}</p>
         </div>
         <div className="badge-touch">
           <StatusBadge status={booking.status} />
@@ -122,8 +122,8 @@ const MobileBookingCard = React.memo(({
       {/* Booking details */}
       <div className="grid grid-cols-2 gap-4 text-sm touch-spacing">
         <div>
-          <p className="text-muted-foreground">Date</p>
-          <p className="font-medium">
+          <p className="text-slate-600">Date</p>
+          <p className="font-medium text-slate-900">
             {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
               day: 'numeric', 
               month: 'short',
@@ -132,8 +132,8 @@ const MobileBookingCard = React.memo(({
           </p>
         </div>
         <div>
-          <p className="text-muted-foreground">Time</p>
-          <p className="font-medium">
+          <p className="text-slate-600">Time</p>
+          <p className="font-medium text-slate-900">
             {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
               hour: '2-digit', 
               minute: '2-digit'
@@ -141,8 +141,8 @@ const MobileBookingCard = React.memo(({
           </p>
         </div>
         <div className="col-span-2">
-          <p className="text-muted-foreground">Party Size</p>
-          <p className="font-medium">{booking.partySize} guests</p>
+          <p className="text-slate-600">Party Size</p>
+          <p className="font-medium text-slate-900">{booking.partySize} guests</p>
         </div>
       </div>
 
@@ -150,7 +150,7 @@ const MobileBookingCard = React.memo(({
       {!isReadOnly && (
         <div className="space-y-3">
           <div>
-            <p className="text-sm text-muted-foreground mb-2">Quick Actions</p>
+            <p className="text-sm text-slate-600 mb-2">Quick Actions</p>
             <StatusActionButtons 
               booking={booking} 
               onStatusChange={onStatusChange} 
@@ -159,17 +159,17 @@ const MobileBookingCard = React.memo(({
           </div>
           
           {/* Additional actions dropdown */}
-          <div className="flex justify-center pt-2 border-t">
+          <div className="flex justify-center pt-2 border-t border-slate-200">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="touch-target card-action-touch">
+                <Button variant="ghost" size="sm" className="touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
                   <DotsHorizontalIcon className="h-4 w-4 mr-2" />
                   More Actions
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="touch-spacing">
-                <DropdownMenuLabel>Additional Actions</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => onEdit(booking)} className="touch-target card-action-touch">
+              <DropdownMenuContent align="center" className="touch-spacing bg-white border-slate-200">
+                <DropdownMenuLabel className="text-slate-900">Additional Actions</DropdownMenuLabel>
+                <DropdownMenuItem onClick={() => onEdit(booking)} className="touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
                   <Pencil2Icon className="mr-2 h-4 w-4" />
                   Edit Details
                 </DropdownMenuItem>
@@ -245,7 +245,7 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
             placeholder="Filter by customer name..."
             value={filterValue}
             onChange={handleFilterChange}
-            className="w-full sm:max-w-sm input-touch filter-touch"
+            className="w-full sm:max-w-sm input-touch filter-touch bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
           />
         </div>
       )}
@@ -265,9 +265,9 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
             />
           ))
         ) : (
-          <Card className="card-touch">
+          <Card className="card-touch bg-white border-slate-200 shadow-sm">
             <CardContent className="p-6 text-center">
-              <p className="text-muted-foreground">No bookings found.</p>
+              <p className="text-slate-600">No bookings found.</p>
             </CardContent>
           </Card>
         )}
@@ -275,25 +275,25 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
       
       {/* Desktop view - Table layout for md screens and larger */}
       <div className="hidden md:block">
-        <div className="rounded-md border overflow-x-auto scroll-area-touch">
+        <div className="rounded-md border border-slate-200 bg-white shadow-sm overflow-x-auto scroll-area-touch">
           <Table className="table-touch">
             <TableHeader>
-              <TableRow className="table-row">
-                <TableHead className="min-w-[200px] table-cell">Customer</TableHead>
-                <TableHead className="min-w-[100px] table-cell">Status</TableHead>
-                <TableHead className="text-right min-w-[140px] table-cell">Booking Time</TableHead>
-                <TableHead className="text-center min-w-[100px] table-cell">Party Size</TableHead>
-                {mounted && !isReadOnly && <TableHead className="text-center min-w-[200px] table-cell">Quick Actions</TableHead>}
-                {mounted && !isReadOnly && <TableHead className="text-center min-w-[80px] table-cell">More</TableHead>}
+              <TableRow className="table-row border-slate-200 hover:bg-slate-50">
+                <TableHead className="min-w-[200px] table-cell text-slate-700">Customer</TableHead>
+                <TableHead className="min-w-[100px] table-cell text-slate-700">Status</TableHead>
+                <TableHead className="text-right min-w-[140px] table-cell text-slate-700">Booking Time</TableHead>
+                <TableHead className="text-center min-w-[100px] table-cell text-slate-700">Party Size</TableHead>
+                {mounted && !isReadOnly && <TableHead className="text-center min-w-[200px] table-cell text-slate-700">Quick Actions</TableHead>}
+                {mounted && !isReadOnly && <TableHead className="text-center min-w-[80px] table-cell text-slate-700">More</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredBookings.length ? (
                 filteredBookings.map((booking) => (
-                  <TableRow key={booking.id} className="table-row">
+                  <TableRow key={booking.id} className="table-row border-slate-200 hover:bg-slate-50">
                     <TableCell className="min-w-[200px] table-cell">
-                      <div className="font-medium">{booking.customerName}</div>
-                      <div className="text-sm text-muted-foreground">{booking.customerEmail}</div>
+                      <div className="font-medium text-slate-900">{booking.customerName}</div>
+                      <div className="text-sm text-slate-600">{booking.customerEmail}</div>
                     </TableCell>
                     <TableCell className="min-w-[100px] table-cell">
                       <div className="badge-touch">
@@ -301,21 +301,21 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                       </div>
                     </TableCell>
                     <TableCell className="text-right min-w-[140px] table-cell">
-                      <div className="font-medium">
+                      <div className="font-medium text-slate-900">
                         {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
                           day: 'numeric', 
                           month: 'short',
                           year: 'numeric'
                         })}
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-slate-600">
                         {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
                           hour: '2-digit', 
                           minute: '2-digit'
                         })}
                       </div>
                     </TableCell>
-                    <TableCell className="text-center font-medium min-w-[100px] table-cell">
+                    <TableCell className="text-center font-medium min-w-[100px] table-cell text-slate-900">
                       {booking.partySize}
                     </TableCell>
                     {mounted && !isReadOnly && (
@@ -331,14 +331,14 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                       <TableCell className="text-center min-w-[80px] table-cell">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0 touch-target card-action-touch">
+                            <Button variant="ghost" className="h-8 w-8 p-0 touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
                               <span className="sr-only">Open menu</span>
                               <DotsHorizontalIcon className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="touch-spacing">
-                            <DropdownMenuLabel>More Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => handleEdit(booking)} className="touch-target card-action-touch">
+                          <DropdownMenuContent align="end" className="touch-spacing bg-white border-slate-200">
+                            <DropdownMenuLabel className="text-slate-900">More Actions</DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => handleEdit(booking)} className="touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
                               <Pencil2Icon className="mr-2 h-4 w-4" />
                               Edit Details
                             </DropdownMenuItem>
@@ -349,8 +349,8 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                   </TableRow>
                 ))
               ) : (
-                <TableRow className="table-row">
-                  <TableCell colSpan={mounted && !isReadOnly ? 6 : 4} className="h-24 text-center table-cell">
+                <TableRow className="table-row border-slate-200 hover:bg-slate-50">
+                  <TableCell colSpan={mounted && !isReadOnly ? 6 : 4} className="h-24 text-center table-cell text-slate-600">
                     No bookings found.
                   </TableCell>
                 </TableRow>

@@ -90,32 +90,32 @@ export function EditBookingDialog({ booking, onSave, onOpenChange }: EditBooking
 
   return (
     <Dialog open={true} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] dialog-touch">
+      <DialogContent className="sm:max-w-[425px] dialog-touch bg-white border-slate-200">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>Edit Booking</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-slate-900">Edit Booking</DialogTitle>
+            <DialogDescription className="text-slate-600">
               Make changes to the reservation for {booking.customerName}.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4 dialog-content touch-spacing-lg">
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="customerName">
+                <Label htmlFor="customerName" className="text-slate-900">
                   Name *
                 </Label>
                 <Input 
                   id="customerName" 
                   name="customerName" 
                   defaultValue={booking.customerName} 
-                  className="input-touch"
+                  className="input-touch bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
                   required
                 />
               </div>
             </div>
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="partySize">
+                <Label htmlFor="partySize" className="text-slate-900">
                   Party Size *
                 </Label>
                 <Input
@@ -125,24 +125,24 @@ export function EditBookingDialog({ booking, onSave, onOpenChange }: EditBooking
                   min="1"
                   max="12"
                   defaultValue={booking.partySize}
-                  className="input-touch"
+                  className="input-touch bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
                   required
                 />
               </div>
             </div>
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="status">
+                <Label htmlFor="status" className="text-slate-900">
                   Status *
                 </Label>
                 <Select defaultValue={booking.status} name="status" required>
-                  <SelectTrigger className="dropdown-trigger-touch">
+                  <SelectTrigger className="dropdown-trigger-touch bg-white border-slate-200 text-slate-900">
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
-                  <SelectContent className="touch-spacing">
-                    <SelectItem value="pending" className="touch-target">Pending</SelectItem>
-                    <SelectItem value="confirmed" className="touch-target">Confirmed</SelectItem>
-                    <SelectItem value="cancelled" className="touch-target">Cancelled</SelectItem>
+                  <SelectContent className="touch-spacing bg-white border-slate-200">
+                    <SelectItem value="pending" className="touch-target text-slate-900 hover:bg-slate-50">Pending</SelectItem>
+                    <SelectItem value="confirmed" className="touch-target text-slate-900 hover:bg-slate-50">Confirmed</SelectItem>
+                    <SelectItem value="cancelled" className="touch-target text-slate-900 hover:bg-slate-50">Cancelled</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -154,14 +154,14 @@ export function EditBookingDialog({ booking, onSave, onOpenChange }: EditBooking
               variant="outline"
               onClick={() => onOpenChange(false)}
               disabled={isPending}
-              className="btn-touch touch-target"
+              className="btn-touch touch-target bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900"
             >
               Cancel
             </Button>
             <Button 
               type="submit" 
               disabled={isPending}
-              className="flex items-center gap-2 btn-touch touch-target"
+              className="flex items-center gap-2 btn-touch touch-target bg-slate-900 hover:bg-slate-800 text-white"
             >
               {isPending ? (
                 <>

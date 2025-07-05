@@ -101,28 +101,28 @@ const MobileCustomerCard = React.memo(({
   onEdit: (customer: Customer) => void
   onDelete: (customer: Customer) => void
 }) => (
-  <Card className="w-full mobile-card-touch card-touch swipe-indicator">
+  <Card className="w-full mobile-card-touch card-touch swipe-indicator bg-white border-slate-200 shadow-sm">
     <CardContent className="p-4 space-y-3">
       {/* Header with name */}
       <div className="flex items-start justify-between">
         <div className="space-y-1 flex-1 min-w-0">
-          <h3 className="font-semibold text-base leading-tight">{customer.name}</h3>
-          <p className="text-sm text-muted-foreground truncate">{customer.email}</p>
+          <h3 className="font-semibold text-base leading-tight text-slate-900">{customer.name}</h3>
+          <p className="text-sm text-slate-600 truncate">{customer.email}</p>
         </div>
       </div>
       
       {/* Customer details */}
       <div className="grid grid-cols-1 gap-3 text-sm touch-spacing">
         <div>
-          <p className="text-muted-foreground">Phone</p>
-          <p className="font-medium">{formatUKPhoneNumber(customer.phone) || "No phone"}</p>
+          <p className="text-slate-600">Phone</p>
+          <p className="font-medium text-slate-900">{formatUKPhoneNumber(customer.phone) || "No phone"}</p>
         </div>
         <div className="flex justify-end gap-2 pt-2 touch-spacing">
-          <Button variant="ghost" size="sm" onClick={() => onEdit(customer)} className="h-8 touch-target card-action-touch">
+          <Button variant="ghost" size="sm" onClick={() => onEdit(customer)} className="h-8 touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
             <PencilIcon />
             <span className="ml-1">Edit</span>
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => onDelete(customer)} className="h-8 text-red-600 hover:text-red-700 touch-target card-action-touch">
+          <Button variant="ghost" size="sm" onClick={() => onDelete(customer)} className="h-8 text-red-600 hover:text-red-700 hover:bg-red-50 touch-target card-action-touch">
             <Trash2Icon />
             <span className="ml-1">Delete</span>
           </Button>
@@ -182,9 +182,9 @@ export function CustomersTable({ customers }: CustomersTableProps) {
             />
           ))
         ) : (
-          <Card className="card-touch">
+          <Card className="card-touch bg-white border-slate-200 shadow-sm">
             <CardContent className="p-6 text-center">
-              <p className="text-muted-foreground">No customers found.</p>
+              <p className="text-slate-600">No customers found.</p>
             </CardContent>
           </Card>
         )}
@@ -192,29 +192,29 @@ export function CustomersTable({ customers }: CustomersTableProps) {
 
       {/* Desktop view - Table layout for md screens and larger */}
       <div className="hidden md:block">
-        <div className="rounded-md border overflow-x-auto scroll-area-touch">
+        <div className="rounded-md border border-slate-200 bg-white shadow-sm overflow-x-auto scroll-area-touch">
           <Table className="table-touch">
             <TableHeader>
-              <TableRow className="table-row">
-                <TableHead className="min-w-[150px] table-cell">Name</TableHead>
-                <TableHead className="min-w-[200px] table-cell">Email</TableHead>
-                <TableHead className="min-w-[140px] table-cell">Phone</TableHead>
-                <TableHead className="text-right min-w-[120px] table-cell">Actions</TableHead>
+              <TableRow className="table-row border-slate-200 hover:bg-slate-50">
+                <TableHead className="min-w-[150px] table-cell text-slate-700">Name</TableHead>
+                <TableHead className="min-w-[200px] table-cell text-slate-700">Email</TableHead>
+                <TableHead className="min-w-[140px] table-cell text-slate-700">Phone</TableHead>
+                <TableHead className="text-right min-w-[120px] table-cell text-slate-700">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {customers.length ? (
                 customers.map((customer) => (
-                  <TableRow key={customer.id} className="table-row">
-                    <TableCell className="font-medium table-cell">{customer.name}</TableCell>
-                    <TableCell className="table-cell">{customer.email}</TableCell>
-                    <TableCell className="table-cell">{formatUKPhoneNumber(customer.phone)}</TableCell>
+                  <TableRow key={customer.id} className="table-row border-slate-200 hover:bg-slate-50">
+                    <TableCell className="font-medium table-cell text-slate-900">{customer.name}</TableCell>
+                    <TableCell className="table-cell text-slate-900">{customer.email}</TableCell>
+                    <TableCell className="table-cell text-slate-900">{formatUKPhoneNumber(customer.phone)}</TableCell>
                     <TableCell className="text-right table-cell">
                       <div className="flex justify-end gap-1 touch-spacing">
-                        <Button variant="ghost" size="icon" onClick={() => handleEditClick(customer)} className="h-8 w-8 touch-target card-action-touch">
+                        <Button variant="ghost" size="icon" onClick={() => handleEditClick(customer)} className="h-8 w-8 touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
                           <PencilIcon />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(customer)} className="h-8 w-8 touch-target card-action-touch">
+                        <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(customer)} className="h-8 w-8 touch-target card-action-touch text-red-600 hover:text-red-700 hover:bg-red-50">
                           <Trash2Icon />
                         </Button>
                       </div>
@@ -222,8 +222,8 @@ export function CustomersTable({ customers }: CustomersTableProps) {
                   </TableRow>
                 ))
               ) : (
-                <TableRow className="table-row">
-                  <TableCell colSpan={4} className="h-24 text-center table-cell">
+                <TableRow className="table-row border-slate-200 hover:bg-slate-50">
+                  <TableCell colSpan={4} className="h-24 text-center table-cell text-slate-600">
                     No customers found.
                   </TableCell>
                 </TableRow>

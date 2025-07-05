@@ -2,52 +2,70 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { RestaurantInfo } from "@/components/locale/restaurant-info"
-import { Bell, Home, Calendar, Users, UtensilsCrossed, Settings } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
 
 export function Sidebar() {
   const pathname = usePathname()
 
-  const navLinks = [
-    { href: "/dashboard", label: "Dashboard", icon: Home },
-    { href: "/dashboard/bookings", label: "Bookings", icon: Calendar },
-    { href: "/dashboard/customers", label: "Customers", icon: Users },
-    { href: "/dashboard/settings", label: "Settings", icon: Settings },
+  const menuItems = [
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Bookings", href: "/dashboard/bookings" },
+    { name: "Customers", href: "/dashboard/customers" },
+    { name: "Settings", href: "/dashboard/settings" },
   ]
 
   return (
-    <div className="fixed top-0 left-0 z-40 w-[220px] lg:w-[280px] sidebar-touch h-full border-r bg-muted/40 hidden md:block">
-      <div className="flex h-full max-h-screen flex-col gap-2">
-        <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6 header-touch">
-          <Link href="/" className="flex items-center gap-2 font-semibold touch-target active-touch">
-            <UtensilsCrossed className="h-6 w-6" />
-            <span className=""><RestaurantInfo type="name" fallback="Dona Theresa" /></span>
+    <aside className="fixed top-0 left-0 z-40 w-[220px] lg:w-[280px] h-full border-r border-slate-200 bg-white hidden md:block">
+      <div className="flex h-full flex-col">
+        {/* Header */}
+        <header className="flex h-14 lg:h-[60px] items-center border-b border-slate-200 px-4 lg:px-6">
+          <Link href="/" className="flex items-center gap-2 font-semibold text-slate-900">
+            <span className="text-2xl">🍽️</span>
+            <span>Dona Theresa</span>
           </Link>
-          <Button variant="outline" size="icon" className="ml-auto h-8 w-8 bg-transparent touch-target notification-badge-touch">
-            <Bell className="h-4 w-4" />
-            <span className="sr-only">Toggle notifications</span>
-          </Button>
-        </div>
-        <div className="flex-1 overflow-auto py-2 scroll-area-touch">
-          <nav className="grid items-start px-2 text-sm font-medium lg:px-4 touch-spacing">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary nav-item touch-target active-touch ripple-touch",
-                  pathname === link.href && "bg-muted text-primary",
-                )}
-              >
-                <link.icon className="h-5 w-5" />
-                <span className="font-medium">{link.label}</span>
-              </Link>
-            ))}
-          </nav>
-        </div>
+        </header>
+        
+        {/* Navigation */}
+        <nav className="flex-1 overflow-auto py-6">
+          <ul className="space-y-3 px-4 lg:px-5">
+            {menuItems.map((item) => {
+              const isCurrentPage = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))
+              
+              return (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    style={{
+                      backgroundColor: isCurrentPage ? '#0f172a' : 'transparent',
+                      color: isCurrentPage ? 'white' : '#475569',
+                    }}
+                    className="flex items-center gap-4 rounded-lg px-4 py-4 min-h-[48px] text-base font-medium transition-all duration-200"
+                    onMouseEnter={(e) => {
+                      if (!isCurrentPage) {
+                        e.currentTarget.style.backgroundColor = '#f8fafc'
+                        e.currentTarget.style.color = '#0f172a'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isCurrentPage) {
+                        e.currentTarget.style.backgroundColor = 'transparent'
+                        e.currentTarget.style.color = '#475569'
+                      }
+                    }}
+                  >
+                    <span className="text-lg min-w-[24px]">
+                      {item.name === 'Dashboard' && '🏠'}
+                      {item.name === 'Bookings' && '📅'}
+                      {item.name === 'Customers' && '👥'}
+                      {item.name === 'Settings' && '⚙️'}
+                    </span>
+                    <span>{item.name}</span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </nav>
       </div>
-    </div>
+    </aside>
   )
-}
+} 
