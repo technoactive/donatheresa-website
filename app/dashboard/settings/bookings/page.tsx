@@ -347,12 +347,12 @@ export default function BookingSettingsPage() {
                   type="number"
                   min="1"
                   max="365"
-                  value={bookingSettings.max_advance_days || ''}
+                  value={bookingSettings.max_advance_days && bookingSettings.max_advance_days > 0 ? bookingSettings.max_advance_days : ''}
                   onChange={(e) => setBookingSettings(prev => ({
                     ...prev, 
                     max_advance_days: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
                   }))}
-                  placeholder="30"
+                  placeholder=""
                 />
                 <p className="text-sm text-muted-foreground">
                   How far in advance customers can book
@@ -365,12 +365,12 @@ export default function BookingSettingsPage() {
                   type="number"
                   min="1"
                   max="20"
-                  value={bookingSettings.max_party_size || ''}
+                  value={bookingSettings.max_party_size && bookingSettings.max_party_size > 0 ? bookingSettings.max_party_size : ''}
                   onChange={(e) => setBookingSettings(prev => ({
                     ...prev, 
                     max_party_size: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
                   }))}
-                  placeholder="8"
+                  placeholder=""
                 />
                 <p className="text-sm text-muted-foreground">
                   Maximum number of guests per booking
