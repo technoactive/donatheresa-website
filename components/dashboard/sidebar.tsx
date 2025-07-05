@@ -35,10 +35,10 @@ export function Sidebar() {
                   <Link
                     href={item.href}
                     style={{
-                      backgroundColor: isCurrentPage ? '#0f172a' : 'transparent',
+                      backgroundColor: isCurrentPage ? '#16a34a' : 'transparent',
                       color: isCurrentPage ? 'white' : '#475569',
                     }}
-                    className="flex items-center gap-4 rounded-lg px-4 py-4 min-h-[48px] text-base font-medium transition-all duration-200"
+                    className="flex items-center gap-4 rounded-lg px-4 py-4 min-h-[48px] text-base font-semibold transition-all duration-200"
                     onMouseEnter={(e) => {
                       if (!isCurrentPage) {
                         e.currentTarget.style.backgroundColor = '#f8fafc'
