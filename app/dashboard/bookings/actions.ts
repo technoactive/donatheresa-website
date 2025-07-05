@@ -1,0 +1,302 @@
+"use server"
+
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
+import { z } from "zod"
+import { 
+  updateBooking,
+  getBookingSettings,
+  updateBookingSettings,
+  type BookingSettings,
+  getBookings,
+  createBookingWithCustomer,
+  upsertServicePeriod,
+  deleteServicePeriod,
+  generateTimeSlotsFromPeriods,
+  type ServicePeriod
+} from "@/lib/database"
+import { type ActionState } from "@/lib/types"
+
+const updateBookingSchema = z.object({
+  id: z.string().min(1, "Booking ID is required"),
+  customerName: z.string().min(1, "Name is required"),
+  partySize: z.coerce.number().min(1, "Party size must be at least 1"),
+  status: z.enum(["pending", "confirmed", "cancelled"]),
+  notes: z.string().optional(),
+})
+
+export async function updateBookingAction(formData: FormData) {
+  // Simulate network delay
+  await new Promise(resolve => setTimeout(resolve, 500))
+  
+  const validatedFields = updateBookingSchema.safeParse(Object.fromEntries(formData.entries()))
+
+  if (!validatedFields.success) {
+    return {
+      error: validatedFields.error.flatten().fieldErrors,
+    }
+  }
+
+  const { id, customerName, partySize, status, notes } = validatedFields.data
+
+  try {
+    const updatedBooking = await updateBooking(id, { 
+      party_size: partySize,
+      status,
+      special_requests: notes || ""
+    })
+
+    if (!updatedBooking) {
+      return { error: { _form: ["Booking not found"] } }
+    }
+
+    revalidatePath("/dashboard/bookings")
+    return { data: updatedBooking }
+  } catch (error) {
+    console.error("Update booking error:", error)
+    return { error: { _form: ["Failed to update booking"] } }
+  }
+}
+
+export async function cancelBookingAction(bookingId: string) {
+  // Simulate network delay
+  await new Promise(resolve => setTimeout(resolve, 500))
+
+  if (!bookingId) {
+    return { error: "Booking ID is required." }
+  }
+
+  try {
+    const cancelledBooking = await updateBooking(bookingId, { status: "cancelled" })
+    
+    if (!cancelledBooking) {
+      return { error: "Booking not found." }
+    }
+
+    revalidatePath("/dashboard/bookings")
+    return { data: "Booking cancelled successfully." }
+  } catch (error) {
+    console.error("Cancel booking error:", error)
+    return { error: "Failed to cancel booking." }
+  }
+}
+
+// Booking Settings Actions
+export async function getBookingSettingsAction() {
+  try {
+    console.log('[SERVER ACTION] Loading booking settings...')
+    const settings = await getBookingSettings()
+    console.log('[SERVER ACTION] Settings loaded successfully:', settings)
+    return settings
+  } catch (error) {
+    console.error('[SERVER ACTION] Error in getBookingSettingsAction:', error)
+    
+    // Return fallback defaults instead of throwing
+    const fallbackSettings = {
+      booking_enabled: true,
+      max_advance_days: 30,
+      max_party_size: 8,
+      available_times: [
+        "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
+        "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30"
+      ],
+      closed_dates: [],
+      closed_days_of_week: [],
+      suspension_message: "We're currently not accepting new bookings. Please check back later.",
+      service_periods: []
+    }
+    
+    console.log('[SERVER ACTION] Returning fallback settings:', fallbackSettings)
+    return fallbackSettings
+  }
+}
+
+export async function updateBookingSettingsAction(formData: FormData): Promise<ActionState> {
+  try {
+    const isBookingEnabled = formData.get("isBookingEnabled") === "on"
+    const suspensionMessage = formData.get("suspensionMessage") as string
+    const maxPartySize = parseInt(formData.get("maxPartySize") as string)
+    const maxAdvanceDays = parseInt(formData.get("maxAdvanceDays") as string)
+
+    // Collect closed dates if any
+    const closedDates: string[] = []
+    const closedDatesData = formData.get("closedDates") as string
+    if (closedDatesData) {
+      try {
+        const parsedDates = JSON.parse(closedDatesData)
+        if (Array.isArray(parsedDates)) {
+          closedDates.push(...parsedDates)
+        }
+      } catch (error) {
+        console.log('No closed dates provided or invalid format')
+      }
+    }
+
+    // Collect closed days of week if any
+    const closedDaysOfWeek: number[] = []
+    const closedDaysData = formData.get("closedDaysOfWeek") as string
+    if (closedDaysData) {
+      try {
+        const parsedDays = JSON.parse(closedDaysData)
+        if (Array.isArray(parsedDays)) {
+          closedDaysOfWeek.push(...parsedDays.map(d => parseInt(d)).filter(d => !isNaN(d) && d >= 0 && d <= 6))
+        }
+      } catch (error) {
+        console.log('No closed days of week provided or invalid format')
+      }
+    }
+
+    const updates = {
+      booking_enabled: isBookingEnabled,
+      suspension_message: suspensionMessage,
+      max_party_size: maxPartySize,
+      max_advance_days: maxAdvanceDays,
+      closed_dates: closedDates,
+      closed_days_of_week: closedDaysOfWeek
+      // Note: available_times are now managed by saveServicePeriodsAction
+    }
+
+    await updateBookingSettings(updates)
+    // revalidatePath("/dashboard/settings/bookings")
+    
+    return {
+      success: true,
+      message: "Booking settings updated successfully"
+    }
+  } catch (error) {
+    console.error('Error updating booking settings:', error)
+    return {
+      success: false,
+      message: "Failed to update booking settings",
+      errors: { general: ["An error occurred while updating settings"] }
+    }
+  }
+}
+
+export async function toggleBookingStatusAction() {
+  try {
+    const currentSettings = await getBookingSettings()
+    await updateBookingSettings({
+      booking_enabled: !currentSettings.booking_enabled
+    })
+
+    revalidatePath("/dashboard/bookings")
+    revalidatePath("/reserve")
+
+    return { 
+      success: true, 
+      message: `Bookings ${!currentSettings.booking_enabled ? 'enabled' : 'suspended'}`
+    }
+  } catch (error) {
+    console.error("Error toggling booking status:", error)
+    return { 
+      success: false, 
+      error: "Failed to toggle booking status" 
+    }
+  }
+}
+
+export async function createBookingAction(formData: FormData): Promise<ActionState> {
+  try {
+    const name = formData.get("name") as string
+    const email = formData.get("email") as string
+    const phone = formData.get("phone") as string
+    const date = formData.get("date") as string
+    const time = formData.get("time") as string
+    const partySize = parseInt(formData.get("partySize") as string)
+    const specialRequests = formData.get("specialRequests") as string
+
+    if (!name || !email || !date || !time || !partySize) {
+      return {
+        success: false,
+        message: "Please fill in all required fields",
+        errors: { general: ["All fields are required"] }
+      }
+    }
+
+    const result = await createBookingWithCustomer({
+      customer: {
+        name,
+        email,
+        phone: phone || undefined
+      },
+      booking: {
+        booking_date: date,
+        booking_time: time,
+        party_size: partySize,
+        special_requests: specialRequests || undefined
+      }
+    })
+
+    revalidatePath("/dashboard/bookings")
+    revalidatePath("/dashboard")
+    
+    return {
+      success: true,
+      message: "Booking created successfully"
+    }
+  } catch (error) {
+    console.error('Error creating booking:', error)
+    return {
+      success: false,
+      message: "Failed to create booking",
+      errors: { general: ["An error occurred while creating the booking"] }
+    }
+  }
+}
+
+export async function getAllBookings() {
+  try {
+    return await getBookings()
+  } catch (error) {
+    console.error('Error fetching bookings:', error)
+    return []
+  }
+}
+
+export async function refreshBookings() {
+  revalidatePath("/dashboard/bookings")
+  revalidatePath("/dashboard")
+}
+
+export async function saveServicePeriodsAction(servicePeriods: ServicePeriod[]): Promise<void> {
+  try {
+    console.log('Saving service periods:', servicePeriods)
+    
+    // Get current service periods from database
+    const currentSettings = await getBookingSettings()
+    const currentPeriods = currentSettings.service_periods || []
+    
+    // Get current period IDs - filter out undefined values properly
+    const currentPeriodIds = currentPeriods
+      .map(p => p.id)
+      .filter((id): id is string => Boolean(id))
+    
+    // Get new period IDs - filter out undefined values properly  
+    const newPeriodIds = servicePeriods
+      .map(p => p.id)
+      .filter((id): id is string => Boolean(id))
+    
+    // Delete periods that are no longer in the new list
+    const periodsToDelete = currentPeriodIds.filter(id => !newPeriodIds.includes(id))
+    for (const periodId of periodsToDelete) {
+      await deleteServicePeriod(periodId)
+    }
+    
+    // Upsert all service periods
+    for (const period of servicePeriods) {
+      await upsertServicePeriod(period)
+    }
+    
+    // Generate new time slots and update booking config
+    const timeSlots = await generateTimeSlotsFromPeriods()
+    await updateBookingSettings({
+      available_times: timeSlots
+    })
+    
+    console.log('Service periods saved successfully')
+  } catch (error) {
+    console.error('Error saving service periods:', error)
+    throw error
+  }
+}

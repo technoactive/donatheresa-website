@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Force black background to prevent white gaps during overscroll */
+html {
+  background-color: #000000 !important;
+  min-height: 100%;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #000000 !important;
+  min-height: 100vh;
+  /* Prevent overscroll bounce on mobile */
+  overscroll-behavior: none;
+  /* Prevent scroll bounce on iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent overscroll on all elements */
+* {
+  overscroll-behavior: none;
+}
+
+/* Additional mobile fixes for Safari */
+html, body {
+  -webkit-overscroll-behavior: none;
+  overscroll-behavior: none;
+  /* Ensure black background always shows */
+  background: #000000 !important;
+}
+
+/* Prevent white flash on page transitions */
+#__next, [data-nextjs-scroll-focus-boundary] {
+  background-color: #000000 !important;
+}
+
+/* Ensure all major containers are black */
+main, div[data-nextjs-scroll-focus-boundary], .min-h-screen {
+  background-color: #000000 !important;
+}
+
+/* Handle viewport background for mobile browsers */
+@media screen and (max-width: 768px) {
+  html {
+    background: #000000 !important;
+    /* Prevent pull-to-refresh white background */
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+  }
+  
+  body {
+    /* Ensure mobile scrolling shows black */
+    background: #000000 !important;
+    /* Additional mobile-specific overscroll prevention */
+    overscroll-behavior-y: none;
+    -webkit-overscroll-behavior-y: none;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 0%; /* Changed from 100% to 0% for black */
+    --foreground: 0 0% 98%; /* Changed to white text */
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --radius: 0.5rem;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --background: 0 0% 0%; /* Ensure dark mode is also black */
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-black text-white;
+    /* Force black background and white text */
+    background-color: #000000 !important;
+    color: #ffffff;
+  }
+}
