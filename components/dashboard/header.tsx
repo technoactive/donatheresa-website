@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Bell, Menu, UtensilsCrossed } from "lucide-react"
+import { Bell, Menu, UtensilsCrossed, X } from "lucide-react"
 import { useState, useEffect } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -51,22 +51,29 @@ export function Header() {
       
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="shrink-0 md:hidden bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900">
-            <Menu className="h-5 w-5" />
+          <Button variant="outline" size="icon" className="shrink-0 md:hidden bg-white border-slate-200 hover:bg-slate-50" style={{ color: '#16a34a' }}>
+            <Menu className="h-6 w-6" />
             <span className="sr-only">Toggle navigation menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="flex flex-col z-[60] bg-white border-slate-200">
+        <SheetContent side="left" className="flex flex-col z-[60] bg-white border-slate-200 [&>button]:hidden">
           <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
           
           {/* Header */}
-          <header className="flex h-14 items-center border-b border-slate-200 px-4 mb-4">
+          <header className="flex h-14 items-center justify-between border-b border-slate-200 px-4 mb-4">
             <button
               onClick={() => handleLinkClick("/dashboard")}
               className="flex items-center gap-2 font-semibold text-slate-900 hover:text-slate-700 transition-colors"
             >
               <span className="text-2xl">🍽️</span>
               <span>Dona Theresa</span>
+            </button>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="p-2 hover:bg-slate-100 rounded-md transition-colors"
+              style={{ color: '#16a34a' }}
+            >
+              <X className="h-6 w-6 font-bold" strokeWidth={3} />
             </button>
           </header>
           
@@ -81,10 +88,10 @@ export function Header() {
                     <button
                       onClick={() => handleLinkClick(link.href)}
                       style={{
-                        backgroundColor: isCurrentPage ? '#0f172a' : 'transparent',
+                        backgroundColor: isCurrentPage ? '#16a34a' : 'transparent',
                         color: isCurrentPage ? 'white' : '#475569',
                       }}
-                      className="flex items-center gap-4 rounded-lg px-4 py-4 min-h-[48px] text-base font-medium transition-all duration-200 text-left w-full"
+                      className="flex items-center gap-4 rounded-lg px-4 py-4 min-h-[48px] text-base font-semibold transition-all duration-200 text-left w-full"
                       onMouseEnter={(e) => {
                         if (!isCurrentPage) {
                           e.currentTarget.style.backgroundColor = '#f8fafc'
