@@ -94,7 +94,7 @@ export function Header() {
       </Sheet>
       <div className="w-full flex-1 relative z-10">
         {isMounted && (
-          <h1 className="font-semibold text-lg hidden md:block header-title">
+          <h1 className="font-semibold text-lg hidden md:block header-title ml-6">
             {navLinks.find((link) => link.href === pathname)?.label}
           </h1>
         )}
