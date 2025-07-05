@@ -93,4 +93,4 @@ Built with modern development practices:
 
 ---
 
-**© 2024 Dona Theresa Restaurant** - Built with ❤️ for exceptional dining experiences.
+**© 2025 Dona Theresa Restaurant** - Built with ❤️ for exceptional dining experiences.
