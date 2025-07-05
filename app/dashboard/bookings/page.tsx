@@ -29,40 +29,48 @@ function ServerDailyStats({ bookings }: { bookings: Booking[] }) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <Card>
+        <Card className="bg-white border-slate-200 shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Today's Bookings</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-slate-600">Today's Bookings</CardTitle>
+            <div className="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center">
+              <Users className="h-4 w-4 text-blue-600" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{dailyStats.totalBookings}</div>
+            <div className="text-2xl font-bold text-slate-900">{dailyStats.totalBookings}</div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-white border-slate-200 shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Today's Guests</CardTitle>
-            <Users2 className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-slate-600">Today's Guests</CardTitle>
+            <div className="h-8 w-8 rounded-lg bg-green-100 flex items-center justify-center">
+              <Users2 className="h-4 w-4 text-green-600" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{dailyStats.totalGuests}</div>
+            <div className="text-2xl font-bold text-slate-900">{dailyStats.totalGuests}</div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-white border-slate-200 shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Confirmed</CardTitle>
-            <CalendarCheck className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-slate-600">Confirmed</CardTitle>
+            <div className="h-8 w-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+              <CalendarCheck className="h-4 w-4 text-emerald-600" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{dailyStats.confirmed}</div>
+            <div className="text-2xl font-bold text-slate-900">{dailyStats.confirmed}</div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-white border-slate-200 shadow-sm hover:shadow-md transition-shadow">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium text-slate-600">Pending</CardTitle>
+            <div className="h-8 w-8 rounded-lg bg-yellow-100 flex items-center justify-center">
+              <Clock className="h-4 w-4 text-yellow-600" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{dailyStats.pending}</div>
+            <div className="text-2xl font-bold text-slate-900">{dailyStats.pending}</div>
           </CardContent>
         </Card>
       </div>
@@ -107,9 +115,9 @@ export default async function BookingsPage() {
 
     return (
       <div className="space-y-6">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">Bookings</h2>
-          <p className="text-muted-foreground">
+        <div className="pb-4">
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900">Bookings</h2>
+          <p className="text-slate-600 mt-2">
             Manage all your restaurant reservations.
           </p>
         </div>
@@ -120,9 +128,9 @@ export default async function BookingsPage() {
     console.error('[SERVER] Error in BookingsPage:', error)
     return (
       <div className="space-y-6">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight">Bookings</h2>
-          <p className="text-muted-foreground">
+        <div className="pb-4">
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900">Bookings</h2>
+          <p className="text-slate-600 mt-2">
             Unable to load bookings at this time.
           </p>
         </div>

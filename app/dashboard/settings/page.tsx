@@ -21,15 +21,15 @@ export default function SettingsPage() {
     >
       {/* Settings Cards */}
       <div className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="group hover:shadow-lg transition-all duration-200 cursor-pointer bg-zinc-900/50 border-zinc-700 flex flex-col h-full">
+        <Card className="group hover:shadow-lg transition-all duration-200 cursor-pointer bg-white border-slate-200 shadow-sm flex flex-col h-full">
           <CardHeader className="pb-4 flex-grow">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-amber-500/10 rounded-lg">
-                <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" />
+              <div className="p-2 bg-amber-50 rounded-lg">
+                <Calendar className="w-5 h-5 sm:w-6 sm:h-6 text-amber-600" />
               </div>
               <div>
-                <CardTitle className="text-white text-base sm:text-lg">Booking Settings</CardTitle>
-                <CardDescription className="text-zinc-400 text-sm">
+                <CardTitle className="text-slate-900 text-base sm:text-lg">Booking Settings</CardTitle>
+                <CardDescription className="text-slate-600 text-sm">
                   Configure reservations, time slots, and availability
                 </CardDescription>
               </div>
@@ -48,15 +48,15 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        <Card className="group hover:shadow-lg transition-all duration-200 cursor-pointer bg-zinc-900/50 border-zinc-700 flex flex-col h-full">
+        <Card className="group hover:shadow-lg transition-all duration-200 cursor-pointer bg-white border-slate-200 shadow-sm flex flex-col h-full">
           <CardHeader className="pb-4 flex-grow">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-emerald-500/10 rounded-lg">
-                <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" />
+              <div className="p-2 bg-emerald-50 rounded-lg">
+                <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-600" />
               </div>
               <div>
-                <CardTitle className="text-white text-base sm:text-lg">Locale Settings</CardTitle>
-                <CardDescription className="text-zinc-400 text-sm">
+                <CardTitle className="text-slate-900 text-base sm:text-lg">Locale Settings</CardTitle>
+                <CardDescription className="text-slate-600 text-sm">
                   Configure timezone, currency, and formatting
                 </CardDescription>
               </div>
@@ -75,22 +75,22 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
 
-        <Card className="group opacity-50 bg-zinc-900/30 border-zinc-700/50 flex flex-col h-full">
+        <Card className="group opacity-50 bg-white border-slate-200 shadow-sm flex flex-col h-full">
           <CardHeader className="pb-4 flex-grow">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-zinc-500/10 rounded-lg">
-                <Settings2 className="w-5 h-5 sm:w-6 sm:h-6 text-zinc-400" />
+              <div className="p-2 bg-slate-50 rounded-lg">
+                <Settings2 className="w-5 h-5 sm:w-6 sm:h-6 text-slate-400" />
               </div>
               <div>
-                <CardTitle className="text-zinc-500 text-base sm:text-lg">Staff Settings</CardTitle>
-                <CardDescription className="text-zinc-600 text-sm">
+                <CardTitle className="text-slate-500 text-base sm:text-lg">Staff Settings</CardTitle>
+                <CardDescription className="text-slate-400 text-sm">
                   User accounts and permissions
                 </CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent className="pt-0 mt-auto">
-            <Button disabled className="w-full h-10" variant="outline">
+            <Button disabled className="w-full h-10 bg-slate-100 text-slate-400 border-slate-200" variant="outline">
               Coming Soon
             </Button>
           </CardContent>

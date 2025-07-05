@@ -53,20 +53,20 @@ export function DeleteCustomerDialog({ customer, open, onOpenChange }: DeleteCus
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent>
+      <AlertDialogContent className="bg-white border-slate-200">
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogTitle className="text-slate-900">Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription className="text-slate-600">
             This action cannot be undone. This will permanently delete the customer{" "}
-            <span className="font-semibold">{customer.name}</span> and all associated data.
+            <span className="font-semibold text-slate-900">{customer.name}</span> and all associated data.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={isDeleting} className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900">Cancel</AlertDialogCancel>
           <AlertDialogAction 
             onClick={handleDelete} 
             disabled={isDeleting}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            className="bg-red-600 text-white hover:bg-red-700"
           >
             {isDeleting ? "Deleting..." : "Yes, delete customer"}
           </AlertDialogAction>

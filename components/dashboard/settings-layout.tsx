@@ -43,13 +43,13 @@ export function SettingsLayout({
         <div className="space-y-1">
           <div className="flex items-center gap-3">
             {showBackButton && (
-              <Link href={backUrl} className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link href={backUrl} className="text-slate-600 hover:text-slate-900 transition-colors">
                 <ArrowLeft className="w-4 h-4" />
               </Link>
             )}
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-white">{title}</h1>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900">{title}</h1>
           </div>
-          <p className="text-muted-foreground text-sm sm:text-base">
+          <p className="text-slate-600 text-sm sm:text-base">
             {description}
           </p>
         </div>
@@ -61,7 +61,7 @@ export function SettingsLayout({
                 onClick={secondaryAction.onClick}
                 disabled={secondaryAction.disabled || secondaryAction.loading}
                 variant={secondaryAction.variant || "outline"}
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900"
               >
                 {secondaryAction.loading ? (
                   secondaryAction.loadingLabel || "Loading..."
@@ -74,7 +74,7 @@ export function SettingsLayout({
               <Button 
                 onClick={primaryAction.onClick}
                 disabled={primaryAction.disabled || primaryAction.loading}
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white"
               >
                 {primaryAction.loading ? (
                   primaryAction.loadingLabel || "Loading..."

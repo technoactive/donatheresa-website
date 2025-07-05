@@ -8,7 +8,7 @@ export default function DashboardLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="min-h-screen w-full bg-background">
+    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
       {/* Fixed Header - always visible across all screen sizes */}
       <Header />
       

@@ -281,8 +281,8 @@ export default function BookingSettingsPage() {
       >
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
-            <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-muted-foreground" />
-            <p className="text-muted-foreground">Loading settings...</p>
+            <RefreshCw className="w-8 h-8 animate-spin mx-auto mb-4 text-slate-600" />
+            <p className="text-slate-600">Loading settings...</p>
           </div>
         </div>
       </SettingsLayout>
@@ -312,21 +312,23 @@ export default function BookingSettingsPage() {
       <div className="w-full max-w-full space-y-4 md:space-y-6">
         {/* System Status */}
         <div className="grid gap-4 md:grid-cols-2">
-          <Card>
+          <Card className="bg-white border-slate-200 shadow-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Calendar className="w-5 h-5" />
+              <CardTitle className="flex items-center gap-2 text-slate-900">
+                <div className="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-blue-600" />
+                </div>
                 Booking System
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-slate-600">
                 Control whether customers can make new reservations
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label>Accept New Bookings</Label>
-                  <p className="text-sm text-muted-foreground">Enable or disable the booking system</p>
+                  <Label className="text-slate-900">Accept New Bookings</Label>
+                  <p className="text-sm text-slate-600">Enable or disable the booking system</p>
                 </div>
                 <Switch
                   checked={bookingSettings.booking_enabled}
@@ -338,83 +340,90 @@ export default function BookingSettingsPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white border-slate-200 shadow-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="w-5 h-5" />
+              <CardTitle className="flex items-center gap-2 text-slate-900">
+                <div className="h-8 w-8 rounded-lg bg-green-100 flex items-center justify-center">
+                  <Users className="w-5 h-5 text-green-600" />
+                </div>
                 Booking Limits
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-slate-600">
                 Set limits for advance bookings and party sizes
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="totalSeats">Total Restaurant Seats</Label>
-                <Input
-                  id="totalSeats"
-                  type="number"
-                  min="1"
-                  max="500"
-                  value={bookingSettings.total_seats && bookingSettings.total_seats > 0 ? bookingSettings.total_seats : ''}
-                  onChange={(e) => setBookingSettings(prev => ({
-                    ...prev, 
-                    total_seats: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
-                  }))}
-                  placeholder=""
-                />
-                <p className="text-sm text-muted-foreground">
-                  Total seating capacity for occupancy calculations
-                </p>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="maxAdvanceDays">Maximum Advance Days</Label>
-                <Input
-                  id="maxAdvanceDays"
-                  type="number"
-                  min="1"
-                  max="365"
-                  value={bookingSettings.max_advance_days && bookingSettings.max_advance_days > 0 ? bookingSettings.max_advance_days : ''}
-                  onChange={(e) => setBookingSettings(prev => ({
-                    ...prev, 
-                    max_advance_days: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
-                  }))}
-                  placeholder=""
-                />
-                <p className="text-sm text-muted-foreground">
-                  How far in advance customers can book
-                </p>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="maxPartySize">Maximum Party Size</Label>
-                <Input
-                  id="maxPartySize"
-                  type="number"
-                  min="1"
-                  max="20"
-                  value={bookingSettings.max_party_size && bookingSettings.max_party_size > 0 ? bookingSettings.max_party_size : ''}
-                  onChange={(e) => setBookingSettings(prev => ({
-                    ...prev, 
-                    max_party_size: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
-                  }))}
-                  placeholder=""
-                />
-                <p className="text-sm text-muted-foreground">
-                  Maximum number of guests per booking
-                </p>
-              </div>
+                              <div className="space-y-2">
+                  <Label htmlFor="totalSeats" className="text-slate-900">Total Restaurant Seats</Label>
+                  <Input
+                    id="totalSeats"
+                    type="number"
+                    min="1"
+                    max="500"
+                    value={bookingSettings.total_seats && bookingSettings.total_seats > 0 ? bookingSettings.total_seats : ''}
+                    onChange={(e) => setBookingSettings(prev => ({
+                      ...prev, 
+                      total_seats: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
+                    }))}
+                    placeholder=""
+                    className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
+                  />
+                  <p className="text-sm text-slate-600">
+                    Total seating capacity for occupancy calculations
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="maxAdvanceDays" className="text-slate-900">Maximum Advance Days</Label>
+                  <Input
+                    id="maxAdvanceDays"
+                    type="number"
+                    min="1"
+                    max="365"
+                    value={bookingSettings.max_advance_days && bookingSettings.max_advance_days > 0 ? bookingSettings.max_advance_days : ''}
+                    onChange={(e) => setBookingSettings(prev => ({
+                      ...prev, 
+                      max_advance_days: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
+                    }))}
+                    placeholder=""
+                    className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
+                  />
+                  <p className="text-sm text-slate-600">
+                    How far in advance customers can book
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="maxPartySize" className="text-slate-900">Maximum Party Size</Label>
+                  <Input
+                    id="maxPartySize"
+                    type="number"
+                    min="1"
+                    max="20"
+                    value={bookingSettings.max_party_size && bookingSettings.max_party_size > 0 ? bookingSettings.max_party_size : ''}
+                    onChange={(e) => setBookingSettings(prev => ({
+                      ...prev, 
+                      max_party_size: e.target.value === '' ? 0 : parseInt(e.target.value) || 0
+                    }))}
+                    placeholder=""
+                    className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
+                  />
+                  <p className="text-sm text-slate-600">
+                    Maximum number of guests per booking
+                  </p>
+                </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Suspension Message */}
-        <Card>
+        <Card className="bg-white border-slate-200 shadow-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertCircle className="w-5 h-5" />
+            <CardTitle className="flex items-center gap-2 text-slate-900">
+              <div className="h-8 w-8 rounded-lg bg-amber-100 flex items-center justify-center">
+                <AlertCircle className="w-5 h-5 text-amber-600" />
+              </div>
               Suspension Message
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-slate-600">
               Message displayed when bookings are disabled
             </CardDescription>
           </CardHeader>
@@ -427,25 +436,27 @@ export default function BookingSettingsPage() {
               }))}
               placeholder="We're currently not accepting new bookings. Please check back later."
               rows={3}
-              className="resize-none"
+              className="resize-none bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
             />
           </CardContent>
         </Card>
 
         {/* Service Periods */}
-        <Card>
+        <Card className="bg-white border-slate-200 shadow-sm">
           <CardHeader>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
               <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="w-5 h-5" />
+                <CardTitle className="flex items-center gap-2 text-slate-900">
+                  <div className="h-8 w-8 rounded-lg bg-purple-100 flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-purple-600" />
+                  </div>
                   Service Periods
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-slate-600">
                   Configure lunch, dinner, and custom service times
                 </CardDescription>
               </div>
-              <Button onClick={addServicePeriod} size="sm">
+              <Button onClick={addServicePeriod} size="sm" className="bg-slate-900 hover:bg-slate-800 text-white">
                 <Plus className="w-4 h-4 mr-2" />
                 Add Period
               </Button>
@@ -453,7 +464,7 @@ export default function BookingSettingsPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             {servicePeriods.map((period) => (
-              <Card key={period.id} className="border-muted">
+              <Card key={period.id} className="border-slate-200 shadow-sm bg-slate-50">
                 <CardContent className="p-4">
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
                     <div className="flex items-center gap-3">
@@ -463,7 +474,7 @@ export default function BookingSettingsPage() {
                       <Input
                         value={period.name}
                         onChange={(e) => updateServicePeriod(period.id, { name: e.target.value })}
-                        className="font-medium w-auto"
+                        className="font-medium w-auto bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
                       />
                     </div>
                     <div className="flex items-center gap-3">
@@ -476,6 +487,7 @@ export default function BookingSettingsPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => removeServicePeriod(period.id)}
+                          className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -484,91 +496,95 @@ export default function BookingSettingsPage() {
                   </div>
 
                   {period.enabled && (
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div className="space-y-2">
-                          <Label>Start Time</Label>
-                          <Input
-                            type="time"
-                            value={period.startTime}
-                            onChange={(e) => updateServicePeriod(period.id, { startTime: e.target.value })}
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Last Order Time</Label>
-                          <Input
-                            type="time"
+                                          <div className="space-y-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                          <div className="space-y-2">
+                            <Label className="text-slate-900">Start Time</Label>
+                            <Input
+                              type="time"
+                              value={period.startTime}
+                              onChange={(e) => updateServicePeriod(period.id, { startTime: e.target.value })}
+                              className="bg-white border-slate-200 text-slate-900"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-slate-900">Last Order Time</Label>
+                            <Input
+                              type="time"
                             value={period.lastOrderTime}
                             onChange={(e) => updateServicePeriod(period.id, { lastOrderTime: e.target.value })}
+                            className="bg-white border-slate-200 text-slate-900"
                           />
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-slate-600">
                             When kitchen stops taking orders
                           </p>
                         </div>
                         <div className="space-y-2">
-                          <Label>Kitchen Closing Time</Label>
+                          <Label className="text-slate-900">Kitchen Closing Time</Label>
                           <Input
                             type="time"
                             value={period.kitchenClosingTime}
                             onChange={(e) => updateServicePeriod(period.id, { kitchenClosingTime: e.target.value })}
+                            className="bg-white border-slate-200 text-slate-900"
                           />
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-slate-600">
                             When kitchen actually closes
                           </p>
                         </div>
                         <div className="space-y-2">
-                          <Label>End Time</Label>
+                          <Label className="text-slate-900">End Time</Label>
                           <Input
                             type="time"
                             value={period.endTime}
                             onChange={(e) => updateServicePeriod(period.id, { endTime: e.target.value })}
+                            className="bg-white border-slate-200 text-slate-900"
                           />
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-slate-600">
                             Service period end time
                           </p>
                         </div>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <Label>Interval (minutes)</Label>
+                          <Label className="text-slate-900">Interval (minutes)</Label>
                           <Select 
                             value={period.interval.toString()} 
                             onValueChange={(value) => updateServicePeriod(period.id, { interval: parseInt(value) })}
                           >
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-white border-slate-200 text-slate-900">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="5">5 min</SelectItem>
-                              <SelectItem value="10">10 min</SelectItem>
-                              <SelectItem value="15">15 min</SelectItem>
-                              <SelectItem value="20">20 min</SelectItem>
-                              <SelectItem value="25">25 min</SelectItem>
-                              <SelectItem value="30">30 min</SelectItem>
-                              <SelectItem value="35">35 min</SelectItem>
-                              <SelectItem value="40">40 min</SelectItem>
-                              <SelectItem value="45">45 min</SelectItem>
-                              <SelectItem value="50">50 min</SelectItem>
-                              <SelectItem value="55">55 min</SelectItem>
-                              <SelectItem value="60">60 min</SelectItem>
+                            <SelectContent className="bg-white border-slate-200">
+                              <SelectItem value="5" className="text-slate-900">5 min</SelectItem>
+                              <SelectItem value="10" className="text-slate-900">10 min</SelectItem>
+                              <SelectItem value="15" className="text-slate-900">15 min</SelectItem>
+                              <SelectItem value="20" className="text-slate-900">20 min</SelectItem>
+                              <SelectItem value="25" className="text-slate-900">25 min</SelectItem>
+                              <SelectItem value="30" className="text-slate-900">30 min</SelectItem>
+                              <SelectItem value="35" className="text-slate-900">35 min</SelectItem>
+                              <SelectItem value="40" className="text-slate-900">40 min</SelectItem>
+                              <SelectItem value="45" className="text-slate-900">45 min</SelectItem>
+                              <SelectItem value="50" className="text-slate-900">50 min</SelectItem>
+                              <SelectItem value="55" className="text-slate-900">55 min</SelectItem>
+                              <SelectItem value="60" className="text-slate-900">60 min</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
                         <div className="space-y-2">
-                          <Label>Period Type</Label>
+                          <Label className="text-slate-900">Period Type</Label>
                           <Select 
                             value={period.type} 
                             onValueChange={(value: "lunch" | "dinner" | "break") => 
                               updateServicePeriod(period.id, { type: value })
                             }
                           >
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-white border-slate-200 text-slate-900">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="lunch">🍽️ Lunch</SelectItem>
-                              <SelectItem value="dinner">🌅 Dinner</SelectItem>
-                              <SelectItem value="break">☕ Other</SelectItem>
+                            <SelectContent className="bg-white border-slate-200">
+                              <SelectItem value="lunch" className="text-slate-900">🍽️ Lunch</SelectItem>
+                              <SelectItem value="dinner" className="text-slate-900">🌅 Dinner</SelectItem>
+                              <SelectItem value="break" className="text-slate-900">☕ Other</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -582,14 +598,16 @@ export default function BookingSettingsPage() {
         </Card>
 
         {/* Generated Time Slots */}
-        <Card>
+        <Card className="bg-white border-slate-200 shadow-sm">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Clock className="w-5 h-5" />
+            <CardTitle className="flex items-center gap-2 text-slate-900">
+              <div className="h-8 w-8 rounded-lg bg-indigo-100 flex items-center justify-center">
+                <Clock className="w-5 h-5 text-indigo-600" />
+              </div>
               Generated Time Slots
-              <Badge variant="secondary">{timeSlots.length}</Badge>
+              <Badge variant="secondary" className="bg-slate-100 text-slate-700">{timeSlots.length}</Badge>
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-slate-600">
               Available booking times generated from service periods
             </CardDescription>
           </CardHeader>
@@ -597,13 +615,13 @@ export default function BookingSettingsPage() {
             {timeSlots.length > 0 ? (
               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
                 {timeSlots.map((slot) => (
-                  <Badge key={slot} variant="outline" className="justify-center py-2">
+                  <Badge key={slot} variant="outline" className="justify-center py-2 border-slate-200 text-slate-700">
                     {slot}
                   </Badge>
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground text-center py-8">
+              <p className="text-slate-600 text-center py-8">
                 No time slots generated. Enable service periods above to generate slots.
               </p>
             )}
@@ -612,13 +630,15 @@ export default function BookingSettingsPage() {
 
         {/* Closure Settings */}
         <div className="grid gap-4 md:grid-cols-2">
-          <Card>
+          <Card className="bg-white border-slate-200 shadow-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CalendarDays className="w-5 h-5" />
+              <CardTitle className="flex items-center gap-2 text-slate-900">
+                <div className="h-8 w-8 rounded-lg bg-red-100 flex items-center justify-center">
+                  <CalendarDays className="w-5 h-5 text-red-600" />
+                </div>
                 Weekly Closures
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-slate-600">
                 Select days when the restaurant is closed
               </CardDescription>
             </CardHeader>
@@ -634,7 +654,11 @@ export default function BookingSettingsPage() {
                     }
                     size="sm"
                     onClick={() => toggleDayOfWeek(index)}
-                    className="flex flex-col gap-1 h-auto py-3"
+                    className={`flex flex-col gap-1 h-auto py-3 ${
+                      (bookingSettings.closed_days_of_week || []).includes(index) 
+                        ? "bg-red-500 hover:bg-red-600 text-white" 
+                        : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                    }`}
                   >
                     <span className="font-medium text-xs">{dayShortNames[index]}</span>
                     <span className="text-xs opacity-70">
@@ -646,13 +670,15 @@ export default function BookingSettingsPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="bg-white border-slate-200 shadow-sm">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Calendar className="w-5 h-5" />
+              <CardTitle className="flex items-center gap-2 text-slate-900">
+                <div className="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                  <Calendar className="w-5 h-5 text-blue-600" />
+                </div>
                 Specific Closed Dates
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-slate-600">
                 Add specific dates when the restaurant is closed
               </CardDescription>
             </CardHeader>
@@ -662,9 +688,9 @@ export default function BookingSettingsPage() {
                   type="date"
                   value={selectedDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
-                  className="flex-1"
+                  className="flex-1 bg-white border-slate-200 text-slate-900"
                 />
-                <Button onClick={addClosedDate} disabled={!selectedDate}>
+                <Button onClick={addClosedDate} disabled={!selectedDate} className="bg-slate-900 hover:bg-slate-800 text-white">
                   <Plus className="w-4 h-4" />
                 </Button>
               </div>
@@ -672,12 +698,13 @@ export default function BookingSettingsPage() {
               {bookingSettings.closed_dates.length > 0 ? (
                 <div className="space-y-2">
                   {bookingSettings.closed_dates.map((date) => (
-                    <div key={date} className="flex items-center justify-between p-2 border rounded">
-                      <span className="text-sm">{new Date(date).toLocaleDateString()}</span>
+                    <div key={date} className="flex items-center justify-between p-2 border border-slate-200 rounded bg-slate-50">
+                      <span className="text-sm text-slate-900">{new Date(date).toLocaleDateString()}</span>
                       <Button
                         variant="outline"
                         size="sm"
                         onClick={() => removeClosedDate(date)}
+                        className="bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -685,7 +712,7 @@ export default function BookingSettingsPage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-muted-foreground text-sm text-center py-4">
+                <p className="text-slate-600 text-sm text-center py-4">
                   No specific closed dates set
                 </p>
               )}
