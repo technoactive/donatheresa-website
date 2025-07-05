@@ -94,3 +94,5 @@ Built with modern development practices:
 ---
 
 **© 2025 Dona Theresa Restaurant** - Built with ❤️ for exceptional dining experiences.
+
+<!-- Last deployment trigger: 2025-01-05 -->
