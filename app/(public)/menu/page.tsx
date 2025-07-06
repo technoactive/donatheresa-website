@@ -75,11 +75,14 @@ const specialExperiences = [
 
 export default function MenuOverviewPage() {
   useEffect(() => {
-    // Auto-scroll to menu categories when page loads from navigation
+    // Auto-scroll to menu categories when page loads from navigation - MOBILE ONLY
     const timer = setTimeout(() => {
-      const menuSection = document.getElementById('menu-categories')
-      if (menuSection) {
-        menuSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      // Only scroll on mobile devices (width < 768px)
+      if (window.innerWidth < 768) {
+        const menuSection = document.getElementById('menu-categories')
+        if (menuSection) {
+          menuSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
       }
     }, 500) // Small delay to allow page to fully load
 
