@@ -33,14 +33,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { CalendarIcon, Plus } from "lucide-react"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import { Badge } from "@/components/ui/badge"
+import { CalendarIcon, Plus, Check, User, Search } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { toast } from "sonner"
-import { createManualBookingAction } from "@/app/dashboard/bookings/actions"
+import { createManualBookingAction, searchCustomersAction } from "@/app/dashboard/bookings/actions"
 import { useTransition } from "react"
 
 const formSchema = z.object({
@@ -57,6 +66,13 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>
 
+interface Customer {
+  id: string
+  name: string
+  email: string
+  phone?: string
+}
+
 interface AddBookingDialogProps {
   availableTimes?: string[]
   maxPartySize?: number
@@ -71,6 +87,11 @@ export function AddBookingDialog({
 }: AddBookingDialogProps) {
   const [open, setOpen] = React.useState(false)
   const [isPending, startTransition] = useTransition()
+  const [searchQuery, setSearchQuery] = React.useState("")
+  const [customers, setCustomers] = React.useState<Customer[]>([])
+  const [showCustomerDropdown, setShowCustomerDropdown] = React.useState(false)
+  const [selectedCustomer, setSelectedCustomer] = React.useState<Customer | null>(null)
+  const [isSearching, setIsSearching] = React.useState(false)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -83,6 +104,64 @@ export function AddBookingDialog({
       specialRequests: "",
     },
   })
+
+  // Debounced customer search
+  const searchTimeoutRef = React.useRef<NodeJS.Timeout | null>(null)
+  const searchCustomers = React.useCallback(async (query: string) => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current)
+      searchTimeoutRef.current = null
+    }
+
+    searchTimeoutRef.current = setTimeout(async () => {
+      if (query.length >= 2) {
+        setIsSearching(true)
+        try {
+          const results = await searchCustomersAction(query)
+          setCustomers(results)
+          setShowCustomerDropdown(true)
+        } catch (error) {
+          console.error('Error searching customers:', error)
+          setCustomers([])
+        } finally {
+          setIsSearching(false)
+        }
+      } else {
+        setCustomers([])
+        setShowCustomerDropdown(false)
+      }
+    }, 300) // 300ms debounce
+  }, [])
+
+  // Handle search input change
+  const handleSearchChange = React.useCallback((value: string) => {
+    setSearchQuery(value)
+    form.setValue("customerName", value)
+    
+    if (selectedCustomer && value !== selectedCustomer.name) {
+      setSelectedCustomer(null)
+    }
+    
+    searchCustomers(value)
+  }, [form, searchCustomers, selectedCustomer])
+
+  // Handle customer selection
+  const handleCustomerSelect = React.useCallback((customer: Customer) => {
+    setSelectedCustomer(customer)
+    setSearchQuery(customer.name)
+    form.setValue("customerName", customer.name)
+    form.setValue("customerEmail", customer.email)
+    form.setValue("customerPhone", customer.phone || "")
+    setShowCustomerDropdown(false)
+    setCustomers([])
+  }, [form])
+
+  // Clear customer selection when email changes manually
+  const handleEmailChange = React.useCallback((value: string) => {
+    if (selectedCustomer && value !== selectedCustomer.email) {
+      setSelectedCustomer(null)
+    }
+  }, [selectedCustomer])
 
   const onSubmit = (data: FormData) => {
     startTransition(async () => {
@@ -103,6 +182,10 @@ export function AddBookingDialog({
           toast.success(result.message)
           setOpen(false)
           form.reset()
+          setSelectedCustomer(null)
+          setSearchQuery("")
+          setCustomers([])
+          setShowCustomerDropdown(false)
         } else {
           toast.error(result.message)
         }
@@ -116,89 +199,167 @@ export function AddBookingDialog({
   const maxDate = new Date()
   maxDate.setDate(today.getDate() + 30) // 30 days in advance
 
+  // Reset form when dialog closes
+  React.useEffect(() => {
+    if (!open) {
+      form.reset()
+      setSelectedCustomer(null)
+      setSearchQuery("")
+      setCustomers([])
+      setShowCustomerDropdown(false)
+    }
+  }, [open, form])
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+        <Button className="bg-amber-600 hover:bg-amber-700 text-white shadow-sm transition-colors duration-200 font-medium">
           <Plus className="w-4 h-4 mr-2" />
           Add Booking
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Add Manual Booking</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="sm:max-w-[600px] max-h-[95vh] overflow-y-auto bg-white">
+        <DialogHeader className="space-y-3 pb-6">
+          <DialogTitle className="text-xl font-semibold text-slate-900">Add Manual Booking</DialogTitle>
+          <DialogDescription className="text-slate-600">
             Create a new booking directly from the dashboard. This booking will be marked as manually created.
           </DialogDescription>
         </DialogHeader>
         
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {/* Customer Information */}
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            {/* Customer Information Section */}
             <div className="space-y-4">
-              <h4 className="text-sm font-medium text-slate-900">Customer Information</h4>
+              <div className="flex items-center gap-2 mb-4">
+                <User className="w-4 h-4 text-amber-600" />
+                <h4 className="text-sm font-medium text-slate-900">Customer Information</h4>
+                {selectedCustomer && (
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 text-xs">
+                    <Check className="w-3 h-3 mr-1" />
+                    Existing Customer
+                  </Badge>
+                )}
+              </div>
               
+              {/* Customer Name with Autocomplete */}
               <FormField
                 control={form.control}
                 name="customerName"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Customer Name *</FormLabel>
+                  <FormItem className="relative">
+                    <FormLabel className="text-sm font-medium text-slate-700">Customer Name *</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter customer name" {...field} />
+                      <div className="relative">
+                        <Input 
+                          placeholder="Start typing customer name..."
+                          value={searchQuery}
+                          onChange={(e) => handleSearchChange(e.target.value)}
+                          className="pr-8"
+                        />
+                        <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+                        
+                        {/* Customer Dropdown */}
+                        {showCustomerDropdown && customers.length > 0 && (
+                          <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+                            {customers.map((customer) => (
+                              <button
+                                key={customer.id}
+                                type="button"
+                                className="w-full px-3 py-2 text-left hover:bg-slate-50 border-b border-slate-100 last:border-b-0 transition-colors duration-150"
+                                onClick={() => handleCustomerSelect(customer)}
+                              >
+                                <div className="font-medium text-slate-900 text-sm">{customer.name}</div>
+                                <div className="text-xs text-slate-500">{customer.email}</div>
+                                {customer.phone && (
+                                  <div className="text-xs text-slate-400">{customer.phone}</div>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                        
+                        {/* Loading state */}
+                        {isSearching && (
+                          <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg p-3">
+                            <div className="text-sm text-slate-500 text-center">Searching customers...</div>
+                          </div>
+                        )}
+                        
+                        {/* No results */}
+                        {showCustomerDropdown && !isSearching && customers.length === 0 && searchQuery.length >= 2 && (
+                          <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg p-3">
+                            <div className="text-sm text-slate-500 text-center">No existing customers found - will create new customer</div>
+                          </div>
+                        )}
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="customerEmail"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email *</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder="customer@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/* Email and Phone Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="customerEmail"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-slate-700">Email *</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="email" 
+                          placeholder="customer@example.com" 
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e)
+                            handleEmailChange(e.target.value)
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-              <FormField
-                control={form.control}
-                name="customerPhone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Optional phone number" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                <FormField
+                  control={form.control}
+                  name="customerPhone"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-slate-700">Phone</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Optional phone number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
-            {/* Booking Information */}
+            {/* Booking Information Section */}
             <div className="space-y-4">
-              <h4 className="text-sm font-medium text-slate-900">Booking Details</h4>
+              <h4 className="text-sm font-medium text-slate-900 flex items-center gap-2">
+                <CalendarIcon className="w-4 h-4 text-amber-600" />
+                Booking Details
+              </h4>
               
-              <div className="grid grid-cols-2 gap-4">
+              {/* Date and Time Row - Properly Aligned */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="date"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel>Date *</FormLabel>
+                      <FormLabel className="text-sm font-medium text-slate-700">Date *</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
                             <Button
                               variant="outline"
                               className={cn(
-                                "w-full pl-3 text-left font-normal",
+                                "w-full pl-3 text-left font-normal justify-start",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -233,7 +394,7 @@ export function AddBookingDialog({
                   name="time"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Time *</FormLabel>
+                      <FormLabel className="text-sm font-medium text-slate-700">Time *</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
@@ -259,7 +420,7 @@ export function AddBookingDialog({
                 name="partySize"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Party Size *</FormLabel>
+                    <FormLabel className="text-sm font-medium text-slate-700">Party Size *</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -267,6 +428,7 @@ export function AddBookingDialog({
                         max={maxPartySize}
                         {...field}
                         onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
+                        className="w-full sm:w-32"
                       />
                     </FormControl>
                     <FormMessage />
@@ -279,12 +441,13 @@ export function AddBookingDialog({
                 name="specialRequests"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Special Requests</FormLabel>
+                    <FormLabel className="text-sm font-medium text-slate-700">Special Requests</FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Any special requests or notes..."
                         rows={3}
                         {...field}
+                        className="resize-none"
                       />
                     </FormControl>
                     <FormMessage />
@@ -294,16 +457,21 @@ export function AddBookingDialog({
             </div>
 
             {/* Actions */}
-            <div className="flex justify-end space-x-2 pt-4">
+            <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-6 border-t border-slate-200">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isPending}
+                className="w-full sm:w-auto order-2 sm:order-1"
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isPending}>
+              <Button 
+                type="submit" 
+                disabled={isPending}
+                className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white order-1 sm:order-2"
+              >
                 {isPending ? "Creating..." : "Create Booking"}
               </Button>
             </div>

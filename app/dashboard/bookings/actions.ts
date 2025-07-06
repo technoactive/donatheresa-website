@@ -15,6 +15,7 @@ import {
   generateTimeSlotsFromPeriods,
   type ServicePeriod
 } from "@/lib/database"
+import { createClient } from "@/lib/supabase/server"
 import { type ActionState } from "@/lib/types"
 
 const updateBookingSchema = z.object({
@@ -341,6 +342,28 @@ export async function getAllBookings() {
 export async function refreshBookings() {
   revalidatePath("/dashboard/bookings")
   revalidatePath("/dashboard")
+}
+
+export async function searchCustomersAction(query: string) {
+  try {
+    if (!query || query.length < 2) {
+      return []
+    }
+
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('customers')
+      .select('id, name, email, phone')
+      .or(`name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%`)
+      .order('name')
+      .limit(5)
+
+    if (error) throw error
+    return data || []
+  } catch (error) {
+    console.error('Error searching customers:', error)
+    return []
+  }
 }
 
 export async function saveServicePeriodsAction(servicePeriods: ServicePeriod[]): Promise<void> {
