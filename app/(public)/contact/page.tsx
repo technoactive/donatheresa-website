@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Image from "next/image"
 import { MapPin, Phone, Clock, Send, MessageSquare } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { submitContactMessage } from "./actions"
 import { toast } from "sonner"
 import { RestaurantInfo, RestaurantPhoneLink } from "@/components/locale/restaurant-info"
@@ -24,6 +24,18 @@ export default function ContactPage() {
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  useEffect(() => {
+    // Auto-scroll to contact form when page loads from navigation
+    const timer = setTimeout(() => {
+      const contactFormSection = document.getElementById('contact-form')
+      if (contactFormSection) {
+        contactFormSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }, 500) // Small delay to allow page to fully load
+
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -201,7 +213,7 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form */}
-      <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-amber-50/20 relative overflow-hidden">
+      <section id="contact-form" className="py-20 bg-gradient-to-br from-slate-50 via-white to-amber-50/20 relative overflow-hidden">
         {/* Subtle Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-amber-100/20 to-yellow-100/10 rounded-full blur-3xl"></div>
