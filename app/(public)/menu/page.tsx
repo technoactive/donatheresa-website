@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
 import { Crown, Wine, Coffee, Star, Utensils, Calendar, Clock, Heart, Sparkles, ChefHat, ArrowRight } from "lucide-react"
+import { motion } from "framer-motion"
+import { useEffect } from "react"
 
 const menuCategories = [
   {
@@ -72,26 +74,126 @@ const specialExperiences = [
 ]
 
 export default function MenuOverviewPage() {
+  useEffect(() => {
+    // Auto-scroll to menu categories when page loads from navigation
+    const timer = setTimeout(() => {
+      const menuSection = document.getElementById('menu-categories')
+      if (menuSection) {
+        menuSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }
+    }, 500) // Small delay to allow page to fully load
+
+    return () => clearTimeout(timer)
+  }, [])
+
   return (
     <div className="bg-white text-slate-900 min-h-screen">
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/20" style={{ minHeight: '80vh', marginTop: '80px' }}>
-        {/* Decorative Elements */}
+        {/* Enhanced Decorative Elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-amber-100/30 to-yellow-100/20 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-orange-100/20 to-amber-100/30 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-amber-100/10 to-transparent rounded-full blur-3xl"></div>
+          <motion.div 
+            animate={{ 
+              y: [0, -20, 0],
+              rotate: [0, 5, 0]
+            }}
+            transition={{ 
+              duration: 6, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-amber-100/30 to-yellow-100/20 rounded-full blur-3xl"
+          />
+          <motion.div 
+            animate={{ 
+              y: [0, 15, 0],
+              rotate: [0, -3, 0]
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 1
+            }}
+            className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-orange-100/20 to-amber-100/30 rounded-full blur-3xl"
+          />
+          <motion.div 
+            animate={{ 
+              scale: [1, 1.1, 1],
+              opacity: [0.3, 0.5, 0.3]
+            }}
+            transition={{ 
+              duration: 10, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 2
+            }}
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-amber-100/10 to-transparent rounded-full blur-3xl"
+          />
+          
+          {/* Floating Sparkles */}
+          <motion.div
+            animate={{ 
+              y: [-10, 10, -10],
+              x: [-5, 5, -5],
+              rotate: [0, 180, 360]
+            }}
+            transition={{ 
+              duration: 4, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            className="absolute top-1/4 left-1/4 w-4 h-4 bg-amber-400/20 rounded-full"
+          />
+          <motion.div
+            animate={{ 
+              y: [10, -15, 10],
+              x: [5, -5, 5],
+              rotate: [360, 180, 0]
+            }}
+            transition={{ 
+              duration: 6, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 1.5
+            }}
+            className="absolute top-3/4 right-1/3 w-3 h-3 bg-yellow-400/30 rounded-full"
+          />
+          <motion.div
+            animate={{ 
+              y: [-5, 20, -5],
+              x: [-10, 10, -10],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{ 
+              duration: 5, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 3
+            }}
+            className="absolute bottom-1/3 left-2/3 w-2 h-2 bg-orange-400/25 rounded-full"
+          />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-center min-h-[80vh]">
-          <div className="text-center space-y-8 py-16">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center space-y-8 py-16"
+          >
             {/* Main Title */}
             <div className="space-y-6">
-              <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-amber-200/50 text-slate-700 px-8 py-4 rounded-full text-sm font-medium shadow-lg">
-                <Sparkles className="w-4 h-4 text-amber-600" />
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-amber-200/50 text-slate-700 px-8 py-4 rounded-full text-sm font-medium shadow-lg"
+              >
+                <Sparkles className="w-4 h-4 text-amber-600 animate-pulse" />
                 <span className="tracking-[0.2em] uppercase">Culinary Collection</span>
-                <div className="w-1 h-1 bg-amber-500 rounded-full"></div>
-              </div>
+                <div className="w-1 h-1 bg-amber-500 rounded-full animate-pulse"></div>
+              </motion.div>
               
               <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-tight tracking-tight">
                 <span className="block text-slate-900">OUR</span>
@@ -115,47 +217,67 @@ export default function MenuOverviewPage() {
             </div>
 
             {/* Quick Stats */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-8">
-              <div className="flex items-center gap-3 text-amber-600">
-                <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center shadow-sm">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-8 pt-8"
+            >
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.8, duration: 0.5 }}
+                className="flex items-center gap-3 text-amber-600 group"
+              >
+                <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:shadow-lg group-hover:scale-110 transition-all duration-300">
                   <Utensils className="w-6 h-6" />
                 </div>
                 <div>
                   <div className="text-xl font-bold text-slate-900">50+ Dishes</div>
                   <div className="text-sm text-slate-600">Authentic Recipes</div>
                 </div>
-              </div>
+              </motion.div>
               
               <div className="w-px h-16 bg-slate-300 hidden sm:block"></div>
               
-              <div className="flex items-center gap-3 text-amber-600">
-                <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center shadow-sm">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.0, duration: 0.5 }}
+                className="flex items-center gap-3 text-amber-600 group"
+              >
+                <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:shadow-lg group-hover:scale-110 transition-all duration-300">
                   <Wine className="w-6 h-6" />
                 </div>
                 <div>
                   <div className="text-xl font-bold text-slate-900">120+ Wines</div>
                   <div className="text-sm text-slate-600">Premium Selection</div>
                 </div>
-              </div>
+              </motion.div>
               
               <div className="w-px h-16 bg-slate-300 hidden sm:block"></div>
               
-              <div className="flex items-center gap-3 text-amber-600">
-                <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center shadow-sm">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.2, duration: 0.5 }}
+                className="flex items-center gap-3 text-amber-600 group"
+              >
+                <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center shadow-sm group-hover:shadow-lg group-hover:scale-110 transition-all duration-300">
                   <Star className="w-6 h-6" />
                 </div>
                 <div>
                   <div className="text-xl font-bold text-slate-900">13 Years</div>
                   <div className="text-sm text-slate-600">Excellence</div>
                 </div>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* Menu Categories */}
-      <section className="py-24 bg-gradient-to-b from-white to-slate-50/50">
+      <section id="menu-categories" className="py-24 bg-gradient-to-b from-white to-slate-50/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Section Header */}
           <div className="text-center mb-20">

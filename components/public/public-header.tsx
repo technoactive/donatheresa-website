@@ -123,7 +123,7 @@ export function PublicHeader() {
                 </div>
             </div>
               
-              <nav className="flex flex-col gap-2 p-6">
+              <nav className="flex flex-col gap-3 p-6">
                 {navLinks.map((link, index) => (
                   <div key={link.href}>
                 <Link
@@ -132,22 +132,22 @@ export function PublicHeader() {
                         handleNavClick(e, link.href)
                         closeSheet()
                       }}
-                      className="group relative flex items-center gap-3 px-4 py-3 text-slate-700 hover:text-slate-900 rounded-xl hover:bg-slate-50 transition-all duration-300"
+                      className="group relative flex items-center gap-4 px-6 py-5 text-slate-700 hover:text-slate-900 rounded-xl hover:bg-slate-50 transition-all duration-300"
                 >
-                      <div className="w-1 h-1 bg-amber-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <span className="font-medium">{link.label}</span>
+                      <div className="w-2 h-2 bg-amber-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <span className="font-semibold text-lg">{link.label}</span>
                 </Link>
                   </div>
               ))}
                 
-                <div className="mt-6">
+                <div className="mt-8">
                   <Button
                     asChild
-                    className="w-full py-4 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-xl text-base font-medium transition-all duration-300 hover:scale-105"
+                    className="w-full py-6 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-xl text-xl font-semibold transition-all duration-300 hover:scale-105"
                   >
-                    <Link href="/reserve" onClick={closeSheet} className="flex items-center justify-center gap-2">
+                    <Link href="/reserve" onClick={closeSheet} className="flex items-center justify-center gap-3">
                       <span>Reserve Table</span>
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight className="w-5 h-5" />
                 </Link>
               </Button>
                 </div>
