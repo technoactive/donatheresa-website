@@ -25,10 +25,15 @@ export default function OfferPopup({ isOpen, onClose }: OfferPopupProps) {
       <div className="bg-white rounded-3xl max-w-md w-full mx-4 relative overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
         {/* Close button */}
         <button
-          onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200 z-10"
+          onClick={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            onClose()
+          }}
+          className="absolute top-4 right-4 w-10 h-10 bg-white hover:bg-gray-100 rounded-full flex items-center justify-center transition-colors duration-200 z-50 shadow-lg border border-gray-200"
+          aria-label="Close popup"
         >
-          <X className="w-4 h-4 text-gray-600" />
+          <X className="w-5 h-5 text-gray-700" />
         </button>
 
         {/* Background decoration */}
