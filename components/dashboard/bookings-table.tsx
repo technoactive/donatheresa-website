@@ -57,7 +57,7 @@ const StatusActionButtons = React.memo(({
         size="sm"
         onClick={() => onStatusChange(booking.id, "confirmed")}
         disabled={isPending}
-        className="touch-target btn-touch bg-green-600 hover:bg-green-700 text-white w-20"
+        className="touch-target btn-touch bg-green-600 hover:bg-green-700 text-white min-w-[5.5rem]"
       >
         <CheckIcon className="w-4 h-4 mr-1" />
         Accept
@@ -69,7 +69,7 @@ const StatusActionButtons = React.memo(({
         variant="outline"
         onClick={() => onStatusChange(booking.id, "pending")}
         disabled={isPending}
-        className="touch-target btn-touch border-yellow-400 text-yellow-600 hover:bg-yellow-50 bg-white w-20"
+        className="touch-target btn-touch border-yellow-400 text-yellow-600 hover:bg-yellow-50 bg-white min-w-[5.5rem]"
       >
         <ClockIcon className="w-4 h-4 mr-1" />
         Pending
@@ -81,7 +81,7 @@ const StatusActionButtons = React.memo(({
         variant="outline"
         onClick={() => onStatusChange(booking.id, "cancelled")}
         disabled={isPending}
-        className="touch-target btn-touch border-red-400 text-red-600 hover:bg-red-50 bg-white w-20"
+        className="touch-target btn-touch border-red-400 text-red-600 hover:bg-red-50 bg-white min-w-[5.5rem]"
       >
         <Cross2Icon className="w-4 h-4 mr-1" />
         Cancel
