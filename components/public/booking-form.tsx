@@ -32,10 +32,18 @@ export function BookingForm() {
     const loadSettings = async () => {
       try {
         console.log('[DEBUG] Fetching booking settings from API...')
-        const response = await fetch('/api/booking-settings')
+        // Add cache busting parameter to ensure fresh data
+        const response = await fetch(`/api/booking-settings?t=${Date.now()}`, {
+          cache: 'no-cache',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        })
         if (response.ok) {
           const settings = await response.json()
           console.log('[DEBUG] Booking settings loaded from Supabase via API:', settings)
+          console.log('[DEBUG] Max party size from API:', settings.max_party_size)
           setBookingSettings(settings)
         } else {
           console.error('Failed to fetch booking settings')
@@ -120,14 +128,22 @@ export function BookingForm() {
   }
 
   const incrementPartySize = () => {
+    console.log('[DEBUG] Increment clicked. Current party size:', partySize, 'Max allowed:', bookingSettings?.max_party_size)
     if (partySize < bookingSettings.max_party_size) {
       setPartySize(partySize + 1)
+      console.log('[DEBUG] Party size increased to:', partySize + 1)
+    } else {
+      console.log('[DEBUG] Cannot increment - already at max party size')
     }
   }
 
   const decrementPartySize = () => {
+    console.log('[DEBUG] Decrement clicked. Current party size:', partySize)
     if (partySize > 1) {
       setPartySize(partySize - 1)
+      console.log('[DEBUG] Party size decreased to:', partySize - 1)
+    } else {
+      console.log('[DEBUG] Cannot decrement - already at minimum')
     }
   }
 
@@ -206,7 +222,7 @@ export function BookingForm() {
 
                 <div className="space-y-2 md:space-y-3">
                   <label className="block text-gray-900 font-semibold text-sm">
-                    Email <span className="text-gray-500 font-normal">(Optional)</span>
+                    Email *
                   </label>
                   <div className="relative group">
                     <Mail className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 h-4 md:h-5 w-4 md:w-5 text-gray-400 group-focus-within:text-amber-500 transition-colors z-10" />
@@ -215,6 +231,7 @@ export function BookingForm() {
                       name="email"
                       type="email"
                       placeholder="your@email.com"
+                      required
                       className="w-full pl-10 md:pl-12 pr-4 py-3 md:py-4 bg-white border-2 border-gray-200 rounded-lg md:rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-400 transition-all duration-300 hover:border-gray-300 relative text-sm md:text-base"
                     />
                   </div>
@@ -304,7 +321,9 @@ export function BookingForm() {
                       max={bookingSettings.max_party_size}
                       value={partySize}
                       onChange={(e) => {
+                        console.log('[DEBUG] Number input changed. Value entered:', e.target.value, 'Max allowed:', bookingSettings.max_party_size)
                         const value = Math.min(Math.max(1, parseInt(e.target.value) || 1), bookingSettings.max_party_size);
+                        console.log('[DEBUG] Clamped value:', value)
                         // Call the setter functions the appropriate number of times
                         const current = partySize;
                         if (value > current) {
@@ -324,6 +343,7 @@ export function BookingForm() {
                   <p className="text-xs md:text-sm text-gray-600 flex items-center gap-2">
                     <Users className="w-3 md:w-4 h-3 md:h-4" />
                     Choose between 1 - {bookingSettings.max_party_size} guests
+                    <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">[DEBUG: Max={bookingSettings.max_party_size}]</span>
                   </p>
                 </div>
 
