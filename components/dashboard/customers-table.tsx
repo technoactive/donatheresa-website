@@ -118,13 +118,11 @@ const MobileCustomerCard = React.memo(({
           <p className="font-medium text-slate-900">{formatUKPhoneNumber(customer.phone) || "No phone"}</p>
         </div>
         <div className="flex justify-end gap-2 pt-2 touch-spacing">
-          <Button variant="ghost" size="sm" onClick={() => onEdit(customer)} className="h-8 touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
+          <Button variant="ghost" size="icon" onClick={() => onEdit(customer)} className="h-8 w-8 touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
             <PencilIcon />
-            <span className="ml-1">Edit</span>
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => onDelete(customer)} className="h-8 text-red-600 hover:text-red-700 hover:bg-red-50 touch-target card-action-touch">
+          <Button variant="ghost" size="icon" onClick={() => onDelete(customer)} className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50 touch-target card-action-touch">
             <Trash2Icon />
-            <span className="ml-1">Delete</span>
           </Button>
         </div>
       </div>
