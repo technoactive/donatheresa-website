@@ -41,6 +41,21 @@ const StatusBadge = React.memo(({ status }: { status: string }) => (
   </Badge>
 ))
 
+const SourceBadge = React.memo(({ source }: { source: "website" | "dashboard" }) => (
+  <Badge
+    variant="outline"
+    className={cn(
+      "capitalize text-xs",
+      source === "website" &&
+        "bg-blue-50 text-blue-700 border-blue-200",
+      source === "dashboard" &&
+        "bg-purple-50 text-purple-700 border-purple-200",
+    )}
+  >
+    {source}
+  </Badge>
+))
+
 // Status Action Buttons Component for iPad-friendly status changes
 const StatusActionButtons = React.memo(({ 
   booking, 
@@ -114,8 +129,9 @@ const MobileBookingCard = React.memo(({
           <h3 className="font-semibold text-base leading-tight text-slate-900">{booking.customerName}</h3>
           <p className="text-sm text-slate-600 truncate">{booking.customerEmail}</p>
         </div>
-        <div className="badge-touch">
+        <div className="space-y-2 badge-touch">
           <StatusBadge status={booking.status} />
+          <SourceBadge source={booking.source} />
         </div>
       </div>
       
@@ -281,6 +297,7 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
               <TableRow className="table-row border-slate-200 hover:bg-slate-50">
                 <TableHead className="min-w-[200px] table-cell text-slate-700">Customer</TableHead>
                 <TableHead className="min-w-[100px] table-cell text-slate-700">Status</TableHead>
+                <TableHead className="min-w-[80px] table-cell text-slate-700">Source</TableHead>
                 <TableHead className="text-right min-w-[140px] table-cell text-slate-700">Booking Time</TableHead>
                 <TableHead className="text-center min-w-[100px] table-cell text-slate-700">Party Size</TableHead>
                 {mounted && !isReadOnly && <TableHead className="text-center min-w-[200px] table-cell text-slate-700">Quick Actions</TableHead>}
@@ -298,6 +315,11 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                     <TableCell className="min-w-[100px] table-cell">
                       <div className="badge-touch">
                         <StatusBadge status={booking.status} />
+                      </div>
+                    </TableCell>
+                    <TableCell className="min-w-[80px] table-cell">
+                      <div className="badge-touch">
+                        <SourceBadge source={booking.source} />
                       </div>
                     </TableCell>
                     <TableCell className="text-right min-w-[140px] table-cell">
@@ -350,7 +372,7 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                 ))
               ) : (
                 <TableRow className="table-row border-slate-200 hover:bg-slate-50">
-                  <TableCell colSpan={mounted && !isReadOnly ? 6 : 4} className="h-24 text-center table-cell text-slate-600">
+                  <TableCell colSpan={mounted && !isReadOnly ? 7 : 5} className="h-24 text-center table-cell text-slate-600">
                     No bookings found.
                   </TableCell>
                 </TableRow>

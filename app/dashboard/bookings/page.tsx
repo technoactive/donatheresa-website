@@ -1,5 +1,6 @@
 import React from "react"
 import { BookingsTable } from "@/components/dashboard/bookings-table"
+import { AddBookingDialog } from "@/components/dashboard/add-booking-dialog"
 import { getBookings, getBookingSettings } from "@/lib/database"
 import type { Booking } from "@/lib/types"
 import { RefreshCw, Users, CalendarCheck, Clock, Users2 } from "lucide-react"
@@ -110,16 +111,25 @@ export default async function BookingsPage() {
       partySize: booking.party_size,
       bookingTime: new Date(`${booking.booking_date}T${booking.booking_time}`),
       status: booking.status as "pending" | "confirmed" | "cancelled",
+      source: booking.source as "website" | "dashboard",
       notes: booking.special_requests || ""
     }))
 
     return (
       <div className="space-y-6">
-        <div className="pb-4">
-          <h2 className="text-3xl font-bold tracking-tight text-slate-900">Bookings</h2>
-          <p className="text-slate-600 mt-2">
-            Manage all your restaurant reservations.
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4">
+          <div>
+            <h2 className="text-3xl font-bold tracking-tight text-slate-900">Bookings</h2>
+            <p className="text-slate-600 mt-2">
+              Manage all your restaurant reservations.
+            </p>
+          </div>
+          <div className="mt-4 sm:mt-0">
+            <AddBookingDialog
+              availableTimes={bookingSettings?.available_times}
+              maxPartySize={bookingSettings?.max_party_size}
+            />
+          </div>
         </div>
         <BookingsTable bookings={bookings} />
       </div>

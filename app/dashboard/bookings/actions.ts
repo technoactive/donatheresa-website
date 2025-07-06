@@ -257,7 +257,8 @@ export async function createBookingAction(formData: FormData): Promise<ActionSta
         booking_date: date,
         booking_time: time,
         party_size: partySize,
-        special_requests: specialRequests || undefined
+        special_requests: specialRequests || undefined,
+        source: 'website' // Default for public bookings
       }
     })
 
@@ -273,6 +274,56 @@ export async function createBookingAction(formData: FormData): Promise<ActionSta
     return {
       success: false,
       message: "Failed to create booking",
+      errors: { general: ["An error occurred while creating the booking"] }
+    }
+  }
+}
+
+export async function createManualBookingAction(formData: FormData): Promise<ActionState> {
+  try {
+    const name = formData.get("name") as string
+    const email = formData.get("email") as string
+    const phone = formData.get("phone") as string
+    const date = formData.get("date") as string
+    const time = formData.get("time") as string
+    const partySize = parseInt(formData.get("partySize") as string)
+    const specialRequests = formData.get("specialRequests") as string
+
+    if (!name || !email || !date || !time || !partySize) {
+      return {
+        success: false,
+        message: "Please fill in all required fields",
+        errors: { general: ["All fields are required"] }
+      }
+    }
+
+    const result = await createBookingWithCustomer({
+      customer: {
+        name,
+        email,
+        phone: phone || undefined
+      },
+      booking: {
+        booking_date: date,
+        booking_time: time,
+        party_size: partySize,
+        special_requests: specialRequests || undefined,
+        source: 'dashboard' // Mark as manual booking from dashboard
+      }
+    })
+
+    revalidatePath("/dashboard/bookings")
+    revalidatePath("/dashboard")
+    
+    return {
+      success: true,
+      message: "Manual booking created successfully"
+    }
+  } catch (error) {
+    console.error('Error creating manual booking:', error)
+    return {
+      success: false,
+      message: "Failed to create manual booking",
       errors: { general: ["An error occurred while creating the booking"] }
     }
   }
