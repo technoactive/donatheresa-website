@@ -123,7 +123,7 @@ export default function AboutPage() {
                   </span>
                 </motion.div>
                 
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-none tracking-tight">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight tracking-tight">
                   <span className="block text-slate-900">About</span>
                   <span className="block bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 bg-clip-text text-transparent">
                     Dona Theresa
@@ -506,38 +506,53 @@ export default function AboutPage() {
       </section>
 
       {/* Call to Action */}
-      <section className="py-16 md:py-24 bg-slate-900 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-600/10 via-yellow-600/5 to-amber-600/10"></div>
+      <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-amber-50/20 relative overflow-hidden">
+        {/* Subtle Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-amber-100/20 to-yellow-100/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-20 w-48 h-48 bg-gradient-to-br from-orange-100/15 to-amber-100/20 rounded-full blur-3xl"></div>
+        </div>
         
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="space-y-6 md:space-y-8"
-          >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight">
-              Experience Manuel & Ana's
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-400">
-                Family Restaurant
-              </span>
-            </h2>
-            
-            <p className="text-lg sm:text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto">
-              Join us for an authentic Italian dining experience, created with Portuguese family passion 
-              and served with the warmth that makes Hatch End feel like home.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center items-center pt-4 md:pt-8">
-              <button className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-yellow-500 text-slate-900 px-8 md:px-10 py-3 md:py-4 rounded-xl md:rounded-2xl font-bold text-base md:text-lg hover:from-amber-600 hover:to-yellow-600 transition-all duration-300 hover:scale-105 shadow-2xl">
-                Reserve Your Table
-              </button>
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-12 md:p-16">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="space-y-8"
+            >
+              <div className="space-y-6">
+                <div className="inline-flex items-center gap-3 bg-amber-50 border border-amber-200 text-amber-700 px-6 py-3 rounded-full text-sm font-medium">
+                  <Heart className="w-4 h-4 text-amber-600" />
+                  <span className="tracking-[0.2em] uppercase">Ready to Dine?</span>
+                </div>
+                
+                <h2 className="text-4xl md:text-5xl font-bold text-slate-900 leading-tight pb-2">
+                  Experience Manuel & Ana's
+                  <span className="block bg-gradient-to-r from-amber-600 to-orange-500 bg-clip-text text-transparent">
+                    Family Restaurant
+                  </span>
+                </h2>
+                
+                <p className="text-xl text-slate-600 leading-relaxed max-w-3xl mx-auto">
+                  Join us for an authentic Italian dining experience, created with Portuguese family passion 
+                  and served with the warmth that makes Hatch End feel like home.
+                </p>
+              </div>
               
-              <button className="w-full sm:w-auto border-2 border-white/50 text-white px-8 md:px-10 py-3 md:py-4 rounded-xl md:rounded-2xl font-bold text-base md:text-lg hover:bg-white hover:text-slate-900 transition-all duration-300 hover:scale-105">
-                View Our Menu
-              </button>
-            </div>
-          </motion.div>
+              <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                <button className="group w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white rounded-2xl text-lg font-semibold transition-all duration-300 hover:scale-105 shadow-2xl">
+                  <span>Reserve Your Table</span>
+                  <Utensils className="w-5 h-5 ml-2 inline group-hover:translate-x-1 transition-transform" />
+                </button>
+                
+                <button className="group w-full sm:w-auto border-2 border-slate-300 hover:border-amber-400 text-slate-700 hover:text-amber-600 px-10 py-4 rounded-2xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:bg-amber-50">
+                  <span>View Our Menu</span>
+                  <Crown className="w-5 h-5 ml-2 inline group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
     </div>

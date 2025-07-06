@@ -102,22 +102,22 @@ export function PublicHeader() {
               <Button 
                 variant="outline" 
                 size="icon"
-                className="relative bg-zinc-900/50 backdrop-blur-xl border-zinc-700/50 hover:border-zinc-600 text-white hover:bg-zinc-800/50 rounded-xl"
+                className="relative bg-zinc-900/50 backdrop-blur-xl border-zinc-700/50 hover:border-amber-500/70 text-white hover:bg-zinc-800/50 rounded-xl transition-all duration-300 group"
               >
-                <Menu className="h-5 w-5" />
+                <Menu className="h-5 w-5 text-white group-hover:text-amber-400 transition-colors duration-300" />
               <span className="sr-only">Open menu</span>
             </Button>
           </SheetTrigger>
             <SheetContent 
               side="right" 
-              className="w-[320px] bg-black/95 backdrop-blur-xl border-zinc-800"
+              className="w-full bg-white backdrop-blur-xl border-slate-200 max-w-none"
             >
-              <div className="p-6 border-b border-zinc-800">
+              <div className="p-6 border-b border-slate-200">
                 <div>
-                  <SheetTitle className="text-xl font-bold bg-gradient-to-r from-white to-zinc-300 bg-clip-text text-transparent">
+                  <SheetTitle className="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
                     <RestaurantInfo type="name" fallback="DONA THERESA" className="uppercase" />
                   </SheetTitle>
-                  <div className="text-xs tracking-[0.2em] text-zinc-400 font-light">
+                  <div className="text-xs tracking-[0.2em] text-slate-500 font-light">
                     CULINARY EXCELLENCE
                   </div>
                 </div>
@@ -128,8 +128,11 @@ export function PublicHeader() {
                   <div key={link.href}>
                 <Link
                   href={link.href}
-                      onClick={(e) => handleNavClick(e, link.href)}
-                      className="group relative flex items-center gap-3 px-4 py-3 text-zinc-300 hover:text-white rounded-xl hover:bg-zinc-800/50 transition-all duration-300"
+                      onClick={(e) => {
+                        handleNavClick(e, link.href)
+                        closeSheet()
+                      }}
+                      className="group relative flex items-center gap-3 px-4 py-3 text-slate-700 hover:text-slate-900 rounded-xl hover:bg-slate-50 transition-all duration-300"
                 >
                       <div className="w-1 h-1 bg-amber-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                       <span className="font-medium">{link.label}</span>

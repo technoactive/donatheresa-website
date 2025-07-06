@@ -69,83 +69,88 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="bg-black text-white min-h-screen">
+    <div className="bg-white text-slate-900 min-h-screen">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center overflow-hidden" style={{ minHeight: 'calc(100vh - 80px)', marginTop: '80px' }}>
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-black via-zinc-900 to-black z-10" />
-          <Image
-            src="/gallery-interior.png"
-            alt="Restaurant interior"
-            fill
-            className="object-cover opacity-40"
-            priority
-          />
+      <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/20" style={{ minHeight: 'calc(100vh - 80px)', marginTop: '80px' }}>
+        {/* Decorative Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-amber-100/30 to-yellow-100/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-orange-100/20 to-amber-100/30 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-amber-100/10 to-transparent rounded-full blur-3xl"></div>
         </div>
 
-        <div className="absolute inset-0 z-20">
-          <div className="absolute top-20 left-20 w-96 h-96 rounded-full bg-gradient-to-r from-amber-500/10 to-yellow-500/10 blur-3xl" />
-          <div className="absolute bottom-20 right-20 w-64 h-64 rounded-full bg-gradient-to-r from-yellow-500/10 to-amber-500/10 blur-2xl" />
-        </div>
-
-        <div className="relative z-30 max-w-7xl mx-auto px-6 w-full text-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full text-center">
           <div className="space-y-8">
             <div className="space-y-6">
-              <div className="flex items-center justify-center gap-3">
-                <div className="w-8 h-px bg-gradient-to-r from-amber-500 to-yellow-500" />
-                <span className="text-sm tracking-[0.3em] text-zinc-400 font-light">
-                  GET IN TOUCH
-                </span>
-                <div className="w-8 h-px bg-gradient-to-r from-amber-500 to-yellow-500" />
+              <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-amber-200/50 text-slate-700 px-8 py-4 rounded-full text-sm font-medium shadow-lg">
+                <MessageSquare className="w-4 h-4 text-amber-600" />
+                <span className="tracking-[0.2em] uppercase">Get in Touch</span>
+                <div className="w-1 h-1 bg-amber-500 rounded-full"></div>
               </div>
               
-              <h1 className="text-6xl lg:text-7xl xl:text-8xl font-bold leading-none tracking-tight">
-                <span className="block text-white">CONTACT</span>
-                <span className="block bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-400 bg-clip-text text-transparent">
+              <h1 className="text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight tracking-tight">
+                <span className="block text-slate-900">CONTACT</span>
+                <span className="block bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
                   US
                 </span>
               </h1>
               
-              <p className="text-xl text-zinc-300 font-light leading-relaxed max-w-2xl mx-auto">
-                We'd love to hear from you! Get in touch with any questions about our restaurant, 
-                menu, or services. Our team will respond within 24 hours.
-              </p>
+              <div className="max-w-4xl mx-auto space-y-6">
+                <p className="text-2xl md:text-3xl text-slate-600 font-light leading-relaxed">
+                  We'd Love to Hear From You
+                </p>
+                
+                <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto"></div>
+                
+                <p className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-3xl mx-auto">
+                  Get in touch with any questions about our restaurant, menu, or services. 
+                  Our dedicated team will respond within 24 hours to assist you.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Contact Info Cards */}
-      <section className="py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-950 to-black" />
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-white via-amber-200 to-white bg-clip-text text-transparent">
+      <section className="py-24 bg-gradient-to-b from-white to-slate-50/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          {/* Section Header */}
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center gap-3 mb-6">
+              <div className="w-8 h-px bg-gradient-to-r from-transparent to-amber-300"></div>
+              <span className="text-sm tracking-[0.3em] text-slate-600 font-light uppercase">
                 Contact Information
               </span>
+              <div className="w-8 h-px bg-gradient-to-l from-transparent to-amber-300"></div>
+            </div>
+            
+            <h2 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
+              Get in Touch
             </h2>
-            <p className="text-xl text-zinc-400 max-w-2xl mx-auto">
-              Multiple ways to reach our team for any inquiries
+            
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              Multiple ways to reach our team for any inquiries, reservations, or special requests
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {/* Location Card */}
             <div className="group relative">
-              <div className="relative bg-gradient-to-br from-zinc-900/50 to-zinc-800/30 backdrop-blur-xl rounded-3xl p-8 border border-zinc-700/50 hover:border-zinc-600 transition-all duration-500 hover:scale-105">
-                <div className="p-4 bg-gradient-to-r from-amber-500 to-yellow-500 rounded-2xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div className="relative bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 p-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                   <MapPin className="w-8 h-8 text-white" />
                 </div>
                 
-                <h3 className="text-2xl font-bold text-white mb-4">Location</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-amber-700 transition-colors duration-300">
+                  Location
+                </h3>
                 
                 <div className="space-y-2">
-                  <p className="text-white font-medium">
+                  <p className="text-slate-900 font-medium">
                     <RestaurantInfo type="address" fallback="451 Uxbridge Rd" />
                   </p>
-                  <p className="text-zinc-400">
+                  <p className="text-slate-600">
                     <RestaurantInfo type="city" fallback="Pinner" /> <RestaurantInfo type="postalCode" fallback="HA5 4JR" />
                   </p>
                 </div>
@@ -154,36 +159,40 @@ export default function ContactPage() {
 
             {/* Phone Card */}
             <div className="group relative">
-              <div className="relative bg-gradient-to-br from-zinc-900/50 to-zinc-800/30 backdrop-blur-xl rounded-3xl p-8 border border-zinc-700/50 hover:border-zinc-600 transition-all duration-500 hover:scale-105">
-                <div className="p-4 bg-gradient-to-r from-amber-600 to-yellow-400 rounded-2xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div className="relative bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 p-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                   <Phone className="w-8 h-8 text-white" />
                 </div>
                 
-                <h3 className="text-2xl font-bold text-white mb-4">Phone</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-blue-700 transition-colors duration-300">
+                  Phone
+                </h3>
                 
                 <div className="space-y-2">
-                  <p className="text-white font-medium">
-                    <RestaurantPhoneLink className="hover:text-amber-400 transition-colors">
+                  <p className="text-slate-900 font-medium">
+                    <RestaurantPhoneLink className="hover:text-amber-600 transition-colors">
                       <RestaurantInfo type="phone" fallback="020 8421 5550" />
                     </RestaurantPhoneLink>
                   </p>
-                  <p className="text-zinc-400">Daily 12:00 - 22:00</p>
+                  <p className="text-slate-600">Daily 12:00 - 22:00</p>
                 </div>
               </div>
             </div>
 
             {/* Hours Card */}
             <div className="group relative">
-              <div className="relative bg-gradient-to-br from-zinc-900/50 to-zinc-800/30 backdrop-blur-xl rounded-3xl p-8 border border-zinc-700/50 hover:border-zinc-600 transition-all duration-500 hover:scale-105">
-                <div className="p-4 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-2xl w-fit mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div className="relative bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 p-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                   <Clock className="w-8 h-8 text-white" />
                 </div>
                 
-                <h3 className="text-2xl font-bold text-white mb-4">Hours</h3>
+                <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-green-700 transition-colors duration-300">
+                  Hours
+                </h3>
                 
                 <div className="space-y-2">
-                  <p className="text-white font-medium">Tuesday - Sunday</p>
-                  <p className="text-zinc-400">12:00 - 15:00, 18:00 - 23:00</p>
+                  <p className="text-slate-900 font-medium">Tuesday - Sunday</p>
+                  <p className="text-slate-600">12:00 - 15:00, 18:00 - 23:00</p>
                 </div>
               </div>
             </div>
@@ -192,53 +201,53 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form */}
-      <section className="py-32 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-zinc-950 via-black to-zinc-950" />
+      <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-amber-50/20 relative overflow-hidden">
+        {/* Subtle Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-amber-100/20 to-yellow-100/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-20 w-48 h-48 bg-gradient-to-br from-orange-100/15 to-amber-100/20 rounded-full blur-3xl"></div>
+        </div>
         
-        <div className="max-w-4xl mx-auto px-6 relative z-10">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
           <div className="text-center mb-16">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <MessageSquare className="w-6 h-6 text-amber-400" />
-              <span className="text-sm tracking-[0.3em] text-zinc-400 font-light">
-                SEND MESSAGE
-              </span>
+            <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-amber-200/50 text-slate-700 px-6 py-3 rounded-full text-sm font-medium shadow-lg mb-6">
+              <Send className="w-4 h-4 text-amber-600" />
+              <span className="tracking-[0.2em] uppercase">Send Message</span>
             </div>
             
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
-              <span className="text-white">Get in</span>
-              <span className="block bg-gradient-to-r from-amber-400 to-yellow-400 bg-clip-text text-transparent">
-                Touch
-              </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+              Send Us a Message
             </h2>
-            <p className="text-xl text-zinc-300 leading-relaxed max-w-2xl mx-auto">
+            
+            <p className="text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
               Have questions about our menu, want to provide feedback, or need assistance? 
               Fill out the form below and we'll respond promptly.
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-zinc-900/50 to-zinc-800/30 backdrop-blur-xl rounded-3xl p-8 lg:p-12 border border-zinc-700/50">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-8 lg:p-12">
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-white font-medium mb-2">Full Name *</label>
+                  <label className="block text-slate-900 font-medium mb-2">Full Name *</label>
                   <Input
                     name="name"
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="Your full name"
-                    className="bg-zinc-900/50 border-zinc-700 text-white placeholder:text-zinc-400 rounded-xl py-3 focus:border-amber-400 transition-colors"
+                    className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-500 rounded-xl py-3 focus:border-amber-400 focus:ring-amber-400 transition-colors"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-white font-medium mb-2">Email *</label>
+                  <label className="block text-slate-900 font-medium mb-2">Email *</label>
                   <Input
                     name="email"
                     type="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="your@email.com"
-                    className="bg-zinc-900/50 border-zinc-700 text-white placeholder:text-zinc-400 rounded-xl py-3 focus:border-amber-400 transition-colors"
+                    className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-500 rounded-xl py-3 focus:border-amber-400 focus:ring-amber-400 transition-colors"
                     required
                   />
                 </div>
@@ -246,23 +255,23 @@ export default function ContactPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-white font-medium mb-2">Phone (Optional)</label>
+                  <label className="block text-slate-900 font-medium mb-2">Phone (Optional)</label>
                   <Input
                     name="phone"
                     type="tel"
                     value={formData.phone}
                     onChange={handleInputChange}
                     placeholder="Phone number"
-                    className="bg-zinc-900/50 border-zinc-700 text-white placeholder:text-zinc-400 rounded-xl py-3 focus:border-amber-400 transition-colors"
+                    className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-500 rounded-xl py-3 focus:border-amber-400 focus:ring-amber-400 transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-white font-medium mb-2">Subject *</label>
+                  <label className="block text-slate-900 font-medium mb-2">Subject *</label>
                   <Select onValueChange={handleSelectChange} required>
-                    <SelectTrigger className="bg-zinc-900/50 border-zinc-700 text-white rounded-xl py-3 focus:border-amber-400 transition-colors">
+                    <SelectTrigger className="bg-slate-50 border-slate-300 text-slate-900 rounded-xl py-3 focus:border-amber-400 focus:ring-amber-400 transition-colors">
                       <SelectValue placeholder="Select inquiry type" />
                     </SelectTrigger>
-                    <SelectContent className="bg-zinc-900 border-zinc-700">
+                    <SelectContent className="bg-white border-slate-300">
                       <SelectItem value="general">General Question</SelectItem>
                       <SelectItem value="menu">Menu Inquiry</SelectItem>
                       <SelectItem value="feedback">Feedback</SelectItem>
@@ -275,13 +284,13 @@ export default function ContactPage() {
               </div>
 
               <div>
-                <label className="block text-white font-medium mb-2">Message *</label>
+                <label className="block text-slate-900 font-medium mb-2">Message *</label>
                 <Textarea
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
                   placeholder="How can we help you today? Please provide details about your inquiry..."
-                  className="bg-zinc-900/50 border-zinc-700 text-white placeholder:text-zinc-400 rounded-xl py-3 h-32 resize-none focus:border-amber-400 transition-colors"
+                  className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-500 rounded-xl py-3 h-32 resize-none focus:border-amber-400 focus:ring-amber-400 transition-colors"
                   required
                 />
               </div>
@@ -304,12 +313,12 @@ export default function ContactPage() {
                 )}
               </Button>
 
-              <p className="text-sm text-zinc-400 text-center">
+              <p className="text-sm text-slate-600 text-center">
                 For immediate assistance with reservations, please call us directly at{' '}
-                <RestaurantPhoneLink className="text-amber-400 hover:text-amber-300">
+                <RestaurantPhoneLink className="text-amber-600 hover:text-amber-700 font-medium">
                   <RestaurantInfo type="phone" fallback="020 8421 5550" />
                 </RestaurantPhoneLink>{' '}or{" "}
-                <Link href="/reserve" className="text-amber-400 hover:text-amber-300 underline">
+                <Link href="/reserve" className="text-amber-600 hover:text-amber-700 font-medium underline">
                   visit our reservations page
                 </Link>
               </p>
