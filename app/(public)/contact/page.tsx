@@ -26,11 +26,14 @@ export default function ContactPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   useEffect(() => {
-    // Auto-scroll to contact form when page loads from navigation
+    // Auto-scroll to contact form when page loads from navigation - MOBILE ONLY
     const timer = setTimeout(() => {
-      const contactFormSection = document.getElementById('contact-form')
-      if (contactFormSection) {
-        contactFormSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      // Only scroll on mobile devices (width < 768px)
+      if (window.innerWidth < 768) {
+        const contactFormSection = document.getElementById('contact-form')
+        if (contactFormSection) {
+          contactFormSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
       }
     }, 500) // Small delay to allow page to fully load
 
