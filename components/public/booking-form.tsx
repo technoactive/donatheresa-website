@@ -75,6 +75,50 @@ export function BookingForm() {
     }
   }, [state?.success])
 
+  // Filter available times based on selected date and current time
+  const getAvailableTimesForDate = (selectedDate: Date | undefined) => {
+    if (!selectedDate || !bookingSettings) return bookingSettings?.available_times || []
+    
+    const today = new Date()
+    const isToday = selectedDate.toDateString() === today.toDateString()
+    
+    if (!isToday) {
+      // For future dates, show all available times
+      return bookingSettings.available_times
+    }
+    
+    // For today, filter out past times
+    const currentTime = new Date()
+    const currentHour = currentTime.getHours()
+    const currentMinute = currentTime.getMinutes()
+    
+    return bookingSettings.available_times.filter(time => {
+      // Parse the time string (e.g., "19:00" or "7:00 PM")
+      const timeMatch = time.match(/(\d{1,2}):(\d{2})/)
+      if (!timeMatch) return false
+      
+      const timeHour = parseInt(timeMatch[1])
+      const timeMinute = parseInt(timeMatch[2])
+      
+      // Convert to 24-hour format if needed
+      let hour24 = timeHour
+      if (time.toLowerCase().includes('pm') && timeHour !== 12) {
+        hour24 = timeHour + 12
+      } else if (time.toLowerCase().includes('am') && timeHour === 12) {
+        hour24 = 0
+      }
+      
+      // Compare with current time (add 30 minutes buffer for preparation)
+      const timeInMinutes = hour24 * 60 + timeMinute
+      const currentTimeInMinutes = currentHour * 60 + currentMinute + 30 // 30 min buffer
+      
+      return timeInMinutes > currentTimeInMinutes
+    })
+  }
+
+  // Get filtered available times
+  const availableTimesForSelectedDate = getAvailableTimesForDate(date)
+
   // Show loading state
   if (!bookingSettings) {
     return (
@@ -410,7 +454,7 @@ export function BookingForm() {
                 </label>
                 <div className="space-y-3 md:space-y-4">
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3">
-                    {bookingSettings.available_times.map((time) => (
+                    {availableTimesForSelectedDate.map((time) => (
                       <button
                         key={time}
                         type="button"
@@ -433,6 +477,22 @@ export function BookingForm() {
                       For late dining requests, please call us directly.
                     </span>
                   </p>
+                  {date && date.toDateString() === new Date().toDateString() && (
+                    <p className="text-xs md:text-sm text-amber-600 bg-amber-50 px-3 md:px-4 py-2 md:py-3 rounded-lg border border-amber-200 flex items-start gap-2">
+                      <Clock className="w-3 md:w-4 h-3 md:h-4 mt-0.5 text-amber-600 flex-shrink-0" />
+                      <span>
+                        <span className="font-medium text-amber-900">Booking for today:</span> Only times after {new Date(Date.now() + 30 * 60 * 1000).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} are available to allow preparation time.
+                      </span>
+                    </p>
+                  )}
+                  {date && date.toDateString() === new Date().toDateString() && availableTimesForSelectedDate.length === 0 && (
+                    <p className="text-xs md:text-sm text-red-600 bg-red-50 px-3 md:px-4 py-2 md:py-3 rounded-lg border border-red-200 flex items-start gap-2">
+                      <AlertTriangle className="w-3 md:w-4 h-3 md:h-4 mt-0.5 text-red-600 flex-shrink-0" />
+                      <span>
+                        <span className="font-medium text-red-900">No times available today.</span> Please select a future date or call us directly for last-minute availability.
+                      </span>
+                    </p>
+                  )}
                 </div>
                 <input type="hidden" name="time" value={selectedTime} />
               </div>
