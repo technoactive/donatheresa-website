@@ -117,7 +117,8 @@ export async function createBooking(prevState: any, formData: FormData) {
         booking_date: date,
         booking_time: time,
         party_size: partySize,
-        special_requests: notes || ""
+        special_requests: notes || "",
+        source: 'website' // Mark as website booking
       }
     })
 

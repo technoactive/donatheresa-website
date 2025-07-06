@@ -10,6 +10,7 @@ export interface Booking {
   booking_time: string
   party_size: number
   status: 'pending' | 'confirmed' | 'cancelled'
+  source: 'website' | 'dashboard'
   special_requests?: string
   created_at: string
   updated_at: string
@@ -137,6 +138,7 @@ export async function createBooking(booking: {
   booking_time: string
   party_size: number
   special_requests?: string
+  source?: 'website' | 'dashboard'
 }): Promise<Booking> {
   const supabase = await createClient()
   const { data, error } = await supabase
@@ -147,6 +149,7 @@ export async function createBooking(booking: {
       booking_time: booking.booking_time,
       party_size: booking.party_size,
       special_requests: booking.special_requests || null,
+      source: booking.source || 'website',
       status: 'confirmed'
     })
     .select()
@@ -169,6 +172,7 @@ export async function getBookings(): Promise<BookingWithCustomer[]> {
         booking_time,
         party_size,
         status,
+        source,
         special_requests,
         created_at,
         updated_at,
@@ -200,6 +204,7 @@ export async function getBookings(): Promise<BookingWithCustomer[]> {
         booking_time: booking.booking_time,
         party_size: booking.party_size,
         status: booking.status,
+        source: booking.source,
         special_requests: booking.special_requests,
         created_at: booking.created_at,
         updated_at: booking.updated_at,
@@ -223,31 +228,53 @@ export async function getBookings(): Promise<BookingWithCustomer[]> {
 export async function getBookingById(id: string): Promise<BookingWithCustomer | null> {
   const supabase = await createClient()
   const { data, error } = await supabase
-    .from('booking_details')
-    .select('*')
+    .from('bookings')
+    .select(`
+      id,
+      customer_id,
+      booking_date,
+      booking_time,
+      party_size,
+      status,
+      source,
+      special_requests,
+      created_at,
+      updated_at,
+      customers (
+        id,
+        name,
+        email,
+        phone,
+        created_at,
+        updated_at
+      )
+    `)
     .eq('id', id)
     .single()
 
   if (error && error.code !== 'PGRST116') throw error
   if (!data) return null
 
+  const customer = Array.isArray(data.customers) ? data.customers[0] : data.customers
+
   return {
     id: data.id,
     customer_id: data.customer_id,
-    booking_date: data.date,
-    booking_time: data.time,
-    party_size: data.guests,
+    booking_date: data.booking_date,
+    booking_time: data.booking_time,
+    party_size: data.party_size,
     status: data.status,
+    source: data.source,
     special_requests: data.special_requests,
     created_at: data.created_at,
     updated_at: data.updated_at,
     customer: {
-      id: data.customer_id,
-      name: data.customer_name,
-      email: data.customer_email,
-      phone: data.customer_phone,
-      created_at: data.created_at,
-      updated_at: data.updated_at
+      id: customer.id,
+      name: customer.name,
+      email: customer.email,
+      phone: customer.phone,
+      created_at: customer.created_at,
+      updated_at: customer.updated_at
     }
   }
 }
@@ -528,6 +555,7 @@ export async function createBookingWithCustomer(bookingData: {
     booking_time: string
     party_size: number
     special_requests?: string
+    source?: 'website' | 'dashboard'
   }
 }): Promise<{ customer: DatabaseCustomer; booking: Booking }> {
   // First upsert the customer
@@ -689,6 +717,7 @@ export async function getRecentBookings(limit: number = 5): Promise<BookingWithC
         booking_time,
         party_size,
         status,
+        source,
         special_requests,
         created_at,
         updated_at,
@@ -716,6 +745,7 @@ export async function getRecentBookings(limit: number = 5): Promise<BookingWithC
         booking_date: booking.booking_date,
         booking_time: booking.booking_time,
         party_size: booking.party_size,
+        source: booking.source,
         status: booking.status,
         special_requests: booking.special_requests,
         created_at: booking.created_at,

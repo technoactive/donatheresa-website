@@ -25,6 +25,7 @@ export type Booking = {
   partySize: number
   bookingTime: Date
   status: "pending" | "confirmed" | "cancelled"
+  source: "website" | "dashboard"
   notes?: string
 }
 
