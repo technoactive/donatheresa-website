@@ -399,180 +399,252 @@ export default function HomePage() {
         <HorizontalGallery />
       </section>
 
-      {/* Professional Reviews Section */}
-      <section className="py-24 bg-gradient-to-b from-slate-50 to-white relative">
-        <div className="container mx-auto px-6">
-          {/* Section Header */}
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-3 bg-slate-100 text-slate-700 px-6 py-3 rounded-full text-sm font-medium mb-6">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              Guest Reviews
+      {/* Modern Testimonials Section */}
+      <section className="py-32 bg-gradient-to-br from-slate-50 via-white to-amber-50/20 relative overflow-hidden">
+        {/* Floating Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-amber-200/30 to-yellow-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-slate-200/30 to-blue-200/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-amber-100/10 to-transparent rounded-full blur-3xl"></div>
+        </div>
+
+        <div className="container mx-auto px-6 relative z-10">
+          {/* Modern Header */}
+          <div className="text-center mb-24">
+            <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-slate-200/50 text-slate-700 px-8 py-4 rounded-full text-sm font-medium mb-12 shadow-lg">
+              <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
+              Over 500+ Happy Guests
             </div>
             
-            <h2 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6">
-              What Our Guests Say
+            <h2 className="text-6xl md:text-8xl font-black text-slate-900 mb-8 leading-none tracking-tight">
+              Real
+              <span className="block relative">
+                <span className="bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
+                  Stories
+                </span>
+              </span>
             </h2>
             
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Discover authentic experiences from our valued guests who have dined with us.
+            <p className="text-2xl text-slate-600 max-w-4xl mx-auto leading-relaxed font-light">
+              Authentic experiences from guests who discovered culinary excellence
             </p>
           </div>
 
-          {/* Clean Stats Row */}
-          <div className="flex flex-col md:flex-row justify-center items-center gap-12 mb-20 max-w-4xl mx-auto">
-            <div className="text-center">
-              <div className="text-5xl font-bold text-slate-900 mb-2">4.9</div>
-              <div className="text-slate-600 mb-2">Average Rating</div>
-              <div className="flex justify-center">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-            </div>
-
-            <div className="hidden md:block w-px h-16 bg-slate-300"></div>
-
-            <div className="text-center">
-              <div className="text-5xl font-bold text-slate-900 mb-2">247</div>
-              <div className="text-slate-600">Reviews</div>
-              <div className="text-sm text-slate-500 mt-1">This Month</div>
-            </div>
-
-            <div className="hidden md:block w-px h-16 bg-slate-300"></div>
-
-            <div className="text-center">
-              <div className="text-5xl font-bold text-slate-900 mb-2">98%</div>
-              <div className="text-slate-600">Recommend</div>
-              <div className="text-sm text-slate-500 mt-1">Would Return</div>
-            </div>
-          </div>
-
-          {/* Professional Testimonials */}
-          <div className="max-w-6xl mx-auto">
-            {/* Featured Testimonial */}
-            <div className="bg-white border border-slate-200 rounded-2xl p-12 shadow-lg mb-12">
-              <div className="flex flex-col lg:flex-row items-start gap-8">
-                <div className="flex-1">
-                  <div className="flex items-center mb-6">
+          {/* Symmetrical Testimonials Grid */}
+          <div className="max-w-7xl mx-auto">
+            {/* First Row - Two Equal Large Cards */}
+            <div className="grid md:grid-cols-2 gap-8 mb-12">
+              {/* Featured Testimonial 1 */}
+              <div className="bg-slate-900 rounded-[2rem] p-12 text-white relative overflow-hidden group hover:scale-[1.02] transition-transform duration-500">
+                {/* Animated Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-600/20 via-transparent to-yellow-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                {/* Quote Mark */}
+                <div className="absolute top-6 right-6 text-amber-400/20 text-6xl font-serif leading-none">"</div>
+                
+                <div className="relative z-10">
+                  {/* Rating */}
+                  <div className="flex items-center gap-2 mb-6">
                     {[...Array(5)].map((_, i) => (
-                      <svg key={i} className="w-5 h-5 text-amber-400 fill-current mr-1" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
+                      <div key={i} className="w-4 h-4 bg-amber-400 rounded-full shadow-lg"></div>
                     ))}
+                    <span className="text-amber-400 font-bold text-lg ml-2">5.0</span>
                   </div>
                   
-                  <blockquote className="text-2xl text-slate-700 leading-relaxed mb-6 font-light">
-                    "An absolutely exceptional dining experience. The attention to detail in both the cuisine and service was extraordinary. Each dish was beautifully presented and the flavors were remarkable. This has become our go-to restaurant for special occasions."
+                  <blockquote className="text-2xl leading-relaxed mb-8 font-light tracking-wide">
+                    "An extraordinary evening that redefined our understanding of fine dining. Every detail was perfection."
                   </blockquote>
 
                   <div className="flex items-center">
-                    <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-semibold text-lg mr-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center text-white font-bold text-lg mr-4 shadow-xl">
                       MS
                     </div>
                     <div>
-                      <div className="font-semibold text-slate-900 text-lg">Maria Santos</div>
-                      <div className="text-slate-500">Food & Travel Blogger</div>
-                      <div className="text-sm text-slate-400 mt-1">Verified Guest</div>
+                      <div className="font-bold text-xl">Maria Santos</div>
+                      <div className="text-slate-300">Food Critic</div>
+                      <div className="text-amber-400 text-sm mt-1">✓ Verified</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Featured Testimonial 2 */}
+              <div className="bg-white rounded-[2rem] p-12 border border-slate-200 relative overflow-hidden group hover:scale-[1.02] transition-transform duration-500 shadow-xl">
+                {/* Animated Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 via-transparent to-yellow-50/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                {/* Quote Mark */}
+                <div className="absolute top-6 right-6 text-amber-400/20 text-6xl font-serif leading-none">"</div>
+                
+                <div className="relative z-10">
+                  {/* Rating */}
+                  <div className="flex items-center gap-2 mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <div key={i} className="w-4 h-4 bg-amber-400 rounded-full shadow-lg"></div>
+                    ))}
+                    <span className="text-amber-600 font-bold text-lg ml-2">5.0</span>
+                  </div>
+                  
+                  <blockquote className="text-2xl text-slate-700 leading-relaxed mb-8 font-light tracking-wide">
+                    "Perfect anniversary celebration! The romantic atmosphere and exceptional cuisine made our special night absolutely unforgettable."
+                  </blockquote>
+
+                  <div className="flex items-center">
+                    <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center text-white font-bold text-lg mr-4 shadow-xl">
+                      JR
+                    </div>
+                    <div>
+                      <div className="font-bold text-xl text-slate-900">João & Rita</div>
+                      <div className="text-slate-600">Anniversary Couple</div>
+                      <div className="text-blue-600 text-sm mt-1">✓ Verified</div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Three Column Testimonials */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-4 h-4 text-amber-400 fill-current mr-1" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                
-                <blockquote className="text-slate-600 mb-6 leading-relaxed">
-                  "Perfect venue for our anniversary celebration. The romantic atmosphere and exceptional Portuguese cuisine made it truly memorable."
-                </blockquote>
-
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-medium mr-3">
-                    JR
+            {/* Second Row - Three Equal Medium Cards */}
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <div className="group">
+                <div className="bg-gradient-to-br from-white to-slate-50 rounded-3xl p-10 border border-slate-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 h-full">
+                  <div className="flex items-center gap-2 mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <div key={i} className="w-3 h-3 bg-amber-400 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
+                    ))}
                   </div>
-                  <div>
-                    <div className="font-medium text-slate-900">João Rodriguez</div>
-                    <div className="text-sm text-slate-500">Regular Guest</div>
+                  <p className="text-slate-700 text-lg mb-8 leading-relaxed">
+                    "Outstanding business dinner venue. The private dining space and sophisticated menu impressed all our clients."
+                  </p>
+                  <div className="flex items-center">
+                    <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-white font-bold mr-4">RL</div>
+                    <div>
+                      <div className="font-bold text-slate-900 text-lg">Ricardo Lima</div>
+                      <div className="text-slate-500">Business Executive</div>
+                      <div className="text-xs text-slate-400 mt-1">Dec 10, 2024</div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-4 h-4 text-amber-400 fill-current mr-1" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                
-                <blockquote className="text-slate-600 mb-6 leading-relaxed">
-                  "Outstanding wine selection and knowledgeable sommelier. The food and wine pairings exceeded our expectations completely."
-                </blockquote>
-
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-medium mr-3">
-                    AC
+              <div className="group">
+                <div className="bg-gradient-to-br from-white to-slate-50 rounded-3xl p-10 border border-slate-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 h-full">
+                  <div className="flex items-center gap-2 mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <div key={i} className="w-3 h-3 bg-amber-400 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
+                    ))}
                   </div>
-                  <div>
-                    <div className="font-medium text-slate-900">Ana Costa</div>
-                    <div className="text-sm text-slate-500">Wine Enthusiast</div>
+                  <p className="text-slate-700 text-lg mb-8 leading-relaxed">
+                    "Wine selection is phenomenal. The sommelier's expertise elevated our entire dining experience to new heights."
+                  </p>
+                  <div className="flex items-center">
+                    <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center text-white font-bold mr-4">AC</div>
+                    <div>
+                      <div className="font-bold text-slate-900 text-lg">Ana Costa</div>
+                      <div className="text-slate-500">Wine Enthusiast</div>
+                      <div className="text-xs text-slate-400 mt-1">Dec 8, 2024</div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-                <div className="flex items-center mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-4 h-4 text-amber-400 fill-current mr-1" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                
-                <blockquote className="text-slate-600 mb-6 leading-relaxed">
-                  "Excellent choice for business dinners. The service was impeccable and the private dining room was perfect for our meeting."
-                </blockquote>
-
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-slate-600 font-medium mr-3">
-                    RL
+              <div className="group">
+                <div className="bg-gradient-to-br from-white to-slate-50 rounded-3xl p-10 border border-slate-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 h-full">
+                  <div className="flex items-center gap-2 mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <div key={i} className="w-3 h-3 bg-amber-400 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
+                    ))}
                   </div>
-                  <div>
-                    <div className="font-medium text-slate-900">Ricardo Lima</div>
-                    <div className="text-sm text-slate-500">Business Executive</div>
+                  <p className="text-slate-700 text-lg mb-8 leading-relaxed">
+                    "Family celebration made perfect. Great atmosphere for all ages with incredible attention to every detail."
+                  </p>
+                  <div className="flex items-center">
+                    <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center text-white font-bold mr-4">CF</div>
+                    <div>
+                      <div className="font-bold text-slate-900 text-lg">Carlos Family</div>
+                      <div className="text-slate-500">Family Dinner</div>
+                      <div className="text-xs text-slate-400 mt-1">Nov 28, 2024</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Simple Call to Action */}
-            <div className="text-center mt-16 bg-slate-900 rounded-2xl p-12">
-              <h3 className="text-3xl font-bold text-white mb-4">
-                Experience Dona Theresa
-              </h3>
-              <p className="text-slate-300 mb-8 max-w-2xl mx-auto">
-                Join our guests and discover why we're considered one of the finest dining destinations.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-amber-500 hover:bg-amber-600 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-200">
-                  Make Reservation
-                </button>
-                <button className="border border-slate-500 text-slate-300 hover:text-white hover:border-white px-8 py-3 rounded-lg font-medium transition-colors duration-200">
-                  View Menu
-                </button>
+            {/* Third Row - Two Equal Medium Cards */}
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="group">
+                <div className="bg-gradient-to-br from-slate-50 to-white rounded-3xl p-12 border border-slate-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-3">
+                  <div className="flex items-center gap-2 mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <div key={i} className="w-4 h-4 bg-amber-400 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
+                    ))}
+                  </div>
+                  <p className="text-slate-700 text-xl mb-8 leading-relaxed font-medium">
+                    "First visit exceeded all expectations. The tasting menu was an incredible culinary journey that we'll never forget."
+                  </p>
+                  <div className="flex items-center">
+                    <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl flex items-center justify-center text-white font-bold text-lg mr-4">LM</div>
+                    <div>
+                      <div className="font-bold text-slate-900 text-xl">Luis Miguel</div>
+                      <div className="text-slate-500 text-lg">First-time Guest</div>
+                      <div className="text-sm text-slate-400 mt-1">Dec 3, 2024</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="group">
+                <div className="bg-gradient-to-br from-slate-50 to-white rounded-3xl p-12 border border-slate-200/50 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-3">
+                  <div className="flex items-center gap-2 mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <div key={i} className="w-4 h-4 bg-amber-400 rounded-full group-hover:scale-110 transition-transform duration-300"></div>
+                    ))}
+                  </div>
+                  <p className="text-slate-700 text-xl mb-8 leading-relaxed font-medium">
+                    "Celebrating our 25th wedding anniversary here was the perfect choice. Exceptional service and unforgettable flavors."
+                  </p>
+                  <div className="flex items-center">
+                    <div className="w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl flex items-center justify-center text-white font-bold text-lg mr-4">PM</div>
+                    <div>
+                      <div className="font-bold text-slate-900 text-xl">Pedro & Maria</div>
+                      <div className="text-slate-500 text-lg">25th Anniversary</div>
+                      <div className="text-sm text-slate-400 mt-1">Nov 22, 2024</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Modern CTA */}
+          <div className="mt-24">
+            <div className="relative bg-slate-900 rounded-[3rem] p-16 overflow-hidden">
+              {/* Animated Background */}
+              <div className="absolute inset-0 bg-gradient-to-r from-amber-600/20 via-yellow-600/10 to-amber-600/20 animate-pulse"></div>
+              
+              <div className="relative z-10 text-center max-w-4xl mx-auto">
+                <h3 className="text-4xl md:text-6xl font-black text-white mb-8 leading-tight">
+                  Your Story
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-400">
+                    Starts Here
+                  </span>
+                </h3>
+                
+                <p className="text-xl text-slate-300 mb-12 leading-relaxed">
+                  Join our community of satisfied guests and create your own unforgettable dining experience
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-6 justify-center items-center max-w-lg mx-auto">
+                  <button className="group bg-gradient-to-r from-amber-500 to-yellow-500 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:from-amber-600 hover:to-yellow-600 transition-all duration-300 hover:scale-105 shadow-2xl flex items-center gap-3 w-full sm:w-auto">
+                    <span>Reserve Table</span>
+                    <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </button>
+                  
+                  <button className="border-2 border-white/50 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-white hover:text-slate-900 transition-all duration-300 hover:scale-105 w-full sm:w-auto">
+                    Read All Reviews
+                  </button>
+                </div>
               </div>
             </div>
           </div>
