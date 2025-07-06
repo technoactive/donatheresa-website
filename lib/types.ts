@@ -7,6 +7,14 @@ export type Customer = {
   bookingCount?: number
   created_at?: string
   updated_at?: string
+  // Enhanced booking analytics
+  total_bookings?: number
+  recent_bookings?: number
+  last_booking_date?: string
+  average_party_size?: number
+  no_show_count?: number
+  cancelled_bookings?: number
+  customer_segment?: 'new' | 'regular' | 'vip' | 'inactive'
 }
 
 export type DatabaseCustomer = {
@@ -16,6 +24,14 @@ export type DatabaseCustomer = {
   phone?: string
   created_at: string
   updated_at: string
+  // Enhanced booking analytics
+  total_bookings?: number
+  recent_bookings?: number
+  last_booking_date?: string
+  average_party_size?: number
+  no_show_count?: number
+  cancelled_bookings?: number
+  customer_segment?: 'new' | 'regular' | 'vip' | 'inactive'
 }
 
 export type Booking = {

@@ -1,8 +1,9 @@
 import { CustomersTable } from "@/components/dashboard/customers-table"
+import { CustomerAnalytics } from "@/components/dashboard/customer-analytics"
 import { AddCustomerDialog } from "@/components/dashboard/add-customer-dialog"
 import { getAllCustomers, refreshCustomersPage } from "./actions"
 import { Button } from "@/components/ui/button"
-import { RefreshCw } from "lucide-react"
+import { RefreshCw, TrendingUp } from "lucide-react"
 import type { Customer } from "@/lib/types"
 
 // Force dynamic rendering since this page uses cookies for authentication
@@ -64,7 +65,22 @@ export default async function CustomersPage() {
         </div>
       </div>
       
+      {/* Customer Analytics Dashboard */}
+      {customers.length > 0 && (
+        <div className="w-full max-w-full">
+          <div className="flex items-center gap-2 mb-4">
+            <TrendingUp className="w-5 h-5 text-amber-600" />
+            <h2 className="text-lg font-semibold text-slate-900">Customer Analytics</h2>
+          </div>
+          <CustomerAnalytics customers={customers} />
+        </div>
+      )}
+      
+      {/* Customer Table */}
       <div className="w-full max-w-full overflow-hidden">
+        <div className="flex items-center gap-2 mb-4">
+          <h2 className="text-lg font-semibold text-slate-900">All Customers</h2>
+        </div>
         <CustomersTable customers={customers} />
       </div>
     </div>
