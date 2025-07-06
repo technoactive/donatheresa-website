@@ -49,7 +49,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { toast } from "sonner"
-import { createManualBookingAction, searchCustomersAction } from "@/app/dashboard/bookings/actions"
+import { createManualBookingAction, searchCustomersAction, getBookingSettingsAction } from "@/app/dashboard/bookings/actions"
 import { useTransition } from "react"
 
 const formSchema = z.object({
@@ -73,6 +73,17 @@ interface Customer {
   phone?: string
 }
 
+interface BookingSettings {
+  booking_enabled: boolean
+  max_advance_days: number
+  max_party_size: number
+  available_times: string[]
+  closed_dates: string[]
+  closed_days_of_week: number[]
+  suspension_message: string
+  maintenance_mode?: boolean
+}
+
 interface AddBookingDialogProps {
   availableTimes?: string[]
   maxPartySize?: number
@@ -92,6 +103,8 @@ export function AddBookingDialog({
   const [showCustomerDropdown, setShowCustomerDropdown] = React.useState(false)
   const [selectedCustomer, setSelectedCustomer] = React.useState<Customer | null>(null)
   const [isSearching, setIsSearching] = React.useState(false)
+  const [bookingSettings, setBookingSettings] = React.useState<BookingSettings | null>(null)
+  const [isLoadingSettings, setIsLoadingSettings] = React.useState(true)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -104,6 +117,35 @@ export function AddBookingDialog({
       specialRequests: "",
     },
   })
+
+  // Load booking settings when dialog opens
+  React.useEffect(() => {
+    if (open && !bookingSettings) {
+      const loadSettings = async () => {
+        setIsLoadingSettings(true)
+        try {
+          const settings = await getBookingSettingsAction()
+          setBookingSettings(settings)
+        } catch (error) {
+          console.error('Error loading booking settings:', error)
+          // Use fallback settings
+          setBookingSettings({
+            booking_enabled: true,
+            max_advance_days: 30,
+            max_party_size: 8,
+            available_times: availableTimes,
+            closed_dates: [],
+            closed_days_of_week: [],
+            suspension_message: "",
+            maintenance_mode: false
+          })
+        } finally {
+          setIsLoadingSettings(false)
+        }
+      }
+      loadSettings()
+    }
+  }, [open, bookingSettings, availableTimes])
 
   // Debounced customer search
   const searchTimeoutRef = React.useRef<NodeJS.Timeout | null>(null)
@@ -163,6 +205,31 @@ export function AddBookingDialog({
     }
   }, [selectedCustomer])
 
+  // Check if a date should be disabled
+  const isDateDisabled = React.useCallback((date: Date) => {
+    if (!bookingSettings) return false
+
+    const today = new Date()
+    const maxDate = new Date()
+    maxDate.setDate(today.getDate() + bookingSettings.max_advance_days)
+
+    // Disable past dates
+    if (date < today) return true
+
+    // Disable dates beyond max advance days
+    if (date > maxDate) return true
+
+    // Check if the day of week is closed (0 = Sunday, 1 = Monday, etc.)
+    const dayOfWeek = date.getDay()
+    if (bookingSettings.closed_days_of_week.includes(dayOfWeek)) return true
+
+    // Check if the specific date is closed
+    const dateString = format(date, 'yyyy-MM-dd')
+    if (bookingSettings.closed_dates.includes(dateString)) return true
+
+    return false
+  }, [bookingSettings])
+
   const onSubmit = (data: FormData) => {
     startTransition(async () => {
       try {
@@ -197,7 +264,7 @@ export function AddBookingDialog({
 
   const today = new Date()
   const maxDate = new Date()
-  maxDate.setDate(today.getDate() + 30) // 30 days in advance
+  maxDate.setDate(today.getDate() + (bookingSettings?.max_advance_days || 30))
 
   // Reset form when dialog closes
   React.useEffect(() => {
@@ -209,6 +276,10 @@ export function AddBookingDialog({
       setShowCustomerDropdown(false)
     }
   }, [open, form])
+
+  // Get available times from settings or fallback
+  const currentAvailableTimes = bookingSettings?.available_times || availableTimes
+  const currentMaxPartySize = bookingSettings?.max_party_size || maxPartySize
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -351,7 +422,7 @@ export function AddBookingDialog({
                   control={form.control}
                   name="date"
                   render={({ field }) => (
-                    <FormItem className="flex flex-col">
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-slate-700">Date *</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
@@ -359,7 +430,7 @@ export function AddBookingDialog({
                             <Button
                               variant="outline"
                               className={cn(
-                                "w-full pl-3 text-left font-normal justify-start",
+                                "w-full h-10 pl-3 text-left font-normal justify-start",
                                 !field.value && "text-muted-foreground"
                               )}
                             >
@@ -373,15 +444,19 @@ export function AddBookingDialog({
                           </FormControl>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            disabled={(date) =>
-                              date < today || date > maxDate
-                            }
-                            initialFocus
-                          />
+                          {isLoadingSettings ? (
+                            <div className="p-4 text-center text-sm text-slate-500">
+                              Loading calendar settings...
+                            </div>
+                          ) : (
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={isDateDisabled}
+                              initialFocus
+                            />
+                          )}
                         </PopoverContent>
                       </Popover>
                       <FormMessage />
@@ -393,16 +468,16 @@ export function AddBookingDialog({
                   control={form.control}
                   name="time"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="space-y-2">
                       <FormLabel className="text-sm font-medium text-slate-700">Time *</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="h-10">
                             <SelectValue placeholder="Select time" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {availableTimes.map((time) => (
+                          {currentAvailableTimes.map((time) => (
                             <SelectItem key={time} value={time}>
                               {time}
                             </SelectItem>
@@ -425,10 +500,10 @@ export function AddBookingDialog({
                       <Input
                         type="number"
                         min="1"
-                        max={maxPartySize}
+                        max={currentMaxPartySize}
                         {...field}
                         onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
-                        className="w-full sm:w-32"
+                        className="w-full sm:w-32 h-10"
                       />
                     </FormControl>
                     <FormMessage />
