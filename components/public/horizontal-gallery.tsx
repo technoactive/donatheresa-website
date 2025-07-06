@@ -110,7 +110,7 @@ export const HorizontalGallery = () => {
   return (
     <div className="relative w-full max-w-7xl mx-auto px-6">
       {/* Main Carousel */}
-      <div className="relative h-[80vh] rounded-2xl overflow-hidden shadow-xl">
+      <div className="relative h-[80vh] rounded-2xl overflow-hidden shadow-xl bg-slate-900">
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentIndex}
