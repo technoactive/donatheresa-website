@@ -353,8 +353,19 @@ export async function searchCustomersAction(query: string) {
     const supabase = await createClient()
     const { data, error } = await supabase
       .from('customers')
-      .select('id, name, email, phone')
+      .select(`
+        id, 
+        name, 
+        email, 
+        phone,
+        total_bookings,
+        recent_bookings,
+        last_booking_date,
+        average_party_size,
+        customer_segment
+      `)
       .or(`name.ilike.%${query}%,email.ilike.%${query}%,phone.ilike.%${query}%`)
+      .order('total_bookings', { ascending: false })
       .order('name')
       .limit(5)
 

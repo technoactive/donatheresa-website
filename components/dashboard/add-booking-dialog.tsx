@@ -44,7 +44,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { CalendarIcon, Plus, Check, User, Search } from "lucide-react"
 import { format } from "date-fns"
-import { cn } from "@/lib/utils"
+import { cn, getCustomerSegmentInfo, formatCustomerStats } from "@/lib/utils"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -71,6 +71,11 @@ interface Customer {
   name: string
   email: string
   phone?: string
+  total_bookings?: number
+  recent_bookings?: number
+  last_booking_date?: string
+  average_party_size?: number
+  customer_segment?: 'new' | 'regular' | 'vip' | 'inactive'
 }
 
 interface BookingSettings {
@@ -331,21 +336,40 @@ export function AddBookingDialog({
                         
                         {/* Customer Dropdown */}
                         {showCustomerDropdown && customers.length > 0 && (
-                          <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
-                            {customers.map((customer) => (
-                              <button
-                                key={customer.id}
-                                type="button"
-                                className="w-full px-3 py-2 text-left hover:bg-slate-50 border-b border-slate-100 last:border-b-0 transition-colors duration-150"
-                                onClick={() => handleCustomerSelect(customer)}
-                              >
-                                <div className="font-medium text-slate-900 text-sm">{customer.name}</div>
-                                <div className="text-xs text-slate-500">{customer.email}</div>
-                                {customer.phone && (
-                                  <div className="text-xs text-slate-400">{customer.phone}</div>
-                                )}
-                              </button>
-                            ))}
+                          <div className="absolute z-50 w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                            {customers.map((customer) => {
+                              const segmentInfo = getCustomerSegmentInfo(customer.customer_segment)
+                              const stats = formatCustomerStats(customer)
+                              
+                              return (
+                                <button
+                                  key={customer.id}
+                                  type="button"
+                                  className="w-full px-3 py-3 text-left hover:bg-slate-50 border-b border-slate-100 last:border-b-0 transition-colors duration-150"
+                                  onClick={() => handleCustomerSelect(customer)}
+                                >
+                                  <div className="flex items-start justify-between">
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center gap-2 mb-1">
+                                        <div className="font-medium text-slate-900 text-sm truncate">{customer.name}</div>
+                                        <Badge variant="outline" className={`text-xs ${segmentInfo.color} border flex-shrink-0`}>
+                                          {segmentInfo.label}
+                                        </Badge>
+                                      </div>
+                                      <div className="text-xs text-slate-500 truncate mb-1">{customer.email}</div>
+                                      {customer.phone && (
+                                        <div className="text-xs text-slate-400 truncate mb-1">{customer.phone}</div>
+                                      )}
+                                      <div className="flex items-center gap-3 text-xs text-slate-600">
+                                        <span>{stats.totalBookings} bookings</span>
+                                        {stats.hasRecentActivity && <span>• Recent: {stats.recentBookings}</span>}
+                                        <span>• Last: {stats.lastBooking}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </button>
+                              )
+                            })}
                           </div>
                         )}
                         

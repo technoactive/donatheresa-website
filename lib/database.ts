@@ -89,7 +89,22 @@ export async function getCustomers(): Promise<DatabaseCustomer[]> {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('customers')
-    .select('*')
+    .select(`
+      id,
+      name,
+      email,
+      phone,
+      created_at,
+      updated_at,
+      total_bookings,
+      recent_bookings,
+      last_booking_date,
+      average_party_size,
+      no_show_count,
+      cancelled_bookings,
+      customer_segment
+    `)
+    .order('total_bookings', { ascending: false })
     .order('created_at', { ascending: false })
 
   if (error) throw error
