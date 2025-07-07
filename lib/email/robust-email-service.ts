@@ -409,7 +409,7 @@ class RobustEmailService {
     return {
       restaurantName: localeSettings?.restaurant_name || 'Dona Theresa',
       restaurantPhone: localeSettings?.restaurant_phone || '+44 20 8421 5550',
-      restaurantEmail: settings.restaurant_email || 'info@donatheresa.com',
+      restaurantEmail: (settings.restaurant_email || settings.reply_to_email || 'donatheresahatchend@gmail.com') as string,
       restaurantAddress: localeSettings?.restaurant_address || '451 Uxbridge Road, Pinner HA5 4JR',
       brandColor: settings.brand_color || '#1e3a8a',
       customFooter,
@@ -500,6 +500,26 @@ export const RobustEmailUtils = {
     });
   },
 
+  /**
+   * Send booking cancellation email
+   */
+  async sendBookingCancellation(booking: any, customer: any): Promise<EmailResult> {
+    return robustEmailService.sendEmailRobust({
+      templateKey: 'booking_cancellation',
+      recipientEmail: customer.email,
+      recipientName: customer.name,
+      bookingId: booking.id,
+      data: {
+        customerName: customer.name,
+        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB'),
+        bookingTime: booking.booking_time,
+        partySize: booking.party_size,
+        bookingId: booking.booking_reference || booking.id,
+        guestText: (Number(booking.party_size) === 1) ? 'guest' : 'guests',
+      }
+    });
+  },
+
   // Process stuck emails
   async processStuckEmails(): Promise<{ processed: number; success: number; failed: number }> {
     const pendingResult = await robustEmailService.processPendingEmails();
@@ -510,5 +530,65 @@ export const RobustEmailUtils = {
       success: pendingResult.success + queueResult.success,
       failed: pendingResult.failed + queueResult.failed
     };
+  },
+
+  /**
+   * Send contact form notification to staff
+   */
+  async sendContactNotification(contact: any): Promise<EmailResult> {
+    const supabase = await createClient();
+    const { data: settings } = await supabase
+      .from('email_settings')
+      .select('*')
+      .eq('user_id', 'admin')
+      .single();
+
+    if (!settings?.contact_staff_notification || !settings.restaurant_email) {
+      return { success: false, error: 'Contact alerts disabled or no email configured' };
+    }
+
+    return robustEmailService.sendEmailRobust({
+      templateKey: 'staff_contact_notification',
+      recipientEmail: settings.restaurant_email,
+      recipientName: 'Restaurant Staff',
+      contactId: contact.id,
+      data: {
+        customerName: contact.name,
+        customerEmail: contact.email,
+        customerPhone: contact.phone,
+        subject: contact.subject,
+        message: contact.message,
+        submittedAt: new Date(contact.created_at).toLocaleString('en-GB'),
+      }
+    });
+  },
+
+  /**
+   * Send contact auto-reply to customer
+   */
+  async sendContactAutoReply(contact: any): Promise<EmailResult> {
+    const supabase = await createClient();
+    const { data: settings } = await supabase
+      .from('email_settings')
+      .select('*')
+      .eq('user_id', 'admin')
+      .single();
+
+    if (!settings?.contact_auto_reply_enabled) {
+      return { success: false, error: 'Auto-reply disabled' };
+    }
+
+    return robustEmailService.sendEmailRobust({
+      templateKey: 'contact_auto_reply',
+      recipientEmail: contact.email,
+      recipientName: contact.name,
+      contactId: contact.id,
+      data: {
+        customerName: contact.name,
+        subject: contact.subject,
+        message: contact.message,
+        sentAt: new Date(contact.created_at).toLocaleString('en-GB'),
+      }
+    });
   }
 }; 
