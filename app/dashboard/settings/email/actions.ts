@@ -54,15 +54,29 @@ export async function updateEmailSettings(formData: EmailSettingsFormData): Prom
   try {
     const supabase = await createClient();
 
-    // Encrypt API key (in production, use proper encryption)
-    const settingsData = {
+    // Get existing settings to preserve API key if not provided
+    const { data: existingSettings } = await supabase
+      .from('email_settings')
+      .select('api_key_encrypted')
+      .eq('user_id', 'admin')
+      .single();
+
+    // Prepare settings data
+    const settingsData: any = {
       ...formData,
-      api_key_encrypted: formData.api_key,
-      api_key_last_updated: new Date().toISOString(),
     };
 
-    // Remove the plain api_key from the data
-    delete (settingsData as any).api_key;
+    // Only update API key if a new one is provided
+    if (formData.api_key && formData.api_key.trim() !== '') {
+      settingsData.api_key_encrypted = formData.api_key;
+      settingsData.api_key_last_updated = new Date().toISOString();
+    } else {
+      // Preserve existing API key
+      settingsData.api_key_encrypted = existingSettings?.api_key_encrypted || null;
+    }
+
+    // Remove the plain api_key from the data (it's not a database column)
+    delete settingsData.api_key;
 
     const { data, error } = await supabase
       .from('email_settings')
@@ -207,7 +221,7 @@ export async function getEmailAnalytics(days: number = 30): Promise<EmailAnalyti
     logs.forEach(log => {
       const existing = templateStatsMap.get(log.template_key) || {
         template_key: log.template_key,
-        template_name: log.template_key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        template_name: log.template_key.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
         sent: 0,
         opened: 0,
         clicked: 0,
