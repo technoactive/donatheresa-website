@@ -9,7 +9,8 @@ import {
   ArrowRight,
   Settings2,
   Globe,
-  Bell
+  Bell,
+  Mail
 } from "lucide-react"
 import { SettingsLayout } from "@/components/dashboard/settings-layout"
 
@@ -97,6 +98,33 @@ export default function SettingsPage() {
             >
               <Link href="/dashboard/settings/notifications" className="flex items-center justify-center gap-2">
                 Manage Notifications
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="group hover:shadow-lg transition-all duration-200 cursor-pointer bg-white border-slate-200 shadow-sm flex flex-col h-full">
+          <CardHeader className="pb-4 flex-grow">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-purple-50 rounded-lg">
+                <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
+              </div>
+              <div>
+                <CardTitle className="text-slate-900 text-base sm:text-lg">Email Settings</CardTitle>
+                <CardDescription className="text-slate-600 text-sm">
+                  Configure email notifications, templates, and delivery
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0 mt-auto">
+            <Button 
+              asChild 
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white group-hover:bg-purple-500 h-10"
+            >
+              <Link href="/dashboard/settings/email" className="flex items-center justify-center gap-2">
+                Manage Email Settings
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </Button>

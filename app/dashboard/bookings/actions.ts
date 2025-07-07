@@ -68,10 +68,31 @@ export async function cancelBookingAction(bookingId: string) {
   }
 
   try {
+    // Get booking details before cancelling for email
+    const supabase = await createClient()
+    const { data: bookingWithCustomer } = await supabase
+      .from('bookings')
+      .select(`
+        *,
+        customers (*)
+      `)
+      .eq('id', bookingId)
+      .single()
+
     const cancelledBooking = await updateBooking(bookingId, { status: "cancelled" })
     
     if (!cancelledBooking) {
       return { error: "Booking not found." }
+    }
+
+    // Send cancellation email (fire and forget)
+    try {
+      if (bookingWithCustomer?.customers) {
+        const { EmailUtils } = await import('@/lib/email/email-service');
+        await EmailUtils.sendBookingCancellation(cancelledBooking, bookingWithCustomer.customers);
+      }
+    } catch (emailError) {
+      console.error('Email notification failed:', emailError);
     }
 
     revalidatePath("/dashboard/bookings")
@@ -92,10 +113,31 @@ export async function updateBookingStatusAction(bookingId: string, status: "pend
   }
 
   try {
+    // Get booking details before updating for email
+    const supabase = await createClient()
+    const { data: bookingWithCustomer } = await supabase
+      .from('bookings')
+      .select(`
+        *,
+        customers (*)
+      `)
+      .eq('id', bookingId)
+      .single()
+
     const updatedBooking = await updateBooking(bookingId, { status })
     
     if (!updatedBooking) {
       return { error: "Booking not found." }
+    }
+
+    // Send email notification if status changed to cancelled (fire and forget)
+    try {
+      if (status === 'cancelled' && bookingWithCustomer?.customers) {
+        const { EmailUtils } = await import('@/lib/email/email-service');
+        await EmailUtils.sendBookingCancellation(updatedBooking, bookingWithCustomer.customers);
+      }
+    } catch (emailError) {
+      console.error('Email notification failed:', emailError);
     }
 
     revalidatePath("/dashboard/bookings")
