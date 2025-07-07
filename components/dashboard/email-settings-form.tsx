@@ -35,54 +35,101 @@ import {
 } from 'lucide-react';
 import type { EmailSettings } from '@/lib/email/types';
 
-// Validation schema
-const emailSettingsSchema = z.object({
-  // Provider Configuration
-  email_provider: z.enum(['resend', 'sendgrid', 'ses', 'postmark']),
-  api_key: z.string().min(1, 'API key is required'),
-  sender_email: z.string().email('Invalid email address'),
-  sender_name: z.string().min(1, 'Sender name is required'),
-  reply_to_email: z.string().email('Invalid email address').optional().or(z.literal('')),
-  
-  // Customer Email Settings
-  booking_confirmation_enabled: z.boolean(),
-  booking_reminder_enabled: z.boolean(),
-  booking_reminder_hours: z.number().min(1).max(168), // 1 hour to 1 week
-  booking_cancellation_enabled: z.boolean(),
-  booking_modification_enabled: z.boolean(),
-  welcome_email_enabled: z.boolean(),
-  
-  // Staff Email Settings
-  staff_booking_alerts: z.boolean(),
-  staff_cancellation_alerts: z.boolean(),
-  staff_contact_alerts: z.boolean(),
-  staff_daily_summary: z.boolean(),
-  staff_vip_alerts: z.boolean(),
-  
-  // Contact Form Settings
-  contact_auto_reply_enabled: z.boolean(),
-  contact_staff_notification: z.boolean(),
-  
-  // Email Addresses
-  restaurant_email: z.string().email('Invalid email address'),
-  manager_email: z.string().email('Invalid email address').optional().or(z.literal('')),
-  backup_email: z.string().email('Invalid email address').optional().or(z.literal('')),
-  
-  // Template Settings
-  custom_logo_url: z.string().url('Invalid URL').optional().or(z.literal('')),
-  brand_color: z.string().regex(/^#[0-9A-F]{6}$/i, 'Invalid hex color'),
-  custom_footer: z.string().optional(),
-  
-  // Advanced Settings
-  max_daily_emails: z.number().min(1).max(10000),
-  rate_limit_per_hour: z.number().min(1).max(1000),
-  retry_failed_emails: z.boolean(),
-  max_retry_attempts: z.number().min(0).max(10),
-  track_opens: z.boolean(),
-  track_clicks: z.boolean(),
-});
+// Create conditional validation schema
+const createEmailSettingsSchema = (hasExistingSettings: boolean) => {
+  const baseSchema = {
+    // Provider Configuration
+    email_provider: z.enum(['resend', 'sendgrid', 'ses', 'postmark']),
+    sender_email: z.string().email('Invalid email address'),
+    sender_name: z.string().min(1, 'Sender name is required'),
+    reply_to_email: z.string().email('Invalid email address').optional().or(z.literal('')),
+    
+    // Customer Email Settings
+    booking_confirmation_enabled: z.boolean(),
+    booking_reminder_enabled: z.boolean(),
+    booking_reminder_hours: z.number().min(1).max(168), // 1 hour to 1 week
+    booking_cancellation_enabled: z.boolean(),
+    booking_modification_enabled: z.boolean(),
+    welcome_email_enabled: z.boolean(),
+    
+    // Staff Email Settings
+    staff_booking_alerts: z.boolean(),
+    staff_cancellation_alerts: z.boolean(),
+    staff_contact_alerts: z.boolean(),
+    staff_daily_summary: z.boolean(),
+    staff_vip_alerts: z.boolean(),
+    
+    // Contact Form Settings
+    contact_auto_reply_enabled: z.boolean(),
+    contact_staff_notification: z.boolean(),
+    
+    // Email Addresses
+    restaurant_email: z.string().email('Invalid email address'),
+    manager_email: z.string().email('Invalid email address').optional().or(z.literal('')),
+    backup_email: z.string().email('Invalid email address').optional().or(z.literal('')),
+    
+    // Template Settings
+    custom_logo_url: z.string().url('Invalid URL').optional().or(z.literal('')),
+    brand_color: z.string().regex(/^#[0-9A-F]{6}$/i, 'Invalid hex color'),
+    custom_footer: z.string().optional(),
+    
+    // Advanced Settings
+    max_daily_emails: z.number().min(1).max(10000),
+    rate_limit_per_hour: z.number().min(1).max(1000),
+    retry_failed_emails: z.boolean(),
+    max_retry_attempts: z.number().min(0).max(10),
+    track_opens: z.boolean(),
+    track_clicks: z.boolean(),
+  };
 
-type EmailSettingsFormData = z.infer<typeof emailSettingsSchema>;
+  // Add conditional API key validation
+  if (hasExistingSettings) {
+    // For existing settings, API key is optional (empty means keep existing)
+    return z.object({
+      ...baseSchema,
+      api_key: z.string(), // Allow empty string for existing settings
+    });
+  } else {
+    // For new settings, API key is required
+    return z.object({
+      ...baseSchema,
+      api_key: z.string().min(1, 'API key is required for initial setup'),
+    });
+  }
+};
+
+type EmailSettingsFormData = {
+  email_provider: 'resend' | 'sendgrid' | 'ses' | 'postmark';
+  api_key: string;
+  sender_email: string;
+  sender_name: string;
+  reply_to_email?: string;
+  booking_confirmation_enabled: boolean;
+  booking_reminder_enabled: boolean;
+  booking_reminder_hours: number;
+  booking_cancellation_enabled: boolean;
+  booking_modification_enabled: boolean;
+  welcome_email_enabled: boolean;
+  staff_booking_alerts: boolean;
+  staff_cancellation_alerts: boolean;
+  staff_contact_alerts: boolean;
+  staff_daily_summary: boolean;
+  staff_vip_alerts: boolean;
+  contact_auto_reply_enabled: boolean;
+  contact_staff_notification: boolean;
+  restaurant_email: string;
+  manager_email?: string;
+  backup_email?: string;
+  custom_logo_url?: string;
+  brand_color: string;
+  custom_footer?: string;
+  max_daily_emails: number;
+  rate_limit_per_hour: number;
+  retry_failed_emails: boolean;
+  max_retry_attempts: number;
+  track_opens: boolean;
+  track_clicks: boolean;
+};
 
 interface EmailSettingsFormProps {
   initialSettings: EmailSettings | null;
@@ -94,7 +141,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
   const { toast } = useToast();
 
   const form = useForm<EmailSettingsFormData>({
-    resolver: zodResolver(emailSettingsSchema),
+    resolver: zodResolver(createEmailSettingsSchema(!!initialSettings)),
     defaultValues: {
       // Provider Configuration
       email_provider: initialSettings?.email_provider || 'resend',
@@ -218,11 +265,16 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
               <Input
                 id="api_key"
                 type="password"
-                placeholder="Enter your email provider API key"
+                placeholder={initialSettings ? "Leave empty to keep current API key" : "Enter your email provider API key"}
                 {...form.register('api_key')}
               />
               {form.formState.errors.api_key && (
                 <p className="text-sm text-red-500">{form.formState.errors.api_key.message}</p>
+              )}
+              {initialSettings && (
+                <p className="text-xs text-muted-foreground">
+                  💡 Your API key is securely stored. Only enter a new one if you want to change it.
+                </p>
               )}
             </div>
           </div>
