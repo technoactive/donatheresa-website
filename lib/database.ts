@@ -8,6 +8,7 @@ export interface Booking {
   customer_id: string
   booking_date: string
   booking_time: string
+  booking_reference?: string
   party_size: number
   status: 'pending' | 'confirmed' | 'cancelled'
   source: 'website' | 'dashboard'
@@ -167,7 +168,7 @@ export async function createBooking(booking: {
       source: booking.source || 'website',
       status: 'confirmed'
     })
-    .select()
+    .select('*, booking_reference')
     .single()
 
   if (error) throw error
@@ -249,6 +250,7 @@ export async function getBookingById(id: string): Promise<BookingWithCustomer | 
       customer_id,
       booking_date,
       booking_time,
+      booking_reference,
       party_size,
       status,
       source,
@@ -277,6 +279,7 @@ export async function getBookingById(id: string): Promise<BookingWithCustomer | 
     customer_id: data.customer_id,
     booking_date: data.booking_date,
     booking_time: data.booking_time,
+    booking_reference: data.booking_reference,
     party_size: data.party_size,
     status: data.status,
     source: data.source,

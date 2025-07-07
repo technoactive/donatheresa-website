@@ -42,6 +42,11 @@ export interface EmailSettings {
   brand_color: string;
   custom_footer: string | null;
   
+  // Booking Reference Settings
+  booking_ref_prefix: string;
+  booking_ref_length: number;
+  booking_ref_counter: number;
+  
   // Advanced Settings
   max_daily_emails: number;
   rate_limit_per_hour: number;
@@ -356,6 +361,10 @@ export interface EmailSettingsFormData {
   custom_logo_url?: string;
   brand_color: string;
   custom_footer?: string;
+  
+  // Booking Reference Settings
+  booking_ref_prefix: string;
+  booking_ref_length: number;
   
   // Advanced Settings
   max_daily_emails: number;
