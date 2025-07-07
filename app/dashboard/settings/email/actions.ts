@@ -24,7 +24,7 @@ export interface EmailAnalyticsResponse {
  */
 export async function getEmailSettings(): Promise<EmailSettingsResponse> {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     
     const { data, error } = await supabase
       .from('email_settings')
@@ -52,7 +52,7 @@ export async function getEmailSettings(): Promise<EmailSettingsResponse> {
  */
 export async function updateEmailSettings(formData: EmailSettingsFormData): Promise<EmailSettingsResponse> {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Encrypt API key (in production, use proper encryption)
     const settingsData = {
@@ -96,7 +96,7 @@ export async function updateEmailSettings(formData: EmailSettingsFormData): Prom
  */
 export async function getEmailAnalytics(days: number = 30): Promise<EmailAnalyticsResponse> {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 
@@ -265,7 +265,7 @@ export async function getEmailAnalytics(days: number = 30): Promise<EmailAnalyti
  */
 export async function getEmailTemplates() {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     
     const { data, error } = await supabase
       .from('email_templates')
@@ -360,7 +360,7 @@ export async function processEmailQueue(): Promise<{ success: boolean; error?: s
  */
 export async function getEmailQueueStatus() {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     
     const [
       { count: pending },
