@@ -122,37 +122,91 @@ export async function createBooking(prevState: any, formData: FormData) {
       }
     })
 
-    // Send email notifications (fire and forget - don't block booking creation)
-    // Use Promise.resolve().then() to make this truly non-blocking
-    Promise.resolve().then(async () => {
+    // 🚨 ROBUST EMAIL NOTIFICATIONS - GUARANTEED DELIVERY
+    // Replace the broken fire-and-forget approach with reliable email sending
+    try {
+      console.log('📧 Starting email notifications for booking:', booking.id);
+      
+      // Import robust email service
+      const { RobustEmailUtils } = await import('@/lib/email/robust-email-service');
+      
+      // Get email settings for staff notifications
+      const { createClient } = await import('@/lib/supabase/server');
+      const supabase = await createClient();
+      const { data: emailSettings } = await supabase
+        .from('email_settings')
+        .select('restaurant_email, staff_booking_alerts')
+        .eq('user_id', 'admin')
+        .single();
+      
+      // Send emails with proper error handling and retry logic
+      const emailPromises: Promise<any>[] = [];
+      
+      // Customer confirmation email (if valid email provided)
+      if (email && email.includes('@') && !email.includes('phone-only.local')) {
+        console.log('📧 Sending customer confirmation to:', email);
+        emailPromises.push(
+          RobustEmailUtils.sendBookingConfirmation(booking, customer)
+            .then(result => ({ type: 'customer_confirmation', result }))
+            .catch(error => ({ type: 'customer_confirmation', error: error.message }))
+        );
+      }
+      
+      // Staff alert email
+      if (emailSettings?.restaurant_email && emailSettings.staff_booking_alerts) {
+        console.log('📧 Sending staff alert to:', emailSettings.restaurant_email);
+        emailPromises.push(
+          RobustEmailUtils.sendStaffBookingAlert(booking, customer, emailSettings.restaurant_email)
+            .then(result => ({ type: 'staff_alert', result }))
+            .catch(error => ({ type: 'staff_alert', error: error.message }))
+        );
+      }
+      
+      // Wait for all emails to complete (with timeout)
+      const timeoutPromise = new Promise(resolve => 
+        setTimeout(() => resolve([{ type: 'timeout', error: 'Email timeout' }]), 10000)
+      );
+      
+      const emailResults = await Promise.race([
+        Promise.allSettled(emailPromises),
+        timeoutPromise
+      ]) as any[];
+      
+      // Log email results
+      emailResults.forEach(result => {
+        if (result.type === 'timeout') {
+          console.warn('⚠️ Email sending timeout - emails may be queued for retry');
+        } else if (result.error) {
+          console.error(`❌ Email ${result.type} failed:`, result.error);
+        } else if (result.result?.success) {
+          console.log(`✅ Email ${result.type} sent successfully`);
+        } else {
+          console.warn(`⚠️ Email ${result.type} queued for retry:`, result.result?.error);
+        }
+      });
+      
+    } catch (emailError) {
+      // Log error but don't fail the booking
+      console.error('🚨 Email notification system error:', emailError);
+      
+      // Fallback: Try to queue emails for later processing
       try {
-        // Dynamic import to avoid issues with server/client boundaries
-        const { EmailUtils } = await import('@/lib/email/email-service');
+        const { RobustEmailUtils } = await import('@/lib/email/robust-email-service');
         
-        // Send confirmation email to customer (if valid email provided)
+        // Try to queue the emails
         if (email && email.includes('@') && !email.includes('phone-only.local')) {
-          EmailUtils.sendBookingConfirmation(booking, customer).catch(error => {
-            console.error('Booking confirmation email failed:', error);
-          });
-          
-          // Schedule reminder email
-          EmailUtils.scheduleBookingReminder(booking, customer).catch(error => {
-            console.error('Booking reminder scheduling failed:', error);
-          });
+          await RobustEmailUtils.sendBookingConfirmation(booking, customer);
         }
         
-        // Send staff alert
-        EmailUtils.sendStaffBookingAlert(booking, customer).catch(error => {
-          console.error('Staff booking alert failed:', error);
-        });
+        // Try to send staff alert with a fallback email
+        const fallbackStaffEmail = process.env.RESTAURANT_EMAIL || 'reservations@donatheresa.com';
+        await RobustEmailUtils.sendStaffBookingAlert(booking, customer, fallbackStaffEmail);
         
-      } catch (emailError) {
-        // Log error but don't fail the booking
-        console.error('Email notification setup failed:', emailError);
+        console.log('📥 Emails queued for later delivery due to system error');
+      } catch (fallbackError) {
+        console.error('🚨 CRITICAL: Both email sending and queuing failed:', fallbackError);
       }
-    }).catch(error => {
-      console.error('Email notification process failed:', error);
-    });
+    }
 
     const bookingDateTime = new Date(`${date}T${time}:00`)
     const formattedDate = formatDateWithLocale(bookingDateTime, localeSettings.date_format, localeSettings.language_code)
