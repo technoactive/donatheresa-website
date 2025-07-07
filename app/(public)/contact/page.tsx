@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Image from "next/image"
-import { MapPin, Phone, Clock, Send, MessageSquare } from "lucide-react"
+import { MapPin, Phone, Clock, Send, MessageSquare, CheckCircle, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { submitContactMessage } from "./actions"
@@ -24,6 +24,7 @@ export default function ContactPage() {
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   useEffect(() => {
     // Auto-scroll to contact form when page loads from navigation - MOBILE ONLY
@@ -50,7 +51,8 @@ export default function ContactPage() {
       
       if (result.success) {
         toast.success(result.message)
-        // Reset form
+        setIsSubmitted(true)
+        // Reset form data
         setFormData({
           name: "",
           email: "",
@@ -83,51 +85,239 @@ export default function ContactPage() {
     }))
   }
 
+  const resetForm = () => {
+    setIsSubmitted(false)
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      subject: "",
+      message: ""
+    })
+  }
+
   return (
     <div className="bg-white text-slate-900 min-h-screen">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/20" style={{ minHeight: 'calc(100vh - 80px)', marginTop: '80px' }}>
+      {/* Hero Section - Half Height */}
+      <section className="relative flex items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/20" style={{ height: '50vh', marginTop: '80px' }}>
         {/* Decorative Elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-amber-100/30 to-yellow-100/20 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-orange-100/20 to-amber-100/30 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-amber-100/10 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute -top-20 -right-20 w-60 h-60 bg-gradient-to-br from-amber-100/30 to-yellow-100/20 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-gradient-to-br from-orange-100/20 to-amber-100/30 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-amber-100/10 to-transparent rounded-full blur-3xl"></div>
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 w-full text-center">
-          <div className="space-y-8">
-            <div className="space-y-6">
-              <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-amber-200/50 text-slate-700 px-8 py-4 rounded-full text-sm font-medium shadow-lg">
-                <MessageSquare className="w-4 h-4 text-amber-600" />
-                <span className="tracking-[0.2em] uppercase">Get in Touch</span>
-                <div className="w-1 h-1 bg-amber-500 rounded-full"></div>
-              </div>
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-amber-200/50 text-slate-700 px-6 py-3 rounded-full text-sm font-medium shadow-lg">
+              <MessageSquare className="w-4 h-4 text-amber-600" />
+              <span className="tracking-[0.2em] uppercase">Get in Touch</span>
+              <div className="w-1 h-1 bg-amber-500 rounded-full"></div>
+            </div>
+            
+            <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-tight">
+              <span className="block text-slate-900">CONTACT</span>
+              <span className="block bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
+                US
+              </span>
+            </h1>
+            
+            <div className="max-w-3xl mx-auto space-y-4">
+              <p className="text-xl md:text-2xl text-slate-600 font-light leading-relaxed">
+                We'd Love to Hear From You
+              </p>
               
-              <h1 className="text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight tracking-tight">
-                <span className="block text-slate-900">CONTACT</span>
-                <span className="block bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
-                  US
-                </span>
-              </h1>
+              <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto"></div>
               
-              <div className="max-w-4xl mx-auto space-y-6">
-                <p className="text-2xl md:text-3xl text-slate-600 font-light leading-relaxed">
-                  We'd Love to Hear From You
-                </p>
-                
-                <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto"></div>
-                
-                <p className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-3xl mx-auto">
-                  Get in touch with any questions about our restaurant, menu, or services. 
-                  Our dedicated team will respond within 24 hours to assist you.
-                </p>
-              </div>
+              <p className="text-lg text-slate-500 leading-relaxed">
+                Get in touch with any questions about our restaurant, menu, or services.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Info Cards */}
+      {/* Contact Form Section - Now Second */}
+      <section id="contact-form" className="py-20 bg-gradient-to-br from-slate-50 via-white to-amber-50/20 relative overflow-hidden">
+        {/* Subtle Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-amber-100/20 to-yellow-100/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-20 left-20 w-48 h-48 bg-gradient-to-br from-orange-100/15 to-amber-100/20 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-amber-200/50 text-slate-700 px-6 py-3 rounded-full text-sm font-medium shadow-lg mb-6">
+              <Send className="w-4 h-4 text-amber-600" />
+              <span className="tracking-[0.2em] uppercase">Send Message</span>
+            </div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+              Send Us a Message
+            </h2>
+            
+            <p className="text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
+              Have questions about our menu, want to provide feedback, or need assistance? 
+              Fill out the form below and we'll respond promptly.
+            </p>
+          </div>
+
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-8 lg:p-12">
+            {!isSubmitted ? (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-slate-900 font-medium mb-2">Full Name *</label>
+                    <Input
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Your full name"
+                      className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-500 rounded-xl py-3 focus:border-amber-400 focus:ring-amber-400 transition-colors"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-900 font-medium mb-2">Email *</label>
+                    <Input
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="your@email.com"
+                      className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-500 rounded-xl py-3 focus:border-amber-400 focus:ring-amber-400 transition-colors"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-slate-900 font-medium mb-2">Phone (Optional)</label>
+                    <Input
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="Phone number"
+                      className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-500 rounded-xl py-3 focus:border-amber-400 focus:ring-amber-400 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-slate-900 font-medium mb-2">Subject *</label>
+                    <Select onValueChange={handleSelectChange} required>
+                      <SelectTrigger className="bg-slate-50 border-slate-300 text-slate-900 rounded-xl py-3 focus:border-amber-400 focus:ring-amber-400 transition-colors">
+                        <SelectValue placeholder="Select inquiry type" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border-slate-300">
+                        <SelectItem value="general">General Question</SelectItem>
+                        <SelectItem value="menu">Menu Inquiry</SelectItem>
+                        <SelectItem value="feedback">Feedback</SelectItem>
+                        <SelectItem value="private-events">Private Events</SelectItem>
+                        <SelectItem value="catering">Catering Services</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {/* Hidden input to ensure subject is included in FormData */}
+                    <input type="hidden" name="subject" value={formData.subject} />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-slate-900 font-medium mb-2">Message *</label>
+                  <Textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    placeholder="How can we help you today? Please provide details about your inquiry..."
+                    className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-500 rounded-xl py-3 h-32 resize-none focus:border-amber-400 focus:ring-amber-400 transition-colors"
+                    required
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-6 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-xl text-lg font-medium transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                >
+                  {isSubmitting ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Sending...
+                    </div>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5 mr-2" />
+                      Send Message
+                    </>
+                  )}
+                </Button>
+
+                <p className="text-sm text-slate-600 text-center">
+                  For immediate assistance with reservations, please call us directly at{' '}
+                  <RestaurantPhoneLink className="text-amber-600 hover:text-amber-700 font-medium">
+                    <RestaurantInfo type="phone" fallback="020 8421 5550" />
+                  </RestaurantPhoneLink>{' '}or{" "}
+                  <Link href="/reserve" className="text-amber-600 hover:text-amber-700 font-medium underline">
+                    visit our reservations page
+                  </Link>
+                </p>
+              </form>
+            ) : (
+              <div className="text-center py-12">
+                <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg">
+                  <CheckCircle className="w-10 h-10 text-white" />
+                </div>
+                
+                <div className="space-y-6">
+                  <h3 className="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">
+                    Thank You for Your Message!
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    <p className="text-xl text-slate-600 font-medium">
+                      Your message has been sent successfully.
+                    </p>
+                    
+                    <p className="text-lg text-slate-500 leading-relaxed max-w-2xl mx-auto">
+                      Our dedicated team will review your inquiry and respond within 24 hours. 
+                      We appreciate your interest in Dona Theresa and look forward to assisting you.
+                    </p>
+                  </div>
+                  
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
+                    <Button
+                      onClick={resetForm}
+                      variant="outline"
+                      className="border-amber-300 text-amber-700 hover:bg-amber-50 rounded-xl px-6 py-3 transition-all duration-300"
+                    >
+                      Send Another Message
+                    </Button>
+                    
+                    <Link href="/reserve">
+                      <Button className="bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-xl px-6 py-3 transition-all duration-300 hover:scale-105">
+                        Make a Reservation
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </Link>
+                  </div>
+                  
+                  <div className="mt-8 pt-6 border-t border-slate-200">
+                    <p className="text-sm text-slate-500">
+                      Need immediate assistance? Call us at{' '}
+                      <RestaurantPhoneLink className="text-amber-600 hover:text-amber-700 font-medium">
+                        <RestaurantInfo type="phone" fallback="020 8421 5550" />
+                      </RestaurantPhoneLink>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Info Cards - Now Third Section */}
       <section className="py-24 bg-gradient-to-b from-white to-slate-50/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Section Header */}
@@ -211,135 +401,6 @@ export default function ContactPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Form */}
-      <section id="contact-form" className="py-20 bg-gradient-to-br from-slate-50 via-white to-amber-50/20 relative overflow-hidden">
-        {/* Subtle Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-20 right-20 w-64 h-64 bg-gradient-to-br from-amber-100/20 to-yellow-100/10 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-20 left-20 w-48 h-48 bg-gradient-to-br from-orange-100/15 to-amber-100/20 rounded-full blur-3xl"></div>
-        </div>
-        
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-amber-200/50 text-slate-700 px-6 py-3 rounded-full text-sm font-medium shadow-lg mb-6">
-              <Send className="w-4 h-4 text-amber-600" />
-              <span className="tracking-[0.2em] uppercase">Send Message</span>
-            </div>
-            
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
-              Send Us a Message
-            </h2>
-            
-            <p className="text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
-              Have questions about our menu, want to provide feedback, or need assistance? 
-              Fill out the form below and we'll respond promptly.
-            </p>
-          </div>
-
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-8 lg:p-12">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-slate-900 font-medium mb-2">Full Name *</label>
-                  <Input
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="Your full name"
-                    className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-500 rounded-xl py-3 focus:border-amber-400 focus:ring-amber-400 transition-colors"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-slate-900 font-medium mb-2">Email *</label>
-                  <Input
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="your@email.com"
-                    className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-500 rounded-xl py-3 focus:border-amber-400 focus:ring-amber-400 transition-colors"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-slate-900 font-medium mb-2">Phone (Optional)</label>
-                  <Input
-                    name="phone"
-                    type="tel"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="Phone number"
-                    className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-500 rounded-xl py-3 focus:border-amber-400 focus:ring-amber-400 transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-slate-900 font-medium mb-2">Subject *</label>
-                  <Select onValueChange={handleSelectChange} required>
-                    <SelectTrigger className="bg-slate-50 border-slate-300 text-slate-900 rounded-xl py-3 focus:border-amber-400 focus:ring-amber-400 transition-colors">
-                      <SelectValue placeholder="Select inquiry type" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-white border-slate-300">
-                      <SelectItem value="general">General Question</SelectItem>
-                      <SelectItem value="menu">Menu Inquiry</SelectItem>
-                      <SelectItem value="feedback">Feedback</SelectItem>
-                      <SelectItem value="private-events">Private Events</SelectItem>
-                      <SelectItem value="catering">Catering Services</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  {/* Hidden input to ensure subject is included in FormData */}
-                  <input type="hidden" name="subject" value={formData.subject} />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-slate-900 font-medium mb-2">Message *</label>
-                <Textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  placeholder="How can we help you today? Please provide details about your inquiry..."
-                  className="bg-slate-50 border-slate-300 text-slate-900 placeholder:text-slate-500 rounded-xl py-3 h-32 resize-none focus:border-amber-400 focus:ring-amber-400 transition-colors"
-                  required
-                />
-              </div>
-
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-6 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-xl text-lg font-medium transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                {isSubmitting ? (
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Sending...
-                  </div>
-                ) : (
-                  <>
-                    <Send className="w-5 h-5 mr-2" />
-                    Send Message
-                  </>
-                )}
-              </Button>
-
-              <p className="text-sm text-slate-600 text-center">
-                For immediate assistance with reservations, please call us directly at{' '}
-                <RestaurantPhoneLink className="text-amber-600 hover:text-amber-700 font-medium">
-                  <RestaurantInfo type="phone" fallback="020 8421 5550" />
-                </RestaurantPhoneLink>{' '}or{" "}
-                <Link href="/reserve" className="text-amber-600 hover:text-amber-700 font-medium underline">
-                  visit our reservations page
-                </Link>
-              </p>
-            </form>
           </div>
         </div>
       </section>
