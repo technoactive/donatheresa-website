@@ -123,25 +123,36 @@ export async function createBooking(prevState: any, formData: FormData) {
     })
 
     // Send email notifications (fire and forget - don't block booking creation)
-    try {
-      // Dynamic import to avoid issues with server/client boundaries
-      const { EmailUtils } = await import('@/lib/email/email-service');
-      
-      // Send confirmation email to customer (if valid email provided)
-      if (email && email.includes('@') && !email.includes('phone-only.local')) {
-        await EmailUtils.sendBookingConfirmation(booking, customer);
+    // Use Promise.resolve().then() to make this truly non-blocking
+    Promise.resolve().then(async () => {
+      try {
+        // Dynamic import to avoid issues with server/client boundaries
+        const { EmailUtils } = await import('@/lib/email/email-service');
         
-        // Schedule reminder email
-        await EmailUtils.scheduleBookingReminder(booking, customer);
+        // Send confirmation email to customer (if valid email provided)
+        if (email && email.includes('@') && !email.includes('phone-only.local')) {
+          EmailUtils.sendBookingConfirmation(booking, customer).catch(error => {
+            console.error('Booking confirmation email failed:', error);
+          });
+          
+          // Schedule reminder email
+          EmailUtils.scheduleBookingReminder(booking, customer).catch(error => {
+            console.error('Booking reminder scheduling failed:', error);
+          });
+        }
+        
+        // Send staff alert
+        EmailUtils.sendStaffBookingAlert(booking, customer).catch(error => {
+          console.error('Staff booking alert failed:', error);
+        });
+        
+      } catch (emailError) {
+        // Log error but don't fail the booking
+        console.error('Email notification setup failed:', emailError);
       }
-      
-      // Send staff alert
-      await EmailUtils.sendStaffBookingAlert(booking, customer);
-      
-    } catch (emailError) {
-      // Log error but don't fail the booking
-      console.error('Email notification failed:', emailError);
-    }
+    }).catch(error => {
+      console.error('Email notification process failed:', error);
+    });
 
     const bookingDateTime = new Date(`${date}T${time}:00`)
     const formattedDate = formatDateWithLocale(bookingDateTime, localeSettings.date_format, localeSettings.language_code)
