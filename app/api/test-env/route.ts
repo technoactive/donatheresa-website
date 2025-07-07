@@ -135,7 +135,57 @@ export async function GET() {
 
     console.log('✅ Test email sent successfully!', result.data);
 
-    // Test 7: Check email templates count
+    // Test 7: Simple direct booking confirmation test
+    console.log('7. Testing simple booking email...');
+    
+    try {
+      // Test direct Resend call with booking-like content
+      const simpleBookingEmailData = {
+        from: `${settings.sender_name} <${settings.sender_email}>`,
+        to: ['delivered@resend.dev'],
+        subject: 'Booking Confirmation Test - Dona Theresa',
+        html: `
+          <h1>Booking Confirmed!</h1>
+          <p>Thank you for your reservation at Dona Theresa Restaurant.</p>
+          <div style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
+            <h3>Reservation Details</h3>
+            <p><strong>Name:</strong> Test Customer</p>
+            <p><strong>Date:</strong> January 15, 2025</p>
+            <p><strong>Time:</strong> 7:30 PM</p>
+            <p><strong>Party Size:</strong> 2 guests</p>
+            <p><strong>Booking Reference:</strong> test-booking-123</p>
+          </div>
+          <p>We look forward to seeing you!</p>
+        `,
+        text: 'Your booking at Dona Theresa Restaurant has been confirmed for January 15, 2025 at 7:30 PM for 2 guests.'
+      };
+
+      console.log('📧 Sending simple booking email...');
+      const simpleResult = await resend.emails.send(simpleBookingEmailData);
+
+      if (simpleResult.error) {
+        console.error('❌ Simple booking email failed:', simpleResult.error);
+        return NextResponse.json({
+          success: false,
+          error: 'Simple booking email test failed',
+          details: simpleResult.error
+        });
+      }
+
+      console.log('✅ Simple booking email sent successfully!', simpleResult.data);
+    } catch (simpleEmailError) {
+      console.error('❌ Simple booking email error:', simpleEmailError);
+      return NextResponse.json({
+        success: false,
+        error: 'Simple booking email test failed',
+        details: {
+          error_message: simpleEmailError instanceof Error ? simpleEmailError.message : 'Unknown error',
+          error_name: simpleEmailError instanceof Error ? simpleEmailError.name : 'Unknown'
+        }
+      });
+    }
+
+    // Test 8: Check email templates count
     const { data: templatesCount } = await supabase
       .from('email_templates')
       .select('template_key', { count: 'exact' })
@@ -151,6 +201,7 @@ export async function GET() {
         resend_initialization: '✅ Success',
         template_retrieval: '✅ Success',
         test_email: '✅ Sent',
+        booking_confirmation_email: '✅ Sent',
         resend_message_id: result.data?.id,
         active_templates: templatesCount?.length || 0,
         settings_summary: {

@@ -138,24 +138,27 @@ class EmailService {
       // Restaurant branding
       restaurantName: localeSettings?.restaurant_name || 'Dona Theresa Restaurant',
       restaurantPhone: localeSettings?.restaurant_phone || '+44 20 8421 5550',
-      restaurantEmail: settings.restaurant_email,
-      restaurantAddress: `${localeSettings?.restaurant_address}, ${localeSettings?.restaurant_city} ${localeSettings?.restaurant_postal_code}`,
+      restaurantEmail: settings.restaurant_email || 'info@donateresa.com',
+      restaurantAddress: localeSettings ? 
+        `${localeSettings.restaurant_address || '451 Uxbridge Road'}, ${localeSettings.restaurant_city || 'Pinner'} ${localeSettings.restaurant_postal_code || 'HA5 1AA'}` :
+        '451 Uxbridge Road, Pinner HA5 1AA',
       businessHours: 'Mon-Sun: 12:00 PM - 11:00 PM',
       
       // Branding
-      logoUrl: '/placeholder-logo.png', // Should be full URL in production
-      brandColor: settings.brand_color,
-      customFooter: settings.custom_footer || undefined,
+      logoUrl: settings.custom_logo_url || '/placeholder-logo.png',
+      brandColor: settings.brand_color || '#D97706',
+      customFooter: settings.custom_footer || 'Dona Theresa Restaurant | 451 Uxbridge Road, Pinner, London HA5 1AA',
       websiteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://donateresa.com',
-      bookingUrl: `${process.env.NEXT_PUBLIC_APP_URL}/reserve`,
-      dashboardUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
+      bookingUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://donateresa.com'}/reserve`,
+      dashboardUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://donateresa.com'}/dashboard`,
       
-      // Helper text
-      guestText: data.partySize === 1 ? 'guest' : 'guests',
+      // Helper text - ensure guestText is calculated from the data
+      guestText: (Number(data.partySize) === 1) ? 'guest' : 'guests',
       
       // Dates
       createdAt: new Date().toLocaleString('en-GB'),
       
+      // Merge all provided data
       ...data
     };
 
