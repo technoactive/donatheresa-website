@@ -98,7 +98,7 @@ export default function ContactPage() {
 
   return (
     <div className="bg-white text-slate-900 min-h-screen">
-      {/* Hero Section - Half Height */}
+      {/* Combined Hero & Message Section */}
       <section className="relative flex items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/20" style={{ height: '50vh', marginTop: '80px' }}>
         {/* Decorative Elements */}
         <div className="absolute inset-0 overflow-hidden">
@@ -110,15 +110,15 @@ export default function ContactPage() {
         <div className="relative z-10 max-w-7xl mx-auto px-6 w-full text-center">
           <div className="space-y-6">
             <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-amber-200/50 text-slate-700 px-6 py-3 rounded-full text-sm font-medium shadow-lg">
-              <MessageSquare className="w-4 h-4 text-amber-600" />
-              <span className="tracking-[0.2em] uppercase">Get in Touch</span>
+              <Send className="w-4 h-4 text-amber-600" />
+              <span className="tracking-[0.2em] uppercase">Send Message</span>
               <div className="w-1 h-1 bg-amber-500 rounded-full"></div>
             </div>
             
             <h1 className="text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight tracking-tight">
-              <span className="block text-slate-900">CONTACT</span>
+              <span className="block text-slate-900">SEND US A</span>
               <span className="block bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
-                US
+                MESSAGE
               </span>
             </h1>
             
@@ -130,14 +130,15 @@ export default function ContactPage() {
               <div className="w-24 h-px bg-gradient-to-r from-transparent via-amber-500 to-transparent mx-auto"></div>
               
               <p className="text-lg text-slate-500 leading-relaxed">
-                Get in touch with any questions about our restaurant, menu, or services.
+                Have questions about our menu, want to provide feedback, or need assistance? 
+                Fill out the form below and we'll respond promptly.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Form Section - Now Second */}
+      {/* Contact Form Section - Directly After Hero */}
       <section id="contact-form" className="py-20 bg-gradient-to-br from-slate-50 via-white to-amber-50/20 relative overflow-hidden">
         {/* Subtle Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
@@ -146,22 +147,6 @@ export default function ContactPage() {
         </div>
         
         <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-amber-200/50 text-slate-700 px-6 py-3 rounded-full text-sm font-medium shadow-lg mb-6">
-              <Send className="w-4 h-4 text-amber-600" />
-              <span className="tracking-[0.2em] uppercase">Send Message</span>
-            </div>
-            
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
-              Send Us a Message
-            </h2>
-            
-            <p className="text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto">
-              Have questions about our menu, want to provide feedback, or need assistance? 
-              Fill out the form below and we'll respond promptly.
-            </p>
-          </div>
-
           <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-8 lg:p-12">
             {!isSubmitted ? (
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -317,7 +302,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Contact Info Cards - Now Third Section */}
+      {/* Contact Info Cards - Third Section */}
       <section className="py-24 bg-gradient-to-b from-white to-slate-50/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           {/* Section Header */}
