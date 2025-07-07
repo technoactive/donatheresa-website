@@ -1,9 +1,8 @@
 import { CustomersTable } from "@/components/dashboard/customers-table"
 import { CustomerAnalytics } from "@/components/dashboard/customer-analytics"
 import { AddCustomerDialog } from "@/components/dashboard/add-customer-dialog"
-import { getAllCustomers, refreshCustomersPage } from "./actions"
-import { Button } from "@/components/ui/button"
-import { RefreshCw, TrendingUp } from "lucide-react"
+import { getAllCustomers } from "./actions"
+import { TrendingUp } from "lucide-react"
 import type { Customer } from "@/lib/types"
 
 // Force dynamic rendering since this page uses cookies for authentication
@@ -32,13 +31,8 @@ export default async function CustomersPage() {
           <div className="space-y-2">
             <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-slate-900">Customers</h1>
             <p className="text-red-500 text-sm sm:text-base">Error: {error}</p>
+            <p className="text-slate-600 text-sm">Please try navigating to another page and back, or contact support if the issue persists.</p>
           </div>
-          <form action={refreshCustomersPage}>
-            <Button type="submit" className="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Retry
-            </Button>
-          </form>
         </div>
       </div>
     )
@@ -52,16 +46,8 @@ export default async function CustomersPage() {
           <p className="text-slate-600 text-sm sm:text-base">View and manage your customer list.</p>
         </div>
         
-        <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-          <form action={refreshCustomersPage} className="w-full sm:w-auto">
-            <Button type="submit" variant="outline" size="sm" className="w-full sm:w-auto flex items-center justify-center gap-2 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900">
-              <RefreshCw className="h-4 w-4" />
-              Refresh
-            </Button>
-          </form>
-          <div className="w-full sm:w-auto">
-            <AddCustomerDialog />
-          </div>
+        <div className="w-full sm:w-auto">
+          <AddCustomerDialog />
         </div>
       </div>
       
