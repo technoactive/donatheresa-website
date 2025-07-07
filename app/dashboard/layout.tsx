@@ -1,6 +1,9 @@
 import type React from "react"
 import { Sidebar } from "@/components/dashboard/sidebar"
 import { Header } from "@/components/dashboard/header"
+import { NotificationProvider } from "@/components/notifications/notification-provider"
+import { RealtimeNotifications } from "@/components/notifications/realtime-notifications"
+import { NotificationToastContainer } from "@/components/notifications/notification-toast"
 
 export default function DashboardLayout({
   children,
@@ -8,21 +11,28 @@ export default function DashboardLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
-      {/* Fixed Header - always visible across all screen sizes */}
-      <Header />
-      
-      {/* Fixed Sidebar - desktop only */}
-      <Sidebar />
+    <NotificationProvider>
+      <RealtimeNotifications>
+        <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-slate-50">
+          {/* Fixed Header - always visible across all screen sizes */}
+          <Header />
+          
+          {/* Fixed Sidebar - desktop only */}
+          <Sidebar />
 
-      {/* Main Content Area - scrollable */}
-      <main className="pt-14 lg:pt-[60px] md:pl-[220px] lg:pl-[280px] min-h-screen">
-        <div className="h-full overflow-auto p-4 md:p-6 lg:p-8 max-w-full">
-          <div className="mx-auto max-w-7xl w-full">
-            {children}
-          </div>
+          {/* Main Content Area - scrollable */}
+          <main className="pt-14 lg:pt-[60px] md:pl-[220px] lg:pl-[280px] min-h-screen">
+            <div className="h-full overflow-auto p-4 md:p-6 lg:p-8 max-w-full">
+              <div className="mx-auto max-w-7xl w-full">
+                {children}
+              </div>
+            </div>
+          </main>
+          
+          {/* Toast notifications container */}
+          <NotificationToastContainer />
         </div>
-      </main>
-    </div>
+      </RealtimeNotifications>
+    </NotificationProvider>
   )
 }

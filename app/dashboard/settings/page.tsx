@@ -8,7 +8,8 @@ import {
   Calendar,
   ArrowRight,
   Settings2,
-  Globe
+  Globe,
+  Bell
 } from "lucide-react"
 import { SettingsLayout } from "@/components/dashboard/settings-layout"
 
@@ -69,6 +70,33 @@ export default function SettingsPage() {
             >
               <Link href="/dashboard/settings/locale" className="flex items-center justify-center gap-2">
                 Manage Locale Settings
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="group hover:shadow-lg transition-all duration-200 cursor-pointer bg-white border-slate-200 shadow-sm flex flex-col h-full">
+          <CardHeader className="pb-4 flex-grow">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-blue-50 rounded-lg">
+                <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
+              </div>
+              <div>
+                <CardTitle className="text-slate-900 text-base sm:text-lg">Notification Settings</CardTitle>
+                <CardDescription className="text-slate-600 text-sm">
+                  Configure alerts, sounds, and notification preferences
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0 mt-auto">
+            <Button 
+              asChild 
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white group-hover:bg-blue-500 h-10"
+            >
+              <Link href="/dashboard/settings/notifications" className="flex items-center justify-center gap-2">
+                Manage Notifications
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </Button>

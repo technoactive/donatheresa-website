@@ -2,11 +2,12 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Bell, Menu, UtensilsCrossed, X } from "lucide-react"
+import { Menu, UtensilsCrossed, X } from "lucide-react"
 import { useState, useEffect } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
+import { NotificationCenter } from "@/components/notifications/notification-center"
 
 export function Header() {
   const pathname = usePathname()
@@ -129,10 +130,9 @@ export function Header() {
         )}
       </div>
       
-      <Button variant="outline" size="icon" className="ml-auto h-8 w-8 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 relative z-10">
-        <Bell className="h-4 w-4" />
-        <span className="sr-only">Toggle notifications</span>
-      </Button>
+      <div className="ml-auto relative z-10">
+        <NotificationCenter />
+      </div>
     </header>
   )
 }
