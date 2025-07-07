@@ -31,7 +31,8 @@ import {
   Shield,
   Clock,
   AlertTriangle,
-  CheckCircle
+  CheckCircle,
+  Hash
 } from 'lucide-react';
 import type { EmailSettings } from '@/lib/email/types';
 
@@ -72,6 +73,10 @@ const createEmailSettingsSchema = (hasExistingSettings: boolean) => {
     custom_logo_url: z.string().url('Invalid URL').optional().or(z.literal('')),
     brand_color: z.string().regex(/^#[0-9A-F]{6}$/i, 'Invalid hex color'),
     custom_footer: z.string().optional(),
+    
+    // Booking Reference Settings
+    booking_ref_prefix: z.string().min(1, 'Prefix is required').max(10, 'Prefix too long'),
+    booking_ref_length: z.number().min(3, 'Minimum 3 digits').max(10, 'Maximum 10 digits'),
     
     // Advanced Settings
     max_daily_emails: z.number().min(1).max(10000),
@@ -129,6 +134,8 @@ type EmailSettingsFormData = {
   max_retry_attempts: number;
   track_opens: boolean;
   track_clicks: boolean;
+  booking_ref_prefix: string;
+  booking_ref_length: number;
 };
 
 interface EmailSettingsFormProps {
@@ -178,6 +185,10 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
       custom_logo_url: initialSettings?.custom_logo_url || '',
       brand_color: initialSettings?.brand_color || '#D97706',
       custom_footer: initialSettings?.custom_footer || 'Dona Theresa Restaurant | 451 Uxbridge Road, Pinner, London HA5 1AA',
+      
+      // Booking Reference Settings
+      booking_ref_prefix: initialSettings?.booking_ref_prefix || '',
+      booking_ref_length: initialSettings?.booking_ref_length || 5,
       
       // Advanced Settings
       max_daily_emails: initialSettings?.max_daily_emails || 1000,
@@ -597,6 +608,70 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
             {form.formState.errors.custom_footer && (
               <p className="text-sm text-red-500">{form.formState.errors.custom_footer.message}</p>
             )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Booking Reference Settings */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Hash className="h-5 w-5" />
+            Booking Reference Settings
+          </CardTitle>
+          <CardDescription>
+            Configure how booking references appear in emails and customer communications
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="booking_ref_prefix">Reference Prefix</Label>
+              <Input
+                id="booking_ref_prefix"
+                type="text"
+                placeholder="DT"
+                maxLength={10}
+                {...form.register('booking_ref_prefix')}
+              />
+              {form.formState.errors.booking_ref_prefix && (
+                <p className="text-sm text-red-500">{form.formState.errors.booking_ref_prefix.message}</p>
+              )}
+              <p className="text-xs text-muted-foreground">
+                Short prefix for your business (2-4 characters recommended)
+              </p>
+            </div>
+   
+            <div className="space-y-2">
+              <Label htmlFor="booking_ref_length">Number Length</Label>
+              <Input
+                id="booking_ref_length"
+                type="number"
+                min="3"
+                max="10"
+                {...form.register('booking_ref_length', { valueAsNumber: true })}
+              />
+              {form.formState.errors.booking_ref_length && (
+                <p className="text-sm text-red-500">{form.formState.errors.booking_ref_length.message}</p>
+              )}
+              <p className="text-xs text-muted-foreground">
+                Number of digits (with leading zeros)
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-slate-50 p-4 rounded-lg border">
+            <div className="text-sm font-medium text-slate-700 mb-2">Preview Example:</div>
+            <div className="text-lg font-mono font-bold text-slate-900">
+              {form.watch('booking_ref_prefix') || 'DT'}-{String(1).padStart(form.watch('booking_ref_length') || 5, '0')}
+            </div>
+            <div className="text-xs text-slate-500 mt-1">
+              Next booking reference format
+            </div>
+          </div>
+
+          <div className="text-sm text-amber-600 bg-amber-50 p-3 rounded-lg border border-amber-200">
+            <strong>Note:</strong> Changing these settings will only affect new bookings. Existing bookings will keep their current references.
           </div>
         </CardContent>
       </Card>

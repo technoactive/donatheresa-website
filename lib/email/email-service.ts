@@ -605,7 +605,7 @@ export const EmailUtils = {
       bookingId: booking.id,
       data: {
         customerName: customer.name,
-        bookingId: booking.id,
+        bookingId: booking.booking_reference || booking.id,
         bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB'),
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
@@ -641,7 +641,7 @@ END:VCALENDAR`
         bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB'),
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
-        bookingId: booking.id,
+        bookingId: booking.booking_reference || booking.id,
       }
     });
   },
@@ -660,7 +660,7 @@ END:VCALENDAR`
         bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB'),
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
-        bookingId: booking.id,
+        bookingId: booking.booking_reference || booking.id,
       }
     });
   },
@@ -687,7 +687,7 @@ END:VCALENDAR`
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
         specialRequests: booking.special_requests,
-        bookingId: booking.id,
+        bookingId: booking.booking_reference || booking.id,
         customerSegment: customer.customer_segment || 'new',
         segmentColor: customer.customer_segment === 'vip' ? '#ffc107' : 
                      customer.customer_segment === 'regular' ? '#28a745' : 
