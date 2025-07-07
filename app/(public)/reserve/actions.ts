@@ -122,13 +122,34 @@ export async function createBooking(prevState: any, formData: FormData) {
       }
     })
 
+    // Send email notifications (fire and forget - don't block booking creation)
+    try {
+      // Dynamic import to avoid issues with server/client boundaries
+      const { EmailUtils } = await import('@/lib/email/email-service');
+      
+      // Send confirmation email to customer (if valid email provided)
+      if (email && email.includes('@') && !email.includes('phone-only.local')) {
+        await EmailUtils.sendBookingConfirmation(booking, customer);
+        
+        // Schedule reminder email
+        await EmailUtils.scheduleBookingReminder(booking, customer);
+      }
+      
+      // Send staff alert
+      await EmailUtils.sendStaffBookingAlert(booking, customer);
+      
+    } catch (emailError) {
+      // Log error but don't fail the booking
+      console.error('Email notification failed:', emailError);
+    }
+
     const bookingDateTime = new Date(`${date}T${time}:00`)
     const formattedDate = formatDateWithLocale(bookingDateTime, localeSettings.date_format, localeSettings.language_code)
     const formattedTime = format(bookingDateTime, localeSettings.time_format === 'HH:mm' ? 'HH:mm' : 'h:mm a')
     
     return {
       message: `Booking request received for ${name}!`,
-      description: `Thank you, ${name}. We've received your request for ${partySize} ${partySize === 1 ? 'person' : 'people'} on ${formattedDate} at ${formattedTime}. We'll confirm shortly via phone.`,
+      description: `Thank you, ${name}. We've received your request for ${partySize} ${partySize === 1 ? 'person' : 'people'} on ${formattedDate} at ${formattedTime}. ${email && email.includes('@') && !email.includes('phone-only.local') ? "You'll receive a confirmation email shortly." : "We'll confirm via phone."}`,
       success: true,
       bookingId: booking.id,
     }

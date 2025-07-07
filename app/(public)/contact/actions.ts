@@ -19,13 +19,28 @@ export async function submitContactMessage(formData: FormData) {
   }
 
   try {
-    await createContactMessage({
+    const contactMessage = await createContactMessage({
       name,
       email,
       phone: phone || undefined,
       subject,
       message
     })
+
+    // Send email notifications (fire and forget - don't block contact form submission)
+    try {
+      const { EmailUtils } = await import('@/lib/email/email-service');
+      
+      // Send auto-reply to customer
+      await EmailUtils.sendContactAutoReply(contactMessage);
+      
+      // Send notification to staff
+      await EmailUtils.sendContactNotification(contactMessage);
+      
+    } catch (emailError) {
+      // Log error but don't fail the contact form submission
+      console.error('Email notification failed:', emailError);
+    }
 
     revalidatePath('/contact')
     
