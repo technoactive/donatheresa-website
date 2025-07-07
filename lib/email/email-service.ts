@@ -5,109 +5,17 @@
 
 import { Resend } from 'resend';
 import { createClient } from '@/lib/supabase/server';
-import type { Database } from '@/lib/types';
-
-// Types
-export interface EmailTemplate {
-  id: string;
-  template_key: string;
-  name: string;
-  subject: string;
-  html_content: string;
-  text_content: string | null;
-  preview_text: string | null;
-  available_variables: string[];
-}
-
-export interface EmailSettings {
-  id: string;
-  email_provider: string;
-  api_key_encrypted: string | null;
-  sender_email: string;
-  sender_name: string;
-  reply_to_email: string | null;
-  restaurant_email: string;
-  manager_email: string | null;
-  backup_email: string | null;
-  brand_color: string;
-  custom_footer: string | null;
-  max_daily_emails: number;
-  emails_sent_today: number;
-  track_opens: boolean;
-  track_clicks: boolean;
-}
-
-export interface SendEmailParams {
-  templateKey: string;
-  recipientEmail: string;
-  recipientName?: string;
-  data?: Record<string, any>;
-  bookingId?: string;
-  contactId?: string;
-  scheduledFor?: Date;
-  priority?: number;
-}
-
-export interface EmailResult {
-  success: boolean;
-  messageId?: string;
-  error?: string;
-  logId?: string;
-}
-
-export interface TemplateData {
-  // Customer data
-  customerName?: string;
-  customerEmail?: string;
-  customerPhone?: string;
-  
-  // Booking data
-  bookingId?: string;
-  bookingDate?: string;
-  bookingTime?: string;
-  partySize?: number;
-  guestText?: string;
-  specialRequests?: string;
-  bookingSource?: string;
-  
-  // Customer analytics
-  customerSegment?: string;
-  segmentColor?: string;
-  isVipCustomer?: boolean;
-  totalBookings?: number;
-  
-  // Restaurant data
-  restaurantName?: string;
-  restaurantPhone?: string;
-  restaurantEmail?: string;
-  restaurantAddress?: string;
-  businessHours?: string;
-  
-  // Branding
-  logoUrl?: string;
-  brandColor?: string;
-  customFooter?: string;
-  websiteUrl?: string;
-  bookingUrl?: string;
-  dashboardUrl?: string;
-  calendarLink?: string;
-  
-  // Contact form data
-  subject?: string;
-  message?: string;
-  submittedAt?: string;
-  
-  // System data
-  createdAt?: string;
-  totalCoversToday?: number;
-  
-  // Dates
-  [key: string]: any;
-}
+import type { 
+  EmailSettings, 
+  EmailTemplate, 
+  EmailLog, 
+  SendEmailParams, 
+  EmailResult,
+  TemplateData
+} from './types';
 
 class EmailService {
   private resend: Resend | null = null;
-  private supabase = createClient();
 
   /**
    * Initialize Resend client with API key from settings
@@ -116,7 +24,8 @@ class EmailService {
     try {
       if (this.resend) return true;
 
-      const { data: settings } = await this.supabase
+      const supabase = await createClient();
+      const { data: settings } = await supabase
         .from('email_settings')
         .select('api_key_encrypted, email_provider')
         .eq('user_id', 'admin')
@@ -147,7 +56,8 @@ class EmailService {
    */
   private async getEmailSettings(): Promise<EmailSettings | null> {
     try {
-      const { data, error } = await this.supabase
+      const supabase = await createClient();
+      const { data, error } = await supabase
         .from('email_settings')
         .select('*')
         .eq('user_id', 'admin')
@@ -170,7 +80,8 @@ class EmailService {
    */
   private async getTemplate(templateKey: string): Promise<EmailTemplate | null> {
     try {
-      const { data, error } = await this.supabase
+      const supabase = await createClient();
+      const { data, error } = await supabase
         .from('email_templates')
         .select('*')
         .eq('template_key', templateKey)
@@ -201,7 +112,7 @@ class EmailService {
     });
 
     // Handle {{#if condition}}...{{/if}} blocks
-    rendered = rendered.replace(/\{\{#if\s+(\w+)\}\}(.*?)\{\{\/if\}\}/gs, (match, key, content) => {
+    rendered = rendered.replace(/\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g, (match, key, content) => {
       return data[key] ? content : '';
     });
 
@@ -216,7 +127,8 @@ class EmailService {
     settings: EmailSettings
   ): Promise<TemplateData> {
     // Get restaurant info from locale settings
-    const { data: localeSettings } = await this.supabase
+    const supabase = await createClient();
+    const { data: localeSettings } = await supabase
       .from('locale_settings')
       .select('*')
       .eq('id', 1)
@@ -233,7 +145,7 @@ class EmailService {
       // Branding
       logoUrl: '/placeholder-logo.png', // Should be full URL in production
       brandColor: settings.brand_color,
-      customFooter: settings.custom_footer,
+      customFooter: settings.custom_footer || undefined,
       websiteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://donateresa.com',
       bookingUrl: `${process.env.NEXT_PUBLIC_APP_URL}/reserve`,
       dashboardUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard`,
@@ -265,7 +177,8 @@ class EmailService {
     errorMessage?: string;
   }): Promise<string | null> {
     try {
-      const { data, error } = await this.supabase
+      const supabase = await createClient();
+      const { data, error } = await supabase
         .from('email_logs')
         .insert({
           template_key: params.templateKey,
@@ -302,7 +215,8 @@ class EmailService {
     clickedAt?: Date;
   }): Promise<boolean> {
     try {
-      const { error } = await this.supabase
+      const supabase = await createClient();
+      const { error } = await supabase
         .from('email_logs')
         .update(updates)
         .eq('id', logId);
@@ -423,13 +337,13 @@ class EmailService {
       }
 
       // Update template usage
-      await this.supabase
+      const supabase = await createClient();
+      await supabase
         .from('email_templates')
         .update({ 
-          usage_count: template.usage_count + 1,
           last_used_at: new Date().toISOString()
         })
-        .eq('id', template.id);
+        .eq('template_key', params.templateKey);
 
       return {
         success: true,
@@ -479,7 +393,8 @@ class EmailService {
       const subject = this.renderTemplate(template.subject, templateData);
 
       // Insert into email queue
-      const { data, error } = await this.supabase
+      const supabase = await createClient();
+      const { data, error } = await supabase
         .from('email_queue')
         .insert({
           template_key: params.templateKey,
@@ -515,7 +430,8 @@ class EmailService {
    */
   async processEmailQueue(): Promise<void> {
     try {
-      const { data: queuedEmails } = await this.supabase
+      const supabase = await createClient();
+      const { data: queuedEmails } = await supabase
         .from('email_queue')
         .select('*')
         .eq('status', 'pending')
@@ -529,7 +445,8 @@ class EmailService {
       for (const email of queuedEmails) {
         try {
           // Mark as processing
-          await this.supabase
+          const supabaseInstance = await createClient();
+          await supabaseInstance
             .from('email_queue')
             .update({ status: 'processing', current_attempts: email.current_attempts + 1 })
             .eq('id', email.id);
@@ -546,13 +463,13 @@ class EmailService {
 
           // Update queue status
           if (result.success) {
-            await this.supabase
+            await supabaseInstance
               .from('email_queue')
               .update({ status: 'sent' })
               .eq('id', email.id);
           } else {
             if (email.current_attempts >= email.max_attempts) {
-              await this.supabase
+              await supabaseInstance
                 .from('email_queue')
                 .update({ 
                   status: 'failed',
@@ -561,7 +478,7 @@ class EmailService {
                 .eq('id', email.id);
             } else {
               // Retry later
-              await this.supabase
+              await supabaseInstance
                 .from('email_queue')
                 .update({ 
                   status: 'pending',
@@ -577,7 +494,8 @@ class EmailService {
           
           // Mark as failed if max attempts reached
           if (email.current_attempts >= email.max_attempts) {
-            await this.supabase
+            const supabaseInstance = await createClient();
+            await supabaseInstance
               .from('email_queue')
               .update({ 
                 status: 'failed',
@@ -618,7 +536,8 @@ class EmailService {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - days);
 
-      const { data: logs } = await this.supabase
+      const supabase = await createClient();
+      const { data: logs } = await supabase
         .from('email_logs')
         .select('*')
         .gte('created_at', startDate.toISOString());
@@ -636,10 +555,10 @@ class EmailService {
         };
       }
 
-      const totalSent = logs.filter(log => log.status === 'sent' || log.status === 'delivered').length;
-      const totalDelivered = logs.filter(log => log.status === 'delivered').length;
-      const totalOpened = logs.filter(log => log.opened_at).length;
-      const totalClicked = logs.filter(log => log.clicked_at).length;
+      const totalSent = logs.filter((log: any) => log.status === 'sent' || log.status === 'delivered').length;
+      const totalDelivered = logs.filter((log: any) => log.status === 'delivered').length;
+      const totalOpened = logs.filter((log: any) => log.opened_at).length;
+      const totalClicked = logs.filter((log: any) => log.clicked_at).length;
 
       return {
         totalSent,
@@ -656,6 +575,13 @@ class EmailService {
       console.error('Failed to get email analytics:', error);
       throw error;
     }
+  }
+
+  /**
+   * Public method to get email settings (for utility functions)
+   */
+  async getSettings(): Promise<EmailSettings | null> {
+    return this.getEmailSettings();
   }
 }
 
@@ -739,7 +665,7 @@ END:VCALENDAR`
    * Send staff new booking alert
    */
   async sendStaffBookingAlert(booking: any, customer: any): Promise<EmailResult> {
-    const settings = await emailService.getEmailSettings();
+    const settings = await emailService.getSettings();
     if (!settings?.staff_booking_alerts || !settings.restaurant_email) {
       return { success: false, error: 'Staff alerts disabled or no email configured' };
     }
@@ -773,7 +699,7 @@ END:VCALENDAR`
    * Send contact form notification to staff
    */
   async sendContactNotification(contact: any): Promise<EmailResult> {
-    const settings = await emailService.getEmailSettings();
+    const settings = await emailService.getSettings();
     if (!settings?.contact_staff_notification || !settings.restaurant_email) {
       return { success: false, error: 'Contact alerts disabled or no email configured' };
     }
@@ -798,7 +724,7 @@ END:VCALENDAR`
    * Send contact auto-reply to customer
    */
   async sendContactAutoReply(contact: any): Promise<EmailResult> {
-    const settings = await emailService.getEmailSettings();
+    const settings = await emailService.getSettings();
     if (!settings?.contact_auto_reply_enabled) {
       return { success: false, error: 'Auto-reply disabled' };
     }
