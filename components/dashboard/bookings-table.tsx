@@ -18,6 +18,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import type { Booking } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { EditBookingDialog } from "./edit-booking-dialog"
+import { DatePickerWithClear } from "./date-picker-with-clear"
 import { toast } from "sonner"
 import { updateBookingStatusAction } from "@/app/dashboard/bookings/actions"
 
@@ -55,6 +56,13 @@ const SourceBadge = React.memo(({ source }: { source: "website" | "dashboard" })
     {source}
   </Badge>
 ))
+
+// Helper function to check if two dates are the same day
+const isSameDay = (date1: Date, date2: Date) => {
+  return date1.getDate() === date2.getDate() &&
+         date1.getMonth() === date2.getMonth() &&
+         date1.getFullYear() === date2.getFullYear()
+}
 
 // Status Action Buttons Component for iPad-friendly status changes
 const StatusActionButtons = React.memo(({ 
@@ -201,6 +209,7 @@ const MobileBookingCard = React.memo(({
 export const BookingsTable = React.memo(function BookingsTable({ bookings, isReadOnly = false }: BookingsTableProps) {
   const [editingBooking, setEditingBooking] = React.useState<Booking | null>(null)
   const [filterValue, setFilterValue] = React.useState("")
+  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(new Date()) // Default to today
   const [isPending, startTransition] = React.useTransition()
   const [mounted, setMounted] = React.useState(false)
 
@@ -209,13 +218,28 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
     setMounted(true)
   }, [])
 
-  // Filter bookings based on customer name
+  // Filter bookings based on customer name and selected date
   const filteredBookings = React.useMemo(() => {
-    if (!filterValue) return bookings
-    return bookings.filter(booking => 
-      booking.customerName.toLowerCase().includes(filterValue.toLowerCase())
-    )
-  }, [bookings, filterValue])
+    let filtered = bookings
+
+    // Filter by customer name
+    if (filterValue) {
+      filtered = filtered.filter(booking => 
+        booking.customerName.toLowerCase().includes(filterValue.toLowerCase())
+      )
+    }
+
+    // Filter by selected date
+    if (selectedDate) {
+      filtered = filtered.filter(booking => {
+        const bookingDate = new Date(booking.bookingTime)
+        return isSameDay(bookingDate, selectedDate)
+      })
+    }
+
+    // Sort by booking time (earliest first)
+    return filtered.sort((a, b) => new Date(a.bookingTime).getTime() - new Date(b.bookingTime).getTime())
+  }, [bookings, filterValue, selectedDate])
 
   const handleEdit = React.useCallback((booking: Booking) => {
     setEditingBooking(booking)
@@ -252,17 +276,55 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
     setFilterValue(e.target.value)
   }, [])
 
+  // Count of filtered bookings
+  const bookingCount = filteredBookings.length
+  const totalGuests = filteredBookings.reduce((sum, booking) => sum + booking.partySize, 0)
+
   return (
     <div className="w-full space-y-4 touch-spacing">
-      {/* Filter input - responsive */}
+      {/* Filters and Summary */}
       {mounted && !isReadOnly && (
-        <div className="flex items-center">
-          <Input
-            placeholder="Filter by customer name..."
-            value={filterValue}
-            onChange={handleFilterChange}
-            className="w-full sm:max-w-sm input-touch filter-touch bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
-          />
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            {/* Date filter */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-slate-700 whitespace-nowrap">Filter by date:</span>
+              <DatePickerWithClear
+                date={selectedDate}
+                setDate={setSelectedDate}
+                className="w-[220px]"
+              />
+            </div>
+            
+            {/* Customer name filter */}
+            <Input
+              placeholder="Filter by customer name..."
+              value={filterValue}
+              onChange={handleFilterChange}
+              className="w-full sm:max-w-sm input-touch filter-touch bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
+            />
+          </div>
+          
+          {/* Summary info */}
+          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-600 bg-slate-50 rounded-lg p-3">
+            <span className="font-medium">
+              {selectedDate ? (
+                <>
+                  {selectedDate.toLocaleDateString('en-GB', { 
+                    weekday: 'long',
+                    day: 'numeric', 
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </>
+              ) : (
+                'All dates'
+              )}:
+            </span>
+            <span>{bookingCount} booking{bookingCount !== 1 ? 's' : ''}</span>
+            <span className="text-slate-400">•</span>
+            <span>{totalGuests} guest{totalGuests !== 1 ? 's' : ''}</span>
+          </div>
         </div>
       )}
       
@@ -283,7 +345,16 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
         ) : (
           <Card className="card-touch bg-white border-slate-200 shadow-sm">
             <CardContent className="p-6 text-center">
-              <p className="text-slate-600">No bookings found.</p>
+              <p className="text-slate-600">
+                {selectedDate ? 
+                  `No bookings found for ${selectedDate.toLocaleDateString('en-GB', { 
+                    day: 'numeric', 
+                    month: 'long',
+                    year: 'numeric'
+                  })}.` :
+                  'No bookings found.'
+                }
+              </p>
             </CardContent>
           </Card>
         )}
@@ -373,7 +444,14 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
               ) : (
                 <TableRow className="table-row border-slate-200 hover:bg-slate-50">
                   <TableCell colSpan={mounted && !isReadOnly ? 7 : 5} className="h-24 text-center table-cell text-slate-600">
-                    No bookings found.
+                    {selectedDate ? 
+                      `No bookings found for ${selectedDate.toLocaleDateString('en-GB', { 
+                        day: 'numeric', 
+                        month: 'long',
+                        year: 'numeric'
+                      })}.` :
+                      'No bookings found.'
+                    }
                   </TableCell>
                 </TableRow>
               )}
