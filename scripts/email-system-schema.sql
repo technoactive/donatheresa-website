@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS email_settings (
   -- Provider Configuration
   email_provider TEXT NOT NULL DEFAULT 'resend' CHECK (email_provider IN ('resend', 'sendgrid', 'ses', 'postmark')),
   api_key_encrypted TEXT,
-  sender_email TEXT NOT NULL DEFAULT 'reservations@donateresa.com',
+  sender_email TEXT NOT NULL DEFAULT 'reservations@donatheresa.com',
   sender_name TEXT NOT NULL DEFAULT 'Dona Theresa Restaurant',
   reply_to_email TEXT,
   
