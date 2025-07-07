@@ -29,13 +29,13 @@ export async function submitContactMessage(formData: FormData) {
 
     // Send email notifications (fire and forget - don't block contact form submission)
     try {
-      const { EmailUtils } = await import('@/lib/email/email-service');
+      const { RobustEmailUtils } = await import('@/lib/email/robust-email-service');
       
       // Send auto-reply to customer
-      await EmailUtils.sendContactAutoReply(contactMessage);
+      await RobustEmailUtils.sendContactAutoReply(contactMessage);
       
       // Send notification to staff
-      await EmailUtils.sendContactNotification(contactMessage);
+      await RobustEmailUtils.sendContactNotification(contactMessage);
       
     } catch (emailError) {
       // Log error but don't fail the contact form submission

@@ -88,8 +88,8 @@ export async function cancelBookingAction(bookingId: string) {
     // Send cancellation email (fire and forget)
     try {
       if (bookingWithCustomer?.customers) {
-        const { EmailUtils } = await import('@/lib/email/email-service');
-        await EmailUtils.sendBookingCancellation(cancelledBooking, bookingWithCustomer.customers);
+        const { RobustEmailUtils } = await import('@/lib/email/robust-email-service');
+        await RobustEmailUtils.sendBookingCancellation(cancelledBooking, bookingWithCustomer.customers);
       }
     } catch (emailError) {
       console.error('Email notification failed:', emailError);
@@ -133,8 +133,8 @@ export async function updateBookingStatusAction(bookingId: string, status: "pend
     // Send email notification if status changed to cancelled (fire and forget)
     try {
       if (status === 'cancelled' && bookingWithCustomer?.customers) {
-        const { EmailUtils } = await import('@/lib/email/email-service');
-        await EmailUtils.sendBookingCancellation(updatedBooking, bookingWithCustomer.customers);
+        const { RobustEmailUtils } = await import('@/lib/email/robust-email-service');
+        await RobustEmailUtils.sendBookingCancellation(updatedBooking, bookingWithCustomer.customers);
       }
     } catch (emailError) {
       console.error('Email notification failed:', emailError);
