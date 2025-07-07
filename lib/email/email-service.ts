@@ -11,7 +11,10 @@ import type {
   EmailLog, 
   SendEmailParams, 
   EmailResult,
-  TemplateData
+  TemplateData,
+  EmailProvider,
+  EmailSendParams,
+  EmailProviderResult
 } from './types';
 
 class EmailService {
@@ -134,6 +137,9 @@ class EmailService {
       .eq('id', 1)
       .single();
 
+    // Generate dynamic footer from locale settings
+    const customFooter = await generateEmailFooter();
+
     const baseData: TemplateData = {
       // Restaurant branding
       restaurantName: localeSettings?.restaurant_name || 'Dona Theresa Restaurant',
@@ -147,7 +153,7 @@ class EmailService {
       // Branding
       logoUrl: settings.custom_logo_url || '/placeholder-logo.png',
       brandColor: settings.brand_color || '#D97706',
-      customFooter: settings.custom_footer || 'Dona Theresa Restaurant | 451 Uxbridge Road, Pinner, London HA5 1AA',
+      customFooter: customFooter, // Now dynamically generated from locale settings
       websiteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com',
       bookingUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com'}/reserve`,
       dashboardUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com'}/dashboard`,
@@ -188,7 +194,7 @@ class EmailService {
           template_key: params.templateKey,
           recipient_email: params.recipientEmail,
           recipient_name: params.recipientName,
-          sender_email: emailSettings?.sender_email || 'system@donatheresa.com',
+          sender_email: emailSettings?.sender_email || 'reservations@donatheresa.com',
           subject: params.subject,
           status: params.status,
           provider_message_id: params.providerMessageId,
@@ -744,4 +750,39 @@ END:VCALENDAR`
       }
     });
   }
-}; 
+};
+
+/**
+ * Generate email footer from restaurant locale settings
+ */
+async function generateEmailFooter(): Promise<string> {
+  try {
+    const supabase = await createClient();
+    
+    const { data: localeSettings } = await supabase
+      .from('locale_settings')
+      .select('restaurant_name, restaurant_phone, restaurant_address, restaurant_city, restaurant_postal_code')
+      .eq('id', 1)
+      .single();
+
+    if (!localeSettings) {
+      // Fallback to default
+      return 'Dona Theresa | 451 Uxbridge Road, Pinner HA5 4JR';
+    }
+
+    const { restaurant_name, restaurant_phone, restaurant_address, restaurant_city, restaurant_postal_code } = localeSettings;
+    
+    // Build address
+    const addressParts = [restaurant_address, restaurant_city, restaurant_postal_code].filter(Boolean);
+    const fullAddress = addressParts.join(', ');
+    
+    // Build footer
+    const footerParts = [restaurant_name, fullAddress, restaurant_phone].filter(Boolean);
+    return footerParts.join(' | ');
+    
+  } catch (error) {
+    console.error('Failed to generate email footer from locale settings:', error);
+    // Fallback to default
+    return 'Dona Theresa | 451 Uxbridge Road, Pinner HA5 4JR';
+  }
+} 

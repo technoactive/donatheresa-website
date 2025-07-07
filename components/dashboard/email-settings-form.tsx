@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -33,8 +33,8 @@ import {
   AlertTriangle,
   CheckCircle,
   Hash
-} from 'lucide-react';
-import type { EmailSettings } from '@/lib/email/types';
+  } from 'lucide-react';
+  import type { EmailSettings } from '@/lib/email/types';
 
 // Create conditional validation schema
 const createEmailSettingsSchema = (hasExistingSettings: boolean) => {
@@ -52,6 +52,24 @@ const createEmailSettingsSchema = (hasExistingSettings: boolean) => {
     booking_cancellation_enabled: z.boolean(),
     booking_modification_enabled: z.boolean(),
     welcome_email_enabled: z.boolean(),
+    
+    // Advanced Reminder Settings
+    reminder_large_party_enabled: z.boolean(),
+    reminder_large_party_hours: z.number().min(1).max(168),
+    reminder_large_party_size: z.number().min(2).max(20),
+    reminder_same_day_enabled: z.boolean(),
+    reminder_same_day_hours: z.number().min(1).max(12),
+    reminder_weekend_enabled: z.boolean(),
+    reminder_weekend_hours: z.number().min(1).max(168),
+    reminder_weekday_enabled: z.boolean(),
+    reminder_weekday_hours: z.number().min(1).max(168),
+    reminder_special_events_enabled: z.boolean(),
+    reminder_special_events_hours: z.number().min(1).max(168),
+    reminder_vip_enabled: z.boolean(),
+    reminder_vip_hours: z.number().min(1).max(168),
+    reminder_second_enabled: z.boolean(),
+    reminder_second_hours: z.number().min(1).max(24),
+    reminder_cutoff_hours: z.number().min(0).max(48),
     
     // Staff Email Settings
     staff_booking_alerts: z.boolean(),
@@ -72,7 +90,6 @@ const createEmailSettingsSchema = (hasExistingSettings: boolean) => {
     // Template Settings
     custom_logo_url: z.string().url('Invalid URL').optional().or(z.literal('')),
     brand_color: z.string().regex(/^#[0-9A-F]{6}$/i, 'Invalid hex color'),
-    custom_footer: z.string().optional(),
     
     // Booking Reference Settings
     booking_ref_prefix: z.string().min(1, 'Prefix is required').max(10, 'Prefix too long'),
@@ -115,6 +132,25 @@ type EmailSettingsFormData = {
   booking_cancellation_enabled: boolean;
   booking_modification_enabled: boolean;
   welcome_email_enabled: boolean;
+  
+  // Advanced Reminder Settings
+  reminder_large_party_enabled: boolean;
+  reminder_large_party_hours: number;
+  reminder_large_party_size: number;
+  reminder_same_day_enabled: boolean;
+  reminder_same_day_hours: number;
+  reminder_weekend_enabled: boolean;
+  reminder_weekend_hours: number;
+  reminder_weekday_enabled: boolean;
+  reminder_weekday_hours: number;
+  reminder_special_events_enabled: boolean;
+  reminder_special_events_hours: number;
+  reminder_vip_enabled: boolean;
+  reminder_vip_hours: number;
+  reminder_second_enabled: boolean;
+  reminder_second_hours: number;
+  reminder_cutoff_hours: number;
+  
   staff_booking_alerts: boolean;
   staff_cancellation_alerts: boolean;
   staff_contact_alerts: boolean;
@@ -127,7 +163,6 @@ type EmailSettingsFormData = {
   backup_email?: string;
   custom_logo_url?: string;
   brand_color: string;
-  custom_footer?: string;
   max_daily_emails: number;
   rate_limit_per_hour: number;
   retry_failed_emails: boolean;
@@ -145,7 +180,36 @@ interface EmailSettingsFormProps {
 export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
   const [isPending, startTransition] = useTransition();
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [dynamicFooter, setDynamicFooter] = useState<string>('Loading...');
   const { toast } = useToast();
+
+  // Load dynamic footer from locale settings
+  useEffect(() => {
+    async function loadDynamicFooter() {
+      try {
+        const response = await fetch('/api/locale-settings');
+        if (response.ok) {
+          const data = await response.json();
+          const { restaurant_name, restaurant_phone, restaurant_address, restaurant_city, restaurant_postal_code } = data;
+          
+          // Build address
+          const addressParts = [restaurant_address, restaurant_city, restaurant_postal_code].filter(Boolean);
+          const fullAddress = addressParts.join(', ');
+          
+          // Build footer
+          const footerParts = [restaurant_name, fullAddress, restaurant_phone].filter(Boolean);
+          setDynamicFooter(footerParts.join(' | '));
+        } else {
+          setDynamicFooter('Dona Theresa | 451 Uxbridge Road, Pinner HA5 4JR');
+        }
+      } catch (error) {
+        console.error('Failed to load locale settings:', error);
+        setDynamicFooter('Dona Theresa | 451 Uxbridge Road, Pinner HA5 4JR');
+      }
+    }
+    
+    loadDynamicFooter();
+  }, []);
 
   const form = useForm<EmailSettingsFormData>({
     resolver: zodResolver(createEmailSettingsSchema(!!initialSettings)),
@@ -164,6 +228,24 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
       booking_cancellation_enabled: initialSettings?.booking_cancellation_enabled ?? true,
       booking_modification_enabled: initialSettings?.booking_modification_enabled ?? true,
       welcome_email_enabled: initialSettings?.welcome_email_enabled ?? true,
+      
+      // Advanced Reminder Settings
+      reminder_large_party_enabled: initialSettings?.reminder_large_party_enabled ?? true,
+      reminder_large_party_hours: initialSettings?.reminder_large_party_hours || 48,
+      reminder_large_party_size: initialSettings?.reminder_large_party_size || 6,
+      reminder_same_day_enabled: initialSettings?.reminder_same_day_enabled ?? false,
+      reminder_same_day_hours: initialSettings?.reminder_same_day_hours || 4,
+      reminder_weekend_enabled: initialSettings?.reminder_weekend_enabled ?? true,
+      reminder_weekend_hours: initialSettings?.reminder_weekend_hours || 24,
+      reminder_weekday_enabled: initialSettings?.reminder_weekday_enabled ?? true,
+      reminder_weekday_hours: initialSettings?.reminder_weekday_hours || 24,
+      reminder_special_events_enabled: initialSettings?.reminder_special_events_enabled ?? true,
+      reminder_special_events_hours: initialSettings?.reminder_special_events_hours || 72,
+      reminder_vip_enabled: initialSettings?.reminder_vip_enabled ?? true,
+      reminder_vip_hours: initialSettings?.reminder_vip_hours || 48,
+      reminder_second_enabled: initialSettings?.reminder_second_enabled ?? false,
+      reminder_second_hours: initialSettings?.reminder_second_hours || 2,
+      reminder_cutoff_hours: initialSettings?.reminder_cutoff_hours || 2,
       
       // Staff Email Settings
       staff_booking_alerts: initialSettings?.staff_booking_alerts ?? true,
@@ -184,7 +266,6 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
       // Template Settings
       custom_logo_url: initialSettings?.custom_logo_url || '',
       brand_color: initialSettings?.brand_color || '#D97706',
-      custom_footer: initialSettings?.custom_footer || 'Dona Theresa Restaurant | 451 Uxbridge Road, Pinner, London HA5 1AA',
       
       // Booking Reference Settings
       booking_ref_prefix: initialSettings?.booking_ref_prefix || '',
@@ -405,6 +486,264 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
               )}
             </div>
           )}
+          
+          {/* Advanced Reminder Settings */}
+          {form.watch('booking_reminder_enabled') && (
+            <Card className="border-2 border-blue-100 bg-blue-50/50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Clock className="h-5 w-5 text-blue-600" />
+                  Advanced Reminder Settings
+                </CardTitle>
+                <CardDescription>
+                  Configure intelligent reminder timing based on booking type and customer segment
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                
+                {/* Large Party Reminders */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label className="text-base font-medium">Large Party Reminders</Label>
+                      <p className="text-sm text-muted-foreground">Send earlier reminders for large bookings (requires more planning)</p>
+                    </div>
+                    <Switch 
+                      checked={form.watch('reminder_large_party_enabled')}
+                      onCheckedChange={(checked) => form.setValue('reminder_large_party_enabled', checked)}
+                    />
+                  </div>
+                  {form.watch('reminder_large_party_enabled') && (
+                    <div className="grid gap-4 md:grid-cols-2 pl-4 border-l-2 border-blue-200">
+                      <div className="space-y-2">
+                        <Label htmlFor="reminder_large_party_hours">Hours before booking</Label>
+                        <Input
+                          id="reminder_large_party_hours"
+                          type="number"
+                          min="1"
+                          max="168"
+                          {...form.register('reminder_large_party_hours', { valueAsNumber: true })}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="reminder_large_party_size">Party size threshold</Label>
+                        <Input
+                          id="reminder_large_party_size"
+                          type="number"
+                          min="2"
+                          max="20"
+                          {...form.register('reminder_large_party_size', { valueAsNumber: true })}
+                        />
+                        <p className="text-xs text-muted-foreground">Parties of this size or larger get extended timing</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* VIP Customer Reminders */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label className="text-base font-medium">VIP Customer Reminders</Label>
+                      <p className="text-sm text-muted-foreground">Special reminder timing for VIP customers</p>
+                    </div>
+                    <Switch 
+                      checked={form.watch('reminder_vip_enabled')}
+                      onCheckedChange={(checked) => form.setValue('reminder_vip_enabled', checked)}
+                    />
+                  </div>
+                  {form.watch('reminder_vip_enabled') && (
+                    <div className="pl-4 border-l-2 border-purple-200">
+                      <div className="space-y-2">
+                        <Label htmlFor="reminder_vip_hours">Hours before booking</Label>
+                        <Input
+                          id="reminder_vip_hours"
+                          type="number"
+                          min="1"
+                          max="168"
+                          {...form.register('reminder_vip_hours', { valueAsNumber: true })}
+                        />
+                        <p className="text-xs text-muted-foreground">Industry standard: 48 hours for VIP customers</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Weekend vs Weekday Reminders */}
+                <div className="space-y-4">
+                  <div className="text-base font-medium text-gray-700">Weekend vs Weekday Timing</div>
+                  
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-0.5">
+                          <Label className="font-medium">Weekend Reminders</Label>
+                          <p className="text-sm text-muted-foreground">Friday-Sunday bookings</p>
+                        </div>
+                        <Switch 
+                          checked={form.watch('reminder_weekend_enabled')}
+                          onCheckedChange={(checked) => form.setValue('reminder_weekend_enabled', checked)}
+                        />
+                      </div>
+                      {form.watch('reminder_weekend_enabled') && (
+                        <div className="pl-4 border-l-2 border-green-200">
+                          <div className="space-y-2">
+                            <Label htmlFor="reminder_weekend_hours">Hours before</Label>
+                            <Input
+                              id="reminder_weekend_hours"
+                              type="number"
+                              min="1"
+                              max="168"
+                              {...form.register('reminder_weekend_hours', { valueAsNumber: true })}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="space-y-0.5">
+                          <Label className="font-medium">Weekday Reminders</Label>
+                          <p className="text-sm text-muted-foreground">Monday-Thursday bookings</p>
+                        </div>
+                        <Switch 
+                          checked={form.watch('reminder_weekday_enabled')}
+                          onCheckedChange={(checked) => form.setValue('reminder_weekday_enabled', checked)}
+                        />
+                      </div>
+                      {form.watch('reminder_weekday_enabled') && (
+                        <div className="pl-4 border-l-2 border-blue-200">
+                          <div className="space-y-2">
+                            <Label htmlFor="reminder_weekday_hours">Hours before</Label>
+                            <Input
+                              id="reminder_weekday_hours"
+                              type="number"
+                              min="1"
+                              max="168"
+                              {...form.register('reminder_weekday_hours', { valueAsNumber: true })}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Same-Day Reminders */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label className="text-base font-medium">Same-Day Reminders</Label>
+                      <p className="text-sm text-muted-foreground">Final reminder on the day of booking</p>
+                    </div>
+                    <Switch 
+                      checked={form.watch('reminder_same_day_enabled')}
+                      onCheckedChange={(checked) => form.setValue('reminder_same_day_enabled', checked)}
+                    />
+                  </div>
+                  {form.watch('reminder_same_day_enabled') && (
+                    <div className="pl-4 border-l-2 border-amber-200">
+                      <div className="space-y-2">
+                        <Label htmlFor="reminder_same_day_hours">Hours before booking</Label>
+                        <Input
+                          id="reminder_same_day_hours"
+                          type="number"
+                          min="1"
+                          max="12"
+                          {...form.register('reminder_same_day_hours', { valueAsNumber: true })}
+                        />
+                        <p className="text-xs text-muted-foreground">Industry standard: 2-4 hours before arrival</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Special Events Reminders */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label className="text-base font-medium">Special Events</Label>
+                      <p className="text-sm text-muted-foreground">Holidays, Valentine's Day, special occasions</p>
+                    </div>
+                    <Switch 
+                      checked={form.watch('reminder_special_events_enabled')}
+                      onCheckedChange={(checked) => form.setValue('reminder_special_events_enabled', checked)}
+                    />
+                  </div>
+                  {form.watch('reminder_special_events_enabled') && (
+                    <div className="pl-4 border-l-2 border-red-200">
+                      <div className="space-y-2">
+                        <Label htmlFor="reminder_special_events_hours">Hours before booking</Label>
+                        <Input
+                          id="reminder_special_events_hours"
+                          type="number"
+                          min="1"
+                          max="168"
+                          {...form.register('reminder_special_events_hours', { valueAsNumber: true })}
+                        />
+                        <p className="text-xs text-muted-foreground">Industry standard: 72 hours for special events</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Second Reminder */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-0.5">
+                      <Label className="text-base font-medium">Second Reminder</Label>
+                      <p className="text-sm text-muted-foreground">Additional reminder closer to booking time</p>
+                    </div>
+                    <Switch 
+                      checked={form.watch('reminder_second_enabled')}
+                      onCheckedChange={(checked) => form.setValue('reminder_second_enabled', checked)}
+                    />
+                  </div>
+                  {form.watch('reminder_second_enabled') && (
+                    <div className="pl-4 border-l-2 border-indigo-200">
+                      <div className="space-y-2">
+                        <Label htmlFor="reminder_second_hours">Hours before booking</Label>
+                        <Input
+                          id="reminder_second_hours"
+                          type="number"
+                          min="1"
+                          max="24"
+                          {...form.register('reminder_second_hours', { valueAsNumber: true })}
+                        />
+                        <p className="text-xs text-muted-foreground">Sent in addition to the main reminder</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Reminder Cutoff */}
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="reminder_cutoff_hours" className="text-base font-medium">Reminder Cutoff</Label>
+                    <p className="text-sm text-muted-foreground">Don't send reminders if booking is within this many hours</p>
+                    <Input
+                      id="reminder_cutoff_hours"
+                      type="number"
+                      min="0"
+                      max="48"
+                      {...form.register('reminder_cutoff_hours', { valueAsNumber: true })}
+                    />
+                    <p className="text-xs text-muted-foreground">Prevents spam for very last-minute bookings</p>
+                  </div>
+                </div>
+
+                {/* Industry Standards Notice */}
+                <Alert className="border-blue-200 bg-blue-50">
+                  <Clock className="h-4 w-4" />
+                  <AlertDescription>
+                    <strong>Industry Standards:</strong> 24hrs (standard), 48hrs (large parties/VIP), 72hrs (special events), 2-4hrs (same-day)
+                  </AlertDescription>
+                </Alert>
+
+              </CardContent>
+            </Card>
+          )}
         </CardContent>
       </Card>
 
@@ -598,16 +937,17 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="custom_footer">Email Footer</Label>
-            <Textarea
-              id="custom_footer"
-              placeholder="Dona Theresa Restaurant | 451 Uxbridge Road, Pinner, London HA5 1AA"
-              className="min-h-[80px]"
-              {...form.register('custom_footer')}
-            />
-            {form.formState.errors.custom_footer && (
-              <p className="text-sm text-red-500">{form.formState.errors.custom_footer.message}</p>
-            )}
+            <Label>Email Footer</Label>
+            <div className="bg-slate-50 p-4 rounded-lg border">
+              <div className="text-sm font-medium text-slate-700 mb-2">Auto-generated from Restaurant Settings:</div>
+              <div className="text-sm text-slate-900 font-mono">
+                {dynamicFooter}
+              </div>
+              <p className="text-xs text-muted-foreground mt-2">
+                Footer is automatically generated from your restaurant information in Settings → Locale. 
+                To change this, update your restaurant details in the locale settings.
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>

@@ -21,6 +21,24 @@ export interface EmailSettings {
   booking_modification_enabled: boolean;
   welcome_email_enabled: boolean;
   
+  // Advanced Reminder Settings
+  reminder_large_party_enabled: boolean;
+  reminder_large_party_hours: number;
+  reminder_large_party_size: number;
+  reminder_same_day_enabled: boolean;
+  reminder_same_day_hours: number;
+  reminder_weekend_enabled: boolean;
+  reminder_weekend_hours: number;
+  reminder_weekday_enabled: boolean;
+  reminder_weekday_hours: number;
+  reminder_special_events_enabled: boolean;
+  reminder_special_events_hours: number;
+  reminder_vip_enabled: boolean;
+  reminder_vip_hours: number;
+  reminder_second_enabled: boolean;
+  reminder_second_hours: number;
+  reminder_cutoff_hours: number;
+  
   // Staff Email Settings
   staff_booking_alerts: boolean;
   staff_cancellation_alerts: boolean;
@@ -40,7 +58,6 @@ export interface EmailSettings {
   // Template Settings
   custom_logo_url: string | null;
   brand_color: string;
-  custom_footer: string | null;
   
   // Booking Reference Settings
   booking_ref_prefix: string;
@@ -341,6 +358,24 @@ export interface EmailSettingsFormData {
   booking_modification_enabled: boolean;
   welcome_email_enabled: boolean;
   
+  // Advanced Reminder Settings
+  reminder_large_party_enabled: boolean;
+  reminder_large_party_hours: number;
+  reminder_large_party_size: number;
+  reminder_same_day_enabled: boolean;
+  reminder_same_day_hours: number;
+  reminder_weekend_enabled: boolean;
+  reminder_weekend_hours: number;
+  reminder_weekday_enabled: boolean;
+  reminder_weekday_hours: number;
+  reminder_special_events_enabled: boolean;
+  reminder_special_events_hours: number;
+  reminder_vip_enabled: boolean;
+  reminder_vip_hours: number;
+  reminder_second_enabled: boolean;
+  reminder_second_hours: number;
+  reminder_cutoff_hours: number;
+  
   // Staff Email Settings
   staff_booking_alerts: boolean;
   staff_cancellation_alerts: boolean;
@@ -360,7 +395,6 @@ export interface EmailSettingsFormData {
   // Template Settings
   custom_logo_url?: string;
   brand_color: string;
-  custom_footer?: string;
   
   // Booking Reference Settings
   booking_ref_prefix: string;
