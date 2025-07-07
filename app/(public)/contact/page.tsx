@@ -295,6 +295,8 @@ export default function ContactPage() {
                       <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
+                  {/* Hidden input to ensure subject is included in FormData */}
+                  <input type="hidden" name="subject" value={formData.subject} />
                 </div>
               </div>
 
