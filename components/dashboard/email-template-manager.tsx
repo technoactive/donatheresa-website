@@ -45,7 +45,7 @@ function TemplatePreview({ template, onClose }: TemplatePreviewProps) {
     specialRequests: 'Window table preferred',
     restaurantName: 'Dona Theresa Restaurant',
     restaurantPhone: '+44 20 8421 5550',
-    restaurantEmail: 'info@donateresa.com',
+    restaurantEmail: '', // Will be populated from actual email settings when needed
     restaurantAddress: '451 Uxbridge Road, Pinner, London HA5 1AA',
     brandColor: '#D97706',
     customFooter: 'Dona Theresa Restaurant | 451 Uxbridge Road, Pinner, London HA5 1AA',

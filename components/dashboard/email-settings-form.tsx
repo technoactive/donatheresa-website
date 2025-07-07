@@ -146,7 +146,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
       // Provider Configuration
       email_provider: initialSettings?.email_provider || 'resend',
       api_key: '', // Don't prefill for security
-      sender_email: initialSettings?.sender_email || 'reservations@donateresa.com',
+      sender_email: initialSettings?.sender_email || '',
       sender_name: initialSettings?.sender_name || 'Dona Theresa Restaurant',
       reply_to_email: initialSettings?.reply_to_email || '',
       
@@ -170,7 +170,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
       contact_staff_notification: initialSettings?.contact_staff_notification ?? true,
       
       // Email Addresses
-      restaurant_email: initialSettings?.restaurant_email || 'info@donateresa.com',
+      restaurant_email: initialSettings?.restaurant_email || '',
       manager_email: initialSettings?.manager_email || '',
       backup_email: initialSettings?.backup_email || '',
       
@@ -285,7 +285,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
               <Input
                 id="sender_email"
                 type="email"
-                placeholder="reservations@donateresa.com"
+                placeholder="reservations@donatheresa.com"
                 {...form.register('sender_email')}
               />
               {form.formState.errors.sender_email && (
@@ -311,7 +311,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
             <Input
               id="reply_to_email"
               type="email"
-              placeholder="info@donateresa.com"
+              placeholder="info@donatheresa.com"
               {...form.register('reply_to_email')}
             />
             {form.formState.errors.reply_to_email && (
@@ -461,7 +461,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
               <Input
                 id="restaurant_email"
                 type="email"
-                placeholder="info@donateresa.com"
+                placeholder="info@donatheresa.com"
                 {...form.register('restaurant_email')}
               />
               {form.formState.errors.restaurant_email && (
@@ -475,7 +475,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
                 <Input
                   id="manager_email"
                   type="email"
-                  placeholder="manager@donateresa.com"
+                  placeholder="manager@donatheresa.com"
                   {...form.register('manager_email')}
                 />
                 {form.formState.errors.manager_email && (
@@ -488,7 +488,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
                 <Input
                   id="backup_email"
                   type="email"
-                  placeholder="backup@donateresa.com"
+                  placeholder="backup@donatheresa.com"
                   {...form.register('backup_email')}
                 />
                 {form.formState.errors.backup_email && (
