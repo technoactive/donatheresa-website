@@ -5,7 +5,6 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
 export async function updateUserProfile(formData: FormData) {
-  console.log('updateUserProfile called with:', formData.get('display_name'))
   const supabase = await createClient()
   
   // Get current user
@@ -66,7 +65,6 @@ export async function updateUserProfile(formData: FormData) {
 }
 
 export async function changePassword(formData: FormData) {
-  console.log('changePassword called')
   const supabase = await createClient()
   
   const currentPassword = formData.get('current_password') as string
