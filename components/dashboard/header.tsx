@@ -12,7 +12,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { createClient } from "@/lib/supabase/client"
 import { signOut } from "@/app/login/actions"
-import { useSidebar } from "@/lib/sidebar-context"
 
 interface UserProfile {
   display_name?: string
@@ -27,11 +26,6 @@ export function Header() {
   const [isMounted, setIsMounted] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
-  
-  const { isCollapsed } = useSidebar()
-  
-  // Calculate left padding based on sidebar state
-  const leftPadding = isCollapsed ? 'md:pl-16' : 'md:pl-[220px] lg:pl-[280px]'
   
   // Get current user and profile
   useEffect(() => {
@@ -126,7 +120,7 @@ export function Header() {
   }
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 flex h-14 items-center gap-4 border-b border-slate-200 bg-white/95 backdrop-blur-sm shadow-sm px-4 lg:h-[60px] lg:px-6 ${leftPadding} transition-all duration-300 ease-in-out`}>
+    <header className="fixed top-0 left-0 right-0 z-50 flex h-14 items-center gap-4 border-b border-slate-200 bg-white/95 backdrop-blur-sm shadow-sm px-4 lg:h-[60px] lg:px-6 md:pl-[220px] lg:pl-[280px]">
       
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>

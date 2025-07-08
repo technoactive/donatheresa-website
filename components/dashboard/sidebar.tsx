@@ -5,11 +5,11 @@ import { usePathname } from "next/navigation"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { useSidebar } from "@/lib/sidebar-context"
+import { useState } from "react"
 
 export function Sidebar() {
   const pathname = usePathname()
-  const { isCollapsed, toggleSidebar } = useSidebar()
+  const [isCollapsed, setIsCollapsed] = useState(false)
 
   const menuItems = [
     { name: "Dashboard", href: "/dashboard", icon: "🏠" },
@@ -41,7 +41,7 @@ export function Sidebar() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={toggleSidebar}
+              onClick={() => setIsCollapsed(!isCollapsed)}
               className={`h-8 w-8 p-0 hover:bg-slate-100 ${isCollapsed ? 'ml-0' : 'ml-2'} shrink-0`}
             >
               {isCollapsed ? (
