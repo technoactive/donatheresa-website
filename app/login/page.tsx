@@ -8,15 +8,18 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Mail, Lock, LogIn, Loader2 } from 'lucide-react'
 import Link from 'next/link'
-import { useState, useTransition } from 'react'
+import { useState, useTransition, use } from 'react'
 
 export default function LoginPage({
   searchParams,
 }: {
-  searchParams: { message?: string; error?: string }
+  searchParams: Promise<{ message?: string; error?: string }>
 }) {
   const [isPending, startTransition] = useTransition()
   const [formData, setFormData] = useState({ email: '', password: '' })
+  
+  // Unwrap searchParams using React.use()
+  const resolvedSearchParams = use(searchParams)
 
   const handleSubmit = async (formData: FormData) => {
     startTransition(async () => {
@@ -37,16 +40,16 @@ export default function LoginPage({
         </div>
 
         {/* Messages */}
-        {searchParams?.message && (
+        {resolvedSearchParams?.message && (
           <Alert>
             <Mail className="h-4 w-4" />
-            <AlertDescription>{searchParams.message}</AlertDescription>
+            <AlertDescription>{resolvedSearchParams.message}</AlertDescription>
           </Alert>
         )}
 
-        {searchParams?.error && (
+        {resolvedSearchParams?.error && (
           <Alert variant="destructive">
-            <AlertDescription>{searchParams.error}</AlertDescription>
+            <AlertDescription>{resolvedSearchParams.error}</AlertDescription>
           </Alert>
         )}
 
