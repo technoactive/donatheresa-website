@@ -4,13 +4,19 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export function Sidebar() {
   const pathname = usePathname()
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
-  console.log('Sidebar rendering, isCollapsed:', isCollapsed)
+  // Handle mounting to avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  console.log('Sidebar rendering, isCollapsed:', isCollapsed, 'mounted:', mounted)
 
   const handleToggle = () => {
     console.log('TOGGLE CLICKED! Current state:', isCollapsed)
@@ -25,10 +31,15 @@ export function Sidebar() {
     { name: "Settings", href: "/dashboard/settings" },
   ]
 
+  // Always render with expanded state until mounted to avoid hydration mismatch
+  const currentCollapsed = mounted ? isCollapsed : false
+
   return (
     <aside 
-      className={`fixed top-0 left-0 z-40 h-full border-r border-slate-200 bg-white hidden md:block transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-[220px] lg:w-[280px]'}`}
-      style={{ backgroundColor: isCollapsed ? '#ffeeee' : '#ffffff' }}
+      className={`fixed top-0 left-0 z-40 h-full border-r border-slate-200 bg-white hidden md:block transition-all duration-300 ${
+        currentCollapsed ? 'w-16' : 'w-[220px] lg:w-[280px]'
+      }`}
+      style={{ backgroundColor: currentCollapsed ? '#ffeeee' : '#ffffff' }}
     >
       <div className="flex h-full flex-col">
         {/* Header */}
@@ -36,7 +47,7 @@ export function Sidebar() {
           <div className="flex items-center justify-between w-full">
             <Link href="/" className="flex items-center gap-2 font-semibold text-slate-900">
               <span className="text-2xl">🍽️</span>
-              {!isCollapsed && <span>Dona Theresa</span>}
+              {!currentCollapsed && <span>Dona Theresa</span>}
             </Link>
             
             {/* BIG RED TEST BUTTON */}
@@ -44,19 +55,19 @@ export function Sidebar() {
               onClick={handleToggle}
               className="bg-red-500 hover:bg-red-600 text-white h-8 w-16 text-xs font-bold"
             >
-              {isCollapsed ? 'OPEN' : 'CLOSE'}
+              {currentCollapsed ? 'OPEN' : 'CLOSE'}
             </Button>
           </div>
         </header>
         
         {/* Show current state */}
         <div className="p-2 bg-yellow-200 text-black text-xs font-bold">
-          STATE: {isCollapsed ? 'COLLAPSED' : 'EXPANDED'}
+          STATE: {currentCollapsed ? 'COLLAPSED' : 'EXPANDED'} {!mounted && '(SSR)'}
         </div>
         
         {/* Navigation */}
         <nav className="flex-1 overflow-auto py-6">
-          <ul className={`space-y-3 ${isCollapsed ? 'px-2' : 'px-4 lg:px-5'}`}>
+          <ul className={`space-y-3 ${currentCollapsed ? 'px-2' : 'px-4 lg:px-5'}`}>
             {menuItems.map((item) => {
               const isCurrentPage = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))
               
@@ -69,7 +80,7 @@ export function Sidebar() {
                       color: isCurrentPage ? 'white' : '#475569',
                     }}
                     className={`flex items-center rounded-lg min-h-[48px] text-base font-semibold transition-all duration-200 ${
-                      isCollapsed ? 'justify-center p-3' : 'gap-4 px-4 py-4'
+                      currentCollapsed ? 'justify-center p-3' : 'gap-4 px-4 py-4'
                     }`}
                     onMouseEnter={(e) => {
                       if (!isCurrentPage) {
@@ -83,7 +94,7 @@ export function Sidebar() {
                         e.currentTarget.style.color = '#475569'
                       }
                     }}
-                    title={isCollapsed ? item.name : undefined}
+                    title={currentCollapsed ? item.name : undefined}
                   >
                     <span className="text-lg min-w-[24px]">
                       {item.name === 'Dashboard' && '🏠'}
@@ -91,7 +102,7 @@ export function Sidebar() {
                       {item.name === 'Customers' && '👥'}
                       {item.name === 'Settings' && '⚙️'}
                     </span>
-                    {!isCollapsed && <span>{item.name}</span>}
+                    {!currentCollapsed && <span>{item.name}</span>}
                   </Link>
                 </li>
               )
