@@ -485,15 +485,17 @@ export async function getBookingSettings(): Promise<BookingSettings> {
   }
 
   try {
-    // Get booking config
-    const { data: configData, error: configError } = await supabase
-      .from('booking_config')
-      .select('*')
-      .eq('id', 1)
-      .single()
+    // Fetch booking config and service periods in parallel for better performance
+    const [configResult, servicePeriods] = await Promise.all([
+      supabase
+        .from('booking_config')
+        .select('*')
+        .eq('id', 1)
+        .single(),
+      getServicePeriods()
+    ])
 
-    // Get service periods
-    const servicePeriods = await getServicePeriods()
+    const { data: configData, error: configError } = configResult
 
     if (configError) {
       console.error('Error fetching booking settings:', configError)
@@ -627,82 +629,129 @@ export async function getBookingStats() {
   }
 }
 
-// Enhanced dashboard statistics
+// Cache for dashboard stats to avoid repeated expensive queries
+let dashboardStatsCache: {
+  data: any
+  timestamp: number
+} | null = null
+
+const DASHBOARD_CACHE_TTL = 30 * 1000 // 30 seconds
+
+// Enhanced dashboard statistics - OPTIMIZED FOR PERFORMANCE WITH CACHING
 export async function getDashboardStats() {
+  // Check cache first
+  if (dashboardStatsCache && Date.now() - dashboardStatsCache.timestamp < DASHBOARD_CACHE_TTL) {
+    return dashboardStatsCache.data
+  }
+
   const supabase = await createClient()
   
   try {
+    // Execute all date calculations and database queries in parallel
     const restaurantDate = await getRestaurantDate()
     
-    // Get today's date for comparisons
-    const today = new Date(restaurantDate)
-    const yesterday = new Date(today)
-    yesterday.setDate(yesterday.getDate() - 1)
-    const lastWeek = new Date(today)
-    lastWeek.setDate(lastWeek.getDate() - 7)
+    const [
+      bookingSettings,
+      dashboardData
+    ] = await Promise.all([
+      getBookingSettings(),
+      // Single optimized query for all booking data we need  
+      (async () => {
+        const restaurantToday = new Date(restaurantDate)
+        const restaurantYesterday = new Date(restaurantToday)
+        restaurantYesterday.setDate(restaurantYesterday.getDate() - 1)
+        const lastWeek = new Date(restaurantToday)
+        lastWeek.setDate(lastWeek.getDate() - 7)
+        
+        // Parallel queries for all needed data
+        const [
+          todayBookingsResult,
+          yesterdayCountResult, 
+          totalCustomersResult,
+          newCustomersResult
+        ] = await Promise.all([
+          supabase
+            .from('bookings')
+            .select('party_size, status')
+            .eq('booking_date', restaurantDate)
+            .neq('status', 'cancelled'),
+          
+          supabase
+            .from('bookings') 
+            .select('*', { count: 'exact', head: true })
+            .eq('booking_date', restaurantYesterday.toISOString().split('T')[0])
+            .neq('status', 'cancelled'),
+            
+          supabase
+            .from('customers')
+            .select('*', { count: 'exact', head: true }),
+            
+          supabase
+            .from('customers')
+            .select('*', { count: 'exact', head: true })
+            .gte('created_at', lastWeek.toISOString())
+        ])
+        
+        return {
+          todayBookings: todayBookingsResult.data || [],
+          todayBookingsError: todayBookingsResult.error,
+          yesterdayCount: yesterdayCountResult.count || 0,
+          yesterdayError: yesterdayCountResult.error,
+          totalCustomers: totalCustomersResult.count || 0,
+          customersError: totalCustomersResult.error,
+          newCustomersThisWeek: newCustomersResult.count || 0,
+          newCustomersError: newCustomersResult.error
+        }
+      })()
+    ])
     
-    // Get booking settings for seating capacity
-    const bookingSettings = await getBookingSettings()
+    // Handle any errors from the parallel queries
+    if (dashboardData.todayBookingsError) throw dashboardData.todayBookingsError
+    if (dashboardData.yesterdayError) throw dashboardData.yesterdayError  
+    if (dashboardData.customersError) throw dashboardData.customersError
+    if (dashboardData.newCustomersError) throw dashboardData.newCustomersError
     
-    // Today's bookings
-    const { data: todayBookings, error: todayError } = await supabase
-      .from('bookings')
-      .select('party_size, status')
-      .eq('booking_date', restaurantDate)
-      .neq('status', 'cancelled')
-    
-    if (todayError) throw todayError
-    
-    // Yesterday's bookings count
-    const { count: yesterdayCount, error: yesterdayError } = await supabase
-      .from('bookings')
-      .select('*', { count: 'exact', head: true })
-      .eq('booking_date', yesterday.toISOString().split('T')[0])
-      .neq('status', 'cancelled')
-    
-    if (yesterdayError) throw yesterdayError
-    
-    // Total customers
-    const { count: totalCustomers, error: customersError } = await supabase
-      .from('customers')
-      .select('*', { count: 'exact', head: true })
-    
-    if (customersError) throw customersError
-    
-    // New customers this week
-    const { count: newCustomersThisWeek, error: newCustomersError } = await supabase
-      .from('customers')
-      .select('*', { count: 'exact', head: true })
-      .gte('created_at', lastWeek.toISOString())
-    
-    if (newCustomersError) throw newCustomersError
-    
-    // Confirmed bookings today
-    const confirmedToday = todayBookings?.filter(b => b.status === 'confirmed') || []
-    const pendingToday = todayBookings?.filter(b => b.status === 'pending') || []
-    
-    // Calculate total guests today
-    const totalGuestsToday = todayBookings?.reduce((sum, booking) => sum + booking.party_size, 0) || 0
+    // Calculate metrics from the fetched data
+    const confirmedToday = dashboardData.todayBookings.filter(b => b.status === 'confirmed')
+    const pendingToday = dashboardData.todayBookings.filter(b => b.status === 'pending')
+    const totalGuestsToday = dashboardData.todayBookings.reduce((sum, booking) => sum + booking.party_size, 0)
     
     // Calculate occupancy percentage
     const occupancyPercentage = bookingSettings.total_seats > 0 
       ? Math.min(Math.round((totalGuestsToday / bookingSettings.total_seats) * 100), 100)
       : 0
     
-    return {
-      todayBookings: todayBookings?.length || 0,
-      yesterdayBookings: yesterdayCount || 0,
-      totalCustomers: totalCustomers || 0,
-      newCustomersThisWeek: newCustomersThisWeek || 0,
+    // Calculate changes
+    const todayBookingsCount = dashboardData.todayBookings.length
+    const bookingChange = dashboardData.yesterdayCount > 0 
+      ? Math.round(((todayBookingsCount - dashboardData.yesterdayCount) / dashboardData.yesterdayCount) * 100)
+      : 0
+      
+    const customerGrowth = dashboardData.totalCustomers > 0 
+      ? Math.round((dashboardData.newCustomersThisWeek / dashboardData.totalCustomers) * 100)
+      : 0
+    
+    const result = {
+      todayBookings: todayBookingsCount,
+      yesterdayBookings: dashboardData.yesterdayCount,
+      totalCustomers: dashboardData.totalCustomers,
+      newCustomersThisWeek: dashboardData.newCustomersThisWeek,
       confirmedToday: confirmedToday.length,
       pendingToday: pendingToday.length,
       totalGuestsToday,
       totalSeats: bookingSettings.total_seats,
       occupancyPercentage,
-      // Calculate percentage changes
-      bookingChange: yesterdayCount ? Math.round(((todayBookings?.length || 0) - yesterdayCount) / yesterdayCount * 100) : 0,
-      customerGrowth: totalCustomers ? Math.round((newCustomersThisWeek || 0) / (totalCustomers || 1) * 100) : 0
+      bookingChange,
+      customerGrowth
     }
+    
+    // Cache the result
+    dashboardStatsCache = {
+      data: result,
+      timestamp: Date.now()
+    }
+    
+    return result
   } catch (error) {
     console.error('Error getting dashboard stats:', error)
     return {
@@ -721,8 +770,24 @@ export async function getDashboardStats() {
   }
 }
 
-// Get recent bookings for dashboard
+// Cache for recent bookings to avoid repeated queries
+let recentBookingsCache: {
+  data: BookingWithCustomer[]
+  timestamp: number
+  limit: number
+} | null = null
+
+const RECENT_BOOKINGS_CACHE_TTL = 30 * 1000 // 30 seconds
+
+// Get recent bookings for dashboard - OPTIMIZED WITH CACHING
 export async function getRecentBookings(limit: number = 5): Promise<BookingWithCustomer[]> {
+  // Check cache first
+  if (recentBookingsCache && 
+      recentBookingsCache.limit === limit &&
+      Date.now() - recentBookingsCache.timestamp < RECENT_BOOKINGS_CACHE_TTL) {
+    return recentBookingsCache.data
+  }
+
   const supabase = await createClient()
   
   try {
@@ -754,7 +819,7 @@ export async function getRecentBookings(limit: number = 5): Promise<BookingWithC
     if (error) throw error
     
     // Transform the data to match our interface
-    return (data || []).map(booking => {
+    const result = (data || []).map(booking => {
       const customer = Array.isArray(booking.customers) ? booking.customers[0] : booking.customers
       
       return {
@@ -778,6 +843,15 @@ export async function getRecentBookings(limit: number = 5): Promise<BookingWithC
         }
       }
     })
+    
+    // Cache the result
+    recentBookingsCache = {
+      data: result,
+      timestamp: Date.now(),
+      limit
+    }
+    
+    return result
   } catch (error) {
     console.error('Error getting recent bookings:', error)
     return []
