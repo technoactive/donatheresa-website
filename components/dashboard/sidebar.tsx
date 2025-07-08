@@ -23,21 +23,20 @@ export function Sidebar() {
         {/* Header */}
         <header className="flex h-14 lg:h-[60px] items-center border-b border-slate-200 px-4 lg:px-6">
           <div className="flex items-center justify-between w-full">
-            <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-slate-900">
+            <Link href="/" className="flex items-center gap-2 font-semibold text-slate-900">
               <span className="text-2xl">🍽️</span>
               {!isCollapsed && <span>Dona Theresa</span>}
             </Link>
-            
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className="h-6 w-6 p-0 hover:bg-slate-100 ml-2"
+              className="h-6 w-6 p-0 hover:bg-slate-100"
             >
               {isCollapsed ? (
-                <ChevronRight className="h-3 w-3" />
+                <ChevronRight className="h-4 w-4" />
               ) : (
-                <ChevronLeft className="h-3 w-3" />
+                <ChevronLeft className="h-4 w-4" />
               )}
             </Button>
           </div>
@@ -58,7 +57,7 @@ export function Sidebar() {
                       color: isCurrentPage ? 'white' : '#475569',
                     }}
                     className={`flex items-center rounded-lg min-h-[48px] text-base font-semibold transition-all duration-200 ${
-                      isCollapsed ? 'justify-center p-2' : 'gap-4 px-4 py-4'
+                      isCollapsed ? 'justify-center p-3' : 'gap-4 px-4 py-4'
                     }`}
                     onMouseEnter={(e) => {
                       if (!isCurrentPage) {
