@@ -40,6 +40,8 @@ export async function updateUserProfile(formData: FormData) {
       .upsert({
         user_id: user.id,
         display_name: displayName.trim()
+      }, {
+        onConflict: 'user_id'
       })
 
     if (error) {
