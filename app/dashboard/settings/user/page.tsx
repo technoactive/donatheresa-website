@@ -118,9 +118,7 @@ export default function UserSettingsPage() {
   }
 
   const handleUpdateProfile = async (formData: FormData) => {
-    console.log('handleUpdateProfile called')
     startProfileTransition(async () => {
-      console.log('About to call updateUserProfile')
       const result = await updateUserProfile(formData)
       
       if (result.success) {
@@ -149,9 +147,7 @@ export default function UserSettingsPage() {
   }
 
   const handleChangePassword = async (formData: FormData) => {
-    console.log('handleChangePassword called')
     startPasswordTransition(async () => {
-      console.log('About to call changePassword')
       const result = await changePassword(formData)
       
       if (result.success) {
