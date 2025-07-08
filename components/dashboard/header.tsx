@@ -204,9 +204,6 @@ export function Header() {
                   <p className="font-semibold text-sm text-slate-900">
                     {getDisplayName(user.email)}
                   </p>
-                  <p className="text-xs text-slate-500 truncate" title={user.email}>
-                    {truncateEmail(user.email, 25)}
-                  </p>
                   <p className="text-xs text-green-700 font-medium">
                     Restaurant Admin
                   </p>
