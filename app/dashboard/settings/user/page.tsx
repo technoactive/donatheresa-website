@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useTransition } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,26 +15,68 @@ import {
   Shield,
   Calendar,
   Save,
-  AlertCircle
+  AlertCircle,
+  Lock,
+  Edit,
+  Loader2
 } from "lucide-react"
 import { SettingsLayout } from "@/components/dashboard/settings-layout"
 import { createClient } from "@/lib/supabase/client"
+import { updateUserProfile, changePassword } from "./actions"
+
+interface UserProfile {
+  display_name?: string
+  avatar_url?: string
+  phone?: string
+}
 
 export default function UserSettingsPage() {
   const [user, setUser] = useState<any>(null)
+  const [profile, setProfile] = useState<UserProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [isSaving, setIsSaving] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  
+  // Form states
+  const [displayName, setDisplayName] = useState("")
+  const [isEditingName, setIsEditingName] = useState(false)
+  const [passwordForm, setPasswordForm] = useState({
+    current_password: "",
+    new_password: "",
+    confirm_password: ""
+  })
 
-  // Get current user
+  // Loading states
+  const [isUpdatingProfile, startProfileTransition] = useTransition()
+  const [isChangingPassword, startPasswordTransition] = useTransition()
+
+  // Get current user and profile
   useEffect(() => {
     const supabase = createClient()
     
-    const getUser = async () => {
+    const getUserAndProfile = async () => {
       try {
-        const { data: { user }, error } = await supabase.auth.getUser()
-        if (error) throw error
+        const { data: { user }, error: userError } = await supabase.auth.getUser()
+        if (userError) throw userError
+        
         setUser(user)
+
+        if (user) {
+          // Get user profile
+          const { data: profileData, error: profileError } = await supabase
+            .from('user_profiles')
+            .select('*')
+            .eq('user_id', user.id)
+            .single()
+
+          if (profileError && profileError.code !== 'PGRST116') {
+            console.error('Error fetching profile:', profileError)
+                     } else if (profileData) {
+             setProfile(profileData)
+             setDisplayName(profileData.display_name || getDisplayName(user.email || ''))
+           } else {
+             setDisplayName(getDisplayName(user.email || ''))
+           }
+        }
       } catch (error) {
         console.error('Error fetching user:', error)
         setMessage({ type: 'error', text: 'Failed to load user information' })
@@ -43,7 +85,7 @@ export default function UserSettingsPage() {
       }
     }
 
-    getUser()
+    getUserAndProfile()
   }, [])
 
   const formatDate = (dateString: string) => {
@@ -69,6 +111,63 @@ export default function UserSettingsPage() {
     return localPart.split('.').map(part => 
       part.charAt(0).toUpperCase() + part.slice(1)
     ).join(' ')
+  }
+
+  const getCurrentDisplayName = () => {
+    return profile?.display_name || getDisplayName(user?.email || '')
+  }
+
+  const handleUpdateProfile = async (formData: FormData) => {
+    console.log('handleUpdateProfile called')
+    startProfileTransition(async () => {
+      console.log('About to call updateUserProfile')
+      const result = await updateUserProfile(formData)
+      
+      if (result.success) {
+        setMessage({ type: 'success', text: result.message || 'Profile updated successfully!' })
+        setIsEditingName(false)
+        // Refresh profile data
+        const supabase = createClient()
+        if (user) {
+          const { data: profileData } = await supabase
+            .from('user_profiles')
+            .select('*')
+            .eq('user_id', user.id)
+            .single()
+          
+          if (profileData) {
+            setProfile(profileData)
+          }
+        }
+      } else {
+        setMessage({ type: 'error', text: result.error || 'Failed to update profile' })
+      }
+      
+      // Clear message after 5 seconds
+      setTimeout(() => setMessage(null), 5000)
+    })
+  }
+
+  const handleChangePassword = async (formData: FormData) => {
+    console.log('handleChangePassword called')
+    startPasswordTransition(async () => {
+      console.log('About to call changePassword')
+      const result = await changePassword(formData)
+      
+      if (result.success) {
+        setMessage({ type: 'success', text: result.message || 'Password changed successfully!' })
+        setPasswordForm({
+          current_password: "",
+          new_password: "",
+          confirm_password: ""
+        })
+      } else {
+        setMessage({ type: 'error', text: result.error || 'Failed to change password' })
+      }
+      
+      // Clear message after 5 seconds
+      setTimeout(() => setMessage(null), 5000)
+    })
   }
 
   if (isLoading) {
@@ -136,14 +235,67 @@ export default function UserSettingsPage() {
             <div className="grid gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="display-name">Display Name</Label>
-                <Input
-                  id="display-name"
-                  value={getDisplayName(user.email)}
-                  disabled
-                  className="bg-slate-50"
-                />
+                {isEditingName ? (
+                  <form action={handleUpdateProfile} className="space-y-2">
+                    <Input
+                      id="display-name"
+                      name="display_name"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      placeholder="Enter your display name"
+                      disabled={isUpdatingProfile}
+                      required
+                    />
+                    <div className="flex gap-2">
+                      <Button 
+                        type="submit" 
+                        size="sm"
+                        disabled={isUpdatingProfile}
+                      >
+                        {isUpdatingProfile ? (
+                          <>
+                            <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                            Saving...
+                          </>
+                        ) : (
+                          <>
+                            <Save className="h-3 w-3 mr-1" />
+                            Save
+                          </>
+                        )}
+                      </Button>
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {
+                          setIsEditingName(false)
+                          setDisplayName(getCurrentDisplayName())
+                        }}
+                        disabled={isUpdatingProfile}
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Input
+                      value={getCurrentDisplayName()}
+                      disabled
+                      className="bg-slate-50"
+                    />
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setIsEditingName(true)}
+                    >
+                      <Edit className="h-3 w-3" />
+                    </Button>
+                  </div>
+                )}
                 <p className="text-xs text-slate-500">
-                  Generated from your email address
+                  {profile?.display_name ? 'Your custom display name' : 'Generated from your email address'}
                 </p>
               </div>
               
@@ -200,6 +352,88 @@ export default function UserSettingsPage() {
                 </div>
               </div>
             </div>
+          </CardContent>
+        </Card>
+
+        {/* Change Password */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Lock className="h-5 w-5" />
+              Change Password
+            </CardTitle>
+            <CardDescription>
+              Update your account password for security
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form action={handleChangePassword} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="current_password">Current Password</Label>
+                <Input
+                  id="current_password"
+                  name="current_password"
+                  type="password"
+                  value={passwordForm.current_password}
+                  onChange={(e) => setPasswordForm(prev => ({ ...prev, current_password: e.target.value }))}
+                  placeholder="Enter your current password"
+                  disabled={isChangingPassword}
+                  required
+                />
+              </div>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="new_password">New Password</Label>
+                  <Input
+                    id="new_password"
+                    name="new_password"
+                    type="password"
+                    value={passwordForm.new_password}
+                    onChange={(e) => setPasswordForm(prev => ({ ...prev, new_password: e.target.value }))}
+                    placeholder="Enter new password"
+                    disabled={isChangingPassword}
+                    required
+                    minLength={8}
+                  />
+                  <p className="text-xs text-slate-500">
+                    At least 8 characters long
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="confirm_password">Confirm New Password</Label>
+                  <Input
+                    id="confirm_password"
+                    name="confirm_password"
+                    type="password"
+                    value={passwordForm.confirm_password}
+                    onChange={(e) => setPasswordForm(prev => ({ ...prev, confirm_password: e.target.value }))}
+                    placeholder="Confirm new password"
+                    disabled={isChangingPassword}
+                    required
+                  />
+                </div>
+              </div>
+
+              <Button 
+                type="submit" 
+                disabled={isChangingPassword}
+                className="w-full md:w-auto"
+              >
+                {isChangingPassword ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Changing Password...
+                  </>
+                ) : (
+                  <>
+                    <Lock className="h-4 w-4 mr-2" />
+                    Change Password
+                  </>
+                )}
+              </Button>
+            </form>
           </CardContent>
         </Card>
 
@@ -264,7 +498,7 @@ export default function UserSettingsPage() {
             <div className="grid gap-4 md:grid-cols-2 text-sm">
               <div>
                 <Label className="text-xs text-slate-500 uppercase tracking-wide">Phone</Label>
-                <p className="text-slate-700">{user.phone || 'Not provided'}</p>
+                <p className="text-slate-700">{profile?.phone || user.phone || 'Not provided'}</p>
               </div>
               
               <div>
