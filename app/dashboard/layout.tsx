@@ -1,7 +1,6 @@
 import type React from "react"
 import { NotificationProvider } from "@/components/notifications/notification-provider"
 import { RealtimeNotifications } from "@/components/notifications/realtime-notifications"
-import { SidebarProvider } from "@/lib/sidebar-context"
 import { DynamicMainContent } from "@/components/dashboard/dynamic-main-content"
 import { createClient } from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
@@ -22,14 +21,12 @@ export default async function DashboardLayout({
   }
   
   return (
-    <SidebarProvider>
-      <NotificationProvider>
-        <RealtimeNotifications>
-          <DynamicMainContent>
-            {children}
-          </DynamicMainContent>
-        </RealtimeNotifications>
-      </NotificationProvider>
-    </SidebarProvider>
+    <NotificationProvider>
+      <RealtimeNotifications>
+        <DynamicMainContent>
+          {children}
+        </DynamicMainContent>
+      </RealtimeNotifications>
+    </NotificationProvider>
   )
 }
