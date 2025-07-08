@@ -4,7 +4,6 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { useState } from "react"
 
 export function Sidebar() {
@@ -12,42 +11,33 @@ export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false)
 
   const menuItems = [
-    { name: "Dashboard", href: "/dashboard", icon: "🏠" },
-    { name: "Bookings", href: "/dashboard/bookings", icon: "📅" },
-    { name: "Customers", href: "/dashboard/customers", icon: "👥" },
-    { name: "Settings", href: "/dashboard/settings", icon: "⚙️" },
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Bookings", href: "/dashboard/bookings" },
+    { name: "Customers", href: "/dashboard/customers" },
+    { name: "Settings", href: "/dashboard/settings" },
   ]
 
-  const sidebarWidth = isCollapsed ? 'w-16' : 'w-[220px] lg:w-[280px]'
-
   return (
-    <aside className={`fixed top-0 left-0 z-40 ${sidebarWidth} h-full border-r border-slate-200 bg-white hidden md:block transition-all duration-300 ease-in-out`}>
+    <aside className={`fixed top-0 left-0 z-40 h-full border-r border-slate-200 bg-white hidden md:block transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-[220px] lg:w-[280px]'}`}>
       <div className="flex h-full flex-col">
         {/* Header */}
         <header className="flex h-14 lg:h-[60px] items-center border-b border-slate-200 px-4 lg:px-6">
           <div className="flex items-center justify-between w-full">
-            {isCollapsed ? (
-              <div className="flex items-center justify-center w-full">
-                <span className="text-xl">🍽️</span>
-              </div>
-            ) : (
-              <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-slate-900">
-                <span className="text-2xl">🍽️</span>
-                <span>Dona Theresa</span>
-              </Link>
-            )}
+            <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-slate-900">
+              <span className="text-2xl">🍽️</span>
+              {!isCollapsed && <span>Dona Theresa</span>}
+            </Link>
             
-            {/* Toggle Button */}
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsCollapsed(!isCollapsed)}
-              className={`h-8 w-8 p-0 hover:bg-slate-100 ${isCollapsed ? 'ml-0' : 'ml-2'} shrink-0`}
+              className="h-6 w-6 p-0 hover:bg-slate-100 ml-2"
             >
               {isCollapsed ? (
-                <ChevronRight className="h-4 w-4" />
+                <ChevronRight className="h-3 w-3" />
               ) : (
-                <ChevronLeft className="h-4 w-4" />
+                <ChevronLeft className="h-3 w-3" />
               )}
             </Button>
           </div>
@@ -55,12 +45,12 @@ export function Sidebar() {
         
         {/* Navigation */}
         <nav className="flex-1 overflow-auto py-6">
-          <TooltipProvider delayDuration={0}>
-            <ul className={`space-y-3 ${isCollapsed ? 'px-2' : 'px-4 lg:px-5'}`}>
-              {menuItems.map((item) => {
-                const isCurrentPage = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))
-                
-                const linkContent = (
+          <ul className={`space-y-3 ${isCollapsed ? 'px-2' : 'px-4 lg:px-5'}`}>
+            {menuItems.map((item) => {
+              const isCurrentPage = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href))
+              
+              return (
+                <li key={item.name}>
                   <Link
                     href={item.href}
                     style={{
@@ -68,9 +58,7 @@ export function Sidebar() {
                       color: isCurrentPage ? 'white' : '#475569',
                     }}
                     className={`flex items-center rounded-lg min-h-[48px] text-base font-semibold transition-all duration-200 ${
-                      isCollapsed 
-                        ? 'justify-center p-3' 
-                        : 'gap-4 px-4 py-4'
+                      isCollapsed ? 'justify-center p-2' : 'gap-4 px-4 py-4'
                     }`}
                     onMouseEnter={(e) => {
                       if (!isCurrentPage) {
@@ -84,35 +72,20 @@ export function Sidebar() {
                         e.currentTarget.style.color = '#475569'
                       }
                     }}
+                    title={isCollapsed ? item.name : undefined}
                   >
-                    <span className="text-lg min-w-[24px] flex items-center justify-center">
-                      {item.icon}
+                    <span className="text-lg min-w-[24px]">
+                      {item.name === 'Dashboard' && '🏠'}
+                      {item.name === 'Bookings' && '📅'}
+                      {item.name === 'Customers' && '👥'}
+                      {item.name === 'Settings' && '⚙️'}
                     </span>
-                    {!isCollapsed && (
-                      <span className="transition-opacity duration-300">{item.name}</span>
-                    )}
+                    {!isCollapsed && <span>{item.name}</span>}
                   </Link>
-                )
-
-                return (
-                  <li key={item.name}>
-                    {isCollapsed ? (
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          {linkContent}
-                        </TooltipTrigger>
-                        <TooltipContent side="right" className="ml-2">
-                          <p>{item.name}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    ) : (
-                      linkContent
-                    )}
-                  </li>
-                )
-              })}
-            </ul>
-          </TooltipProvider>
+                </li>
+              )
+            })}
+          </ul>
         </nav>
       </div>
     </aside>
