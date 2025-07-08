@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Mail, Lock, LogIn, Loader2 } from 'lucide-react'
 import Link from 'next/link'
-import { useState, useTransition, use } from 'react'
+import { useTransition, use } from 'react'
 
 export default function LoginPage({
   searchParams,
@@ -16,7 +16,6 @@ export default function LoginPage({
   searchParams: Promise<{ message?: string; error?: string }>
 }) {
   const [isPending, startTransition] = useTransition()
-  const [formData, setFormData] = useState({ email: '', password: '' })
   
   // Unwrap searchParams using React.use()
   const resolvedSearchParams = use(searchParams)
@@ -82,8 +81,6 @@ export default function LoginPage({
                     type="email"
                     placeholder="Enter your email"
                     className="pl-10"
-                    value={formData.email}
-                    onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     disabled={isPending}
                     required
                   />
@@ -100,8 +97,6 @@ export default function LoginPage({
                     type="password"
                     placeholder="Enter your password"
                     className="pl-10"
-                    value={formData.password}
-                    onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
                     disabled={isPending}
                     required
                   />
