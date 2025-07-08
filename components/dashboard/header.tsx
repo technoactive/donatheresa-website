@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Menu, UtensilsCrossed, X, LogOut, User } from "lucide-react"
+import { Menu, UtensilsCrossed, X, LogOut, User, Settings } from "lucide-react"
 import { useState, useEffect } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -40,6 +40,27 @@ export function Header() {
   // Handle logout
   const handleLogout = async () => {
     await signOut()
+  }
+
+  // Helper functions for user display
+  const getInitials = (email: string) => {
+    const parts = email.split('@')[0].split('.')
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase()
+    }
+    return email.charAt(0).toUpperCase()
+  }
+
+  const getDisplayName = (email: string) => {
+    const localPart = email.split('@')[0]
+    return localPart.split('.').map(part => 
+      part.charAt(0).toUpperCase() + part.slice(1)
+    ).join(' ')
+  }
+
+  const truncateEmail = (email: string, maxLength: number = 30) => {
+    if (email.length <= maxLength) return email
+    return email.substring(0, maxLength) + '...'
   }
   
   const navLinks = [
@@ -166,22 +187,38 @@ export function Header() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-slate-100 text-slate-700">
-                    {user.email?.charAt(0).toUpperCase() || 'U'}
+                  <AvatarFallback className="bg-slate-100 text-slate-700 font-semibold">
+                    {getInitials(user.email)}
                   </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
-              <div className="flex items-center justify-start gap-2 p-2">
-                <div className="flex flex-col space-y-1 leading-none">
-                  <p className="font-medium">{user.email}</p>
-                  <p className="text-xs text-slate-500">
+            <DropdownMenuContent className="w-64" align="end" forceMount>
+              <div className="flex items-center justify-start gap-3 p-3">
+                <Avatar className="h-10 w-10">
+                  <AvatarFallback className="bg-slate-100 text-slate-700 font-semibold">
+                    {getInitials(user.email)}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col space-y-1 leading-none flex-1 min-w-0">
+                  <p className="font-semibold text-sm text-slate-900">
+                    {getDisplayName(user.email)}
+                  </p>
+                  <p className="text-xs text-slate-500 truncate" title={user.email}>
+                    {truncateEmail(user.email, 25)}
+                  </p>
+                  <p className="text-xs text-green-700 font-medium">
                     Restaurant Admin
                   </p>
                 </div>
               </div>
               <DropdownMenuSeparator />
+              <DropdownMenuItem asChild className="cursor-pointer">
+                <Link href="/dashboard/settings/user" className="flex items-center">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Account Settings</span>
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={handleLogout} className="text-red-600 cursor-pointer">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
