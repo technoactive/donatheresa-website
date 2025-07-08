@@ -10,6 +10,14 @@ export function Sidebar() {
   const pathname = usePathname()
   const [isCollapsed, setIsCollapsed] = useState(false)
 
+  console.log('Sidebar rendering, isCollapsed:', isCollapsed)
+
+  const handleToggle = () => {
+    console.log('TOGGLE CLICKED! Current state:', isCollapsed)
+    setIsCollapsed(!isCollapsed)
+    console.log('New state will be:', !isCollapsed)
+  }
+
   const menuItems = [
     { name: "Dashboard", href: "/dashboard" },
     { name: "Bookings", href: "/dashboard/bookings" },
@@ -18,7 +26,10 @@ export function Sidebar() {
   ]
 
   return (
-    <aside className={`fixed top-0 left-0 z-40 h-full border-r border-slate-200 bg-white hidden md:block transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-[220px] lg:w-[280px]'}`}>
+    <aside 
+      className={`fixed top-0 left-0 z-40 h-full border-r border-slate-200 bg-white hidden md:block transition-all duration-300 ${isCollapsed ? 'w-16' : 'w-[220px] lg:w-[280px]'}`}
+      style={{ backgroundColor: isCollapsed ? '#ffeeee' : '#ffffff' }}
+    >
       <div className="flex h-full flex-col">
         {/* Header */}
         <header className="flex h-14 lg:h-[60px] items-center border-b border-slate-200 px-4 lg:px-6">
@@ -27,20 +38,21 @@ export function Sidebar() {
               <span className="text-2xl">🍽️</span>
               {!isCollapsed && <span>Dona Theresa</span>}
             </Link>
+            
+            {/* BIG RED TEST BUTTON */}
             <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsCollapsed(!isCollapsed)}
-              className="h-6 w-6 p-0 hover:bg-slate-100"
+              onClick={handleToggle}
+              className="bg-red-500 hover:bg-red-600 text-white h-8 w-16 text-xs font-bold"
             >
-              {isCollapsed ? (
-                <ChevronRight className="h-4 w-4" />
-              ) : (
-                <ChevronLeft className="h-4 w-4" />
-              )}
+              {isCollapsed ? 'OPEN' : 'CLOSE'}
             </Button>
           </div>
         </header>
+        
+        {/* Show current state */}
+        <div className="p-2 bg-yellow-200 text-black text-xs font-bold">
+          STATE: {isCollapsed ? 'COLLAPSED' : 'EXPANDED'}
+        </div>
         
         {/* Navigation */}
         <nav className="flex-1 overflow-auto py-6">
