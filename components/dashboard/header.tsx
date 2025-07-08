@@ -13,25 +13,52 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { createClient } from "@/lib/supabase/client"
 import { signOut } from "@/app/login/actions"
 
+interface UserProfile {
+  display_name?: string
+  avatar_url?: string
+  phone?: string
+}
+
 export function Header() {
   const pathname = usePathname()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const [user, setUser] = useState<any>(null)
+  const [profile, setProfile] = useState<UserProfile | null>(null)
   
-  // Get current user
+  // Get current user and profile
   useEffect(() => {
     const supabase = createClient()
     
-    // Get initial user
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    const getUserAndProfile = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
-    })
+
+      if (user) {
+        // Get user profile
+        const { data: profileData } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .single()
+
+        if (profileData) {
+          setProfile(profileData)
+        }
+      }
+    }
+
+    getUserAndProfile()
     
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
+      if (session?.user) {
+        getUserAndProfile()
+      } else {
+        setProfile(null)
+      }
     })
     
     return () => subscription.unsubscribe()
@@ -56,6 +83,13 @@ export function Header() {
     return localPart.split('.').map(part => 
       part.charAt(0).toUpperCase() + part.slice(1)
     ).join(' ')
+  }
+
+  const getCurrentDisplayName = () => {
+    if (profile?.display_name) {
+      return profile.display_name
+    }
+    return user?.email ? getDisplayName(user.email) : 'User'
   }
 
   const truncateEmail = (email: string, maxLength: number = 30) => {
@@ -188,7 +222,7 @@ export function Header() {
               <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-slate-100 text-slate-700 font-semibold">
-                    {getInitials(user.email)}
+                    {getInitials(user.email || '')}
                   </AvatarFallback>
                 </Avatar>
               </Button>
@@ -197,12 +231,12 @@ export function Header() {
               <div className="flex items-center justify-start gap-3 p-3">
                 <Avatar className="h-10 w-10">
                   <AvatarFallback className="bg-slate-100 text-slate-700 font-semibold">
-                    {getInitials(user.email)}
+                    {getInitials(user.email || '')}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col space-y-1 leading-none flex-1 min-w-0">
                   <p className="font-semibold text-sm text-slate-900">
-                    {getDisplayName(user.email)}
+                    {getCurrentDisplayName()}
                   </p>
                   <p className="text-xs text-green-700 font-medium">
                     Restaurant Admin
