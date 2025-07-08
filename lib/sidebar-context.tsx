@@ -13,25 +13,35 @@ const SidebarContext = createContext<SidebarContextType | undefined>(undefined)
 
 export function SidebarProvider({ children }: { children: React.ReactNode }) {
   const [isCollapsed, setIsCollapsed] = useState(false)
-  const [isHydrated, setIsHydrated] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
-  // Load from localStorage on mount
+  // Handle mounting
   useEffect(() => {
-    const saved = localStorage.getItem('sidebar-collapsed')
-    if (saved !== null) {
-      setIsCollapsed(JSON.parse(saved))
+    setMounted(true)
+    try {
+      const saved = localStorage.getItem('sidebar-collapsed')
+      if (saved !== null) {
+        setIsCollapsed(JSON.parse(saved))
+      }
+    } catch (error) {
+      console.error('Error loading sidebar state:', error)
     }
-    setIsHydrated(true)
   }, [])
 
   // Save to localStorage when state changes
   useEffect(() => {
-    if (isHydrated) {
-      localStorage.setItem('sidebar-collapsed', JSON.stringify(isCollapsed))
+    if (mounted) {
+      try {
+        localStorage.setItem('sidebar-collapsed', JSON.stringify(isCollapsed))
+      } catch (error) {
+        console.error('Error saving sidebar state:', error)
+      }
     }
-  }, [isCollapsed, isHydrated])
+  }, [isCollapsed, mounted])
 
-  const toggleSidebar = () => setIsCollapsed(!isCollapsed)
+  const toggleSidebar = () => {
+    setIsCollapsed(prev => !prev)
+  }
   const collapseSidebar = () => setIsCollapsed(true)
   const expandSidebar = () => setIsCollapsed(false)
 
@@ -52,7 +62,14 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
 export function useSidebar() {
   const context = useContext(SidebarContext)
   if (context === undefined) {
-    throw new Error('useSidebar must be used within a SidebarProvider')
+    console.warn('useSidebar must be used within a SidebarProvider')
+    // Return a default context instead of throwing
+    return {
+      isCollapsed: false,
+      toggleSidebar: () => {},
+      collapseSidebar: () => {},
+      expandSidebar: () => {},
+    }
   }
   return context
 } 

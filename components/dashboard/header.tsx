@@ -27,6 +27,7 @@ export function Header() {
   const [isMounted, setIsMounted] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
+  
   const { isCollapsed } = useSidebar()
   
   // Calculate left padding based on sidebar state
