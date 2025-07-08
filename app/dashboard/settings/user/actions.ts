@@ -11,6 +11,7 @@ export async function updateUserProfile(formData: FormData) {
   const { data: { user }, error: userError } = await supabase.auth.getUser()
   
   if (userError || !user) {
+    console.error('Authentication error:', userError)
     return { 
       error: 'Not authenticated',
       success: false 
@@ -34,18 +35,41 @@ export async function updateUserProfile(formData: FormData) {
   }
 
   try {
+    console.log('Attempting to update profile for user:', user.id, 'with display name:', displayName.trim())
+    
+    // First, try to check if the user_profiles table exists and is accessible
+    const { data: existingProfile, error: checkError } = await supabase
+      .from('user_profiles')
+      .select('*')
+      .eq('user_id', user.id)
+      .single()
+    
+    console.log('Existing profile check:', { existingProfile, checkError })
+    
     // Update or insert user profile
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('user_profiles')
       .upsert({
         user_id: user.id,
-        display_name: displayName.trim()
+        display_name: displayName.trim(),
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'user_id'
       })
+      .select()
+
+    console.log('Upsert result:', { data, error })
 
     if (error) {
-      console.error('Error updating profile:', error)
+      console.error('Database error updating profile:', error)
+      console.error('Error details:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code
+      })
       return { 
-        error: 'Failed to update profile. Please try again.',
+        error: `Database error: ${error.message}`,
         success: false 
       }
     }
@@ -56,9 +80,9 @@ export async function updateUserProfile(formData: FormData) {
       message: 'Profile updated successfully!'
     }
   } catch (error) {
-    console.error('Error updating profile:', error)
+    console.error('Unexpected error updating profile:', error)
     return { 
-      error: 'Failed to update profile. Please try again.',
+      error: `Unexpected error: ${error instanceof Error ? error.message : 'Unknown error'}`,
       success: false 
     }
   }
