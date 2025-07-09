@@ -33,7 +33,7 @@ const formSchema = z.object({
   customerPhone: z.string().optional(),
   date: z.date({ required_error: "Please select a booking date." }),
   time: z.string({ required_error: "Please select a booking time." }),
-  partySize: z.number().min(1, { message: "Party size must be at least 1." }).max(20, { message: "Party size cannot exceed 20." }),
+  partySize: z.number().min(1, { message: "Party size must be at least 1." }),
   specialRequests: z.string().optional(),
 })
 
@@ -64,7 +64,6 @@ interface BookingSettings {
 
 interface AddBookingDialogProps {
   availableTimes?: string[]
-  maxPartySize?: number
   children?: React.ReactNode
 }
 
@@ -73,7 +72,6 @@ export function AddBookingDialog({
     "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
     "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30"
   ],
-  maxPartySize = 8,
   children
 }: AddBookingDialogProps) {
   const [open, setOpen] = React.useState(false)
@@ -300,7 +298,6 @@ export function AddBookingDialog({
 
   // Get current settings
   const currentAvailableTimes = bookingSettings?.available_times || availableTimes
-  const currentMaxPartySize = bookingSettings?.max_party_size || maxPartySize
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -729,7 +726,6 @@ export function AddBookingDialog({
                               <Input
                                 type="number"
                                 min="1"
-                                max={currentMaxPartySize}
                                 {...field}
                                 onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
                                 className="mobile-input-number border-2 border-slate-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-200 bg-white"
@@ -1064,7 +1060,6 @@ export function AddBookingDialog({
                               <Input
                                 type="number"
                                 min="1"
-                                max={currentMaxPartySize}
                                 {...field}
                                 onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
                                 className="w-24 text-center h-10 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200"

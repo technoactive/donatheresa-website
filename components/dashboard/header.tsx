@@ -22,7 +22,6 @@ interface UserProfile {
 
 interface BookingSettings {
   available_times?: string[]
-  max_party_size?: number
 }
 
 export function Header() {
@@ -239,7 +238,6 @@ export function Header() {
           <div className="mr-2">
             <AddBookingDialog
               availableTimes={bookingSettings?.available_times}
-              maxPartySize={bookingSettings?.max_party_size}
             >
               <div className="flex">
                 {/* Desktop version - full button */}
