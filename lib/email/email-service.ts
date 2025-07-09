@@ -681,7 +681,7 @@ END:VCALENDAR`
     }
 
     return emailService.sendEmail({
-      templateKey: 'staff_new_booking',
+      templateKey: 'staff_booking_alert',
       recipientEmail: settings.restaurant_email,
       recipientName: 'Restaurant Staff',
       bookingId: booking.id,
@@ -701,6 +701,7 @@ END:VCALENDAR`
         isVipCustomer: customer.customer_segment === 'vip',
         totalBookings: customer.total_bookings || 0,
         bookingSource: booking.source || 'website',
+        guestText: (Number(booking.party_size) === 1) ? 'guest' : 'guests',
       }
     });
   },

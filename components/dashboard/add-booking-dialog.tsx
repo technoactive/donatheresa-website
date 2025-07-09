@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { Button } from "@/components/ui/button"
+import { useIPadOptimizations } from "@/hooks/use-ipad-detection"
 import {
   Dialog,
   DialogContent,
@@ -110,6 +111,10 @@ export function AddBookingDialog({
   const [isSearching, setIsSearching] = React.useState(false)
   const [bookingSettings, setBookingSettings] = React.useState<BookingSettings | null>(null)
   const [isLoadingSettings, setIsLoadingSettings] = React.useState(true)
+  
+  // iPad optimizations
+  const iPadOpts = useIPadOptimizations()
+  const [activeField, setActiveField] = React.useState<string | null>(null)
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -122,6 +127,37 @@ export function AddBookingDialog({
       specialRequests: "",
     },
   })
+
+  // iPad keyboard management
+  React.useEffect(() => {
+    if (!iPadOpts.isIPad) return
+
+    let initialViewportHeight = window.visualViewport?.height || window.innerHeight
+    
+    const handleViewportChange = () => {
+      const currentHeight = window.visualViewport?.height || window.innerHeight
+      const heightDifference = initialViewportHeight - currentHeight
+      const isKeyboardVisible = heightDifference > 150
+      
+      if (isKeyboardVisible && activeField) {
+        setTimeout(() => {
+          const activeElement = document.querySelector(`[name="${activeField}"]`) as HTMLElement
+          if (activeElement) {
+            activeElement.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center',
+              inline: 'nearest'
+            })
+          }
+        }, 100)
+      }
+    }
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleViewportChange)
+      return () => window.visualViewport?.removeEventListener('resize', handleViewportChange)
+    }
+  }, [activeField, iPadOpts.isIPad])
 
   // Load booking settings when dialog opens
   React.useEffect(() => {
@@ -294,18 +330,27 @@ export function AddBookingDialog({
           Add Booking
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] max-h-[95vh] overflow-y-auto bg-white">
-        <DialogHeader className="space-y-3 pb-6">
-          <DialogTitle className="text-xl font-semibold text-slate-900">Add Manual Booking</DialogTitle>
-          <DialogDescription className="text-slate-600">
-            Create a new booking directly from the dashboard. This booking will be marked as manually created.
-          </DialogDescription>
-        </DialogHeader>
-        
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* Customer Information Section */}
-            <div className="space-y-4">
+      <DialogContent className={`${iPadOpts.shouldUseIPadLayout ? 'max-w-5xl w-full h-[85vh] max-h-[600px]' : 'sm:max-w-[600px] max-h-[95vh]'} ${iPadOpts.containerClasses} overflow-hidden bg-white`}>
+        {/* Sticky Header for iPad */}
+        <div className={`${iPadOpts.shouldUseIPadLayout ? 'sticky top-0 bg-white border-b border-gray-200 px-6 py-4 z-10' : 'space-y-3 pb-6'}`}>
+          <DialogHeader>
+            <DialogTitle className={`${iPadOpts.shouldUseIPadLayout ? 'text-2xl' : 'text-xl'} font-semibold text-slate-900`}>Add Manual Booking</DialogTitle>
+            <DialogDescription className={`${iPadOpts.shouldUseIPadLayout ? 'text-base' : ''} text-slate-600`}>
+              Create a new booking directly from the dashboard. This booking will be marked as manually created.
+            </DialogDescription>
+          </DialogHeader>
+        </div>
+
+        {/* Scrollable Form Content */}
+        <div className={`${iPadOpts.shouldUseIPadLayout ? 'flex-1 overflow-y-auto px-6 pb-6' : ''}`}>
+          <Form {...form}>
+                         <form onSubmit={form.handleSubmit(onSubmit)} className={`${iPadOpts.shouldUseIPadLayout ? 'space-y-0' : 'space-y-6'}`}>
+              
+              {/* iPad Two-Column Layout */}
+              <div className={`${iPadOpts.shouldUseIPadLayout ? 'grid grid-cols-1 lg:grid-cols-2 gap-8 min-h-[400px]' : 'space-y-6'}`}>
+                
+                {/* Customer Information Section */}
+                <div className={`${iPadOpts.shouldUseIPadLayout ? 'space-y-6' : 'space-y-4'}`}>
               <div className="flex items-center gap-2 mb-4">
                 <User className="w-4 h-4 text-amber-600" />
                 <h4 className="text-sm font-medium text-slate-900">Customer Information</h4>
@@ -330,7 +375,8 @@ export function AddBookingDialog({
                           placeholder="Start typing customer name..."
                           value={searchQuery}
                           onChange={(e) => handleSearchChange(e.target.value)}
-                          className="pr-8"
+                          onFocus={() => setActiveField('customerName')}
+                          className={`pr-8 ${iPadOpts.inputClasses} ${iPadOpts.shouldUseIPadLayout ? 'h-12 text-base' : ''}`}
                         />
                         <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
                         
@@ -405,6 +451,8 @@ export function AddBookingDialog({
                         <Input 
                           type="email" 
                           placeholder="customer@example.com" 
+                          onFocus={() => setActiveField('customerEmail')}
+                          className={`${iPadOpts.inputClasses} ${iPadOpts.shouldUseIPadLayout ? 'h-12 text-base' : ''}`}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e)
@@ -424,7 +472,12 @@ export function AddBookingDialog({
                     <FormItem>
                       <FormLabel className="text-sm font-medium text-slate-700">Phone</FormLabel>
                       <FormControl>
-                        <Input placeholder="Optional phone number" {...field} />
+                        <Input 
+                          placeholder="Optional phone number" 
+                          onFocus={() => setActiveField('customerPhone')}
+                          className={`${iPadOpts.inputClasses} ${iPadOpts.shouldUseIPadLayout ? 'h-12 text-base' : ''}`}
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -562,20 +615,22 @@ export function AddBookingDialog({
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isPending}
-                className="w-full sm:w-auto order-2 sm:order-1"
+                className={`w-full sm:w-auto order-2 sm:order-1 ${iPadOpts.buttonClasses} ${iPadOpts.shouldUseIPadLayout ? 'h-12 px-8 text-base' : ''}`}
               >
                 Cancel
               </Button>
               <Button 
                 type="submit" 
                 disabled={isPending}
-                className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white order-1 sm:order-2"
+                className={`w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white order-1 sm:order-2 ${iPadOpts.buttonClasses} ${iPadOpts.shouldUseIPadLayout ? 'h-12 px-8 text-base' : ''}`}
               >
                 {isPending ? "Creating..." : "Create Booking"}
               </Button>
             </div>
+            </div>
           </form>
         </Form>
+        </div>
       </DialogContent>
     </Dialog>
   )
