@@ -470,9 +470,9 @@ export function AddBookingDialog({
               variant="ghost"
               size="sm"
               onClick={() => setOpen(false)}
-              className="h-12 w-12 p-0 hover:bg-slate-100 rounded-full"
+              className="h-14 w-14 p-0 hover:bg-slate-100 rounded-full"
             >
-              <X className="h-6 w-6" />
+              <X className="h-8 w-8" />
             </Button>
           </div>
         </div>
