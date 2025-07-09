@@ -52,72 +52,75 @@ function CompactDailyStats({ bookings, selectedDate }: { bookings: Booking[]; se
   }) : ''
 
   return (
-    <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-4">
+    <div className="bg-white border border-slate-200 rounded-lg shadow-sm p-3 sm:p-4">
       {/* Compact Header with Today */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-          <h3 className="text-lg font-bold text-slate-900">{isToday ? 'TODAY' : 'SELECTED DATE'}</h3>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3 sm:mb-4">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="w-2 h-2 bg-amber-500 rounded-full flex-shrink-0"></div>
+          <h3 className="text-base sm:text-lg font-bold text-slate-900">{isToday ? 'TODAY' : 'SELECTED DATE'}</h3>
           {isClient && (
-            <span className="text-sm text-slate-600 font-medium">{dateFormatted}</span>
+            <span className="text-xs sm:text-sm text-slate-600 font-medium truncate">{dateFormatted}</span>
           )}
         </div>
-        <div className="text-right">
+        <div className="text-left sm:text-right">
           <p className="text-xs text-slate-500">Live Stats</p>
         </div>
       </div>
 
-      {/* Compact Stats Grid - All in one row */}
-      <div className="grid grid-cols-4 gap-4">
+      {/* Responsive Stats Grid - 2 cols on mobile, 4 on larger screens */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* Bookings */}
-        <div className="text-center bg-blue-50 rounded-lg p-3 border border-blue-200">
+        <div className="text-center bg-blue-50 rounded-lg p-2 sm:p-3 border border-blue-200">
           <div className="flex items-center justify-center gap-1 mb-1">
-            <Users className="w-4 h-4 text-blue-600" />
+            <Users className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
             <span className="text-xs font-medium text-blue-600">BOOKINGS</span>
           </div>
-          <div className="text-2xl font-bold text-blue-900">{dailyStats.totalBookings}</div>
-          <p className="text-xs text-blue-700">Today</p>
+          <div className="text-xl sm:text-2xl font-bold text-blue-900">{dailyStats.totalBookings}</div>
+          <p className="text-xs text-blue-700">Total</p>
         </div>
 
         {/* Guests */}
-        <div className="text-center bg-green-50 rounded-lg p-3 border border-green-200">
+        <div className="text-center bg-green-50 rounded-lg p-2 sm:p-3 border border-green-200">
           <div className="flex items-center justify-center gap-1 mb-1">
-            <Users2 className="w-4 h-4 text-green-600" />
+            <Users2 className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
             <span className="text-xs font-medium text-green-600">GUESTS</span>
           </div>
-          <div className="text-2xl font-bold text-green-900">{dailyStats.totalGuests}</div>
-          <p className="text-xs text-green-700">Today</p>
+          <div className="text-xl sm:text-2xl font-bold text-green-900">{dailyStats.totalGuests}</div>
+          <p className="text-xs text-green-700">Total</p>
         </div>
 
         {/* Confirmed */}
-        <div className="text-center bg-emerald-50 rounded-lg p-3 border border-emerald-200">
+        <div className="text-center bg-emerald-50 rounded-lg p-2 sm:p-3 border border-emerald-200">
           <div className="flex items-center justify-center gap-1 mb-1">
-            <CalendarCheck className="w-4 h-4 text-emerald-600" />
+            <CalendarCheck className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-600" />
             <span className="text-xs font-medium text-emerald-600">CONFIRMED</span>
           </div>
-          <div className="text-2xl font-bold text-emerald-900">{dailyStats.confirmed}</div>
+          <div className="text-xl sm:text-2xl font-bold text-emerald-900">{dailyStats.confirmed}</div>
           <p className="text-xs text-emerald-700">Ready</p>
         </div>
 
         {/* Pending */}
-        <div className="text-center bg-yellow-50 rounded-lg p-3 border border-yellow-200">
+        <div className="text-center bg-yellow-50 rounded-lg p-2 sm:p-3 border border-yellow-200">
           <div className="flex items-center justify-center gap-1 mb-1">
-            <Clock className="w-4 h-4 text-yellow-600" />
+            <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-600" />
             <span className="text-xs font-medium text-yellow-600">PENDING</span>
           </div>
-          <div className="text-2xl font-bold text-yellow-900">{dailyStats.pending}</div>
+          <div className="text-xl sm:text-2xl font-bold text-yellow-900">{dailyStats.pending}</div>
           <p className="text-xs text-yellow-700">Waiting</p>
         </div>
       </div>
 
       {/* Compact Summary Line */}
       <div className="mt-3 pt-3 border-t border-slate-100">
-        <p className="text-center text-xs text-slate-600">
-          <span className="font-semibold text-slate-800">{dailyStats.totalBookings} bookings</span> • 
-          <span className="font-semibold text-slate-800">{dailyStats.totalGuests} guests</span> • 
-          <span className="font-semibold text-emerald-700">{dailyStats.confirmed} confirmed</span> • 
+        <div className="flex flex-wrap justify-center items-center gap-1 text-xs text-slate-600">
+          <span className="font-semibold text-slate-800">{dailyStats.totalBookings} bookings</span>
+          <span className="hidden sm:inline">•</span>
+          <span className="font-semibold text-slate-800">{dailyStats.totalGuests} guests</span>
+          <span className="hidden sm:inline">•</span>
+          <span className="font-semibold text-emerald-700">{dailyStats.confirmed} confirmed</span>
+          <span className="hidden sm:inline">•</span>
           <span className="font-semibold text-yellow-700">{dailyStats.pending} pending</span>
-        </p>
+        </div>
       </div>
     </div>
   )
@@ -134,35 +137,56 @@ export function BookingsPageClient({ bookings }: { bookings: Booking[] }) {
   }, [])
   
   return (
-    <div className="space-y-4">
-      {/* Date Picker - Controls everything */}
-      <div className="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
-        <div className="flex items-center gap-4">
-          <h3 className="text-base font-medium text-slate-900">View Date:</h3>
-          <DatePickerWithClear
-            date={selectedDate}
-            setDate={setSelectedDate}
-            className="w-[200px]"
-          />
-          {isClient && selectedDate && (
-            <span className="text-sm text-slate-600 font-medium">
+    <div className="space-y-3 sm:space-y-4">
+      {/* Date Picker - Mobile optimized responsive layout */}
+      <div className="bg-white border border-slate-200 rounded-lg p-3 sm:p-4 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          {/* Date selection section */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 min-w-0 flex-1">
+            <h3 className="text-sm sm:text-base font-medium text-slate-900 whitespace-nowrap">View Date:</h3>
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <DatePickerWithClear
+                date={selectedDate}
+                setDate={setSelectedDate}
+                className="w-full sm:w-[180px] lg:w-[200px]"
+              />
+              {isClient && selectedDate && (
+                <span className="hidden md:inline text-sm text-slate-600 font-medium truncate">
+                  {selectedDate.toLocaleDateString('en-GB', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </span>
+              )}
+            </div>
+          </div>
+          
+          {/* Today button */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setSelectedDate(new Date())}
+            className="text-xs sm:text-sm w-full sm:w-auto"
+          >
+            Today
+          </Button>
+        </div>
+
+        {/* Mobile-only: Show selected date in compact format */}
+        {isClient && selectedDate && (
+          <div className="mt-2 pt-2 border-t border-slate-100 md:hidden">
+            <p className="text-sm text-slate-600 text-center">
               {selectedDate.toLocaleDateString('en-GB', {
                 weekday: 'long',
                 day: 'numeric',
                 month: 'long',
                 year: 'numeric'
               })}
-            </span>
-          )}
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setSelectedDate(new Date())}
-          className="text-xs"
-        >
-          Today
-        </Button>
+            </p>
+          </div>
+        )}
       </div>
 
       {/* DAILY STATS - Reactive to selected date */}
@@ -171,9 +195,9 @@ export function BookingsPageClient({ bookings }: { bookings: Booking[] }) {
       {/* All Bookings Table - Filtered by selected date */}
       <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
         {/* Header with customer filter inline - Mobile optimized */}
-        <div className="px-4 py-3 border-b border-slate-200">
+        <div className="px-3 sm:px-4 py-3 border-b border-slate-200">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <h3 className="text-base font-medium text-slate-900">
+            <h3 className="text-sm sm:text-base font-medium text-slate-900">
               {selectedDate && isSameDay(selectedDate, new Date()) ? 'Today\'s Bookings' : 'Bookings'}
             </h3>
             <div className="flex items-center gap-2">
@@ -182,7 +206,7 @@ export function BookingsPageClient({ bookings }: { bookings: Booking[] }) {
                 placeholder="Search customer name..."
                 value={customerFilter}
                 onChange={(e) => setCustomerFilter(e.target.value)}
-                className="w-full sm:w-64 md:w-72 bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full sm:w-56 md:w-64 lg:w-72 bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
           </div>

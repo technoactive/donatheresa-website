@@ -1,5 +1,4 @@
 import React from "react"
-import { AddBookingDialog } from "@/components/dashboard/add-booking-dialog"
 import { BookingsPageClient } from "@/components/dashboard/bookings-page-client"
 import { getBookings, getBookingSettings } from "@/lib/database"
 import type { Booking } from "@/lib/types"
@@ -44,22 +43,6 @@ export default async function BookingsPage() {
 
     return (
       <div className="space-y-6">
-        {/* Header Section */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4">
-          <div>
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900">Bookings</h2>
-            <p className="text-slate-600 mt-2">
-              Manage all your restaurant reservations.
-            </p>
-          </div>
-          <div className="mt-4 sm:mt-0">
-            <AddBookingDialog
-              availableTimes={bookingSettings?.available_times}
-              maxPartySize={bookingSettings?.max_party_size}
-            />
-          </div>
-        </div>
-
         {/* Client Component with Interactive Features */}
         <BookingsPageClient bookings={bookings} />
       </div>
