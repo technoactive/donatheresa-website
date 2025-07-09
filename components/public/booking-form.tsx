@@ -31,23 +31,64 @@ export function BookingForm() {
   React.useEffect(() => {
     const loadSettings = async () => {
       try {
+        console.log('Loading booking settings...')
         // Add cache busting parameter to ensure fresh data
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 second timeout
+        
         const response = await fetch(`/api/booking-settings?t=${Date.now()}`, {
           cache: 'no-cache',
           headers: {
             'Cache-Control': 'no-cache',
             'Pragma': 'no-cache'
-          }
+          },
+          signal: controller.signal
         })
+        
+        clearTimeout(timeoutId)
+        console.log('Response status:', response.status)
         if (response.ok) {
           const settings = await response.json()
+          console.log('Booking settings loaded:', settings)
           setBookingSettings(settings)
         } else {
-          console.error('Failed to fetch booking settings')
+          console.error('Failed to fetch booking settings, status:', response.status)
+          // Set a fallback with basic settings so form doesn't hang
+          setBookingSettings({
+            booking_enabled: false,
+            max_advance_days: 30,
+            max_party_size: 8,
+            total_seats: 0,
+            available_times: [],
+            closed_dates: [],
+            closed_days_of_week: [],
+            suspension_message: "Unable to load booking system. Please try again later or call us directly.",
+            maintenance_mode: false,
+            service_periods: []
+          })
         }
-      } catch (error) {
-        console.error('Error fetching booking settings:', error)
-      }
+              } catch (error) {
+          console.error('Error fetching booking settings:', error)
+          
+          let suspensionMessage = "Unable to load booking system. Please try again later or call us directly."
+          if (error instanceof Error && error.name === 'AbortError') {
+            suspensionMessage = "Booking system is taking too long to load. Please try again later or call us directly."
+          }
+          
+          // Set a fallback with basic settings so form doesn't hang
+          setBookingSettings({
+            booking_enabled: false,
+            max_advance_days: 30,
+            max_party_size: 8,
+            total_seats: 0,
+            available_times: [],
+            closed_dates: [],
+            closed_days_of_week: [],
+            suspension_message: suspensionMessage,
+            maintenance_mode: false,
+            service_periods: []
+          })
+        }
     }
 
     // Initial load
