@@ -1,11 +1,12 @@
-"use client"
-
 import { BookingForm } from "@/components/public/booking-form"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { Calendar, Clock, Users, Phone, Star, Heart, Utensils, Crown, Sparkles } from "lucide-react"
+import { getBookingSettings } from "@/lib/database"
 
-export default function ReservePage() {
+export default async function ReservePage() {
+  // Fetch booking settings from database
+  const bookingSettings = await getBookingSettings()
   return (
     <div className="bg-white min-h-screen">
       {/* Main Booking Form Section */}
@@ -49,7 +50,7 @@ export default function ReservePage() {
                 <Users className="w-5 md:w-6 h-5 md:h-6 text-white" />
               </div>
               <div className="flex-1 flex flex-col justify-center">
-                <div className="text-xl md:text-2xl font-bold text-gray-900 mb-1">2-12</div>
+                <div className="text-xl md:text-2xl font-bold text-gray-900 mb-1">1-{bookingSettings.max_party_size}</div>
                 <div className="text-xs md:text-sm text-gray-600 font-medium">Party Size</div>
               </div>
             </div>
@@ -59,7 +60,7 @@ export default function ReservePage() {
                 <Calendar className="w-5 md:w-6 h-5 md:h-6 text-white" />
               </div>
               <div className="flex-1 flex flex-col justify-center">
-                <div className="text-xl md:text-2xl font-bold text-gray-900 mb-1">30</div>
+                <div className="text-xl md:text-2xl font-bold text-gray-900 mb-1">{bookingSettings.max_advance_days}</div>
                 <div className="text-xs md:text-sm text-gray-600 font-medium">Days Ahead</div>
               </div>
             </div>
@@ -123,7 +124,7 @@ export default function ReservePage() {
                     <Users className="w-6 md:w-8 h-6 md:h-8 text-white" />
                   </div>
                   <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4">Intimate Gatherings</h3>
-                  <p className="text-gray-600 leading-relaxed text-sm md:text-base flex-1">Perfect for couples to groups of 12, with dedicated service and personalized attention.</p>
+                  <p className="text-gray-600 leading-relaxed text-sm md:text-base flex-1">Perfect for couples to groups of {bookingSettings.max_party_size}, with dedicated service and personalized attention.</p>
                 </div>
               </div>
             </div>
