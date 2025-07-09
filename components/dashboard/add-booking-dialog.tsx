@@ -20,7 +20,7 @@ import { Badge } from "@/components/ui/badge"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { CalendarIcon, Plus, Search, User, Check, Clock, Users } from "lucide-react"
+import { CalendarIcon, Plus, Search, User, Check, Clock, Users, X } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
@@ -88,68 +88,63 @@ export function AddBookingDialog({
   const [isPending, startTransition] = React.useTransition()
   const [datePickerOpen, setDatePickerOpen] = React.useState(false)
   
-  // Enhanced device detection
-  const [deviceInfo, setDeviceInfo] = React.useState({
+  // Simple, reliable device detection
+  const [screenSize, setScreenSize] = React.useState({
+    width: 0,
+    height: 0,
     isMobile: false,
     isTablet: false,
-    isIPad: false,
-    isIOS: false,
-    width: 0,
-    height: 0
+    isDesktop: false,
+    isIOS: false
   })
   
   // Form refs
   const scrollContainerRef = React.useRef<HTMLDivElement>(null)
   
-  // Enhanced device detection with better mobile/tablet logic
+  // Simple and reliable device detection
   React.useEffect(() => {
-    const detectDevice = () => {
+    const updateScreenSize = () => {
       const width = window.innerWidth
       const height = window.innerHeight
       const userAgent = navigator.userAgent.toLowerCase()
+      const isIOS = /ipad|iphone|ipod/.test(userAgent) || 
+                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
       
-      // Detect iOS devices (iPhone, iPad, iPod)
-      const isIOSDevice = /ipad|iphone|ipod/.test(userAgent) || 
-                         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+      // Simple breakpoint logic
+      const isMobile = width < 768
+      const isTablet = width >= 768 && width < 1024
+      const isDesktop = width >= 1024
       
-      // Detect specifically iPad
-      const isIPadDevice = /ipad/.test(userAgent) || 
-                          (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-      
-      // Device type detection with more specific logic
-      const isMobileDevice = width < 768 && !isIPadDevice  // Mobile phones only
-      const isTabletDevice = (width >= 768 && width <= 1024) || isIPadDevice  // Tablets including iPad
-      
-      const newDeviceInfo = {
-        isMobile: isMobileDevice,
-        isTablet: isTabletDevice,
-        isIPad: isIPadDevice,
-        isIOS: isIOSDevice,
-        width,
-        height
-      }
-      
-      setDeviceInfo(newDeviceInfo)
-      
-      // Debug logging
-      console.log('Device Detection:', {
-        userAgent,
-        navigator_platform: navigator.platform,
-        maxTouchPoints: navigator.maxTouchPoints,
+      const newScreenSize = {
         width,
         height,
-        detected: newDeviceInfo
+        isMobile,
+        isTablet,
+        isDesktop,
+        isIOS
+      }
+      
+      setScreenSize(newScreenSize)
+      
+      // Clear debug logging
+      console.log('📱 Device:', {
+        width,
+        isMobile,
+        isTablet,
+        isDesktop,
+        isIOS,
+        userAgent: userAgent.substring(0, 50) + '...'
       })
     }
     
-    detectDevice()
-    window.addEventListener('resize', detectDevice)
-    return () => window.removeEventListener('resize', detectDevice)
+    updateScreenSize()
+    window.addEventListener('resize', updateScreenSize)
+    return () => window.removeEventListener('resize', updateScreenSize)
   }, [])
 
   // Enhanced keyboard handling for mobile/tablet
   React.useEffect(() => {
-    if (!deviceInfo.isMobile && !deviceInfo.isTablet) return
+    if (screenSize.isDesktop) return
 
     let initialViewportHeight = window.innerHeight
     
@@ -175,7 +170,7 @@ export function AddBookingDialog({
       window.visualViewport.addEventListener('resize', handleViewportChange)
       return () => window.visualViewport?.removeEventListener('resize', handleViewportChange)
     }
-  }, [activeField, deviceInfo.isMobile, deviceInfo.isTablet])
+  }, [activeField, screenSize.isDesktop])
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -379,84 +374,9 @@ export function AddBookingDialog({
   const currentAvailableTimes = bookingSettings?.available_times || availableTimes
   const currentMaxPartySize = bookingSettings?.max_party_size || maxPartySize
 
-  // Enhanced responsive classes with clearer logic
-  const getDialogClasses = () => {
-    if (deviceInfo.isMobile) {
-      return "fixed inset-0 w-full h-full max-w-none max-h-none rounded-none border-0 bg-white p-0"
-    }
-    if (deviceInfo.isTablet) {
-      return "w-[95vw] max-w-4xl h-[85vh] max-h-[750px] rounded-2xl border-0 bg-white shadow-2xl"
-    }
-    return "w-[90vw] max-w-2xl max-h-[85vh] rounded-xl border-0 bg-white shadow-xl"
-  }
-
-  const getInputClasses = () => {
-    const baseClasses = "border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200"
-    
-    if (deviceInfo.isMobile) {
-      return `${baseClasses} h-12 text-base px-4 py-3 rounded-lg touch-manipulation`
-    }
-    if (deviceInfo.isTablet) {
-      return `${baseClasses} h-14 text-base px-4 py-3 rounded-xl font-medium touch-manipulation`
-    }
-    
-    return `${baseClasses} h-10 text-sm px-3 py-2 rounded-lg`
-  }
-
-  const getButtonClasses = () => {
-    const baseClasses = "font-semibold transition-all duration-200 active:scale-95"
-    
-    if (deviceInfo.isMobile) {
-      return `${baseClasses} h-12 px-6 text-base rounded-lg touch-manipulation`
-    }
-    if (deviceInfo.isTablet) {
-      return `${baseClasses} h-14 px-8 text-base rounded-xl touch-manipulation`
-    }
-    
-    return `${baseClasses} h-10 px-4 text-sm rounded-lg`
-  }
-
-  const getHeaderClasses = () => {
-    if (deviceInfo.isMobile) {
-      return "px-4 py-3 border-b border-slate-200 bg-white"
-    }
-    return "px-6 py-4 border-b border-slate-200 bg-white"
-  }
-
-  const getContentClasses = () => {
-    if (deviceInfo.isMobile) {
-      return "flex-1 overflow-y-auto px-4 py-4"
-    }
-    return "flex-1 overflow-y-auto px-6 py-6"
-  }
-
-  const getGridClasses = () => {
-    if (deviceInfo.isMobile) {
-      return "space-y-6"
-    }
-    return "grid grid-cols-1 lg:grid-cols-2 gap-8"
-  }
-
-  // Enhanced button layout classes
-  const getButtonContainerClasses = () => {
-    if (deviceInfo.isMobile) {
-      return "flex flex-col gap-3 pt-4 border-t border-slate-200"
-    }
-    // For tablet/iPad and desktop - always horizontal
-    return "flex flex-row gap-4 pt-4 border-t border-slate-200 justify-end"
-  }
-
-  const getButtonItemClasses = (isSubmit: boolean = false) => {
-    if (deviceInfo.isMobile) {
-      return `w-full ${isSubmit ? 'order-1' : 'order-2'}`
-    }
-    // For tablet/iPad and desktop
-    return "min-w-[120px] flex-shrink-0"
-  }
-
   // Enhanced date picker with iOS/iPad specific handling
   const renderDatePicker = (field: any) => {
-    if (deviceInfo.isIOS) {
+    if (screenSize.isIOS) {
       // For iOS devices, use native date input for better UX
       return (
         <Input
@@ -466,7 +386,14 @@ export function AddBookingDialog({
             const date = e.target.value ? new Date(e.target.value) : null
             field.onChange(date)
           }}
-          className={getInputClasses()}
+          className={cn(
+            "border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200",
+            screenSize.isMobile 
+              ? "h-12 text-base px-4 py-3 rounded-lg touch-manipulation" 
+              : screenSize.isTablet 
+                ? "h-14 text-base px-4 py-3 rounded-xl font-medium touch-manipulation"
+                : "h-10 text-sm px-3 py-2 rounded-lg"
+          )}
           min={format(new Date(), 'yyyy-MM-dd')}
           max={format(new Date(Date.now() + (bookingSettings?.max_advance_days || 30) * 24 * 60 * 60 * 1000), 'yyyy-MM-dd')}
         />
@@ -480,13 +407,17 @@ export function AddBookingDialog({
           <Button
             variant="outline"
             className={cn(
-              "w-full justify-start text-left font-normal",
+              "w-full justify-start text-left font-normal border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200",
               !field.value && "text-muted-foreground",
-              getInputClasses()
+              screenSize.isMobile 
+                ? "h-12 text-base px-4 py-3 rounded-lg touch-manipulation" 
+                : screenSize.isTablet 
+                  ? "h-14 text-base px-4 py-3 rounded-xl font-medium touch-manipulation"
+                  : "h-10 text-sm px-3 py-2 rounded-lg"
             )}
             onClick={() => setDatePickerOpen(true)}
           >
-            <CalendarIcon className={`mr-3 ${deviceInfo.isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
+            <CalendarIcon className={`mr-3 ${screenSize.isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
             {field.value ? (
               format(field.value, "PPP")
             ) : (
@@ -521,6 +452,16 @@ export function AddBookingDialog({
     )
   }
 
+  // Input classes
+  const inputClasses = cn(
+    "border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200",
+    screenSize.isMobile 
+      ? "h-12 text-base px-4 py-3 rounded-lg touch-manipulation" 
+      : screenSize.isTablet 
+        ? "h-14 text-base px-4 py-3 rounded-xl font-medium touch-manipulation"
+        : "h-10 text-sm px-3 py-2 rounded-lg"
+  )
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -531,13 +472,21 @@ export function AddBookingDialog({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className={getDialogClasses()}>
+      <DialogContent 
+        className={cn(
+          screenSize.isMobile
+            ? "fixed inset-0 w-full h-full max-w-none max-h-none rounded-none border-0 bg-white p-0"
+            : screenSize.isTablet
+              ? "w-[95vw] max-w-4xl h-[85vh] max-h-[750px] rounded-2xl border-0 bg-white shadow-2xl"
+              : "w-[90vw] max-w-2xl max-h-[85vh] rounded-xl border-0 bg-white shadow-xl"
+        )}
+      >
         {/* Header */}
-        <div className={getHeaderClasses()}>
-          <DialogTitle className={`${deviceInfo.isMobile ? 'text-lg' : 'text-2xl'} font-bold text-slate-900`}>
+        <div className={cn(screenSize.isMobile ? "px-4 py-3 border-b border-slate-200 bg-white" : "px-6 py-4 border-b border-slate-200 bg-white")}>
+          <DialogTitle className={cn(screenSize.isMobile ? "text-lg" : "text-2xl", "font-bold text-slate-900")}>
             Add Manual Booking
           </DialogTitle>
-          <DialogDescription className={`${deviceInfo.isMobile ? 'text-sm' : 'text-base'} text-slate-600 mt-1`}>
+          <DialogDescription className={cn(screenSize.isMobile ? "text-sm" : "text-base", "text-slate-600 mt-1")}>
             Create a new booking directly from the dashboard
           </DialogDescription>
         </div>
@@ -545,23 +494,23 @@ export function AddBookingDialog({
         {/* Form Content */}
         <div 
           ref={scrollContainerRef}
-          className={getContentClasses()}
+          className={cn(screenSize.isMobile ? "flex-1 overflow-y-auto px-4 py-4" : "flex-1 overflow-y-auto px-6 py-6")}
           style={{ scrollBehavior: 'smooth' }}
         >
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               
               {/* Form Fields */}
-              <div className={getGridClasses()}>
+              <div className={cn(screenSize.isMobile ? "space-y-6" : "grid grid-cols-1 lg:grid-cols-2 gap-8")}>
                 
                 {/* Customer Information */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 pb-2 border-b border-slate-200">
-                    <div className={`${deviceInfo.isMobile ? 'w-8 h-8' : 'w-10 h-10'} bg-green-100 rounded-full flex items-center justify-center`}>
-                      <User className={`${deviceInfo.isMobile ? 'w-4 h-4' : 'w-5 h-5'} text-green-600`} />
+                    <div className={cn(screenSize.isMobile ? "w-8 h-8" : "w-10 h-10", "bg-green-100 rounded-full flex items-center justify-center")}>
+                      <User className={cn(screenSize.isMobile ? "w-4 h-4" : "w-5 h-5", "text-green-600")} />
                     </div>
                     <div>
-                      <h3 className={`${deviceInfo.isMobile ? 'text-base' : 'text-lg'} font-semibold text-slate-900`}>
+                      <h3 className={cn(screenSize.isMobile ? "text-base" : "text-lg", "font-semibold text-slate-900")}>
                         Customer Information
                       </h3>
                       {selectedCustomer && (
@@ -579,7 +528,7 @@ export function AddBookingDialog({
                     name="customerName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className={`${deviceInfo.isMobile ? 'text-sm' : 'text-base'} font-semibold text-slate-800`}>
+                        <FormLabel className={cn(screenSize.isMobile ? "text-sm" : "text-base", "font-semibold text-slate-800")}>
                           Customer Name *
                         </FormLabel>
                         <FormControl>
@@ -589,10 +538,10 @@ export function AddBookingDialog({
                               value={searchQuery}
                               onChange={(e) => handleSearchChange(e.target.value)}
                               onFocus={() => setActiveField('customerName')}
-                              className={`pr-12 ${getInputClasses()}`}
+                              className={cn(inputClasses, "pr-12")}
                               autoComplete="off"
                             />
-                            <Search className={`absolute right-3 top-1/2 transform -translate-y-1/2 ${deviceInfo.isMobile ? 'w-4 h-4' : 'w-5 h-5'} text-slate-400`} />
+                            <Search className={cn(screenSize.isMobile ? "w-4 h-4" : "w-5 h-5", "absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400")} />
                             
                             {/* Customer Dropdown */}
                             {showCustomerDropdown && customers.length > 0 && (
@@ -659,7 +608,7 @@ export function AddBookingDialog({
                     name="customerEmail"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className={`${deviceInfo.isMobile ? 'text-sm' : 'text-base'} font-semibold text-slate-800`}>
+                        <FormLabel className={cn(screenSize.isMobile ? "text-sm" : "text-base", "font-semibold text-slate-800")}>
                           Email Address *
                         </FormLabel>
                         <FormControl>
@@ -667,7 +616,7 @@ export function AddBookingDialog({
                             type="email" 
                             placeholder="customer@example.com" 
                             onFocus={() => setActiveField('customerEmail')}
-                            className={getInputClasses()}
+                            className={inputClasses}
                             {...field}
                             onChange={(e) => {
                               field.onChange(e)
@@ -686,7 +635,7 @@ export function AddBookingDialog({
                     name="customerPhone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className={`${deviceInfo.isMobile ? 'text-sm' : 'text-base'} font-semibold text-slate-800`}>
+                        <FormLabel className={cn(screenSize.isMobile ? "text-sm" : "text-base", "font-semibold text-slate-800")}>
                           Phone Number
                         </FormLabel>
                         <FormControl>
@@ -694,7 +643,7 @@ export function AddBookingDialog({
                             type="tel"
                             placeholder="Optional phone number" 
                             onFocus={() => setActiveField('customerPhone')}
-                            className={getInputClasses()}
+                            className={inputClasses}
                             {...field} 
                           />
                         </FormControl>
@@ -707,11 +656,11 @@ export function AddBookingDialog({
                 {/* Booking Details */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 pb-2 border-b border-slate-200">
-                    <div className={`${deviceInfo.isMobile ? 'w-8 h-8' : 'w-10 h-10'} bg-orange-100 rounded-full flex items-center justify-center`}>
-                      <CalendarIcon className={`${deviceInfo.isMobile ? 'w-4 h-4' : 'w-5 h-5'} text-orange-600`} />
+                    <div className={cn(screenSize.isMobile ? "w-8 h-8" : "w-10 h-10", "bg-orange-100 rounded-full flex items-center justify-center")}>
+                      <CalendarIcon className={cn(screenSize.isMobile ? "w-4 h-4" : "w-5 h-5", "text-orange-600")} />
                     </div>
                     <div>
-                      <h3 className={`${deviceInfo.isMobile ? 'text-base' : 'text-lg'} font-semibold text-slate-900`}>
+                      <h3 className={cn(screenSize.isMobile ? "text-base" : "text-lg", "font-semibold text-slate-900")}>
                         Booking Details
                       </h3>
                     </div>
@@ -723,7 +672,7 @@ export function AddBookingDialog({
                     name="date"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className={`${deviceInfo.isMobile ? 'text-sm' : 'text-base'} font-semibold text-slate-800`}>
+                        <FormLabel className={cn(screenSize.isMobile ? "text-sm" : "text-base", "font-semibold text-slate-800")}>
                           Booking Date *
                         </FormLabel>
                         <FormControl>
@@ -740,13 +689,13 @@ export function AddBookingDialog({
                     name="time"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className={`${deviceInfo.isMobile ? 'text-sm' : 'text-base'} font-semibold text-slate-800`}>
+                        <FormLabel className={cn(screenSize.isMobile ? "text-sm" : "text-base", "font-semibold text-slate-800")}>
                           Booking Time *
                         </FormLabel>
                         <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl>
-                            <SelectTrigger className={getInputClasses()}>
-                              <Clock className={`mr-3 ${deviceInfo.isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
+                            <SelectTrigger className={inputClasses}>
+                              <Clock className={cn(screenSize.isMobile ? "h-4 w-4" : "h-5 w-5", "mr-3")} />
                               <SelectValue placeholder="Select time" />
                             </SelectTrigger>
                           </FormControl>
@@ -755,7 +704,7 @@ export function AddBookingDialog({
                               <SelectItem 
                                 key={time} 
                                 value={time}
-                                className={`${deviceInfo.isMobile ? 'py-3 px-4' : 'py-3'} text-base`}
+                                className={cn(screenSize.isMobile ? "py-3 px-4" : "py-3", "text-base")}
                               >
                                 {time}
                               </SelectItem>
@@ -773,24 +722,24 @@ export function AddBookingDialog({
                     name="partySize"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className={`${deviceInfo.isMobile ? 'text-sm' : 'text-base'} font-semibold text-slate-800`}>
+                        <FormLabel className={cn(screenSize.isMobile ? "text-sm" : "text-base", "font-semibold text-slate-800")}>
                           Party Size *
                         </FormLabel>
                         <FormControl>
                           <div className="flex items-center gap-3">
                             <div className="flex items-center gap-2">
-                              <Users className={`${deviceInfo.isMobile ? 'h-4 w-4' : 'h-5 w-5'} text-slate-400`} />
+                              <Users className={cn(screenSize.isMobile ? "h-4 w-4" : "h-5 w-5", "text-slate-400")} />
                               <Input
                                 type="number"
                                 min="1"
                                 max={currentMaxPartySize}
                                 {...field}
                                 onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
-                                className={`w-24 text-center ${getInputClasses()}`}
+                                className={cn(inputClasses, "w-24 text-center")}
                                 onFocus={() => setActiveField('partySize')}
                               />
                             </div>
-                            <span className={`${deviceInfo.isMobile ? 'text-sm' : 'text-base'} text-slate-500`}>guests</span>
+                            <span className={cn(screenSize.isMobile ? "text-sm" : "text-base", "text-slate-500")}>guests</span>
                           </div>
                         </FormControl>
                         <FormMessage />
@@ -804,14 +753,14 @@ export function AddBookingDialog({
                     name="specialRequests"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className={`${deviceInfo.isMobile ? 'text-sm' : 'text-base'} font-semibold text-slate-800`}>
+                        <FormLabel className={cn(screenSize.isMobile ? "text-sm" : "text-base", "font-semibold text-slate-800")}>
                           Special Requests
                         </FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder="Any special requests or notes..."
-                            className={`resize-none ${getInputClasses()}`}
-                            rows={deviceInfo.isMobile ? 3 : 4}
+                            className={cn(inputClasses, "resize-none")}
+                            rows={screenSize.isMobile ? 3 : 4}
                             onFocus={() => setActiveField('specialRequests')}
                             {...field}
                           />
@@ -823,31 +772,91 @@ export function AddBookingDialog({
                 </div>
               </div>
 
-              {/* Action Buttons - Fixed layout */}
-              <div className={getButtonContainerClasses()}>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setOpen(false)}
-                  disabled={isPending}
-                  className={`${getButtonItemClasses(false)} ${getButtonClasses()}`}
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  type="submit" 
-                  disabled={isPending}
-                  className={`${getButtonItemClasses(true)} bg-green-600 hover:bg-green-700 text-white shadow-lg ${getButtonClasses()}`}
-                >
-                  {isPending ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Creating...
-                    </>
-                  ) : (
-                    "Create Booking"
-                  )}
-                </Button>
+              {/* Action Buttons - Icon-only for mobile/tablet, text for desktop */}
+              <div className={cn(
+                "pt-4 border-t border-slate-200",
+                screenSize.isMobile 
+                  ? "flex flex-col gap-4" 
+                  : "flex flex-row gap-4 justify-end"
+              )}>
+                {screenSize.isDesktop ? (
+                  // Desktop: Text buttons
+                  <>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setOpen(false)}
+                      disabled={isPending}
+                      className="h-10 px-4 text-sm rounded-lg font-semibold transition-all duration-200 active:scale-95 min-w-[120px] flex-shrink-0"
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      type="submit" 
+                      disabled={isPending}
+                      className="h-10 px-4 text-sm rounded-lg font-semibold transition-all duration-200 active:scale-95 bg-green-600 hover:bg-green-700 text-white shadow-lg min-w-[120px] flex-shrink-0"
+                    >
+                      {isPending ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Creating...
+                        </>
+                      ) : (
+                        "Create Booking"
+                      )}
+                    </Button>
+                  </>
+                ) : (
+                  // Mobile/Tablet: Large square icon buttons
+                  <div className={cn(
+                    screenSize.isMobile 
+                      ? "flex flex-col gap-4" 
+                      : "flex flex-row gap-6 justify-center"
+                  )}>
+                    <Button 
+                      type="submit" 
+                      disabled={isPending}
+                      className={cn(
+                        "font-bold transition-all duration-200 active:scale-95 bg-green-600 hover:bg-green-700 text-white shadow-lg touch-manipulation",
+                        screenSize.isMobile 
+                          ? "w-full h-14 rounded-xl text-lg order-1" 
+                          : "w-16 h-16 rounded-2xl"
+                      )}
+                    >
+                      {isPending ? (
+                        <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                      ) : screenSize.isMobile ? (
+                        <>
+                          <Check className="w-5 h-5 mr-2" />
+                          Create Booking
+                        </>
+                      ) : (
+                        <Check className="w-8 h-8" />
+                      )}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setOpen(false)}
+                      disabled={isPending}
+                      className={cn(
+                        "font-bold transition-all duration-200 active:scale-95 border-2 border-slate-300 hover:border-red-300 hover:bg-red-50 hover:text-red-600 touch-manipulation",
+                        screenSize.isMobile 
+                          ? "w-full h-14 rounded-xl text-lg order-2" 
+                          : "w-16 h-16 rounded-2xl"
+                      )}
+                    >
+                      {screenSize.isMobile ? (
+                        <>
+                          <X className="w-5 h-5 mr-2" />
+                          Cancel
+                        </>
+                      ) : (
+                        <X className="w-8 h-8" />
+                      )}
+                    </Button>
+                  </div>
+                )}
               </div>
             </form>
           </Form>
