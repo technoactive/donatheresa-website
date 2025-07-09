@@ -315,12 +315,18 @@ export function AddBookingDialog({
         )}
       </DialogTrigger>
       <DialogContent className="booking-dialog-mobile w-[95vw] max-w-4xl h-[90vh] max-h-none rounded-2xl border-0 bg-white shadow-2xl overflow-hidden">
-        <style jsx>{`
-          /* Hide default DialogContent close button */
-          .booking-dialog-mobile [data-radix-dialog-close] {
+        <style jsx global>{`
+          /* Hide default DialogContent close button - more specific selectors */
+          .booking-dialog-mobile > button[data-radix-dialog-close] {
+            display: none !important;
+          }
+          .booking-dialog-mobile > [data-radix-dialog-close] {
             display: none !important;
           }
           .booking-dialog-mobile button[aria-label="Close"] {
+            display: none !important;
+          }
+          .booking-dialog-mobile [data-close] {
             display: none !important;
           }
           
@@ -407,7 +413,7 @@ export function AddBookingDialog({
               display: none !important;
             }
             /* Force date picker button to be same height */
-            .mobile-layout button[data-slot="trigger"] {
+            .mobile-layout .mobile-input {
               height: 4rem !important;
               font-size: 1.125rem !important;
               padding: 1rem 1.25rem !important;
@@ -418,14 +424,14 @@ export function AddBookingDialog({
             /* Force proper button spacing */
             .mobile-buttons {
               padding-top: 2rem !important;
+              display: flex !important;
+              flex-direction: column !important;
+              gap: 1.5rem !important;
             }
             .mobile-buttons > button {
               display: block !important;
               width: 100% !important;
-              margin-bottom: 1rem !important;
-            }
-            .mobile-buttons > button:last-child {
-              margin-bottom: 0 !important;
+              margin: 0 !important;
             }
           }
           @media (min-width: 769px) {
@@ -635,15 +641,15 @@ export function AddBookingDialog({
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
-                                  className="mobile-input w-full justify-start text-left font-normal border-2 border-slate-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-200 bg-white"
+                                  className="mobile-input w-full justify-start text-left font-normal border-2 border-slate-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-200 bg-white hover:bg-slate-50"
                                   type="button"
-                                  data-slot="trigger"
+                                  onClick={() => setDatePickerOpen(!datePickerOpen)}
                                 >
                                   <CalendarIcon className="mobile-date-icon text-slate-400" />
                                   {field.value ? format(field.value, "PPP") : <span className="text-slate-400">Pick a date</span>}
                                 </Button>
                               </PopoverTrigger>
-                              <PopoverContent className="w-auto p-0">
+                              <PopoverContent className="w-auto p-0 z-50" align="start">
                                 <Calendar
                                   mode="single"
                                   selected={field.value}
@@ -972,14 +978,15 @@ export function AddBookingDialog({
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
-                                  className="w-full justify-start text-left font-normal h-10 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200"
+                                  className="w-full justify-start text-left font-normal h-10 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200 hover:bg-slate-50"
                                   type="button"
+                                  onClick={() => setDatePickerOpen(!datePickerOpen)}
                                 >
                                   <CalendarIcon className="mr-3 h-5 w-5 text-slate-400" />
                                   {field.value ? format(field.value, "PPP") : <span className="text-slate-400">Pick a date</span>}
                                 </Button>
                               </PopoverTrigger>
-                              <PopoverContent className="w-auto p-0">
+                              <PopoverContent className="w-auto p-0 z-50" align="start">
                                 <Calendar
                                   mode="single"
                                   selected={field.value}
