@@ -86,7 +86,6 @@ export function AddBookingDialog({
   const [isLoadingSettings, setIsLoadingSettings] = React.useState(false)
   const [activeField, setActiveField] = React.useState<string | null>(null)
   const [isPending, startTransition] = React.useTransition()
-  const [datePickerOpen, setDatePickerOpen] = React.useState(false)
   
   // Form refs
   const scrollContainerRef = React.useRef<HTMLDivElement>(null)
@@ -295,7 +294,6 @@ export function AddBookingDialog({
       setSearchQuery("")
       setCustomers([])
       setShowCustomerDropdown(false)
-      setDatePickerOpen(false)
       setActiveField(null)
     }
   }, [open, form])
@@ -423,7 +421,6 @@ export function AddBookingDialog({
               gap: 1.5rem !important;
             }
             .mobile-buttons > button {
-              display: block !important;
               width: 100% !important;
               margin: 0 !important;
             }
@@ -631,17 +628,12 @@ export function AddBookingDialog({
                               min={format(new Date(), 'yyyy-MM-dd')}
                             />
                           ) : (
-                            <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+                            <Popover>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
                                   className="mobile-input w-full justify-start text-left font-normal border-2 border-slate-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-200 bg-white hover:bg-slate-50"
                                   type="button"
-                                  onPointerDown={(e) => e.preventDefault()}
-                                  onClick={(e) => {
-                                    e.preventDefault()
-                                    setDatePickerOpen(!datePickerOpen)
-                                  }}
                                 >
                                   <CalendarIcon className="mobile-date-icon text-slate-400" />
                                   {field.value ? format(field.value, "PPP") : <span className="text-slate-400">Pick a date</span>}
@@ -653,7 +645,6 @@ export function AddBookingDialog({
                                   selected={field.value}
                                   onSelect={(date) => {
                                     field.onChange(date)
-                                    setDatePickerOpen(false)
                                   }}
                                   disabled={isDateDisabled}
                                   initialFocus
@@ -972,17 +963,12 @@ export function AddBookingDialog({
                               min={format(new Date(), 'yyyy-MM-dd')}
                             />
                           ) : (
-                            <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+                            <Popover>
                               <PopoverTrigger asChild>
                                 <Button
                                   variant="outline"
                                   className="w-full justify-start text-left font-normal h-10 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200 hover:bg-slate-50"
                                   type="button"
-                                  onPointerDown={(e) => e.preventDefault()}
-                                  onClick={(e) => {
-                                    e.preventDefault()
-                                    setDatePickerOpen(!datePickerOpen)
-                                  }}
                                 >
                                   <CalendarIcon className="mr-3 h-5 w-5 text-slate-400" />
                                   {field.value ? format(field.value, "PPP") : <span className="text-slate-400">Pick a date</span>}
@@ -994,7 +980,6 @@ export function AddBookingDialog({
                                   selected={field.value}
                                   onSelect={(date) => {
                                     field.onChange(date)
-                                    setDatePickerOpen(false)
                                   }}
                                   disabled={isDateDisabled}
                                   initialFocus
