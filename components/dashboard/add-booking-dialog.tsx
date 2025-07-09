@@ -153,10 +153,13 @@ export function AddBookingDialog({
       const loadSettings = async () => {
         setIsLoadingSettings(true)
         try {
+          console.log('🔄 Loading booking settings...')
           const settings = await getBookingSettingsAction()
+          console.log('✅ Booking settings loaded:', settings)
+          console.log('📅 Available times from database:', settings.available_times)
           setBookingSettings(settings)
         } catch (error) {
-          console.error('Error loading booking settings:', error)
+          console.error('❌ Error loading booking settings:', error)
           setBookingSettings({
             booking_enabled: true,
             max_advance_days: 30,
@@ -303,6 +306,16 @@ export function AddBookingDialog({
   // Get current settings
   const currentAvailableTimes = bookingSettings?.available_times || availableTimes
   const currentMaxPartySize = bookingSettings?.max_party_size || maxPartySize
+  
+  // Debug logging
+  React.useEffect(() => {
+    if (bookingSettings) {
+      console.log('🎯 Current available times being used:', currentAvailableTimes)
+      console.log('🏪 From database:', bookingSettings.available_times)
+      console.log('📦 Fallback times:', availableTimes)
+      console.log('📊 Times count - DB:', bookingSettings.available_times?.length || 0, 'Fallback:', availableTimes.length)
+    }
+  }, [bookingSettings, currentAvailableTimes, availableTimes])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -316,6 +329,14 @@ export function AddBookingDialog({
       </DialogTrigger>
       <DialogContent className="booking-dialog-mobile w-[95vw] max-w-4xl h-[90vh] max-h-none rounded-2xl border-0 bg-white shadow-2xl overflow-hidden">
         <style jsx>{`
+          /* Hide default DialogContent close button */
+          .booking-dialog-mobile [data-radix-dialog-close] {
+            display: none !important;
+          }
+          .booking-dialog-mobile button[aria-label="Close"] {
+            display: none !important;
+          }
+          
           @media (max-width: 768px) {
             .booking-dialog-mobile {
               position: fixed !important;
@@ -628,7 +649,7 @@ export function AddBookingDialog({
                                 <Button
                                   variant="outline"
                                   className="mobile-input w-full justify-start text-left font-normal border-2 border-slate-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-200 bg-white"
-                                  onClick={() => setDatePickerOpen(true)}
+                                  type="button"
                                   data-slot="trigger"
                                 >
                                   <CalendarIcon className="mobile-date-icon text-slate-400" />
@@ -672,11 +693,17 @@ export function AddBookingDialog({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {currentAvailableTimes.map((time) => (
-                              <SelectItem key={time} value={time} className="py-4 px-5 text-lg">
-                                {time}
+                            {currentAvailableTimes.length === 0 ? (
+                              <SelectItem value="no-times" disabled className="py-4 px-5 text-lg text-red-600">
+                                No time slots configured - Please set up service periods in Settings
                               </SelectItem>
-                            ))}
+                            ) : (
+                              currentAvailableTimes.map((time) => (
+                                <SelectItem key={time} value={time} className="py-4 px-5 text-lg">
+                                  {time}
+                                </SelectItem>
+                              ))
+                            )}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -959,10 +986,10 @@ export function AddBookingDialog({
                                 <Button
                                   variant="outline"
                                   className="w-full justify-start text-left font-normal h-10 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200"
-                                  onClick={() => setDatePickerOpen(true)}
+                                  type="button"
                                 >
                                   <CalendarIcon className="mr-3 h-5 w-5 text-slate-400" />
-                                  {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                                  {field.value ? format(field.value, "PPP") : <span className="text-slate-400">Pick a date</span>}
                                 </Button>
                               </PopoverTrigger>
                               <PopoverContent className="w-auto p-0">
@@ -1002,11 +1029,17 @@ export function AddBookingDialog({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {currentAvailableTimes.map((time) => (
-                              <SelectItem key={time} value={time} className="py-3 text-base">
-                                {time}
+                            {currentAvailableTimes.length === 0 ? (
+                              <SelectItem value="no-times" disabled className="py-3 text-base text-red-600">
+                                No time slots configured - Please set up service periods in Settings
                               </SelectItem>
-                            ))}
+                            ) : (
+                              currentAvailableTimes.map((time) => (
+                                <SelectItem key={time} value={time} className="py-3 text-base">
+                                  {time}
+                                </SelectItem>
+                              ))
+                            )}
                           </SelectContent>
                         </Select>
                         <FormMessage />
