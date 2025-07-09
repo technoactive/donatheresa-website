@@ -232,7 +232,7 @@ export function BookingForm() {
           Reserve Your <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent font-medium">Table</span>
         </h3>
         <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed px-4">
-          Complete the form below and we'll confirm your reservation within 2 hours. 
+          Complete the form below and your reservation will be confirmed instantly. 
           Our team is dedicated to making your dining experience exceptional.
         </p>
       </div>
@@ -249,7 +249,7 @@ export function BookingForm() {
               <div className="space-y-3 md:space-y-4">
                 <h4 className="text-2xl md:text-3xl font-semibold text-gray-900">{state?.message}</h4>
                 <p className="text-gray-600 max-w-md mx-auto text-sm md:text-base">
-                  We'll contact you shortly to confirm all the details of your reservation.
+                  Your reservation is confirmed! We'll contact you if we need to discuss any special requests.
                 </p>
               </div>
 
@@ -603,10 +603,10 @@ export function BookingForm() {
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg md:rounded-xl p-4 md:p-6 border border-blue-200">
           <div className="flex items-center justify-center gap-2 mb-2 md:mb-3">
             <CheckCircle className="w-4 md:w-5 h-4 md:h-5 text-blue-600" />
-            <span className="font-semibold text-blue-900 text-sm md:text-base">Confirmation Process</span>
+            <span className="font-semibold text-blue-900 text-sm md:text-base">Instant Confirmation</span>
           </div>
           <p className="text-blue-800 text-xs md:text-sm leading-relaxed">
-            Your reservation will be confirmed within 2 hours via phone. We'll review your requests 
+            Your reservation is confirmed automatically upon submission. We'll review your special requests 
             and ensure everything is perfectly arranged for your visit.
           </p>
         </div>

@@ -213,8 +213,8 @@ export async function createBooking(prevState: any, formData: FormData) {
     const formattedTime = format(bookingDateTime, localeSettings.time_format === 'HH:mm' ? 'HH:mm' : 'h:mm a')
     
     return {
-      message: `Booking request received for ${name}!`,
-      description: `Thank you, ${name}. We've received your request for ${partySize} ${partySize === 1 ? 'person' : 'people'} on ${formattedDate} at ${formattedTime}. ${email && email.includes('@') && !email.includes('phone-only.local') ? "You'll receive a confirmation email shortly." : "We'll confirm via phone."}`,
+      message: `Booking confirmed for ${name}!`,
+      description: `Thank you, ${name}. Your reservation for ${partySize} ${partySize === 1 ? 'person' : 'people'} on ${formattedDate} at ${formattedTime} is confirmed. ${email && email.includes('@') && !email.includes('phone-only.local') ? "You'll receive a confirmation email shortly." : "We'll contact you if we need to discuss any special requests."}`,
       success: true,
       bookingId: booking.id,
     }
