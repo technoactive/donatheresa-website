@@ -2,99 +2,14 @@
 
 import { BookingForm } from "@/components/public/booking-form"
 import { Button } from "@/components/ui/button"
-import Image from "next/image"
 import Link from "next/link"
-import { Calendar, Clock, Users, MapPin, Phone, Star, Heart, Utensils, Crown, CheckCircle, Award, Sparkles } from "lucide-react"
+import { Calendar, Clock, Users, Phone, Star, Heart, Utensils, Crown, Sparkles } from "lucide-react"
 
 export default function ReservePage() {
   return (
     <div className="bg-white min-h-screen">
-      {/* Hero Header Section */}
-      <section className="relative py-16 md:py-24 mt-16 md:mt-20 bg-gradient-to-b from-slate-50 via-white to-gray-50 overflow-hidden">
-        {/* Subtle background pattern */}
-        <div className="absolute inset-0 opacity-[0.02]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_rgba(59,130,246,0.5)_1px,_transparent_0)] bg-[length:24px_24px]" />
-        </div>
-        
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center relative z-10">
-          <div className="space-y-6 md:space-y-8">
-            {/* Elegant badge */}
-            <div className="inline-flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 bg-white/80 backdrop-blur-sm rounded-full border border-gray-200 shadow-sm">
-              <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
-              <span className="text-xs md:text-sm font-medium text-gray-700 tracking-wide uppercase">
-                Reserve Your Table
-              </span>
-              <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
-            </div>
-            
-            <div className="space-y-4 md:space-y-6">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-gray-900 leading-tight">
-                <span className="block">Book Your</span>
-                <span className="block mt-2 md:mt-0">
-                  <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent font-medium" style={{lineHeight: '1.2', paddingBottom: '0.1em'}}>
-                    Perfect Evening
-                  </span>
-                </span>
-              </h1>
-              
-              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4">
-                Experience London's most exquisite dining destination. Reserve your table now and let us create 
-                an unforgettable culinary journey just for you.
-              </p>
-            </div>
-
-            {/* Restaurant highlights */}
-            <div className="flex flex-wrap justify-center gap-3 md:gap-6 pt-6 md:pt-8 px-4">
-              <div className="flex items-center gap-2 text-gray-700 bg-white/60 backdrop-blur-sm px-3 md:px-4 py-2 rounded-full border border-gray-200">
-                <Heart className="w-3 md:w-4 h-3 md:h-4 text-amber-500" />
-                <span className="text-xs md:text-sm font-medium">Family Owned</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-700 bg-white/60 backdrop-blur-sm px-3 md:px-4 py-2 rounded-full border border-gray-200">
-                <Star className="w-3 md:w-4 h-3 md:h-4 text-amber-500" />
-                <span className="text-xs md:text-sm font-medium">4.9★ Rating</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-700 bg-white/60 backdrop-blur-sm px-3 md:px-4 py-2 rounded-full border border-gray-200">
-                <Sparkles className="w-3 md:w-4 h-3 md:h-4 text-amber-500" />
-                <span className="text-xs md:text-sm font-medium">Premium Service</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Information Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mt-12 md:mt-16 px-4">
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-gray-700 bg-white/80 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="w-8 md:w-10 h-8 md:h-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <MapPin className="w-4 md:w-5 h-4 md:h-5 text-amber-600" />
-              </div>
-              <div className="text-center sm:text-left">
-                <div className="text-xs md:text-sm text-gray-500">Location</div>
-                <div className="font-medium text-sm md:text-base">451 Uxbridge Rd, Pinner</div>
-              </div>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-gray-700 bg-white/80 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="w-8 md:w-10 h-8 md:h-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <Phone className="w-4 md:w-5 h-4 md:h-5 text-amber-600" />
-              </div>
-              <div className="text-center sm:text-left">
-                <div className="text-xs md:text-sm text-gray-500">Reservations</div>
-                <div className="font-medium text-sm md:text-base">020 8421 5550</div>
-              </div>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 text-gray-700 bg-white/80 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
-              <div className="w-8 md:w-10 h-8 md:h-10 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <Clock className="w-4 md:w-5 h-4 md:h-5 text-amber-600" />
-              </div>
-              <div className="text-center sm:text-left">
-                <div className="text-xs md:text-sm text-gray-500">Hours</div>
-                <div className="font-medium text-sm md:text-base">Tue-Sun 12:00-23:00</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Main Booking Form Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white">
+      <section className="pt-20 md:pt-24 pb-16 md:pb-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           {/* Enhanced form container */}
           <div className="bg-white rounded-2xl md:rounded-3xl shadow-xl shadow-gray-200/50 border border-gray-100 p-6 md:p-8 lg:p-12 relative overflow-hidden">
