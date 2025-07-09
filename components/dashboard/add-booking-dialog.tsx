@@ -426,11 +426,31 @@ export function AddBookingDialog({
             }
           }
           @media (min-width: 769px) {
+            .booking-dialog-mobile {
+              width: 90vw !important;
+              max-width: 1200px !important;
+              height: auto !important;
+              max-height: 90vh !important;
+              position: fixed !important;
+              top: 50% !important;
+              left: 50% !important;
+              transform: translate(-50%, -50%) !important;
+            }
             .mobile-layout {
               display: none !important;
             }
             .desktop-layout {
               display: grid !important;
+              grid-template-columns: 1fr 1fr !important;
+              gap: 2rem !important;
+            }
+            .mobile-header {
+              padding: 1.5rem !important;
+            }
+            .mobile-content {
+              padding: 1.5rem !important;
+              max-height: 70vh !important;
+              overflow-y: auto !important;
             }
           }
         `}</style>
@@ -777,7 +797,7 @@ export function AddBookingDialog({
               </div>
 
               {/* DESKTOP LAYOUT - Keep existing desktop code */}
-              <div className="desktop-layout grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="desktop-layout">
                 {/* Customer Information */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 pb-2 border-b border-slate-200">
