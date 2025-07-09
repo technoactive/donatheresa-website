@@ -26,6 +26,7 @@ interface BookingsTableProps {
   bookings: Booking[]
   isReadOnly?: boolean
   hideFilters?: boolean // Hide internal date filtering when controlled externally
+  customerFilter?: string // External customer filter value
 }
 
 const StatusBadge = React.memo(({ status }: { status: string }) => (
@@ -207,7 +208,7 @@ const MobileBookingCard = React.memo(({
   </Card>
 ))
 
-export const BookingsTable = React.memo(function BookingsTable({ bookings, isReadOnly = false, hideFilters = false }: BookingsTableProps) {
+export const BookingsTable = React.memo(function BookingsTable({ bookings, isReadOnly = false, hideFilters = false, customerFilter }: BookingsTableProps) {
   const [editingBooking, setEditingBooking] = React.useState<Booking | null>(null)
   const [filterValue, setFilterValue] = React.useState("")
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(new Date()) // Default to today
@@ -223,10 +224,11 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
   const filteredBookings = React.useMemo(() => {
     let filtered = bookings
 
-    // Filter by customer name
-    if (filterValue) {
+    // Filter by customer name (use external filter if provided, otherwise internal)
+    const activeFilter = customerFilter !== undefined ? customerFilter : filterValue
+    if (activeFilter) {
       filtered = filtered.filter(booking => 
-        booking.customerName.toLowerCase().includes(filterValue.toLowerCase())
+        booking.customerName.toLowerCase().includes(activeFilter.toLowerCase())
       )
     }
 
@@ -240,7 +242,7 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
 
     // Sort by booking time (earliest first)
     return filtered.sort((a, b) => new Date(a.bookingTime).getTime() - new Date(b.bookingTime).getTime())
-  }, [bookings, filterValue, selectedDate, hideFilters])
+  }, [bookings, customerFilter, filterValue, selectedDate, hideFilters])
 
   const handleEdit = React.useCallback((booking: Booking) => {
     setEditingBooking(booking)
@@ -329,8 +331,8 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
         </div>
       )}
 
-      {/* Simple customer name filter when date is controlled externally */}
-      {mounted && !isReadOnly && hideFilters && (
+      {/* Simple customer name filter when date is controlled externally and no external filter is provided */}
+      {mounted && !isReadOnly && hideFilters && customerFilter === undefined && (
         <div className="flex justify-center">
           <Input
             placeholder="Filter by customer name..."
@@ -359,15 +361,17 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
           <Card className="card-touch bg-white border-slate-200 shadow-sm">
             <CardContent className="p-6 text-center">
               <p className="text-slate-600">
-                {hideFilters ? 
-                  'No bookings found.' :
-                  selectedDate ? 
-                    `No bookings found for ${selectedDate.toLocaleDateString('en-GB', { 
-                      day: 'numeric', 
-                      month: 'long',
-                      year: 'numeric'
-                    })}.` :
-                    'No bookings found.'
+                {(customerFilter !== undefined ? customerFilter : filterValue) ? 
+                  'No bookings found matching your search.' :
+                  hideFilters ? 
+                    'No bookings found.' :
+                    selectedDate ? 
+                      `No bookings found for ${selectedDate.toLocaleDateString('en-GB', { 
+                        day: 'numeric', 
+                        month: 'long',
+                        year: 'numeric'
+                      })}.` :
+                      'No bookings found.'
                 }
               </p>
             </CardContent>
@@ -459,15 +463,17 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
               ) : (
                 <TableRow className="table-row border-slate-200 hover:bg-slate-50">
                   <TableCell colSpan={mounted && !isReadOnly ? 7 : 5} className="h-24 text-center table-cell text-slate-600">
-                    {hideFilters ? 
-                      'No bookings found.' :
-                      selectedDate ? 
-                        `No bookings found for ${selectedDate.toLocaleDateString('en-GB', { 
-                          day: 'numeric', 
-                          month: 'long',
-                          year: 'numeric'
-                        })}.` :
-                        'No bookings found.'
+                    {(customerFilter !== undefined ? customerFilter : filterValue) ? 
+                      'No bookings found matching your search.' :
+                      hideFilters ? 
+                        'No bookings found.' :
+                        selectedDate ? 
+                          `No bookings found for ${selectedDate.toLocaleDateString('en-GB', { 
+                            day: 'numeric', 
+                            month: 'long',
+                            year: 'numeric'
+                          })}.` :
+                          'No bookings found.'
                     }
                   </TableCell>
                 </TableRow>

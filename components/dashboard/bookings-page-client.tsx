@@ -6,6 +6,7 @@ import { DatePickerWithClear } from "@/components/dashboard/date-picker-with-cle
 import type { Booking } from "@/lib/types"
 import { Users, CalendarCheck, Clock, Users2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 
 // Helper function to check if two dates are the same day
 const isSameDay = (date1: Date, date2: Date) => {
@@ -126,6 +127,7 @@ function CompactDailyStats({ bookings, selectedDate }: { bookings: Booking[]; se
 export function BookingsPageClient({ bookings }: { bookings: Booking[] }) {
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(new Date()) // Default to today
   const [isClient, setIsClient] = React.useState(false)
+  const [customerFilter, setCustomerFilter] = React.useState("")
   
   React.useEffect(() => {
     setIsClient(true)
@@ -168,16 +170,29 @@ export function BookingsPageClient({ bookings }: { bookings: Booking[] }) {
 
       {/* All Bookings Table - Filtered by selected date */}
       <div className="bg-white rounded-lg border border-slate-200 shadow-sm">
+        {/* Header with customer filter inline - Mobile optimized */}
         <div className="px-4 py-3 border-b border-slate-200">
-          <h3 className="text-base font-medium text-slate-900">
-            {selectedDate && isSameDay(selectedDate, new Date()) ? 'Today\'s Bookings' : 'Bookings'}
-          </h3>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <h3 className="text-base font-medium text-slate-900">
+              {selectedDate && isSameDay(selectedDate, new Date()) ? 'Today\'s Bookings' : 'Bookings'}
+            </h3>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-slate-600 whitespace-nowrap hidden sm:inline">Filter:</span>
+              <Input
+                placeholder="Search customer name..."
+                value={customerFilter}
+                onChange={(e) => setCustomerFilter(e.target.value)}
+                className="w-full sm:w-64 md:w-72 bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>
+          </div>
         </div>
         <BookingsTable 
           bookings={selectedDate ? bookings.filter(booking => 
             isSameDay(new Date(booking.bookingTime), selectedDate)
           ) : bookings}
           hideFilters={true}
+          customerFilter={customerFilter}
         />
       </div>
     </div>
