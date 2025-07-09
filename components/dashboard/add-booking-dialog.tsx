@@ -93,6 +93,7 @@ interface BookingSettings {
 interface AddBookingDialogProps {
   availableTimes?: string[]
   maxPartySize?: number
+  children?: React.ReactNode // Custom trigger element
 }
 
 export function AddBookingDialog({ 
@@ -100,7 +101,8 @@ export function AddBookingDialog({
     "12:00", "12:30", "13:00", "13:30", "14:00", "14:30",
     "18:00", "18:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30"
   ],
-  maxPartySize = 8
+  maxPartySize = 8,
+  children
 }: AddBookingDialogProps) {
   const [open, setOpen] = React.useState(false)
   const [isPending, startTransition] = useTransition()
@@ -325,10 +327,12 @@ export function AddBookingDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-amber-600 hover:bg-amber-700 text-white shadow-sm transition-colors duration-200 font-medium">
-          <Plus className="w-4 h-4 mr-2" />
-          Add Booking
-        </Button>
+        {children || (
+          <Button className="bg-amber-600 hover:bg-amber-700 text-white shadow-sm transition-colors duration-200 font-medium">
+            <Plus className="w-4 h-4 mr-2" />
+            Add Booking
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className={`${iPadOpts.shouldUseIPadLayout ? 'max-w-5xl w-full h-[85vh] max-h-[600px]' : 'sm:max-w-[600px] max-h-[95vh]'} ${iPadOpts.containerClasses} overflow-hidden bg-white`}>
         {/* Sticky Header for iPad */}

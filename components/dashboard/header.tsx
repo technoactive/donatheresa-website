@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Menu, UtensilsCrossed, X, LogOut, User, Settings } from "lucide-react"
+import { Menu, UtensilsCrossed, X, LogOut, User, Settings, Plus } from "lucide-react"
 import { useState, useEffect } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/s
 import { NotificationCenter } from "@/components/notifications/notification-center"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { AddBookingDialog } from "@/components/dashboard/add-booking-dialog"
 import { createClient } from "@/lib/supabase/client"
 import { signOut } from "@/app/login/actions"
 
@@ -19,6 +20,11 @@ interface UserProfile {
   phone?: string
 }
 
+interface BookingSettings {
+  available_times?: string[]
+  max_party_size?: number
+}
+
 export function Header() {
   const pathname = usePathname()
   const router = useRouter()
@@ -26,6 +32,7 @@ export function Header() {
   const [isMounted, setIsMounted] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
+  const [bookingSettings, setBookingSettings] = useState<BookingSettings | null>(null)
   
   // Get current user and profile
   useEffect(() => {
@@ -46,6 +53,16 @@ export function Header() {
         if (profileData) {
           setProfile(profileData)
         }
+
+        // Get booking settings for Add Booking dialog
+        const { data: settingsData } = await supabase
+          .from('booking_settings')
+          .select('*')
+          .single()
+
+        if (settingsData) {
+          setBookingSettings(settingsData)
+        }
       }
     }
 
@@ -58,6 +75,7 @@ export function Header() {
         getUserAndProfile()
       } else {
         setProfile(null)
+        setBookingSettings(null)
       }
     })
     
@@ -216,6 +234,29 @@ export function Header() {
       </div>
       
       <div className="ml-auto flex items-center gap-2 relative z-10">
+        {/* Add Booking Button - Always visible */}
+        {isMounted && (
+          <div className="mr-2">
+            <AddBookingDialog
+              availableTimes={bookingSettings?.available_times}
+              maxPartySize={bookingSettings?.max_party_size}
+            >
+              <div className="flex">
+                {/* Desktop version - full button */}
+                <Button className="hidden sm:flex bg-green-600 hover:bg-green-700 text-white shadow-sm transition-colors duration-200 font-medium items-center gap-2">
+                  <Plus className="w-4 h-4" />
+                  <span>Add Booking</span>
+                </Button>
+                {/* Mobile version - just + icon */}
+                <Button size="icon" className="sm:hidden bg-green-600 hover:bg-green-700 text-white shadow-sm transition-colors duration-200">
+                  <Plus className="w-5 h-5" />
+                  <span className="sr-only">Add Booking</span>
+                </Button>
+              </div>
+            </AddBookingDialog>
+          </div>
+        )}
+        
         <NotificationCenter />
         
         {/* User Menu */}
