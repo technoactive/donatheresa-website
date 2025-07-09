@@ -368,29 +368,56 @@ export function AddBookingDialog({
               font-weight: 700 !important;
               border-radius: 1rem !important;
               width: 100% !important;
+              display: block !important;
               margin-bottom: 1rem !important;
             }
             .mobile-button:last-child {
               margin-bottom: 0 !important;
             }
             .mobile-button-icon {
-              width: 1.75rem !important;
-              height: 1.75rem !important;
+              width: 2rem !important;
+              height: 2rem !important;
               margin-right: 0.75rem !important;
             }
             .mobile-search-icon {
               width: 1.75rem !important;
               height: 1.75rem !important;
               position: absolute !important;
-              right: 1rem !important;
+              right: 1.25rem !important;
               top: 50% !important;
               transform: translateY(-50%) !important;
+            }
+            .mobile-date-icon {
+              width: 1.75rem !important;
+              height: 1.75rem !important;
+              margin-right: 0.75rem !important;
             }
             .mobile-layout {
               display: block !important;
             }
             .desktop-layout {
               display: none !important;
+            }
+            /* Force date picker button to be same height */
+            .mobile-layout button[data-slot="trigger"] {
+              height: 4rem !important;
+              font-size: 1.125rem !important;
+              padding: 1rem 1.25rem !important;
+              border-radius: 1rem !important;
+              border-width: 2px !important;
+              width: 100% !important;
+            }
+            /* Force proper button spacing */
+            .mobile-buttons {
+              padding-top: 2rem !important;
+            }
+            .mobile-buttons > button {
+              display: block !important;
+              width: 100% !important;
+              margin-bottom: 1rem !important;
+            }
+            .mobile-buttons > button:last-child {
+              margin-bottom: 0 !important;
             }
           }
           @media (min-width: 769px) {
@@ -405,12 +432,24 @@ export function AddBookingDialog({
 
         {/* Header */}
         <div className="mobile-header border-b border-slate-200 bg-white px-6 py-4">
-          <DialogTitle className="text-2xl font-bold text-slate-900">
-            Add Manual Booking
-          </DialogTitle>
-          <DialogDescription className="text-base text-slate-600 mt-2">
-            Create a new booking directly from the dashboard
-          </DialogDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <DialogTitle className="text-2xl font-bold text-slate-900">
+                Add Manual Booking
+              </DialogTitle>
+              <DialogDescription className="text-base text-slate-600 mt-2">
+                Create a new booking directly from the dashboard
+              </DialogDescription>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setOpen(false)}
+              className="h-12 w-12 p-0 hover:bg-slate-100 rounded-full"
+            >
+              <X className="h-6 w-6" />
+            </Button>
+          </div>
         </div>
 
         {/* Form Content */}
@@ -590,9 +629,10 @@ export function AddBookingDialog({
                                   variant="outline"
                                   className="mobile-input w-full justify-start text-left font-normal border-2 border-slate-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-200 bg-white"
                                   onClick={() => setDatePickerOpen(true)}
+                                  data-slot="trigger"
                                 >
-                                  <CalendarIcon className="mr-3 h-6 w-6 text-slate-400" />
-                                  {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                                  <CalendarIcon className="mobile-date-icon text-slate-400" />
+                                  {field.value ? format(field.value, "PPP") : <span className="text-slate-400">Pick a date</span>}
                                 </Button>
                               </PopoverTrigger>
                               <PopoverContent className="w-auto p-0">
@@ -699,7 +739,7 @@ export function AddBookingDialog({
                 </div>
 
                 {/* Mobile Buttons */}
-                <div className="pt-8">
+                <div className="mobile-buttons pt-8">
                   <Button 
                     type="submit" 
                     disabled={isPending}
