@@ -695,9 +695,331 @@ export function AddBookingDialog({
 
               {/* DESKTOP LAYOUT - Keep existing desktop code */}
               <div className="desktop-layout grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Your existing desktop form code would go here */}
-                <div className="p-4 text-center text-slate-600">
-                  Desktop layout - form fields would be here
+                {/* Customer Information */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 pb-2 border-b border-slate-200">
+                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                      <User className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-slate-900">
+                        Customer Information
+                      </h3>
+                      {selectedCustomer && (
+                        <Badge className="bg-green-50 text-green-700 border-green-200 mt-1 text-xs">
+                          <Check className="w-3 h-3 mr-1" />
+                          Existing Customer
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Customer Name */}
+                  <FormField
+                    control={form.control}
+                    name="customerName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-base font-semibold text-slate-800">
+                          Customer Name *
+                        </FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input 
+                              placeholder="Start typing customer name..."
+                              value={searchQuery}
+                              onChange={(e) => handleSearchChange(e.target.value)}
+                              onFocus={() => setActiveField('customerName')}
+                              className="h-10 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200 pr-12"
+                              autoComplete="off"
+                            />
+                            <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                            
+                            {/* Customer Dropdown */}
+                            {showCustomerDropdown && customers.length > 0 && (
+                              <div className="absolute z-50 w-full mt-2 bg-white border-2 border-slate-300 rounded-lg shadow-2xl max-h-60 overflow-y-auto">
+                                {customers.map((customer) => {
+                                  const segmentInfo = getCustomerSegmentInfo(customer.customer_segment)
+                                  const stats = formatCustomerStats(customer)
+                                  
+                                  return (
+                                    <button
+                                      key={customer.id}
+                                      type="button"
+                                      className="w-full px-4 py-3 text-left hover:bg-slate-50 border-b border-slate-200 last:border-b-0 transition-colors duration-200"
+                                      onClick={() => handleCustomerSelect(customer)}
+                                    >
+                                      <div className="flex items-start justify-between">
+                                        <div className="flex-1 min-w-0">
+                                          <div className="flex items-center gap-2 mb-1">
+                                            <div className="font-semibold text-slate-900 text-sm truncate">{customer.name}</div>
+                                            <Badge variant="outline" className={`text-xs ${segmentInfo.color}`}>
+                                              {segmentInfo.label}
+                                            </Badge>
+                                          </div>
+                                          <div className="text-xs text-slate-600 truncate mb-1">{customer.email}</div>
+                                          {customer.phone && (
+                                            <div className="text-xs text-slate-500 truncate mb-1">{customer.phone}</div>
+                                          )}
+                                          <div className="flex items-center gap-3 text-xs text-slate-500">
+                                            <span>{stats.totalBookings} bookings</span>
+                                            {stats.hasRecentActivity && <span>• Recent: {stats.recentBookings}</span>}
+                                            <span>• Last: {stats.lastBooking}</span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </button>
+                                  )
+                                })}
+                              </div>
+                            )}
+                            
+                            {/* Loading state */}
+                            {isSearching && (
+                              <div className="absolute z-50 w-full mt-2 bg-white border-2 border-slate-300 rounded-lg shadow-2xl p-3">
+                                <div className="text-slate-600 text-center text-sm">Searching customers...</div>
+                              </div>
+                            )}
+                            
+                            {/* No results */}
+                            {showCustomerDropdown && !isSearching && customers.length === 0 && searchQuery.length >= 2 && (
+                              <div className="absolute z-50 w-full mt-2 bg-white border-2 border-slate-300 rounded-lg shadow-2xl p-3">
+                                <div className="text-slate-600 text-center text-sm">No customers found - will create new</div>
+                              </div>
+                            )}
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Email */}
+                  <FormField
+                    control={form.control}
+                    name="customerEmail"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-base font-semibold text-slate-800">
+                          Email Address *
+                        </FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="email" 
+                            placeholder="customer@example.com" 
+                            onFocus={() => setActiveField('customerEmail')}
+                            className="h-10 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e)
+                              handleEmailChange(e.target.value)
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Phone */}
+                  <FormField
+                    control={form.control}
+                    name="customerPhone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-base font-semibold text-slate-800">
+                          Phone Number
+                        </FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="tel"
+                            placeholder="Optional phone number" 
+                            onFocus={() => setActiveField('customerPhone')}
+                            className="h-10 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200"
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Booking Details */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 pb-2 border-b border-slate-200">
+                    <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                      <CalendarIcon className="w-5 h-5 text-orange-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-slate-900">
+                        Booking Details
+                      </h3>
+                    </div>
+                  </div>
+                  
+                  {/* Date */}
+                  <FormField
+                    control={form.control}
+                    name="date"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-base font-semibold text-slate-800">
+                          Booking Date *
+                        </FormLabel>
+                        <FormControl>
+                          {isIOS ? (
+                            <Input
+                              type="date"
+                              value={field.value ? format(field.value, 'yyyy-MM-dd') : ''}
+                              onChange={(e) => {
+                                const date = e.target.value ? new Date(e.target.value) : null
+                                field.onChange(date)
+                              }}
+                              className="h-10 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200"
+                              min={format(new Date(), 'yyyy-MM-dd')}
+                            />
+                          ) : (
+                            <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+                              <PopoverTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="w-full justify-start text-left font-normal h-10 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200"
+                                  onClick={() => setDatePickerOpen(true)}
+                                >
+                                  <CalendarIcon className="mr-3 h-5 w-5 text-slate-400" />
+                                  {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
+                                </Button>
+                              </PopoverTrigger>
+                              <PopoverContent className="w-auto p-0">
+                                <Calendar
+                                  mode="single"
+                                  selected={field.value}
+                                  onSelect={(date) => {
+                                    field.onChange(date)
+                                    setDatePickerOpen(false)
+                                  }}
+                                  disabled={isDateDisabled}
+                                  initialFocus
+                                />
+                              </PopoverContent>
+                            </Popover>
+                          )}
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Time */}
+                  <FormField
+                    control={form.control}
+                    name="time"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-base font-semibold text-slate-800">
+                          Booking Time *
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-10 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200">
+                              <Clock className="mr-3 h-5 w-5 text-slate-400" />
+                              <SelectValue placeholder="Select time" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {currentAvailableTimes.map((time) => (
+                              <SelectItem key={time} value={time} className="py-3 text-base">
+                                {time}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Party Size */}
+                  <FormField
+                    control={form.control}
+                    name="partySize"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-base font-semibold text-slate-800">
+                          Party Size *
+                        </FormLabel>
+                        <FormControl>
+                          <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2">
+                              <Users className="h-5 w-5 text-slate-400" />
+                              <Input
+                                type="number"
+                                min="1"
+                                max={currentMaxPartySize}
+                                {...field}
+                                onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
+                                className="w-24 text-center h-10 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200"
+                                onFocus={() => setActiveField('partySize')}
+                              />
+                            </div>
+                            <span className="text-base text-slate-500">guests</span>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Special Requests */}
+                  <FormField
+                    control={form.control}
+                    name="specialRequests"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-base font-semibold text-slate-800">
+                          Special Requests
+                        </FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Any special requests or notes..."
+                            className="resize-none h-20 text-sm px-3 py-2 rounded-lg border-2 border-slate-300 focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200"
+                            rows={3}
+                            onFocus={() => setActiveField('specialRequests')}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Desktop Buttons */}
+                <div className="col-span-2 flex flex-row gap-4 justify-end pt-6 border-t border-slate-200">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setOpen(false)}
+                    disabled={isPending}
+                    className="h-10 px-6 text-sm rounded-lg font-semibold transition-all duration-200 active:scale-95 min-w-[120px]"
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    type="submit" 
+                    disabled={isPending}
+                    className="h-10 px-6 text-sm rounded-lg font-semibold transition-all duration-200 active:scale-95 bg-green-600 hover:bg-green-700 text-white shadow-lg min-w-[140px]"
+                  >
+                    {isPending ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Creating...
+                      </>
+                    ) : (
+                      "Create Booking"
+                    )}
+                  </Button>
                 </div>
               </div>
             </form>
