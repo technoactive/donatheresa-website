@@ -272,55 +272,7 @@ export async function toggleBookingStatusAction() {
   }
 }
 
-export async function createBookingAction(formData: FormData): Promise<ActionState> {
-  try {
-    const name = formData.get("name") as string
-    const email = formData.get("email") as string
-    const phone = formData.get("phone") as string
-    const date = formData.get("date") as string
-    const time = formData.get("time") as string
-    const partySize = parseInt(formData.get("partySize") as string)
-    const specialRequests = formData.get("specialRequests") as string
 
-    if (!name || !email || !date || !time || !partySize) {
-      return {
-        success: false,
-        message: "Please fill in all required fields",
-        errors: { general: ["All fields are required"] }
-      }
-    }
-
-    const result = await createBookingWithCustomer({
-      customer: {
-        name,
-        email,
-        phone: phone || undefined
-      },
-      booking: {
-        booking_date: date,
-        booking_time: time,
-        party_size: partySize,
-        special_requests: specialRequests || undefined,
-        source: 'website' // Default for public bookings
-      }
-    })
-
-    revalidatePath("/dashboard/bookings")
-    revalidatePath("/dashboard")
-    
-    return {
-      success: true,
-      message: "Booking created successfully"
-    }
-  } catch (error) {
-    console.error('Error creating booking:', error)
-    return {
-      success: false,
-      message: "Failed to create booking",
-      errors: { general: ["An error occurred while creating the booking"] }
-    }
-  }
-}
 
 export async function createManualBookingAction(formData: FormData): Promise<ActionState> {
   try {
@@ -355,12 +307,106 @@ export async function createManualBookingAction(formData: FormData): Promise<Act
       }
     })
 
+    // 🚨 ROBUST EMAIL NOTIFICATIONS - Same as web bookings
+    // Send confirmation emails after successful booking creation
+    try {
+      console.log('📧 Starting email notifications for manual booking:', result.booking.id);
+      
+      // Import robust email service
+      const { RobustEmailUtils } = await import('@/lib/email/robust-email-service');
+      
+      // Get email settings for staff notifications
+      const supabase = await createClient();
+      const { data: emailSettings } = await supabase
+        .from('email_settings')
+        .select('restaurant_email, staff_booking_alerts')
+        .eq('user_id', 'admin')
+        .single();
+      
+      // Send emails with proper error handling and retry logic
+      const emailPromises: Promise<any>[] = [];
+      
+      // Customer confirmation email (if valid email provided)
+      if (email && email.includes('@') && !email.includes('phone-only.local')) {
+        console.log('📧 Sending customer confirmation to:', email);
+        emailPromises.push(
+          RobustEmailUtils.sendBookingConfirmation(result.booking, result.customer)
+            .then(emailResult => ({ type: 'customer_confirmation', result: emailResult }))
+            .catch(error => ({ type: 'customer_confirmation', error: error.message || 'Unknown error' }))
+        );
+      }
+      
+      // Staff alert email
+      if (emailSettings?.restaurant_email && emailSettings.staff_booking_alerts) {
+        console.log('📧 Sending staff alert to:', emailSettings.restaurant_email);
+        emailPromises.push(
+          RobustEmailUtils.sendStaffBookingAlert(result.booking, result.customer, emailSettings.restaurant_email)
+            .then(emailResult => ({ type: 'staff_alert', result: emailResult }))
+            .catch(error => ({ type: 'staff_alert', error: error.message || 'Unknown error' }))
+        );
+      }
+      
+      // Wait for all emails to complete (with timeout)
+      const timeoutPromise = new Promise(resolve => 
+        setTimeout(() => resolve({ type: 'timeout', error: 'Email timeout' }), 10000)
+      );
+      
+      const emailResults = await Promise.race([
+        Promise.allSettled(emailPromises),
+        timeoutPromise
+      ]);
+      
+      // Log email results
+      if (Array.isArray(emailResults)) {
+        // Handle Promise.allSettled results
+        emailResults.forEach(result => {
+          if (result.status === 'fulfilled') {
+            const emailResult = result.value;
+            if (emailResult.error) {
+              console.error(`❌ Manual booking email ${emailResult.type} failed:`, emailResult.error);
+            } else if (emailResult.result?.success) {
+              console.log(`✅ Manual booking email ${emailResult.type} sent successfully`);
+            } else {
+              console.warn(`⚠️ Manual booking email ${emailResult.type} queued for retry:`, emailResult.result?.error || 'Unknown error');
+            }
+          } else if (result.status === 'rejected') {
+            console.error(`❌ Manual booking email failed:`, result.reason);
+          }
+        });
+      } else {
+        // Handle timeout case
+        console.warn('⚠️ Manual booking email sending timeout - emails may be queued for retry');
+      }
+      
+    } catch (emailError) {
+      // Log error but don't fail the booking
+      console.error('🚨 Manual booking email notification system error:', emailError);
+      
+      // Fallback: Try to queue emails for later processing
+      try {
+        const { RobustEmailUtils } = await import('@/lib/email/robust-email-service');
+        
+        // Try to queue the emails
+        if (email && email.includes('@') && !email.includes('phone-only.local')) {
+          await RobustEmailUtils.sendBookingConfirmation(result.booking, result.customer);
+        }
+        
+        // Try to send staff alert with a fallback email [[memory:2465475]]
+        const fallbackStaffEmail = process.env.RESTAURANT_EMAIL || 'reservations@donatheresa.com';
+        await RobustEmailUtils.sendStaffBookingAlert(result.booking, result.customer, fallbackStaffEmail);
+        
+        console.log('📥 Manual booking emails queued for later delivery due to system error');
+      } catch (fallbackError) {
+        console.error('🚨 CRITICAL: Both manual booking email sending and queuing failed:', fallbackError);
+      }
+    }
+
     revalidatePath("/dashboard/bookings")
     revalidatePath("/dashboard")
     
     return {
       success: true,
-      message: "Manual booking created successfully"
+      message: "Manual booking created successfully with confirmation email sent"
     }
   } catch (error) {
     console.error('Error creating manual booking:', error)

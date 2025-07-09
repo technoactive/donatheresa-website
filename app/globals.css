@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import iPad optimizations */
+@import '../styles/ipad-optimized.css';
+
 /* Force white background for light theme */
 html {
   background-color: #ffffff !important;

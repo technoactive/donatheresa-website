@@ -1,0 +1,270 @@
+/* iPad-Optimized Styles for Booking Forms */
+
+/* iPad Detection and Base Styles */
+@media screen and (min-width: 768px) and (max-width: 1366px) and (orientation: landscape) {
+  .ipad-optimized {
+    /* Ensure forms fit when keyboard is visible */
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  
+  /* Larger touch targets for iPad */
+  .ipad-touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 16px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Input field optimizations */
+  .ipad-input {
+    height: 48px;
+    font-size: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    transition: all 0.2s ease;
+  }
+  
+  .ipad-input:focus {
+    border-color: #d97706;
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+    outline: none;
+  }
+  
+  /* Button optimizations */
+  .ipad-button {
+    height: 48px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    min-width: 120px;
+  }
+  
+  .ipad-button-primary {
+    background: #d97706;
+    color: white;
+    border: none;
+  }
+  
+  .ipad-button-primary:hover {
+    background: #b45309;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+  }
+  
+  .ipad-button-secondary {
+    background: white;
+    color: #374151;
+    border: 2px solid #e5e7eb;
+  }
+  
+  .ipad-button-secondary:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+  }
+  
+  /* Layout optimizations */
+  .ipad-two-column {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    min-height: 400px;
+  }
+  
+  .ipad-form-section {
+    padding: 24px;
+    background: #fafafa;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .ipad-form-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 24px;
+  }
+  
+  .ipad-form-header h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+  }
+  
+  /* Select and dropdown optimizations */
+  .ipad-select {
+    height: 48px;
+    font-size: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    background: white;
+    cursor: pointer;
+  }
+  
+  .ipad-select:focus {
+    border-color: #d97706;
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+  }
+  
+  /* Textarea optimizations */
+  .ipad-textarea {
+    min-height: 80px;
+    font-size: 16px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    resize: vertical;
+    font-family: inherit;
+  }
+  
+  .ipad-textarea:focus {
+    border-color: #d97706;
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.1);
+    outline: none;
+  }
+  
+  /* Modal optimizations for iPad */
+  .ipad-modal {
+    width: 90vw;
+    max-width: 1200px;
+    height: 85vh;
+    max-height: 700px;
+    border-radius: 16px;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  .ipad-modal-header {
+    padding: 24px 32px;
+    border-bottom: 1px solid #e5e7eb;
+    background: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .ipad-modal-content {
+    padding: 32px;
+    flex: 1;
+    overflow-y: auto;
+    height: calc(100% - 160px); /* Account for header and footer */
+  }
+  
+  .ipad-modal-footer {
+    padding: 24px 32px;
+    border-top: 1px solid #e5e7eb;
+    background: white;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+  }
+  
+  /* Customer search dropdown */
+  .ipad-customer-dropdown {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ipad-customer-item {
+    padding: 16px;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .ipad-customer-item:hover {
+    background: #f9fafb;
+  }
+  
+  .ipad-customer-item:last-child {
+    border-bottom: none;
+  }
+  
+  /* Loading states */
+  .ipad-loading {
+    padding: 24px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 16px;
+  }
+  
+  /* Spacing optimizations */
+  .ipad-spacing-sm { margin-bottom: 12px; }
+  .ipad-spacing-md { margin-bottom: 16px; }
+  .ipad-spacing-lg { margin-bottom: 24px; }
+  .ipad-spacing-xl { margin-bottom: 32px; }
+  
+  /* Grid responsive for iPad */
+  .ipad-grid-responsive {
+    display: grid;
+    gap: 16px;
+  }
+  
+  .ipad-grid-responsive.cols-1 { grid-template-columns: 1fr; }
+  .ipad-grid-responsive.cols-2 { grid-template-columns: 1fr 1fr; }
+  .ipad-grid-responsive.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+/* Portrait mode adjustments */
+@media screen and (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+  .ipad-optimized {
+    max-height: 70vh;
+  }
+  
+  .ipad-two-column {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  .ipad-modal {
+    width: 95vw;
+    height: 90vh;
+  }
+}
+
+/* Keyboard visible state management */
+@supports (height: 100dvh) {
+  .ipad-modal-content {
+    height: calc(100dvh - 160px);
+  }
+}
+
+/* Accessibility improvements for iPad */
+.ipad-focus-ring:focus {
+  outline: 3px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Animation optimizations for iPad */
+.ipad-smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom scrollbars for iPad */
+.ipad-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.ipad-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.ipad-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.ipad-scroll::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+} 

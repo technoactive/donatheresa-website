@@ -478,7 +478,7 @@ export const RobustEmailUtils = {
 
   async sendStaffBookingAlert(booking: any, customer: any, staffEmail: string): Promise<EmailResult> {
     return robustEmailService.sendEmailRobust({
-      templateKey: 'staff_new_booking',
+      templateKey: 'staff_booking_alert',
       recipientEmail: staffEmail,
       recipientName: 'Restaurant Staff',
       bookingId: booking.id,
@@ -496,6 +496,7 @@ export const RobustEmailUtils = {
         totalBookings: customer.total_bookings || 0,
         bookingSource: booking.source || 'website',
         createdAt: new Date().toLocaleString('en-GB'),
+        guestText: (Number(booking.party_size) === 1) ? 'guest' : 'guests',
       }
     });
   },
