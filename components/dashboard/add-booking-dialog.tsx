@@ -343,6 +343,24 @@ export function AddBookingDialog({
               padding: 1rem 1.25rem !important;
               border-radius: 1rem !important;
               border-width: 2px !important;
+              width: 100% !important;
+            }
+            .mobile-input-number {
+              height: 4rem !important;
+              font-size: 1.125rem !important;
+              padding: 1rem 1.25rem !important;
+              border-radius: 1rem !important;
+              border-width: 2px !important;
+              width: 8rem !important;
+              text-align: center !important;
+            }
+            .mobile-textarea {
+              height: 8rem !important;
+              font-size: 1.125rem !important;
+              padding: 1rem 1.25rem !important;
+              border-radius: 1rem !important;
+              border-width: 2px !important;
+              width: 100% !important;
             }
             .mobile-button {
               height: 4rem !important;
@@ -350,6 +368,23 @@ export function AddBookingDialog({
               font-weight: 700 !important;
               border-radius: 1rem !important;
               width: 100% !important;
+              margin-bottom: 1rem !important;
+            }
+            .mobile-button:last-child {
+              margin-bottom: 0 !important;
+            }
+            .mobile-button-icon {
+              width: 1.75rem !important;
+              height: 1.75rem !important;
+              margin-right: 0.75rem !important;
+            }
+            .mobile-search-icon {
+              width: 1.75rem !important;
+              height: 1.75rem !important;
+              position: absolute !important;
+              right: 1rem !important;
+              top: 50% !important;
+              transform: translateY(-50%) !important;
             }
             .mobile-layout {
               display: block !important;
@@ -414,10 +449,10 @@ export function AddBookingDialog({
                               value={searchQuery}
                               onChange={(e) => handleSearchChange(e.target.value)}
                               onFocus={() => setActiveField('customerName')}
-                              className="mobile-input border-2 border-slate-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-200 pr-16 bg-white"
+                              className="mobile-input border-2 border-slate-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-200 bg-white"
                               autoComplete="off"
                             />
-                            <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-6 h-6" />
+                            <Search className="mobile-search-icon text-slate-400" />
                             
                             {/* Customer Dropdown */}
                             {showCustomerDropdown && customers.length > 0 && (
@@ -628,7 +663,7 @@ export function AddBookingDialog({
                                 max={currentMaxPartySize}
                                 {...field}
                                 onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
-                                className="w-32 h-16 text-center text-xl font-semibold rounded-2xl border-2 border-slate-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-200 bg-white"
+                                className="mobile-input-number border-2 border-slate-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-200 bg-white"
                                 onFocus={() => setActiveField('partySize')}
                               />
                             </div>
@@ -652,8 +687,7 @@ export function AddBookingDialog({
                         <FormControl>
                           <Textarea
                             placeholder="Any special dietary requirements, celebrations, or seating preferences..."
-                            className="resize-none h-32 text-lg px-5 py-4 rounded-2xl border-2 border-slate-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-200 bg-white"
-                            rows={4}
+                            className="mobile-textarea border-2 border-slate-200 focus:border-green-500 focus:ring-4 focus:ring-green-100 transition-all duration-200 bg-white resize-none"
                             onFocus={() => setActiveField('specialRequests')}
                             {...field}
                           />
@@ -665,7 +699,7 @@ export function AddBookingDialog({
                 </div>
 
                 {/* Mobile Buttons */}
-                <div className="pt-8 space-y-4">
+                <div className="pt-8">
                   <Button 
                     type="submit" 
                     disabled={isPending}
@@ -675,7 +709,7 @@ export function AddBookingDialog({
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
                     ) : (
                       <>
-                        <Check className="w-6 h-6 mr-3" />
+                        <Check className="mobile-button-icon" />
                         Create Booking
                       </>
                     )}
@@ -687,7 +721,7 @@ export function AddBookingDialog({
                     disabled={isPending}
                     className="mobile-button border-2 border-slate-300 hover:border-red-300 hover:bg-red-50 hover:text-red-600 transition-all duration-300 active:scale-95"
                   >
-                    <X className="w-6 h-6 mr-3" />
+                    <X className="mobile-button-icon" />
                     Cancel
                   </Button>
                 </div>
