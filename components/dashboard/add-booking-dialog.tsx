@@ -153,13 +153,10 @@ export function AddBookingDialog({
       const loadSettings = async () => {
         setIsLoadingSettings(true)
         try {
-          console.log('🔄 Loading booking settings...')
           const settings = await getBookingSettingsAction()
-          console.log('✅ Booking settings loaded:', settings)
-          console.log('📅 Available times from database:', settings.available_times)
           setBookingSettings(settings)
         } catch (error) {
-          console.error('❌ Error loading booking settings:', error)
+          console.error('Error loading booking settings:', error)
           setBookingSettings({
             booking_enabled: true,
             max_advance_days: 30,
@@ -306,16 +303,6 @@ export function AddBookingDialog({
   // Get current settings
   const currentAvailableTimes = bookingSettings?.available_times || availableTimes
   const currentMaxPartySize = bookingSettings?.max_party_size || maxPartySize
-  
-  // Debug logging
-  React.useEffect(() => {
-    if (bookingSettings) {
-      console.log('🎯 Current available times being used:', currentAvailableTimes)
-      console.log('🏪 From database:', bookingSettings.available_times)
-      console.log('📦 Fallback times:', availableTimes)
-      console.log('📊 Times count - DB:', bookingSettings.available_times?.length || 0, 'Fallback:', availableTimes.length)
-    }
-  }, [bookingSettings, currentAvailableTimes, availableTimes])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
