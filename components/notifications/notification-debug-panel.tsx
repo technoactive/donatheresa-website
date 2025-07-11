@@ -61,10 +61,9 @@ export function NotificationDebugPanel() {
   const testSound = async () => {
     setLastTest('🔊 Testing sound...')
     try {
-      const audio = new Audio('/sounds/new-booking.mp3')
-      audio.volume = 0.3
-      await audio.play()
-      setLastTest('✅ Sound played')
+      const { playNotificationSound } = await import('@/lib/notification-sounds')
+      await playNotificationSound('new_booking', 0.3)
+      setLastTest('✅ Sound played successfully!')
     } catch (error) {
       setLastTest('❌ Sound failed: ' + (error instanceof Error ? error.message : String(error)))
     }
