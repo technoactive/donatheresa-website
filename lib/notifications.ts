@@ -192,6 +192,7 @@ export class NotificationManager {
 
   private async loadSettings(): Promise<void> {
     try {
+      console.log('📱 Loading notification settings...');
       const supabase = createClient()
       const { data, error } = await supabase
         .from('notification_settings')
@@ -200,10 +201,26 @@ export class NotificationManager {
         .single()
 
       if (error) {
-        console.error('Error loading notification settings:', error)
-        // Use default settings if database fetch fails
-        this.settings = this.getDefaultSettings()
+        console.error('❌ Error loading notification settings:', error)
+        console.log('📝 Creating default notification settings...');
+        
+        // Try to create default settings if they don't exist
+        const defaultSettings = this.getDefaultSettings();
+        const { data: newSettings, error: insertError } = await supabase
+          .from('notification_settings')
+          .insert([{ user_id: 'admin', ...defaultSettings }])
+          .select()
+          .single();
+        
+        if (insertError) {
+          console.error('❌ Failed to create default settings:', insertError);
+          this.settings = defaultSettings;
+        } else {
+          console.log('✅ Created default notification settings');
+          this.settings = newSettings;
+        }
       } else {
+        console.log('✅ Notification settings loaded successfully');
         this.settings = data
       }
 
@@ -213,8 +230,17 @@ export class NotificationManager {
           listener(this.settings)
         }
       })
+      
+      console.log('📊 Current notification settings:', {
+        enabled: this.settings?.notifications_enabled,
+        sound: this.settings?.sound_enabled,
+        toasts: this.settings?.show_toasts,
+        newBooking: this.settings?.new_booking_enabled
+      });
+      
     } catch (error) {
-      console.error('Error in loadSettings:', error)
+      console.error('💥 Error in loadSettings:', error)
+      console.log('🔄 Falling back to default settings');
       this.settings = this.getDefaultSettings()
     }
   }
@@ -515,8 +541,13 @@ export function createBookingNotification(
     title,
     message: `${customerName} - ${partySize} guests on ${bookingTime}`,
     priority: 'high',
-    customerName,
-    bookingId,
+    dismissed: false,
+    data: {
+      customerName,
+      bookingId,
+      bookingTime,
+      partySize
+    },
     actionUrl: `/dashboard/bookings?highlight=${bookingId}`
   }
 }
@@ -531,8 +562,12 @@ export function createCancellationNotification(
     title: 'Booking Cancelled',
     message: `${customerName}'s reservation for ${bookingTime} has been cancelled`,
     priority: 'high',
-    customerName,
-    bookingId,
+    dismissed: false,
+    data: {
+      customerName,
+      bookingId,
+      bookingTime
+    },
     actionUrl: `/dashboard/bookings`
   }
 }
@@ -546,7 +581,8 @@ export function createSystemAlertNotification(
     type: 'system_alert',
     title,
     message,
-    priority
+    priority,
+    dismissed: false
   }
 }
 

@@ -32,7 +32,14 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
 
   // Load settings and subscribe to changes
   useEffect(() => {
+    console.log('🎛️ Setting up notification settings subscription...');
+    
     const unsubscribeSettings = notificationManager.onSettingsChange((newSettings) => {
+      console.log('📊 Notification settings updated:', {
+        enabled: newSettings.notifications_enabled,
+        sound: newSettings.sound_enabled,
+        toasts: newSettings.show_toasts
+      });
       setSettings(newSettings)
     })
 
@@ -41,33 +48,54 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
 
   // Subscribe to notifications
   useEffect(() => {
+    console.log('🔔 Setting up notification subscription...');
+    
     const unsubscribeNotifications = notificationManager.subscribe((newNotifications) => {
+      console.log('📥 Notifications updated:', newNotifications.length, 'total');
+      console.log('📬 Unread notifications:', newNotifications.filter(n => !n.read).length);
       setNotifications(newNotifications)
     })
 
     // Initial load
-    setNotifications(notificationManager.getNotifications())
+    const initialNotifications = notificationManager.getNotifications();
+    console.log('🔄 Loading initial notifications:', initialNotifications.length);
+    setNotifications(initialNotifications)
 
     return unsubscribeNotifications
   }, [])
 
+  // Log state changes
+  useEffect(() => {
+    console.log('📈 Notification provider state:', {
+      totalNotifications: notifications.length,
+      unreadCount,
+      settingsLoaded: settings !== null,
+      centerOpen: isNotificationCenterOpen
+    });
+  }, [notifications, unreadCount, settings, isNotificationCenterOpen]);
+
   const markAsRead = useCallback((id: string) => {
+    console.log('✅ Provider marking as read:', id);
     notificationManager.markAsRead(id)
   }, [])
 
   const markAllAsRead = useCallback(() => {
+    console.log('✅ Provider marking all as read');
     notificationManager.markAllAsRead()
   }, [])
 
   const dismissNotification = useCallback((id: string) => {
+    console.log('❌ Provider dismissing notification:', id);
     notificationManager.dismissNotification(id)
   }, [])
 
   const clearAll = useCallback(() => {
+    console.log('🗑️ Provider clearing all notifications');
     notificationManager.clearAll()
   }, [])
 
   const refreshSettings = useCallback(async () => {
+    console.log('🔄 Provider refreshing settings...');
     await notificationManager.refreshSettings()
   }, [])
 
@@ -83,6 +111,12 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
     isNotificationCenterOpen,
     setNotificationCenterOpen,
   }
+
+  console.log('🎛️ Notification provider rendering with:', {
+    notifications: notifications.length,
+    unread: unreadCount,
+    hasSettings: !!settings
+  });
 
   return (
     <NotificationContext.Provider value={value}>
