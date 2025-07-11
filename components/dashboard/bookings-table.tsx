@@ -82,9 +82,9 @@ const StatusActionButtons = React.memo(({
         size="sm"
         onClick={() => onStatusChange(booking.id, "confirmed")}
         disabled={isPending}
-        className="touch-target btn-touch bg-green-600 hover:bg-green-700 text-white w-[6rem]"
+        className="touch-target btn-touch bg-green-600 hover:bg-green-700 text-white min-w-[6.5rem] h-10" // Added h-10 for 40px height
       >
-        <CheckIcon className="w-4 h-4 mr-1" />
+        <CheckIcon className="w-5 h-5 mr-1" /> {/* Increased icon size */}
         Accept
       </Button>
     )}
@@ -94,9 +94,9 @@ const StatusActionButtons = React.memo(({
         variant="outline"
         onClick={() => onStatusChange(booking.id, "pending")}
         disabled={isPending}
-        className="touch-target btn-touch border-yellow-400 text-yellow-600 hover:bg-yellow-50 bg-white w-[6rem]"
+        className="touch-target btn-touch border-yellow-400 text-yellow-600 hover:bg-yellow-50 bg-white min-w-[6.5rem] h-10" // Added h-10
       >
-        <ClockIcon className="w-4 h-4 mr-1" />
+        <ClockIcon className="w-5 h-5 mr-1" /> {/* Increased icon size */}
         Pending
       </Button>
     )}
@@ -106,9 +106,9 @@ const StatusActionButtons = React.memo(({
         variant="outline"
         onClick={() => onStatusChange(booking.id, "cancelled")}
         disabled={isPending}
-        className="touch-target btn-touch border-red-400 text-red-600 hover:bg-red-50 bg-white w-[6rem]"
+        className="touch-target btn-touch border-red-400 text-red-600 hover:bg-red-50 bg-white min-w-[6.5rem] h-10" // Added h-10
       >
-        <Cross2Icon className="w-4 h-4 mr-1" />
+        <Cross2Icon className="w-5 h-5 mr-1" /> {/* Increased icon size */}
         Cancel
       </Button>
     )}
@@ -171,7 +171,7 @@ const MobileBookingCard = React.memo(({
       
       {/* Right side - Action buttons */}
       {!isReadOnly && (
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2"> {/* Increased gap from gap-1 to gap-2 */}
           {/* Accept button - show if not confirmed */}
           {booking.status !== "confirmed" && (
             <Button
@@ -179,10 +179,10 @@ const MobileBookingCard = React.memo(({
               variant="ghost"
               onClick={() => onStatusChange(booking.id, "confirmed")}
               disabled={isPending}
-              className="h-8 w-8 text-green-600 hover:bg-green-50"
+              className="h-11 w-11 text-green-600 hover:bg-green-50" // Increased from h-8 w-8 to h-11 w-11 (44px)
               title="Accept booking"
             >
-              <CheckIcon className="h-4 w-4" />
+              <CheckIcon className="h-5 w-5" /> {/* Increased icon size */}
             </Button>
           )}
           
@@ -193,10 +193,10 @@ const MobileBookingCard = React.memo(({
               variant="ghost"
               onClick={() => onStatusChange(booking.id, "pending")}
               disabled={isPending}
-              className="h-8 w-8 text-yellow-600 hover:bg-yellow-50"
+              className="h-11 w-11 text-yellow-600 hover:bg-yellow-50" // Increased from h-8 w-8 to h-11 w-11 (44px)
               title="Set to pending"
             >
-              <ClockIcon className="h-4 w-4" />
+              <ClockIcon className="h-5 w-5" /> {/* Increased icon size */}
             </Button>
           )}
           
@@ -207,10 +207,10 @@ const MobileBookingCard = React.memo(({
               variant="ghost"
               onClick={() => onStatusChange(booking.id, "cancelled")}
               disabled={isPending}
-              className="h-8 w-8 text-red-600 hover:bg-red-50"
+              className="h-11 w-11 text-red-600 hover:bg-red-50" // Increased from h-8 w-8 to h-11 w-11 (44px)
               title="Cancel booking"
             >
-              <Cross2Icon className="h-4 w-4" />
+              <Cross2Icon className="h-5 w-5" /> {/* Increased icon size */}
             </Button>
           )}
           
@@ -219,10 +219,10 @@ const MobileBookingCard = React.memo(({
             size="icon"
             variant="ghost"
             onClick={() => onEdit(booking)}
-            className="h-8 w-8 text-slate-600 hover:bg-slate-50"
+            className="h-11 w-11 text-slate-600 hover:bg-slate-50" // Increased from h-8 w-8 to h-11 w-11 (44px)
             title="Edit booking"
           >
-            <Pencil2Icon className="h-4 w-4" />
+            <Pencil2Icon className="h-5 w-5" /> {/* Increased icon size */}
           </Button>
         </div>
       )}
@@ -446,33 +446,33 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                     </TableCell>
                     {mounted && !isReadOnly && (
                       <TableCell className="text-right py-2">
-                        <div className="flex justify-end gap-1">
+                        <div className="flex justify-end gap-2"> {/* Increased gap */}
                           {booking.status !== "confirmed" && (
                             <Button
                               size="sm"
                               variant="ghost"
                               onClick={() => handleStatusChange(booking.id, "confirmed")}
                               disabled={isPending}
-                              className="h-7 px-2 text-green-600 hover:bg-green-50"
+                              className="h-10 w-10 p-0 text-green-600 hover:bg-green-50" // Changed to square icon button
                             >
-                              <CheckIcon className="h-3 w-3" />
+                              <CheckIcon className="h-4 w-4" />
                             </Button>
                           )}
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
-                                <DotsHorizontalIcon className="h-3 w-3" />
+                              <Button variant="ghost" size="sm" className="h-10 w-10 p-0"> {/* Increased size */}
+                                <DotsHorizontalIcon className="h-4 w-4" />
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-32">
-                              <DropdownMenuItem onClick={() => handleEdit(booking)} className="text-sm">
+                              <DropdownMenuItem onClick={() => handleEdit(booking)} className="text-sm py-2"> {/* Added padding */}
                                 <Pencil2Icon className="mr-2 h-3 w-3" />
                                 Edit
                               </DropdownMenuItem>
                               {booking.status !== "cancelled" && (
                                 <DropdownMenuItem 
                                   onClick={() => handleStatusChange(booking.id, "cancelled")} 
-                                  className="text-sm text-red-600"
+                                  className="text-sm text-red-600 py-2" // Added padding
                                 >
                                   <Cross2Icon className="mr-2 h-3 w-3" />
                                   Cancel

@@ -32,8 +32,13 @@ export function DatePickerWithClear({ date, setDate, className = "" }: DatePicke
         </PopoverContent>
       </Popover>
       {date && (
-        <Button variant="ghost" size="icon" onClick={() => setDate(undefined)}>
-          <X className="h-4 w-4" />
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={() => setDate(undefined)}
+          className="h-10 w-10 md:h-9 md:w-9" // 40px on mobile/tablet, 36px on desktop
+        >
+          <X className="h-5 w-5 md:h-4 md:w-4" /> {/* Larger icon on mobile */}
           <span className="sr-only">Clear date</span>
         </Button>
       )}
