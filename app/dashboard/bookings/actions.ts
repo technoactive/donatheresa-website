@@ -130,14 +130,22 @@ export async function updateBookingStatusAction(bookingId: string, status: "pend
       return { error: "Booking not found." }
     }
 
-    // Send email notification if status changed to cancelled (fire and forget)
+    // Send email notification based on status change (fire and forget)
     try {
-      if (status === 'cancelled' && bookingWithCustomer?.customers) {
+      if (bookingWithCustomer?.customers) {
         const { RobustEmailUtils } = await import('@/lib/email/robust-email-service');
-        await RobustEmailUtils.sendBookingCancellation(updatedBooking, bookingWithCustomer.customers);
+        
+        if (status === 'cancelled') {
+          console.log('📧 Sending cancellation email for booking:', bookingId);
+          await RobustEmailUtils.sendBookingCancellation(updatedBooking, bookingWithCustomer.customers);
+        } else if (status === 'confirmed') {
+          console.log('📧 Sending confirmation email for booking:', bookingId);
+          await RobustEmailUtils.sendBookingConfirmation(updatedBooking, bookingWithCustomer.customers);
+        }
+        console.log('✅ Email sent successfully for status:', status);
       }
     } catch (emailError) {
-      console.error('Email notification failed:', emailError);
+      console.error('❌ Email notification failed for status', status, ':', emailError);
     }
 
     revalidatePath("/dashboard/bookings")
