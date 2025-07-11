@@ -350,13 +350,20 @@ export class NotificationManager {
   }
 
   private isNotificationAllowed(type: NotificationType): boolean {
+    console.log('🔍 Checking if notification allowed for type:', type);
+    console.log('🔍 Settings loaded:', !!this.settings);
+    
     if (!this.settings || !this.settings.notifications_enabled) {
+      console.log('❌ Notifications disabled globally or no settings');
       return false
     }
 
     // Check if this notification type is enabled
     const typeEnabled = this.settings[`${type}_enabled` as keyof NotificationSettings] as boolean
+    console.log(`🔍 ${type}_enabled setting:`, typeEnabled);
+    
     if (!typeEnabled) {
+      console.log('❌ Notification type disabled in settings');
       return false
     }
 
@@ -367,11 +374,15 @@ export class NotificationManager {
       const businessStart = this.settings.business_hours_start
       const businessEnd = this.settings.business_hours_end
       
+      console.log('🔍 Business hours check:', { currentTime, businessStart, businessEnd });
+      
       if (currentTime < businessStart || currentTime > businessEnd) {
+        console.log('❌ Outside business hours');
         return false
       }
     }
 
+    console.log('✅ Notification allowed');
     return true
   }
 
@@ -432,8 +443,11 @@ export class NotificationManager {
   }
 
   public addNotification(notification: Omit<Notification, 'id' | 'timestamp' | 'read'>): boolean {
+    console.log('📝 Adding notification:', notification.type, notification.title);
+    
     // Check if notifications are allowed for this type
     if (!this.isNotificationAllowed(notification.type)) {
+      console.log('❌ Notification blocked by settings for type:', notification.type);
       return false
     }
 
@@ -445,6 +459,13 @@ export class NotificationManager {
       priority: this.getNotificationPriority(notification.type)
     }
 
+    console.log('✅ Creating notification:', {
+      id: newNotification.id,
+      type: newNotification.type,
+      title: newNotification.title,
+      priority: newNotification.priority
+    });
+
     this.notifications.unshift(newNotification)
 
     // Limit notifications based on settings
@@ -453,6 +474,8 @@ export class NotificationManager {
       this.notifications = this.notifications.slice(0, maxNotifications)
     }
 
+    console.log('📊 Total notifications now:', this.notifications.length);
+    
     this.notifyListeners()
 
     // Auto-mark as read after delay (unless it's critical and persistence is enabled)

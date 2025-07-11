@@ -82,31 +82,23 @@ export const playNotificationSound = async (type: NotificationSoundType, volume:
   const config = soundConfigs[type]
   if (!config) return
 
+  console.log(`🔊 Attempting to play sound for ${type}`)
+
+  // Skip file loading and go straight to fallback for now
+  // (since we know files don't exist)
   try {
-    // Try to play the audio file first
-    const audio = new Audio(config.file)
-    audio.volume = Math.min(Math.max(volume, 0), 1) // Clamp volume between 0 and 1
+    console.log(`🔄 Using fallback sound for ${type}`)
+    await config.fallback()
+    console.log(`✅ Played fallback sound for ${type}`)
+  } catch (fallbackError) {
+    console.warn(`❌ Failed to play fallback sound for ${type}:`, fallbackError)
     
-    await new Promise((resolve, reject) => {
-      audio.oncanplaythrough = () => {
-        audio.play().then(resolve).catch(reject)
-      }
-      audio.onerror = reject
-      
-      // Timeout after 1 second to fallback
-      setTimeout(() => reject(new Error('Audio load timeout')), 1000)
-    })
-    
-    console.log(`🔊 Played sound file for ${type}`)
-  } catch (error) {
-    console.log(`🔄 Sound file failed for ${type}, using fallback`)
-    
-    // Use fallback sound generator
+    // Last resort: simple beep
     try {
-      await config.fallback()
-      console.log(`🔊 Played fallback sound for ${type}`)
-    } catch (fallbackError) {
-      console.warn(`❌ Failed to play fallback sound for ${type}:`, fallbackError)
+      await generateBeep(800, 0.3, volume)
+      console.log(`🔔 Played simple beep as last resort`)
+    } catch (finalError) {
+      console.warn(`❌ All sound methods failed:`, finalError)
     }
   }
 }

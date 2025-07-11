@@ -40,7 +40,21 @@ export function NotificationDebugPanel() {
     }
     
     const wasAdded = notificationManager.addNotification(testNotif)
-    setLastTest(wasAdded ? '✅ Test notification created' : '❌ Notification blocked')
+    setLastTest(wasAdded ? '✅ Test notification created! Check notification center (🔔)' : '❌ Notification blocked')
+  }
+
+  // Test silent notification (no sound)
+  const testSilentNotification = () => {
+    const testNotif = {
+      type: 'system_alert' as const,
+      title: '🔕 Silent Test',
+      message: 'Silent notification test - no sound should play',
+      priority: 'medium' as const,
+      dismissed: false
+    }
+    
+    const wasAdded = notificationManager.addNotification(testNotif)
+    setLastTest(wasAdded ? '✅ Silent notification created! Look for notification badge 🔔' : '❌ Silent notification blocked')
   }
 
   // Test sound
@@ -60,14 +74,18 @@ export function NotificationDebugPanel() {
   const checkPermissions = async () => {
     if ('Notification' in window) {
       const permission = Notification.permission
-      setLastTest(`Browser notifications: ${permission}`)
       
-      if (permission === 'default') {
+      if (permission === 'denied') {
+        setLastTest('🚫 Browser notifications denied (but in-app notifications still work!)')
+      } else if (permission === 'granted') {
+        setLastTest('✅ Browser notifications allowed')
+      } else {
+        setLastTest('⚠️ Browser notifications not set - requesting...')
         const result = await Notification.requestPermission()
-        setLastTest(`Permission requested: ${result}`)
+        setLastTest(`Permission result: ${result === 'granted' ? '✅ Granted' : result === 'denied' ? '🚫 Denied (in-app still works!)' : '⚠️ Default'}`)
       }
     } else {
-      setLastTest('❌ Browser notifications not supported')
+      setLastTest('❌ Browser notifications not supported (in-app notifications still work!)')
     }
   }
 
@@ -114,6 +132,9 @@ export function NotificationDebugPanel() {
           </Button>
           <Button onClick={testNotification} variant="outline" size="sm">
             Test Notification
+          </Button>
+          <Button onClick={testSilentNotification} variant="outline" size="sm">
+            Test Silent
           </Button>
           <Button onClick={testSound} variant="outline" size="sm">
             Test Sound
