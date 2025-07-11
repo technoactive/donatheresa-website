@@ -66,55 +66,6 @@ const isSameDay = (date1: Date, date2: Date) => {
          date1.getFullYear() === date2.getFullYear()
 }
 
-// Status Action Buttons Component for iPad-friendly status changes
-const StatusActionButtons = React.memo(({ 
-  booking, 
-  onStatusChange, 
-  isPending 
-}: {
-  booking: Booking
-  onStatusChange: (bookingId: string, status: "pending" | "confirmed" | "cancelled") => void
-  isPending: boolean
-}) => (
-  <div className="flex flex-wrap gap-2 touch-spacing">
-    {booking.status !== "confirmed" && (
-      <Button
-        size="sm"
-        onClick={() => onStatusChange(booking.id, "confirmed")}
-        disabled={isPending}
-        className="touch-target btn-touch bg-green-600 hover:bg-green-700 text-white min-w-[6.5rem] h-10" // Added h-10 for 40px height
-      >
-        <CheckIcon className="w-5 h-5 mr-1" /> {/* Increased icon size */}
-        Accept
-      </Button>
-    )}
-    {booking.status !== "pending" && (
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={() => onStatusChange(booking.id, "pending")}
-        disabled={isPending}
-        className="touch-target btn-touch border-yellow-400 text-yellow-600 hover:bg-yellow-50 bg-white min-w-[6.5rem] h-10" // Added h-10
-      >
-        <ClockIcon className="w-5 h-5 mr-1" /> {/* Increased icon size */}
-        Pending
-      </Button>
-    )}
-    {booking.status !== "cancelled" && (
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={() => onStatusChange(booking.id, "cancelled")}
-        disabled={isPending}
-        className="touch-target btn-touch border-red-400 text-red-600 hover:bg-red-50 bg-white min-w-[6.5rem] h-10" // Added h-10
-      >
-        <Cross2Icon className="w-5 h-5 mr-1" /> {/* Increased icon size */}
-        Cancel
-      </Button>
-    )}
-  </div>
-))
-
 // Mobile card component for individual bookings - COMPACT DESIGN
 const MobileBookingCard = React.memo(({ 
   booking, 
@@ -453,15 +404,15 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                               variant="ghost"
                               onClick={() => handleStatusChange(booking.id, "confirmed")}
                               disabled={isPending}
-                              className="h-10 w-10 p-0 text-green-600 hover:bg-green-50" // Changed to square icon button
+                              className="h-11 w-11 p-0 text-green-600 hover:bg-green-50" // Increased to 44px like mobile
                             >
-                              <CheckIcon className="h-4 w-4" />
+                              <CheckIcon className="h-5 w-5" /> {/* Larger icon */}
                             </Button>
                           )}
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm" className="h-10 w-10 p-0"> {/* Increased size */}
-                                <DotsHorizontalIcon className="h-4 w-4" />
+                              <Button variant="ghost" size="sm" className="h-11 w-11 p-0"> {/* Increased to 44px */}
+                                <DotsHorizontalIcon className="h-5 w-5" /> {/* Larger icon */}
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-32">
@@ -499,109 +450,129 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
       
       {/* Desktop view - Full table for large screens */}
       <div className="hidden lg:block"> {/* Changed from md:block to lg:block */}
-        <div className="rounded-md border border-slate-200 bg-white shadow-sm overflow-x-auto scroll-area-touch">
-          <div className="overflow-x-auto w-full">
-            <Table className="table-touch">
-              <TableHeader>
-                <TableRow className="table-row border-slate-200 hover:bg-slate-50">
-                  <TableHead className="min-w-[200px] table-cell text-slate-700">Customer</TableHead>
-                  <TableHead className="min-w-[100px] table-cell text-slate-700">Status</TableHead>
-                  <TableHead className="min-w-[80px] table-cell text-slate-700">Source</TableHead>
-                  <TableHead className="text-right min-w-[140px] table-cell text-slate-700">Booking Time</TableHead>
-                  <TableHead className="text-center min-w-[100px] table-cell text-slate-700">Party Size</TableHead>
-                  {mounted && !isReadOnly && <TableHead className="text-center min-w-[200px] table-cell text-slate-700">Quick Actions</TableHead>}
-                  {mounted && !isReadOnly && <TableHead className="text-center min-w-[80px] table-cell text-slate-700">More</TableHead>}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredBookings.length ? (
-                  filteredBookings.map((booking) => (
-                    <TableRow key={booking.id} className="table-row border-slate-200 hover:bg-slate-50">
-                      <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
-                        <div className="font-medium text-slate-900">{booking.customerName}</div>
-                        <div className="text-sm text-slate-600">{booking.customerEmail}</div>
-                      </TableCell>
-                      <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
-                        <div className="badge-touch">
-                          <StatusBadge status={booking.status} />
-                        </div>
-                      </TableCell>
-                      <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
-                        <div className="badge-touch">
-                          <SourceBadge source={booking.source} />
-                        </div>
-                      </TableCell>
-                      <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
-                        <div className="font-medium text-slate-900">
-                          {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
-                            day: 'numeric', 
-                            month: 'short',
-                            year: 'numeric'
-                          })}
-                        </div>
-                        <div className="text-sm text-slate-600">
-                          {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
-                            hour: '2-digit', 
-                            minute: '2-digit'
-                          })}
-                        </div>
-                      </TableCell>
-                      <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
-                        <div className="font-medium min-w-[100px] table-cell text-slate-900">
-                          {booking.partySize}
-                        </div>
-                      </TableCell>
-                      {mounted && !isReadOnly && (
-                        <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
-                          <StatusActionButtons 
-                            booking={booking} 
-                            onStatusChange={handleStatusChange} 
-                            isPending={isPending} 
-                          />
-                        </TableCell>
-                      )}
-                      {mounted && !isReadOnly && (
-                        <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" className="h-8 w-8 p-0 touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
-                                <span className="sr-only">Open menu</span>
-                                <DotsHorizontalIcon className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="touch-spacing bg-white border-slate-200">
-                              <DropdownMenuLabel className="text-slate-900">More Actions</DropdownMenuLabel>
-                              <DropdownMenuItem onClick={() => handleEdit(booking)} className="touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
-                                <Pencil2Icon className="mr-2 h-4 w-4" />
-                                Edit Details
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      )}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow className="table-row border-slate-200 hover:bg-slate-50">
-                    <TableCell colSpan={mounted && !isReadOnly ? 7 : 5} className="h-24 text-center table-cell text-slate-600">
-                      {(customerFilter !== undefined ? customerFilter : filterValue) ? 
-                        'No bookings found matching your search.' :
-                        hideFilters ? 
-                          'No bookings found.' :
-                          selectedDate ? 
-                            `No bookings found for ${selectedDate.toLocaleDateString('en-GB', { 
-                              day: 'numeric', 
-                              month: 'long',
-                              year: 'numeric'
-                            })}.` :
-                            'No bookings found.'
-                      }
+        <div className="rounded-md border border-slate-200 bg-white shadow-sm">
+          <Table className="table-touch">
+            <TableHeader>
+              <TableRow className="table-row border-slate-200 hover:bg-slate-50">
+                <TableHead className="text-slate-700">Customer</TableHead>
+                <TableHead className="text-slate-700">Status</TableHead>
+                <TableHead className="text-slate-700">Source</TableHead>
+                <TableHead className="text-right text-slate-700">Booking Time</TableHead>
+                <TableHead className="text-center text-slate-700">Party Size</TableHead>
+                {mounted && !isReadOnly && <TableHead className="text-right text-slate-700">Actions</TableHead>}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredBookings.length ? (
+                filteredBookings.map((booking) => (
+                  <TableRow key={booking.id} className="table-row border-slate-200 hover:bg-slate-50">
+                    <TableCell>
+                      <div className="font-medium text-slate-900">{booking.customerName}</div>
+                      <div className="text-sm text-slate-600">{booking.customerEmail}</div>
                     </TableCell>
+                    <TableCell>
+                      <StatusBadge status={booking.status} />
+                    </TableCell>
+                    <TableCell>
+                      <SourceBadge source={booking.source} />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="font-medium text-slate-900">
+                        {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
+                          day: 'numeric', 
+                          month: 'short',
+                          year: 'numeric'
+                        })}
+                      </div>
+                      <div className="text-sm text-slate-600">
+                        {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
+                          hour: '2-digit', 
+                          minute: '2-digit'
+                        })}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <div className="font-medium text-slate-900">
+                        {booking.partySize}
+                      </div>
+                    </TableCell>
+                    {mounted && !isReadOnly && (
+                      <TableCell className="text-right">
+                        <div className="flex justify-end items-center gap-2">
+                          {/* Same icon buttons as mobile/tablet */}
+                          {booking.status !== "confirmed" && (
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => handleStatusChange(booking.id, "confirmed")}
+                              disabled={isPending}
+                              className="h-11 w-11 text-green-600 hover:bg-green-50"
+                              title="Accept booking"
+                            >
+                              <CheckIcon className="h-5 w-5" />
+                            </Button>
+                          )}
+                          
+                          {booking.status !== "pending" && (
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => handleStatusChange(booking.id, "pending")}
+                              disabled={isPending}
+                              className="h-11 w-11 text-yellow-600 hover:bg-yellow-50"
+                              title="Set to pending"
+                            >
+                              <ClockIcon className="h-5 w-5" />
+                            </Button>
+                          )}
+                          
+                          {booking.status !== "cancelled" && (
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => handleStatusChange(booking.id, "cancelled")}
+                              disabled={isPending}
+                              className="h-11 w-11 text-red-600 hover:bg-red-50"
+                              title="Cancel booking"
+                            >
+                              <Cross2Icon className="h-5 w-5" />
+                            </Button>
+                          )}
+                          
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => handleEdit(booking)}
+                            className="h-11 w-11 text-slate-600 hover:bg-slate-50"
+                            title="Edit booking"
+                          >
+                            <Pencil2Icon className="h-5 w-5" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    )}
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
+                ))
+              ) : (
+                <TableRow className="table-row border-slate-200 hover:bg-slate-50">
+                  <TableCell colSpan={mounted && !isReadOnly ? 6 : 5} className="h-24 text-center table-cell text-slate-600">
+                    {(customerFilter !== undefined ? customerFilter : filterValue) ? 
+                      'No bookings found matching your search.' :
+                      hideFilters ? 
+                        'No bookings found.' :
+                        selectedDate ? 
+                          `No bookings found for ${selectedDate.toLocaleDateString('en-GB', { 
+                            day: 'numeric', 
+                            month: 'long',
+                            year: 'numeric'
+                          })}.` :
+                          'No bookings found.'
+                    }
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </div>
       </div>
       
