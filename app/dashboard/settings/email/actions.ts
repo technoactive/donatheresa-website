@@ -20,6 +20,42 @@ export interface EmailAnalyticsResponse {
 }
 
 /**
+ * Get current daily email usage with automatic reset
+ */
+export async function getDailyEmailUsage(): Promise<{ dailyUsage: number; dailyLimit: number; error?: string }> {
+  try {
+    const supabase = await createClient();
+    
+    // First reset the counter if it's a new day
+    await supabase.rpc('reset_daily_email_count');
+    
+    // Get current usage and limit
+    const { data: settings, error } = await supabase
+      .from('email_settings')
+      .select('emails_sent_today, max_daily_emails')
+      .eq('user_id', 'admin')
+      .single();
+
+    if (error) {
+      console.error('Failed to get daily email usage:', error);
+      return { dailyUsage: 0, dailyLimit: 1000, error: error.message };
+    }
+
+    return {
+      dailyUsage: settings?.emails_sent_today || 0,
+      dailyLimit: settings?.max_daily_emails || 1000
+    };
+  } catch (error) {
+    console.error('Error fetching daily email usage:', error);
+    return { 
+      dailyUsage: 0, 
+      dailyLimit: 1000, 
+      error: error instanceof Error ? error.message : 'Unknown error' 
+    };
+  }
+}
+
+/**
  * Get current email settings
  */
 export async function getEmailSettings(): Promise<EmailSettingsResponse> {
@@ -114,6 +150,9 @@ export async function getEmailAnalytics(days: number = 30): Promise<EmailAnalyti
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 
+    // Get accurate daily usage first
+    const dailyUsageResult = await getDailyEmailUsage();
+
     // Get email logs for analytics
     const { data: logs, error } = await supabase
       .from('email_logs')
@@ -127,7 +166,7 @@ export async function getEmailAnalytics(days: number = 30): Promise<EmailAnalyti
     }
 
     if (!logs || logs.length === 0) {
-      // Return empty analytics
+      // Return analytics with accurate daily usage even if no logs
       return {
         data: {
           totalSent: 0,
@@ -142,7 +181,10 @@ export async function getEmailAnalytics(days: number = 30): Promise<EmailAnalyti
           bounceRate: 0,
           dailyStats: [],
           templateStats: [],
-          recentEmails: []
+          recentEmails: [],
+          // Add current daily usage info
+          currentDailyUsage: dailyUsageResult.dailyUsage,
+          currentDailyLimit: dailyUsageResult.dailyLimit
         },
         error: null
       };
@@ -248,7 +290,7 @@ export async function getEmailAnalytics(days: number = 30): Promise<EmailAnalyti
 
     const templateStats = Array.from(templateStatsMap.values()).sort((a, b) => b.sent - a.sent);
 
-    const analytics: EmailAnalytics = {
+    const analytics: EmailAnalytics & { currentDailyUsage?: number; currentDailyLimit?: number } = {
       totalSent,
       totalDelivered,
       totalOpened,
@@ -261,7 +303,10 @@ export async function getEmailAnalytics(days: number = 30): Promise<EmailAnalyti
       bounceRate,
       dailyStats,
       templateStats,
-      recentEmails: logs.slice(0, 10) as any[]
+      recentEmails: logs.slice(0, 10) as any[],
+      // Add accurate daily usage
+      currentDailyUsage: dailyUsageResult.dailyUsage,
+      currentDailyLimit: dailyUsageResult.dailyLimit
     };
 
     return { data: analytics, error: null };

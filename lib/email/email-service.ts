@@ -239,13 +239,73 @@ class EmailService {
   }
 
   /**
+   * Update daily email count after successful send
+   */
+  private async updateDailyEmailCount(): Promise<void> {
+    try {
+      const supabase = await createClient();
+      
+      // Manually increment the email count
+      // First reset count if it's a new day, then increment
+      await supabase.rpc('reset_daily_email_count');
+      
+      // Get current count and increment it
+      const { data: currentSettings, error: selectError } = await supabase
+        .from('email_settings')
+        .select('emails_sent_today')
+        .eq('user_id', 'admin')
+        .single();
+      
+      if (selectError) {
+        console.error('Failed to get current email count:', selectError);
+        return;
+      }
+      
+      const newCount = (currentSettings?.emails_sent_today || 0) + 1;
+      
+      const { error } = await supabase
+        .from('email_settings')
+        .update({ emails_sent_today: newCount })
+        .eq('user_id', 'admin');
+      
+      if (error) {
+        console.error('Failed to update daily email count:', error);
+      }
+    } catch (error) {
+      console.error('Error updating daily email count:', error);
+    }
+  }
+
+  /**
    * Check if within daily email limit
    */
   private async checkDailyLimit(): Promise<boolean> {
-    const settings = await this.getEmailSettings();
-    if (!settings) return false;
-
-    return settings.emails_sent_today < settings.max_daily_emails;
+    try {
+      const supabase = await createClient();
+      
+      // Reset count if it's a new day
+      await supabase.rpc('reset_daily_email_count');
+      
+      // Get current counts
+      const { data, error } = await supabase
+        .from('email_settings')
+        .select('emails_sent_today, max_daily_emails')
+        .eq('user_id', 'admin')
+        .single();
+      
+      if (error) {
+        console.error('Failed to check daily email limit:', error);
+        return false;
+      }
+      
+      const currentCount = data?.emails_sent_today || 0;
+      const maxCount = data?.max_daily_emails || 1000;
+      
+      return currentCount < maxCount;
+    } catch (error) {
+      console.error('Error checking daily email limit:', error);
+      return false;
+    }
   }
 
   /**
@@ -354,6 +414,9 @@ class EmailService {
           last_used_at: new Date().toISOString()
         })
         .eq('template_key', params.templateKey);
+
+      // Update daily email count after successful send
+      await this.updateDailyEmailCount();
 
       return {
         success: true,
