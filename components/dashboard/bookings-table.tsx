@@ -33,7 +33,7 @@ const StatusBadge = React.memo(({ status }: { status: string }) => (
   <Badge
     variant={status === "confirmed" ? "default" : status === "pending" ? "outline" : "destructive"}
     className={cn(
-      "capitalize",
+      "capitalize text-xs", // Added text-xs for smaller badge
       status === "confirmed" &&
         "bg-green-100 text-green-800 border-green-200",
       status === "pending" &&
@@ -115,7 +115,7 @@ const StatusActionButtons = React.memo(({
   </div>
 ))
 
-// Mobile card component for individual bookings
+// Mobile card component for individual bookings - COMPACT DESIGN
 const MobileBookingCard = React.memo(({ 
   booking, 
   onEdit, 
@@ -131,81 +131,84 @@ const MobileBookingCard = React.memo(({
   isReadOnly: boolean
   isPending: boolean
 }) => (
-  <Card className="w-full mobile-card-touch card-touch swipe-indicator bg-white border-slate-200 shadow-sm">
-    <CardContent className="p-4 space-y-4">
-      {/* Header with name and status */}
-      <div className="flex items-start justify-between">
-        <div className="space-y-1 flex-1 min-w-0">
-          <h3 className="font-semibold text-base leading-tight text-slate-900">{booking.customerName}</h3>
-          <p className="text-sm text-slate-600 truncate">{booking.customerEmail}</p>
-        </div>
-        <div className="space-y-2 badge-touch">
-          <StatusBadge status={booking.status} />
-          <SourceBadge source={booking.source} />
-        </div>
-      </div>
-      
-      {/* Booking details */}
-      <div className="grid grid-cols-2 gap-4 text-sm touch-spacing">
-        <div>
-          <p className="text-slate-600">Date</p>
-          <p className="font-medium text-slate-900">
-            {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
-              day: 'numeric', 
-              month: 'short',
-              year: 'numeric'
-            })}
-          </p>
-        </div>
-        <div>
-          <p className="text-slate-600">Time</p>
-          <p className="font-medium text-slate-900">
+  <div className="w-full bg-white border border-slate-200 rounded-lg shadow-sm p-3 hover:shadow-md transition-shadow">
+    {/* Compact single row layout */}
+    <div className="flex items-center justify-between gap-3">
+      {/* Left side - Customer info and time */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-baseline gap-2 flex-wrap">
+          <h4 className="font-medium text-sm text-slate-900 truncate">{booking.customerName}</h4>
+          <span className="text-xs text-slate-600">
             {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
               hour: '2-digit', 
               minute: '2-digit'
             })}
-          </p>
+          </span>
+          <span className="text-xs text-slate-600">• {booking.partySize} guests</span>
         </div>
-        <div className="col-span-2">
-          <p className="text-slate-600">Party Size</p>
-          <p className="font-medium text-slate-900">{booking.partySize} guests</p>
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-xs text-slate-500">
+            {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
+              day: 'numeric', 
+              month: 'short'
+            })}
+          </span>
+          <StatusBadge status={booking.status} />
         </div>
       </div>
-
-      {/* Direct Status Action Buttons for iPad */}
+      
+      {/* Right side - Actions */}
       {!isReadOnly && (
-        <div className="space-y-3">
-          <div>
-            <p className="text-sm text-slate-600 mb-2">Quick Actions</p>
-            <StatusActionButtons 
-              booking={booking} 
-              onStatusChange={onStatusChange} 
-              isPending={isPending} 
-            />
-          </div>
+        <div className="flex items-center gap-1">
+          {/* Quick status toggle for pending/confirmed */}
+          {booking.status !== "confirmed" && (
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => onStatusChange(booking.id, "confirmed")}
+              disabled={isPending}
+              className="h-8 w-8 text-green-600 hover:bg-green-50"
+            >
+              <CheckIcon className="h-4 w-4" />
+            </Button>
+          )}
           
-          {/* Additional actions dropdown */}
-          <div className="flex justify-center pt-2 border-t border-slate-200">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
-                  <DotsHorizontalIcon className="h-4 w-4 mr-2" />
-                  More Actions
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="touch-spacing bg-white border-slate-200">
-                <DropdownMenuLabel className="text-slate-900">Additional Actions</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => onEdit(booking)} className="touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
-                  <Pencil2Icon className="mr-2 h-4 w-4" />
-                  Edit Details
+          {/* More actions dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8">
+                <DotsHorizontalIcon className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuItem onClick={() => onEdit(booking)} className="text-sm">
+                <Pencil2Icon className="mr-2 h-3 w-3" />
+                Edit
+              </DropdownMenuItem>
+              {booking.status !== "pending" && (
+                <DropdownMenuItem 
+                  onClick={() => onStatusChange(booking.id, "pending")} 
+                  className="text-sm text-yellow-600"
+                >
+                  <ClockIcon className="mr-2 h-3 w-3" />
+                  Set Pending
                 </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+              )}
+              {booking.status !== "cancelled" && (
+                <DropdownMenuItem 
+                  onClick={() => onStatusChange(booking.id, "cancelled")} 
+                  className="text-sm text-red-600"
+                >
+                  <Cross2Icon className="mr-2 h-3 w-3" />
+                  Cancel
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       )}
-    </CardContent>
-  </Card>
+    </div>
+  </div>
 ))
 
 export const BookingsTable = React.memo(function BookingsTable({ bookings, isReadOnly = false, hideFilters = false, customerFilter }: BookingsTableProps) {
@@ -343,8 +346,8 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
         </div>
       )}
       
-      {/* Mobile view - Card layout for screens smaller than md */}
-      <div className="block md:hidden space-y-3 touch-spacing">
+      {/* Mobile view - Compact cards for phones */}
+      <div className="block lg:hidden space-y-2 touch-spacing"> {/* Changed from md:hidden to lg:hidden */}
         {filteredBookings.length ? (
           filteredBookings.map((booking) => (
             <MobileBookingCard
@@ -378,9 +381,105 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
           </Card>
         )}
       </div>
+
+      {/* Tablet view - Simplified table for iPads (hidden on mobile and desktop) */}
+      <div className="hidden md:block lg:hidden">
+        <div className="rounded-md border border-slate-200 bg-white shadow-sm overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-slate-200">
+                <TableHead className="text-sm">Customer</TableHead>
+                <TableHead className="text-sm">Time</TableHead>
+                <TableHead className="text-sm text-center">Guests</TableHead>
+                <TableHead className="text-sm">Status</TableHead>
+                {mounted && !isReadOnly && <TableHead className="text-sm text-right">Actions</TableHead>}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredBookings.length ? (
+                filteredBookings.map((booking) => (
+                  <TableRow key={booking.id} className="border-slate-200">
+                    <TableCell className="py-2">
+                      <div>
+                        <div className="font-medium text-sm">{booking.customerName}</div>
+                        <div className="text-xs text-slate-600">{booking.customerEmail}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-2">
+                      <div className="text-sm">
+                        {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
+                          hour: '2-digit', 
+                          minute: '2-digit'
+                        })}
+                      </div>
+                      <div className="text-xs text-slate-600">
+                        {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
+                          day: 'numeric', 
+                          month: 'short'
+                        })}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center py-2 text-sm">
+                      {booking.partySize}
+                    </TableCell>
+                    <TableCell className="py-2">
+                      <StatusBadge status={booking.status} />
+                    </TableCell>
+                    {mounted && !isReadOnly && (
+                      <TableCell className="text-right py-2">
+                        <div className="flex justify-end gap-1">
+                          {booking.status !== "confirmed" && (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleStatusChange(booking.id, "confirmed")}
+                              disabled={isPending}
+                              className="h-7 px-2 text-green-600 hover:bg-green-50"
+                            >
+                              <CheckIcon className="h-3 w-3" />
+                            </Button>
+                          )}
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="sm" className="h-7 w-7 p-0">
+                                <DotsHorizontalIcon className="h-3 w-3" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-32">
+                              <DropdownMenuItem onClick={() => handleEdit(booking)} className="text-sm">
+                                <Pencil2Icon className="mr-2 h-3 w-3" />
+                                Edit
+                              </DropdownMenuItem>
+                              {booking.status !== "cancelled" && (
+                                <DropdownMenuItem 
+                                  onClick={() => handleStatusChange(booking.id, "cancelled")} 
+                                  className="text-sm text-red-600"
+                                >
+                                  <Cross2Icon className="mr-2 h-3 w-3" />
+                                  Cancel
+                                </DropdownMenuItem>
+                              )}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={mounted && !isReadOnly ? 5 : 4} className="h-24 text-center text-slate-600">
+                    No bookings found.
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
       
-      {/* Desktop view - Table layout for md screens and larger */}
-      <div className="hidden md:block">
+      {/* Desktop view - Full table for large screens */}
+      <div className="hidden lg:block"> {/* Changed from md:block to lg:block */}
         <div className="rounded-md border border-slate-200 bg-white shadow-sm overflow-x-auto scroll-area-touch">
           <div className="overflow-x-auto w-full">
             <Table className="table-touch">
