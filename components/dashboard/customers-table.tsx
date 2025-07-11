@@ -217,85 +217,87 @@ export function CustomersTable({ customers }: CustomersTableProps) {
       {/* Desktop view - Table layout for md screens and larger */}
       <div className="hidden md:block">
         <div className="rounded-md border border-slate-200 bg-white shadow-sm overflow-x-auto scroll-area-touch">
-          <Table className="table-touch">
-            <TableHeader>
-              <TableRow className="table-row border-slate-200 hover:bg-slate-50">
-                <TableHead className="min-w-[180px] table-cell text-slate-700">Customer</TableHead>
-                <TableHead className="min-w-[200px] table-cell text-slate-700">Contact</TableHead>
-                <TableHead className="min-w-[120px] table-cell text-slate-700 text-center">Bookings</TableHead>
-                <TableHead className="min-w-[140px] table-cell text-slate-700 text-center">Activity</TableHead>
-                <TableHead className="min-w-[120px] table-cell text-slate-700">Status</TableHead>
-                <TableHead className="text-right min-w-[120px] table-cell text-slate-700">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {customers.length ? (
-                customers.map((customer) => {
-                  const segmentInfo = getCustomerSegmentInfo(customer.customer_segment)
-                  const stats = formatCustomerStats(customer)
-                  const engagement = getCustomerEngagementLevel(customer)
-                  
-                  return (
-                    <TableRow key={customer.id} className="table-row border-slate-200 hover:bg-slate-50">
-                      <TableCell className="table-cell">
-                        <div className="flex items-center gap-2">
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium text-slate-900">{customer.name}</span>
-                              <span className={`text-sm ${engagement.color}`}>{engagement.icon}</span>
-                            </div>
-                            <Badge variant="outline" className={`text-xs mt-1 ${segmentInfo.color} border`}>
-                              {segmentInfo.label}
-                            </Badge>
-                          </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="table-cell">
-                        <div className="space-y-1">
-                          <div className="text-slate-900">{customer.email}</div>
-                          <div className="text-sm text-slate-600">{formatUKPhoneNumber(customer.phone) || "No phone"}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="table-cell text-center">
-                        <div className="space-y-1">
-                          <div className="font-semibold text-slate-900">{stats.totalBookings}</div>
-                          <div className="text-xs text-slate-600">total</div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="table-cell text-center">
-                        <div className="space-y-1">
-                          <div className="font-semibold text-slate-900">{stats.recentBookings}</div>
-                          <div className="text-xs text-slate-600">last 90d</div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="table-cell">
-                        <div className="space-y-1">
-                          <div className="text-sm font-medium text-slate-900">Avg: {stats.avgPartySize}</div>
-                          <div className="text-xs text-slate-600">Last: {stats.lastBooking}</div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right table-cell">
-                        <div className="flex justify-end gap-1 touch-spacing">
-                          <Button variant="ghost" size="icon" onClick={() => handleEditClick(customer)} className="h-8 w-8 touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
-                            <PencilIcon />
-                          </Button>
-                          <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(customer)} className="h-8 w-8 touch-target card-action-touch text-red-600 hover:text-red-700 hover:bg-red-50">
-                            <Trash2Icon />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })
-              ) : (
+          <div className="overflow-x-auto w-full">
+            <Table className="table-touch">
+              <TableHeader>
                 <TableRow className="table-row border-slate-200 hover:bg-slate-50">
-                  <TableCell colSpan={6} className="h-24 text-center table-cell text-slate-600">
-                    No customers found.
-                  </TableCell>
+                  <TableHead className="min-w-[180px] table-cell text-slate-700">Customer</TableHead>
+                  <TableHead className="min-w-[200px] table-cell text-slate-700">Contact</TableHead>
+                  <TableHead className="min-w-[120px] table-cell text-slate-700 text-center">Bookings</TableHead>
+                  <TableHead className="min-w-[140px] table-cell text-slate-700 text-center">Activity</TableHead>
+                  <TableHead className="min-w-[120px] table-cell text-slate-700">Status</TableHead>
+                  <TableHead className="text-right min-w-[120px] table-cell text-slate-700">Actions</TableHead>
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {customers.length ? (
+                  customers.map((customer) => {
+                    const segmentInfo = getCustomerSegmentInfo(customer.customer_segment)
+                    const stats = formatCustomerStats(customer)
+                    const engagement = getCustomerEngagementLevel(customer)
+                    
+                    return (
+                      <TableRow key={customer.id} className="table-row border-slate-200 hover:bg-slate-50">
+                        <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
+                          <div className="flex items-center gap-2">
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium text-slate-900">{customer.name}</span>
+                                <span className={`text-sm ${engagement.color}`}>{engagement.icon}</span>
+                              </div>
+                              <Badge variant="outline" className={`text-xs mt-1 ${segmentInfo.color} border`}>
+                                {segmentInfo.label}
+                              </Badge>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
+                          <div className="space-y-1">
+                            <div className="text-slate-900">{customer.email}</div>
+                            <div className="text-sm text-slate-600">{formatUKPhoneNumber(customer.phone) || "No phone"}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
+                          <div className="space-y-1">
+                            <div className="font-semibold text-slate-900">{stats.totalBookings}</div>
+                            <div className="text-xs text-slate-600">total</div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
+                          <div className="space-y-1">
+                            <div className="font-semibold text-slate-900">{stats.recentBookings}</div>
+                            <div className="text-xs text-slate-600">last 90d</div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
+                          <div className="space-y-1">
+                            <div className="text-sm font-medium text-slate-900">Avg: {stats.avgPartySize}</div>
+                            <div className="text-xs text-slate-600">Last: {stats.lastBooking}</div>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right table-cell">
+                          <div className="flex justify-end gap-1 touch-spacing">
+                            <Button variant="ghost" size="icon" onClick={() => handleEditClick(customer)} className="h-8 w-8 touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
+                              <PencilIcon />
+                            </Button>
+                            <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(customer)} className="h-8 w-8 touch-target card-action-touch text-red-600 hover:text-red-700 hover:bg-red-50">
+                              <Trash2Icon />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })
+                ) : (
+                  <TableRow className="table-row border-slate-200 hover:bg-slate-50">
+                    <TableCell colSpan={6} className="h-24 text-center table-cell text-slate-600">
+                      No customers found.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
 

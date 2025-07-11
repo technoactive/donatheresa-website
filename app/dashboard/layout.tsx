@@ -33,9 +33,9 @@ export default async function DashboardLayout({
           <Sidebar />
 
           {/* Main Content Area - scrollable with fixed padding */}
-          <main className="pt-14 lg:pt-[60px] md:pl-[220px] lg:pl-[280px] min-h-screen">
-            <div className="h-full overflow-auto p-4 md:p-6 lg:p-8 max-w-full">
-              <div className="mx-auto max-w-7xl w-full">
+          <main className="pt-14 md:pt-[60px] lg:pt-[60px] pl-0 md:pl-[220px] lg:pl-[280px] min-h-screen transition-all duration-300">
+            <div className="h-full overflow-auto p-4 sm:p-6 md:p-8 lg:p-10 max-w-full">
+              <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8">
                 {children}
               </div>
             </div>
