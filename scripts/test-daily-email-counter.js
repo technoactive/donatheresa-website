@@ -4,15 +4,79 @@
  * Verifies that the daily email usage counter increments properly
  */
 
+// Load environment variables from .env.local manually
+const fs = require('fs');
+const path = require('path');
+
+function loadEnvFile() {
+  try {
+    const envPath = path.join(process.cwd(), '.env.local');
+    const envContent = fs.readFileSync(envPath, 'utf8');
+    
+    let currentKey = '';
+    let currentValue = '';
+    
+    envContent.split('\n').forEach(line => {
+      const trimmed = line.trim();
+      
+      // Skip empty lines and comments
+      if (!trimmed || trimmed.startsWith('#')) {
+        return;
+      }
+      
+      // If line contains '=', it's a new key-value pair
+      if (trimmed.includes('=') && !currentKey) {
+        const equalIndex = trimmed.indexOf('=');
+        currentKey = trimmed.substring(0, equalIndex).trim();
+        currentValue = trimmed.substring(equalIndex + 1).trim();
+        
+        // If the value seems complete (not a JWT that might be split), set it
+        process.env[currentKey] = currentValue;
+        currentKey = '';
+        currentValue = '';
+      } else if (currentKey) {
+        // This is a continuation of the previous value
+        currentValue += trimmed;
+        process.env[currentKey] = currentValue;
+        currentKey = '';
+        currentValue = '';
+      } else if (trimmed.includes('=')) {
+        // New key-value pair
+        const equalIndex = trimmed.indexOf('=');
+        const key = trimmed.substring(0, equalIndex).trim();
+        const value = trimmed.substring(equalIndex + 1).trim();
+        process.env[key] = value;
+      }
+    });
+    
+    // Set any remaining key-value pair
+    if (currentKey && currentValue) {
+      process.env[currentKey] = currentValue;
+    }
+    
+    console.log('✅ Loaded environment variables from .env.local');
+  } catch (error) {
+    console.warn('⚠️ Could not load .env.local file:', error.message);
+  }
+}
+
+// Load environment variables
+loadEnvFile();
+
 const { createClient } = require('@supabase/supabase-js');
 
 // Supabase configuration
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+console.log('🔧 Environment check:');
+console.log(`Supabase URL: ${supabaseUrl ? '✅ Found' : '❌ Missing'}`);
+console.log(`Service Key: ${supabaseServiceKey ? '✅ Found (length: ' + (supabaseServiceKey?.length || 0) + ')' : '❌ Missing'}`);
 
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('❌ Missing Supabase environment variables');
-  console.error('Required: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY');
+  console.error('Required: NEXT_PUBLIC_SUPABASE_URL (or SUPABASE_URL) and SUPABASE_SERVICE_ROLE_KEY');
+  console.error('Please ensure .env.local file exists and contains these variables');
   process.exit(1);
 }
 
