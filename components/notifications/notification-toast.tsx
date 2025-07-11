@@ -20,18 +20,18 @@ interface ToastNotificationProps {
 function ToastNotification({ notification, onMarkAsRead, onDismiss, onRemove }: ToastNotificationProps) {
   const [isVisible, setIsVisible] = useState(true)
   const [isExiting, setIsExiting] = useState(false)
-  const settings = NotificationSettings[notification.type]
+  const staticSettings = NotificationSettings[notification.type]
 
   // Auto-remove after persist duration
   useEffect(() => {
-    if (settings.persistDuration > 0) {
+    if (staticSettings.persistDuration > 0) {
       const timer = setTimeout(() => {
         handleRemove()
-      }, settings.persistDuration * 1000)
+      }, staticSettings.persistDuration * 1000)
 
       return () => clearTimeout(timer)
     }
-  }, [settings.persistDuration])
+  }, [staticSettings.persistDuration])
 
   const handleRemove = () => {
     setIsExiting(true)
@@ -42,7 +42,7 @@ function ToastNotification({ notification, onMarkAsRead, onDismiss, onRemove }: 
 
   const handleMarkAsRead = () => {
     onMarkAsRead(notification.id)
-    if (settings.autoMarkRead) {
+    if (staticSettings.autoMarkRead) {
       handleRemove()
     }
   }
@@ -144,7 +144,7 @@ function ToastNotification({ notification, onMarkAsRead, onDismiss, onRemove }: 
                   </Button>
                 )}
                 
-                {!notification.read && settings.requiresAction && (
+                {!notification.read && staticSettings.requiresAction && (
                   <Button
                     variant="outline"
                     size="sm"
@@ -174,24 +174,35 @@ function ToastNotification({ notification, onMarkAsRead, onDismiss, onRemove }: 
 }
 
 export function NotificationToastContainer() {
-  const { notifications, markAsRead, dismissNotification } = useNotifications()
+  const { notifications, markAsRead, dismissNotification, settings } = useNotifications()
   const [activeToasts, setActiveToasts] = useState<Notification[]>([])
 
   // Monitor for new notifications that should show as toasts
   useEffect(() => {
     console.log('🍞 Toast container checking notifications:', notifications.length);
+    console.log('🍞 User settings loaded:', !!settings);
+    
+    if (!settings) {
+      console.log('🍞 No user settings available yet, skipping toast check');
+      return;
+    }
     
     const newToastNotifications = notifications.filter(notification => {
-      const settings = NotificationSettings[notification.type]
+      // Use actual user settings from database, not static NotificationSettings
+      const shouldShowToast = settings[`${notification.type}_toast` as keyof typeof settings] as boolean
+      const isGloballyEnabled = settings.show_toasts
+      
       const shouldShow = (
-        settings.showInToast && 
+        isGloballyEnabled &&
+        shouldShowToast && 
         !notification.dismissed &&
         !activeToasts.some(toast => toast.id === notification.id)
       );
       
       console.log(`📝 Notification ${notification.id}:`, {
         type: notification.type,
-        shouldShowInToast: settings.showInToast,
+        globalToastsEnabled: isGloballyEnabled,
+        typeToastEnabled: shouldShowToast,
         dismissed: notification.dismissed,
         alreadyActive: activeToasts.some(toast => toast.id === notification.id),
         willShow: shouldShow
@@ -206,7 +217,7 @@ export function NotificationToastContainer() {
     } else {
       console.log('📭 No new toast notifications to show');
     }
-  }, [notifications, activeToasts])
+  }, [notifications, activeToasts, settings])
 
   // Log active toasts
   useEffect(() => {

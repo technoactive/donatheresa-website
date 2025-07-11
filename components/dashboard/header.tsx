@@ -54,13 +54,14 @@ export function Header() {
         }
 
         // Get booking settings for Add Booking dialog
-        const { data: settingsData } = await supabase
-          .from('booking_settings')
-          .select('*')
-          .single()
-
-        if (settingsData) {
-          setBookingSettings(settingsData)
+        try {
+          const response = await fetch('/api/booking-settings')
+          if (response.ok) {
+            const settingsData = await response.json()
+            setBookingSettings(settingsData)
+          }
+        } catch (error) {
+          console.error('Failed to fetch booking settings:', error)
         }
       }
     }
