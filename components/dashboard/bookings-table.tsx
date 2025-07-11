@@ -154,13 +154,25 @@ const MobileBookingCard = React.memo(({
             })}
           </span>
           <StatusBadge status={booking.status} />
+          {/* Source icon */}
+          <div className="flex items-center" title={booking.source === 'website' ? 'Website booking' : 'Dashboard booking'}>
+            {booking.source === 'website' ? (
+              <svg className="w-3.5 h-3.5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+              </svg>
+            ) : (
+              <svg className="w-3.5 h-3.5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+              </svg>
+            )}
+          </div>
         </div>
       </div>
       
-      {/* Right side - Actions */}
+      {/* Right side - Action buttons */}
       {!isReadOnly && (
         <div className="flex items-center gap-1">
-          {/* Quick status toggle for pending/confirmed */}
+          {/* Accept button - show if not confirmed */}
           {booking.status !== "confirmed" && (
             <Button
               size="icon"
@@ -168,43 +180,50 @@ const MobileBookingCard = React.memo(({
               onClick={() => onStatusChange(booking.id, "confirmed")}
               disabled={isPending}
               className="h-8 w-8 text-green-600 hover:bg-green-50"
+              title="Accept booking"
             >
               <CheckIcon className="h-4 w-4" />
             </Button>
           )}
           
-          {/* More actions dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <DotsHorizontalIcon className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-40">
-              <DropdownMenuItem onClick={() => onEdit(booking)} className="text-sm">
-                <Pencil2Icon className="mr-2 h-3 w-3" />
-                Edit
-              </DropdownMenuItem>
-              {booking.status !== "pending" && (
-                <DropdownMenuItem 
-                  onClick={() => onStatusChange(booking.id, "pending")} 
-                  className="text-sm text-yellow-600"
-                >
-                  <ClockIcon className="mr-2 h-3 w-3" />
-                  Set Pending
-                </DropdownMenuItem>
-              )}
-              {booking.status !== "cancelled" && (
-                <DropdownMenuItem 
-                  onClick={() => onStatusChange(booking.id, "cancelled")} 
-                  className="text-sm text-red-600"
-                >
-                  <Cross2Icon className="mr-2 h-3 w-3" />
-                  Cancel
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {/* Pending button - show if not pending */}
+          {booking.status !== "pending" && (
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => onStatusChange(booking.id, "pending")}
+              disabled={isPending}
+              className="h-8 w-8 text-yellow-600 hover:bg-yellow-50"
+              title="Set to pending"
+            >
+              <ClockIcon className="h-4 w-4" />
+            </Button>
+          )}
+          
+          {/* Cancel button - show if not cancelled */}
+          {booking.status !== "cancelled" && (
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => onStatusChange(booking.id, "cancelled")}
+              disabled={isPending}
+              className="h-8 w-8 text-red-600 hover:bg-red-50"
+              title="Cancel booking"
+            >
+              <Cross2Icon className="h-4 w-4" />
+            </Button>
+          )}
+          
+          {/* Edit button */}
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => onEdit(booking)}
+            className="h-8 w-8 text-slate-600 hover:bg-slate-50"
+            title="Edit booking"
+          >
+            <Pencil2Icon className="h-4 w-4" />
+          </Button>
         </div>
       )}
     </div>
