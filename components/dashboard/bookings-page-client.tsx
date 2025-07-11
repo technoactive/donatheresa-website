@@ -67,8 +67,8 @@ function CompactDailyStats({ bookings, selectedDate }: { bookings: Booking[]; se
         </div>
       </div>
 
-      {/* Responsive Stats Grid - 2 cols on mobile, 4 on larger screens */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      {/* Responsive Stats Grid - 2 cols on mobile/tablet, 4 on desktop */}
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4">
         {/* Bookings */}
         <div className="text-center bg-blue-50 rounded-lg p-2 sm:p-3 border border-blue-200">
           <div className="flex items-center justify-center gap-1 mb-1">
@@ -148,7 +148,7 @@ export function BookingsPageClient({ bookings }: { bookings: Booking[] }) {
               <DatePickerWithClear
                 date={selectedDate}
                 setDate={setSelectedDate}
-                className="w-full sm:w-[180px] lg:w-[200px]"
+                className="w-full sm:w-[200px] xl:w-[220px]"
               />
               {isClient && selectedDate && (
                 <span className="hidden md:inline text-sm text-slate-600 font-medium truncate">
@@ -206,7 +206,7 @@ export function BookingsPageClient({ bookings }: { bookings: Booking[] }) {
                 placeholder="Search customer name..."
                 value={customerFilter}
                 onChange={(e) => setCustomerFilter(e.target.value)}
-                className="w-full sm:w-56 md:w-64 lg:w-72 bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full sm:w-64 xl:w-80 bg-white border-slate-300 text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:ring-blue-500"
               />
             </div>
           </div>

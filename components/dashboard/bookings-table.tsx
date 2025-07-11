@@ -268,7 +268,7 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
               <DatePickerWithClear
                 date={selectedDate}
                 setDate={setSelectedDate}
-                className="w-[180px] sm:w-[220px]"
+                className="w-[200px] sm:w-[240px]"
               />
             </div>
             
@@ -316,8 +316,8 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
         </div>
       )}
       
-      {/* Mobile view - Compact cards for phones */}
-      <div className="block lg:hidden space-y-2 touch-spacing"> {/* Changed from md:hidden to lg:hidden */}
+      {/* Mobile view - Compact cards for phones and tablets */}
+      <div className="block xl:hidden space-y-2 touch-spacing"> {/* Changed from lg:hidden to xl:hidden */}
         {filteredBookings.length ? (
           filteredBookings.map((booking) => (
             <MobileBookingCard
@@ -352,104 +352,10 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
         )}
       </div>
 
-      {/* Tablet view - Simplified table for iPads (hidden on mobile and desktop) */}
-      <div className="hidden md:block lg:hidden">
-        <div className="rounded-md border border-slate-200 bg-white shadow-sm overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-slate-200">
-                <TableHead className="text-sm">Customer</TableHead>
-                <TableHead className="text-sm">Time</TableHead>
-                <TableHead className="text-sm text-center">Guests</TableHead>
-                <TableHead className="text-sm">Status</TableHead>
-                {mounted && !isReadOnly && <TableHead className="text-sm text-right">Actions</TableHead>}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredBookings.length ? (
-                filteredBookings.map((booking) => (
-                  <TableRow key={booking.id} className="border-slate-200">
-                    <TableCell className="py-2">
-                      <div>
-                        <div className="font-medium text-sm">{booking.customerName}</div>
-                        <div className="text-xs text-slate-600">{booking.customerEmail}</div>
-                      </div>
-                    </TableCell>
-                    <TableCell className="py-2">
-                      <div className="text-sm">
-                        {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
-                          hour: '2-digit', 
-                          minute: '2-digit'
-                        })}
-                      </div>
-                      <div className="text-xs text-slate-600">
-                        {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
-                          day: 'numeric', 
-                          month: 'short'
-                        })}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-center py-2 text-sm">
-                      {booking.partySize}
-                    </TableCell>
-                    <TableCell className="py-2">
-                      <StatusBadge status={booking.status} />
-                    </TableCell>
-                    {mounted && !isReadOnly && (
-                      <TableCell className="text-right py-2">
-                        <div className="flex justify-end gap-2"> {/* Increased gap */}
-                          {booking.status !== "confirmed" && (
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={() => handleStatusChange(booking.id, "confirmed")}
-                              disabled={isPending}
-                              className="h-11 w-11 p-0 text-green-600 hover:bg-green-50" // Increased to 44px like mobile
-                            >
-                              <CheckIcon className="h-5 w-5" /> {/* Larger icon */}
-                            </Button>
-                          )}
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="sm" className="h-11 w-11 p-0"> {/* Increased to 44px */}
-                                <DotsHorizontalIcon className="h-5 w-5" /> {/* Larger icon */}
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-32">
-                              <DropdownMenuItem onClick={() => handleEdit(booking)} className="text-sm py-2"> {/* Added padding */}
-                                <Pencil2Icon className="mr-2 h-3 w-3" />
-                                Edit
-                              </DropdownMenuItem>
-                              {booking.status !== "cancelled" && (
-                                <DropdownMenuItem 
-                                  onClick={() => handleStatusChange(booking.id, "cancelled")} 
-                                  className="text-sm text-red-600 py-2" // Added padding
-                                >
-                                  <Cross2Icon className="mr-2 h-3 w-3" />
-                                  Cancel
-                                </DropdownMenuItem>
-                              )}
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={mounted && !isReadOnly ? 5 : 4} className="h-24 text-center text-slate-600">
-                    No bookings found.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
+
       
-      {/* Desktop view - Full table for large screens */}
-      <div className="hidden lg:block">
+      {/* Desktop view - Full table for extra large screens */}
+      <div className="hidden xl:block">
         <div className="rounded-md border border-slate-200 bg-white shadow-sm overflow-hidden">
           <Table className="w-full table-fixed">
             <TableHeader>
