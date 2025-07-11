@@ -110,6 +110,12 @@ class RobustEmailService {
    * Single email sending attempt
    */
   private async sendEmailAttempt(params: SendEmailParams): Promise<EmailResult> {
+    // Check daily limit first
+    const canSend = await this.checkDailyLimit();
+    if (!canSend) {
+      throw new Error('Daily email limit reached');
+    }
+
     // Initialize if needed
     if (!(await this.initialize())) {
       throw new Error('Email service initialization failed');
@@ -181,11 +187,16 @@ class RobustEmailService {
       throw new Error(result.error.message);
     }
 
-    // Success
+    // Success - update daily email count
+    console.log('✅ Email sent successfully, updating daily count...');
+    
+    // Update daily email counter
+    await this.updateDailyEmailCount();
+
     return {
       success: true,
       messageId: result.data?.id,
-      logId: logId || undefined
+      logId: logId !== null ? logId : undefined
     };
   }
 
@@ -450,6 +461,88 @@ class RobustEmailService {
         .eq('id', logId);
     } catch (error) {
       console.error('Failed to update email status:', error);
+    }
+  }
+
+  /**
+   * Update daily email count after successful send
+   */
+  private async updateDailyEmailCount(): Promise<void> {
+    try {
+      console.log('📊 Updating daily email count...');
+      const supabase = await createClient();
+      
+      // Manually increment the email count
+      // First reset count if it's a new day, then increment
+      await supabase.rpc('reset_daily_email_count');
+      
+      // Get current count and increment it
+      const { data: currentSettings, error: selectError } = await supabase
+        .from('email_settings')
+        .select('emails_sent_today')
+        .eq('user_id', 'admin')
+        .single();
+      
+      if (selectError) {
+        console.error('❌ Failed to get current email count:', selectError);
+        return;
+      }
+      
+      const newCount = (currentSettings?.emails_sent_today || 0) + 1;
+      
+      const { error } = await supabase
+        .from('email_settings')
+        .update({ 
+          emails_sent_today: newCount,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', 'admin');
+      
+      if (error) {
+        console.error('❌ Failed to update daily email count:', error);
+      } else {
+        console.log(`✅ Daily email count updated: ${newCount}`);
+      }
+    } catch (error) {
+      console.error('💥 Error updating daily email count:', error);
+    }
+  }
+
+  /**
+   * Check if within daily email limit
+   */
+  private async checkDailyLimit(): Promise<boolean> {
+    try {
+      const supabase = await createClient();
+      
+      // Reset counter if new day
+      await supabase.rpc('reset_daily_email_count');
+      
+      const { data: settings, error } = await supabase
+        .from('email_settings')
+        .select('emails_sent_today, max_daily_emails')
+        .eq('user_id', 'admin')
+        .single();
+      
+      if (error) {
+        console.error('❌ Failed to check daily limit:', error);
+        return true; // Allow sending if we can't check
+      }
+      
+      const currentCount = settings?.emails_sent_today || 0;
+      const dailyLimit = settings?.max_daily_emails || 1000;
+      
+      console.log(`📊 Daily email usage: ${currentCount}/${dailyLimit}`);
+      
+      if (currentCount >= dailyLimit) {
+        console.warn(`⚠️ Daily email limit reached: ${currentCount}/${dailyLimit}`);
+        return false;
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('💥 Error checking daily limit:', error);
+      return true; // Allow sending if check fails
     }
   }
 }
