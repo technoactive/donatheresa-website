@@ -179,31 +179,59 @@ export function NotificationToastContainer() {
 
   // Monitor for new notifications that should show as toasts
   useEffect(() => {
+    console.log('🍞 Toast container checking notifications:', notifications.length);
+    
     const newToastNotifications = notifications.filter(notification => {
       const settings = NotificationSettings[notification.type]
-      return (
+      const shouldShow = (
         settings.showInToast && 
         !notification.dismissed &&
         !activeToasts.some(toast => toast.id === notification.id)
-      )
+      );
+      
+      console.log(`📝 Notification ${notification.id}:`, {
+        type: notification.type,
+        shouldShowInToast: settings.showInToast,
+        dismissed: notification.dismissed,
+        alreadyActive: activeToasts.some(toast => toast.id === notification.id),
+        willShow: shouldShow
+      });
+      
+      return shouldShow;
     })
 
     if (newToastNotifications.length > 0) {
+      console.log(`🆕 Adding ${newToastNotifications.length} new toast notifications`);
       setActiveToasts(prev => [...newToastNotifications, ...prev])
+    } else {
+      console.log('📭 No new toast notifications to show');
     }
   }, [notifications, activeToasts])
 
+  // Log active toasts
+  useEffect(() => {
+    console.log(`🍞 Active toasts: ${activeToasts.length}`);
+    activeToasts.forEach((toast, index) => {
+      console.log(`   ${index + 1}. ${toast.type}: ${toast.title}`);
+    });
+  }, [activeToasts]);
+
   const handleRemoveToast = (notificationId: string) => {
+    console.log('🗑️ Removing toast:', notificationId);
     setActiveToasts(prev => prev.filter(toast => toast.id !== notificationId))
   }
 
   const handleMarkAsRead = (notificationId: string) => {
+    console.log('✅ Marking toast as read:', notificationId);
     markAsRead(notificationId)
   }
 
   const handleDismiss = (notificationId: string) => {
+    console.log('❌ Dismissing toast:', notificationId);
     dismissNotification(notificationId)
   }
+
+  console.log('🍞 Rendering toast container with', activeToasts.length, 'active toasts');
 
   return (
     <div className="fixed top-4 right-4 z-50 flex flex-col-reverse max-w-md">

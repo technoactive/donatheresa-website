@@ -154,3 +154,127 @@ This will verify:
 - `scripts/test-email-system-integrity.js` - New comprehensive test script
 
 ---
+
+## 🔔 Notification System Fixes (Latest Update)
+
+### Issues Resolved ✅
+
+**Problem**: Notification system was completely non-functional - no real-time alerts, broken UI components, and missing database integration.
+
+**Root Causes Identified**:
+1. Notification manager wasn't properly loading settings from the database
+2. Real-time subscriptions had poor error handling and debugging
+3. Toast notifications weren't showing due to configuration issues
+4. Missing debugging and monitoring throughout the notification pipeline
+5. TypeScript errors in notification utility functions
+6. Inconsistent database field names (booking_date vs date, booking_time vs time)
+
+**Solutions Implemented**:
+
+### **🛠️ Core Notification Manager Fixes**
+- **Enhanced settings loading** with automatic fallback to defaults
+- **Added comprehensive error handling** for database connection issues
+- **Implemented auto-creation** of notification settings if missing
+- **Added detailed logging** throughout the notification pipeline
+- **Fixed TypeScript errors** in notification utility functions
+
+### **🔄 Real-time Subscription Improvements**
+- **Enhanced error handling** for Supabase real-time connections
+- **Added comprehensive debugging logs** for monitoring subscription status
+- **Fixed database field mapping** (booking_date/booking_time vs date/time)
+- **Improved customer data fetching** with proper error handling
+- **Added VIP and peak-time detection logic** with logging
+
+### **🍞 Toast Notification System**
+- **Enhanced toast container** with detailed debugging logs
+- **Fixed notification filtering** logic for proper toast display
+- **Added state monitoring** for active toasts
+- **Improved toast lifecycle management**
+
+### **🎛️ Notification Provider Enhancements**
+- **Added comprehensive state logging** for debugging
+- **Enhanced subscription management** with proper cleanup
+- **Improved settings synchronization** between components
+- **Added initialization debugging** for troubleshooting
+
+### **📊 Testing & Monitoring**
+- **Created comprehensive test script** (`scripts/test-notifications-system.js`)
+- **Added notification demo component** to settings page for easy testing
+- **Enhanced settings page layout** with side-by-side demo and configuration
+- **Added real-time test booking creation** for verification
+
+## **🧪 How to Test the Notification System**
+
+### **1. Check Browser Console**
+Open your browser's developer tools and watch the console for:
+```
+📱 Loading notification settings...
+✅ Notification settings loaded successfully
+🔄 Setting up real-time notifications...
+📡 Realtime subscription status: SUBSCRIBED
+✅ Real-time notifications are now active
+```
+
+### **2. Use the Notification Demo**
+1. Go to **Dashboard → Settings → Notifications**
+2. Use the **Notification System Demo** on the right side
+3. Click **"Send Test"** for different notification types
+4. Click **"Test Sound"** to verify audio is working
+
+### **3. Test Real-time Notifications**
+**Method 1: Database Test Booking**
+- I've created a test booking (6 guests at 8:00 PM) that should trigger a peak-time notification
+
+**Method 2: Create Website Booking**
+1. Go to your public booking page: `/reserve`
+2. Make a reservation (this will have `source: 'website'`)
+3. Watch the dashboard for real-time notifications
+
+**Method 3: Manual Database Insert**
+```sql
+INSERT INTO bookings (customer_id, booking_date, booking_time, party_size, source) 
+VALUES ((SELECT id FROM customers LIMIT 1), CURRENT_DATE + 1, '19:00:00', 4, 'website');
+```
+
+### **4. Verify Notification Components**
+- **Bell Icon**: Should appear in dashboard header
+- **Notification Count**: Red badge should show unread count
+- **Toast Notifications**: Should slide in from top-right
+- **Sound Alerts**: Should play for enabled notification types
+
+### **5. Check Settings**
+- **Notifications Enabled**: ✅ Master switch
+- **Sound Enabled**: ✅ Audio feedback  
+- **Show Toasts**: ✅ Visual popups
+- **New Booking Enabled**: ✅ Website booking alerts
+
+## **🔍 Troubleshooting**
+
+If notifications still don't work:
+
+1. **Check Supabase Real-time** 
+   - Ensure real-time is enabled for `bookings` table in Supabase dashboard
+   - Verify your Supabase project has real-time enabled
+
+2. **Browser Permissions**
+   - Allow audio autoplay in browser settings
+   - Check if notifications are blocked
+
+3. **Console Errors**
+   - Look for JavaScript errors in browser console
+   - Check network tab for failed API calls
+
+4. **Database Issues**
+   - Verify `notification_settings` table has data for user 'admin'
+   - Check RLS policies allow proper access
+
+## **⚡ Expected Notification Types**
+
+- **🍽️ New Booking**: Regular customer reservations from website
+- **👑 VIP Booking**: Customers with `customer_segment = 'VIP'`  
+- **🔥 Peak Time**: Bookings between 6:00 PM - 9:00 PM
+- **❌ Booking Cancelled**: Status changes to 'cancelled'
+- **✏️ Booking Updated**: Changes to date, time, or party size
+- **⚠️ System Alert**: Important system notifications
+
+The notification system now includes comprehensive logging, error handling, and should work reliably for real-time restaurant booking alerts!
