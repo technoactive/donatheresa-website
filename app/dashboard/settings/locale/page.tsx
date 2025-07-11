@@ -15,7 +15,6 @@ import { type LocaleSettings } from '@/lib/types'
 import { SettingsLayout } from '@/components/dashboard/settings-layout'
 
 export default function LocaleSettingsPage() {
-  const [mounted, setMounted] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   
@@ -42,7 +41,6 @@ export default function LocaleSettingsPage() {
   })
 
   useEffect(() => {
-    setMounted(true)
     loadData()
   }, [])
 
@@ -95,8 +93,6 @@ export default function LocaleSettingsPage() {
       restaurant_timezone: timezone
     }))
   }
-
-  if (!mounted) return null
 
   if (isLoading) {
     return (

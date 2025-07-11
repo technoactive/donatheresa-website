@@ -99,14 +99,13 @@ export function PublicHeader() {
         <div className="lg:hidden">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
-              <Button 
-                variant="outline" 
-                size="icon"
-                className="relative bg-zinc-900/50 backdrop-blur-xl border-zinc-700/50 hover:border-amber-500/70 text-white hover:bg-zinc-800/50 rounded-xl transition-all duration-300 group"
+              <button 
+                type="button"
+                className="relative h-10 w-10 inline-flex items-center justify-center bg-zinc-900/50 backdrop-blur-xl border border-zinc-700/50 hover:border-amber-500/70 text-white hover:bg-zinc-800/50 rounded-xl transition-all duration-300 group"
               >
-                <Menu className="h-5 w-5 text-white group-hover:text-amber-400 transition-colors duration-300" />
+                <Menu className="h-5 w-5 text-white group-hover:text-amber-400 transition-colors duration-300 pointer-events-none" />
               <span className="sr-only">Open menu</span>
-            </Button>
+            </button>
           </SheetTrigger>
             <SheetContent 
               side="right" 

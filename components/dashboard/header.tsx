@@ -28,7 +28,6 @@ export function Header() {
   const pathname = usePathname()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
-  const [isMounted, setIsMounted] = useState(false)
   const [user, setUser] = useState<any>(null)
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [bookingSettings, setBookingSettings] = useState<BookingSettings | null>(null)
@@ -122,10 +121,7 @@ export function Header() {
     { href: "/dashboard/settings", label: "Settings" },
   ]
 
-  // Handle mounting
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
+
 
   // Close menu when pathname changes
   useEffect(() => {
@@ -155,10 +151,14 @@ export function Header() {
       
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="shrink-0 md:hidden bg-white border-slate-200 hover:bg-slate-50" style={{ color: '#16a34a' }}>
-            <Menu className="h-6 w-6" />
+          <button 
+            type="button"
+            className="shrink-0 md:hidden h-10 w-10 inline-flex items-center justify-center bg-white border border-slate-200 hover:bg-slate-50 rounded-md transition-colors"
+            style={{ color: '#16a34a' }}
+          >
+            <Menu className="h-6 w-6 pointer-events-none" />
             <span className="sr-only">Toggle navigation menu</span>
-          </Button>
+          </button>
         </SheetTrigger>
         <SheetContent side="left" className="flex flex-col z-[60] bg-white border-slate-200 [&>button]:hidden">
           <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
@@ -226,35 +226,31 @@ export function Header() {
       </Sheet>
       
       <div className="w-full flex-1 relative z-10">
-        {isMounted && (
-          <h1 className="font-semibold text-lg text-slate-900 hidden md:block ml-6">
-            {navLinks.find((link) => link.href === pathname)?.label}
-          </h1>
-        )}
+        <h1 className="font-semibold text-lg text-slate-900 hidden md:block ml-6">
+          {navLinks.find((link) => link.href === pathname)?.label}
+        </h1>
       </div>
       
       <div className="ml-auto flex items-center gap-2 relative z-10">
         {/* Add Booking Button - Always visible */}
-        {isMounted && (
-          <div className="mr-2">
-            <AddBookingDialog
-              availableTimes={bookingSettings?.available_times}
-            >
-              <div className="flex">
-                {/* Desktop version - full button */}
-                <Button className="hidden sm:flex bg-green-600 hover:bg-green-700 text-white shadow-sm transition-colors duration-200 font-medium items-center gap-2">
-                  <Plus className="w-4 h-4" />
-                  <span>Add Booking</span>
-                </Button>
-                {/* Mobile version - just + icon */}
-                <Button size="icon" className="sm:hidden bg-green-600 hover:bg-green-700 text-white shadow-sm transition-colors duration-200">
-                  <Plus className="w-5 h-5" />
-                  <span className="sr-only">Add Booking</span>
-                </Button>
-              </div>
-            </AddBookingDialog>
-          </div>
-        )}
+        <div className="mr-2">
+          <AddBookingDialog
+            availableTimes={bookingSettings?.available_times}
+          >
+            <div className="flex">
+              {/* Desktop version - full button */}
+              <Button className="hidden sm:flex bg-green-600 hover:bg-green-700 text-white shadow-sm transition-colors duration-200 font-medium items-center gap-2">
+                <Plus className="w-4 h-4" />
+                <span>Add Booking</span>
+              </Button>
+              {/* Mobile version - just + icon */}
+              <Button size="icon" className="sm:hidden bg-green-600 hover:bg-green-700 text-white shadow-sm transition-colors duration-200">
+                <Plus className="w-5 h-5" />
+                <span className="sr-only">Add Booking</span>
+              </Button>
+            </div>
+          </AddBookingDialog>
+        </div>
         
         <NotificationCenter />
         
