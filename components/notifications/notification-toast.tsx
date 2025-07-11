@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useNotifications } from './notification-provider'
-import { Notification, NotificationSettings } from '@/lib/notifications'
+import { Notification, NotificationSettings, type NotificationSettings as NotificationSettingsType } from '@/lib/notifications'
 import { X, ExternalLink, Check } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { cn } from '@/lib/utils'
