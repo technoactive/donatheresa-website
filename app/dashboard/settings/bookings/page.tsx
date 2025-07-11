@@ -48,7 +48,6 @@ interface ServicePeriodFrontend {
 }
 
 export default function BookingSettingsPage() {
-  const [mounted, setMounted] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
   
@@ -95,7 +94,6 @@ export default function BookingSettingsPage() {
   const dayShortNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
   useEffect(() => {
-    setMounted(true)
     loadData()
   }, [])
 
@@ -136,9 +134,7 @@ export default function BookingSettingsPage() {
     }
   }
 
-  if (!mounted) {
-    return null
-  }
+
 
   const generateTimeSlots = () => {
     const slots: string[] = []
