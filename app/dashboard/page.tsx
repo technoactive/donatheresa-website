@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Calendar, Users, TrendingUp, Clock, CheckCircle, AlertCircle, Star, ArrowUpRight, ArrowDownRight } from "lucide-react"
 import { getDashboardStats, getRecentBookings } from "@/lib/database"
 import { Badge } from "@/components/ui/badge"
-import { NotificationDebugPanel } from "@/components/notifications/notification-debug-panel"
+
 
 // Force dynamic rendering since this page uses cookies for authentication
 export const dynamic = 'force-dynamic'
@@ -162,10 +162,7 @@ export default async function DashboardPage() {
           </Card>
         </div>
         
-        {/* Notification Debug Panel - TEMPORARY FOR TESTING */}
-        <div className="grid gap-6">
-          <NotificationDebugPanel />
-        </div>
+
 
         {/* Analytics and Recent Bookings */}
         <div className="grid gap-6 lg:grid-cols-3">
