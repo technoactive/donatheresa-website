@@ -69,38 +69,39 @@ function NotificationItem({ notification, onMarkAsRead, onDismiss }: Notificatio
     <Card className={cn(
       "mb-2 transition-all duration-200 hover:shadow-md cursor-pointer border",
       priorityColors,
-      !notification.read && "ring-2 ring-amber-200"
+      !notification.read && "ring-1 ring-amber-200"
     )}>
-      <CardContent className="p-3">
+      <CardContent className="p-2 sm:p-3">
         {/* Header with icon, title, and unread indicator */}
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-lg flex-shrink-0">{icon}</span>
-          <h4 className="font-semibold text-sm flex-1 truncate">
-            {notification.title}
-          </h4>
-          {!notification.read && (
-            <div className="w-2 h-2 bg-amber-500 rounded-full flex-shrink-0" />
-          )}
+        <div className="flex items-start gap-2 mb-1 sm:mb-2">
+          <span className="text-base sm:text-lg flex-shrink-0">{icon}</span>
+          <div className="flex-1 min-w-0">
+            <h4 className="font-semibold text-xs sm:text-sm truncate flex items-center gap-1">
+              {notification.title}
+              {!notification.read && (
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-amber-500 rounded-full flex-shrink-0" />
+              )}
+            </h4>
+            {/* Message content */}
+            <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 leading-relaxed mt-0.5">
+              {notification.message}
+            </p>
+          </div>
         </div>
         
-        {/* Message content */}
-        <p className="text-sm text-slate-600 mb-3 line-clamp-2 leading-relaxed">
-          {notification.message}
-        </p>
-        
-        {/* Footer with timestamp and actions - guaranteed space */}
-        <div className="flex items-center justify-between min-h-[24px]">
-          <span className="text-xs text-slate-500 flex-shrink-0 max-w-[60%] truncate">
+        {/* Footer with timestamp and actions */}
+        <div className="flex items-center justify-between mt-2">
+          <span className="text-[10px] sm:text-xs text-slate-500 flex-shrink-0">
             {formatDistanceToNow(notification.timestamp, { addSuffix: true })}
           </span>
           
-          {/* Action buttons with guaranteed minimum width */}
-          <div className="flex items-center gap-1 flex-shrink-0 min-w-[80px] justify-end">
+          {/* Action buttons */}
+          <div className="flex items-center gap-1 flex-shrink-0">
             {notification.actionUrl && (
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-6 w-6 p-0 hover:bg-white/50 flex-shrink-0"
+                className="h-7 w-7 sm:h-6 sm:w-6 p-0 hover:bg-white/50 flex-shrink-0"
                 onClick={(e) => {
                   e.stopPropagation()
                   window.location.href = notification.actionUrl!
@@ -115,7 +116,7 @@ function NotificationItem({ notification, onMarkAsRead, onDismiss }: Notificatio
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-6 w-6 p-0 hover:bg-white/50 flex-shrink-0"
+                className="h-7 w-7 sm:h-6 sm:w-6 p-0 hover:bg-white/50 flex-shrink-0"
                 onClick={(e) => {
                   e.stopPropagation()
                   onMarkAsRead(notification.id)
@@ -129,7 +130,7 @@ function NotificationItem({ notification, onMarkAsRead, onDismiss }: Notificatio
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 w-6 p-0 hover:bg-white/50 text-red-600 flex-shrink-0"
+              className="h-7 w-7 sm:h-6 sm:w-6 p-0 hover:bg-white/50 text-red-600 flex-shrink-0"
               onClick={(e) => {
                 e.stopPropagation()
                 onDismiss(notification.id)
@@ -190,16 +191,16 @@ export function NotificationCenter() {
       
       <DropdownMenuContent 
         align="end" 
-        className="w-[480px] max-h-[80vh] p-0 bg-white border-slate-200 shadow-xl"
+        className="w-full sm:w-[380px] md:w-[420px] lg:w-[480px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-6rem)] p-0 bg-white border-slate-200 shadow-xl flex flex-col"
       >
-        {/* Header */}
-        <div className="p-4 border-b border-slate-200 bg-slate-50">
+        {/* Header - Fixed */}
+        <div className="p-3 sm:p-4 border-b border-slate-200 bg-slate-50 flex-shrink-0">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-slate-900 flex items-center gap-2">
+            <h3 className="font-semibold text-slate-900 flex items-center gap-2 text-sm sm:text-base">
               <Bell className="h-4 w-4" />
               Notifications
               {hasUnread && (
-                <Badge variant="secondary" className="bg-amber-100 text-amber-700 ml-2">
+                <Badge variant="secondary" className="bg-amber-100 text-amber-700 ml-1 sm:ml-2 text-xs">
                   {unreadCount} new
                 </Badge>
               )}
@@ -212,7 +213,7 @@ export function NotificationCenter() {
                     variant="ghost"
                     size="sm"
                     onClick={markAllAsRead}
-                    className="h-8 w-8 p-0 hover:bg-white/50"
+                    className="h-9 w-9 sm:h-8 sm:w-8 p-0 hover:bg-white/50"
                     title="Mark all as read"
                   >
                     <Check className="h-4 w-4" />
@@ -224,7 +225,7 @@ export function NotificationCenter() {
                     variant="ghost"
                     size="sm"
                     onClick={clearAll}
-                    className="h-8 w-8 p-0 text-red-600 hover:bg-red-50"
+                    className="h-9 w-9 sm:h-8 sm:w-8 p-0 text-red-600 hover:bg-red-50"
                     title="Clear all notifications"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -235,36 +236,41 @@ export function NotificationCenter() {
           </div>
         </div>
         
-        {/* Notifications List */}
+        {/* Notifications List - Scrollable */}
         {hasNotifications ? (
-          <ScrollArea className="max-h-96">
-            <div className="p-2">
-              {notifications.map((notification) => (
-                <NotificationItem
-                  key={notification.id}
-                  notification={notification}
-                  onMarkAsRead={markAsRead}
-                  onDismiss={dismissNotification}
-                />
-              ))}
-            </div>
-          </ScrollArea>
+          <div className="flex-1 overflow-y-auto min-h-0">
+            <ScrollArea className="h-full">
+              <div className="p-2">
+                {notifications.map((notification) => (
+                  <NotificationItem
+                    key={notification.id}
+                    notification={notification}
+                    onMarkAsRead={markAsRead}
+                    onDismiss={dismissNotification}
+                  />
+                ))}
+              </div>
+            </ScrollArea>
+          </div>
         ) : (
-          <div className="p-8 text-center">
-            <Bell className="h-12 w-12 text-slate-300 mx-auto mb-3" />
-            <h4 className="font-medium text-slate-900 mb-1">No notifications</h4>
-            <p className="text-sm text-slate-500">
+          <div className="p-6 sm:p-8 text-center flex-1 flex flex-col items-center justify-center">
+            <Bell className="h-10 w-10 sm:h-12 sm:w-12 text-slate-300 mx-auto mb-3" />
+            <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">No notifications</h4>
+            <p className="text-xs sm:text-sm text-slate-500">
               You're all caught up! New booking notifications will appear here.
             </p>
           </div>
         )}
         
-        {/* Footer */}
+        {/* Footer - Fixed */}
         {hasNotifications && (
           <>
-            <DropdownMenuSeparator />
-            <div className="p-2">
-              <DropdownMenuItem className="cursor-pointer hover:bg-slate-50">
+            <DropdownMenuSeparator className="flex-shrink-0" />
+            <div className="p-2 flex-shrink-0">
+              <DropdownMenuItem 
+                className="cursor-pointer hover:bg-slate-50 py-2.5"
+                onClick={() => window.location.href = '/dashboard/settings/notifications'}
+              >
                 <Settings className="h-4 w-4 mr-2" />
                 Notification Settings
               </DropdownMenuItem>

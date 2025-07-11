@@ -257,7 +257,7 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
   const totalGuests = filteredBookings.reduce((sum, booking) => sum + booking.partySize, 0)
 
   return (
-    <div className="w-full space-y-4 touch-spacing">
+    <div className="w-full space-y-4 touch-spacing overflow-hidden">
       {/* Filters and Summary */}
       {mounted && !isReadOnly && !hideFilters && (
         <div className="space-y-4">
@@ -268,7 +268,7 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
               <DatePickerWithClear
                 date={selectedDate}
                 setDate={setSelectedDate}
-                className="w-[220px]"
+                className="w-[180px] sm:w-[220px]"
               />
             </div>
             
@@ -449,26 +449,28 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
       </div>
       
       {/* Desktop view - Full table for large screens */}
-      <div className="hidden lg:block"> {/* Changed from md:block to lg:block */}
-        <div className="rounded-md border border-slate-200 bg-white shadow-sm">
-          <Table className="table-touch">
+      <div className="hidden lg:block">
+        <div className="rounded-md border border-slate-200 bg-white shadow-sm overflow-hidden">
+          <Table className="w-full table-fixed">
             <TableHeader>
               <TableRow className="table-row border-slate-200 hover:bg-slate-50">
-                <TableHead className="text-slate-700">Customer</TableHead>
-                <TableHead className="text-slate-700">Status</TableHead>
-                <TableHead className="text-slate-700">Source</TableHead>
-                <TableHead className="text-right text-slate-700">Booking Time</TableHead>
-                <TableHead className="text-center text-slate-700">Party Size</TableHead>
-                {mounted && !isReadOnly && <TableHead className="text-right text-slate-700">Actions</TableHead>}
+                <TableHead className="text-slate-700 w-[25%]">Customer</TableHead>
+                <TableHead className="text-slate-700 w-[12%]">Status</TableHead>
+                <TableHead className="text-slate-700 w-[12%]">Source</TableHead>
+                <TableHead className="text-right text-slate-700 w-[18%]">Booking Time</TableHead>
+                <TableHead className="text-center text-slate-700 w-[10%]">Guests</TableHead>
+                {mounted && !isReadOnly && <TableHead className="text-right text-slate-700 w-[23%]">Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
               {filteredBookings.length ? (
                 filteredBookings.map((booking) => (
                   <TableRow key={booking.id} className="table-row border-slate-200 hover:bg-slate-50">
-                    <TableCell>
-                      <div className="font-medium text-slate-900">{booking.customerName}</div>
-                      <div className="text-sm text-slate-600">{booking.customerEmail}</div>
+                    <TableCell className="truncate">
+                      <div className="truncate">
+                        <div className="font-medium text-slate-900 truncate">{booking.customerName}</div>
+                        <div className="text-sm text-slate-600 truncate">{booking.customerEmail}</div>
+                      </div>
                     </TableCell>
                     <TableCell>
                       <StatusBadge status={booking.status} />
@@ -477,18 +479,20 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                       <SourceBadge source={booking.source} />
                     </TableCell>
                     <TableCell className="text-right">
-                      <div className="font-medium text-slate-900">
-                        {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
-                          day: 'numeric', 
-                          month: 'short',
-                          year: 'numeric'
-                        })}
-                      </div>
-                      <div className="text-sm text-slate-600">
-                        {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
-                          hour: '2-digit', 
-                          minute: '2-digit'
-                        })}
+                      <div>
+                        <div className="font-medium text-slate-900 text-sm">
+                          {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
+                            day: 'numeric', 
+                            month: 'short',
+                            year: 'numeric'
+                          })}
+                        </div>
+                        <div className="text-xs text-slate-600">
+                          {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
+                            hour: '2-digit', 
+                            minute: '2-digit'
+                          })}
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell className="text-center">
@@ -498,7 +502,7 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                     </TableCell>
                     {mounted && !isReadOnly && (
                       <TableCell className="text-right">
-                        <div className="flex justify-end items-center gap-2">
+                        <div className="flex justify-end items-center gap-1 flex-wrap">
                           {/* Same icon buttons as mobile/tablet */}
                           {booking.status !== "confirmed" && (
                             <Button
@@ -506,10 +510,10 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                               variant="ghost"
                               onClick={() => handleStatusChange(booking.id, "confirmed")}
                               disabled={isPending}
-                              className="h-11 w-11 text-green-600 hover:bg-green-50"
+                              className="h-10 w-10 text-green-600 hover:bg-green-50" // Reduced from h-11 w-11
                               title="Accept booking"
                             >
-                              <CheckIcon className="h-5 w-5" />
+                              <CheckIcon className="h-4 w-4" /> {/* Reduced from h-5 w-5 */}
                             </Button>
                           )}
                           
@@ -519,10 +523,10 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                               variant="ghost"
                               onClick={() => handleStatusChange(booking.id, "pending")}
                               disabled={isPending}
-                              className="h-11 w-11 text-yellow-600 hover:bg-yellow-50"
+                              className="h-10 w-10 text-yellow-600 hover:bg-yellow-50" // Reduced from h-11 w-11
                               title="Set to pending"
                             >
-                              <ClockIcon className="h-5 w-5" />
+                              <ClockIcon className="h-4 w-4" /> {/* Reduced from h-5 w-5 */}
                             </Button>
                           )}
                           
@@ -532,10 +536,10 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                               variant="ghost"
                               onClick={() => handleStatusChange(booking.id, "cancelled")}
                               disabled={isPending}
-                              className="h-11 w-11 text-red-600 hover:bg-red-50"
+                              className="h-10 w-10 text-red-600 hover:bg-red-50" // Reduced from h-11 w-11
                               title="Cancel booking"
                             >
-                              <Cross2Icon className="h-5 w-5" />
+                              <Cross2Icon className="h-4 w-4" /> {/* Reduced from h-5 w-5 */}
                             </Button>
                           )}
                           
@@ -543,10 +547,10 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                             size="icon"
                             variant="ghost"
                             onClick={() => handleEdit(booking)}
-                            className="h-11 w-11 text-slate-600 hover:bg-slate-50"
+                            className="h-10 w-10 text-slate-600 hover:bg-slate-50" // Reduced from h-11 w-11
                             title="Edit booking"
                           >
-                            <Pencil2Icon className="h-5 w-5" />
+                            <Pencil2Icon className="h-4 w-4" /> {/* Reduced from h-5 w-5 */}
                           </Button>
                         </div>
                       </TableCell>
