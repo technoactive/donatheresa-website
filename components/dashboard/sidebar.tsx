@@ -3,15 +3,24 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useState, useEffect } from "react"
+import { useIPadDetection } from '@/hooks/use-ipad-detection'
+import { Button } from '@/components/ui/button'
+import { PanelLeft } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 export function Sidebar() {
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
+  const isIpad = useIPadDetection() // Add iPad detection
+  const [isCollapsed, setIsCollapsed] = useState(isIpad) // Collapse by default on iPad
 
   // Handle mounting to avoid hydration mismatch
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Toggle collapse function
+  const toggleCollapse = () => setIsCollapsed(!isCollapsed)
 
   const menuItems = [
     { name: "Dashboard", href: "/dashboard" },
@@ -21,7 +30,21 @@ export function Sidebar() {
   ]
 
   return (
-    <aside className="fixed top-0 left-0 z-40 h-full w-[220px] lg:w-[280px] border-r border-slate-200 bg-white hidden md:block">
+    <aside className={cn(
+      'fixed top-0 left-0 z-40 h-full transition-all duration-300',
+      isCollapsed ? 'w-0 overflow-hidden' : 'w-[220px] lg:w-[280px]',
+      'border-r border-slate-200 bg-white hidden md:block'
+    )}>
+      {isIpad && (
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="absolute top-4 -right-10 bg-white border border-slate-200 rounded-r-md"
+          onClick={toggleCollapse}
+        >
+          <PanelLeft className="h-5 w-5" />
+        </Button>
+      )}
       <div className="flex h-full flex-col">
         {/* Header */}
         <header className="flex h-14 lg:h-[60px] items-center border-b border-slate-200 px-4 lg:px-6">

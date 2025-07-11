@@ -382,104 +382,108 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
       {/* Desktop view - Table layout for md screens and larger */}
       <div className="hidden md:block">
         <div className="rounded-md border border-slate-200 bg-white shadow-sm overflow-x-auto scroll-area-touch">
-          <Table className="table-touch">
-            <TableHeader>
-              <TableRow className="table-row border-slate-200 hover:bg-slate-50">
-                <TableHead className="min-w-[200px] table-cell text-slate-700">Customer</TableHead>
-                <TableHead className="min-w-[100px] table-cell text-slate-700">Status</TableHead>
-                <TableHead className="min-w-[80px] table-cell text-slate-700">Source</TableHead>
-                <TableHead className="text-right min-w-[140px] table-cell text-slate-700">Booking Time</TableHead>
-                <TableHead className="text-center min-w-[100px] table-cell text-slate-700">Party Size</TableHead>
-                {mounted && !isReadOnly && <TableHead className="text-center min-w-[200px] table-cell text-slate-700">Quick Actions</TableHead>}
-                {mounted && !isReadOnly && <TableHead className="text-center min-w-[80px] table-cell text-slate-700">More</TableHead>}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredBookings.length ? (
-                filteredBookings.map((booking) => (
-                  <TableRow key={booking.id} className="table-row border-slate-200 hover:bg-slate-50">
-                    <TableCell className="min-w-[200px] table-cell">
-                      <div className="font-medium text-slate-900">{booking.customerName}</div>
-                      <div className="text-sm text-slate-600">{booking.customerEmail}</div>
-                    </TableCell>
-                    <TableCell className="min-w-[100px] table-cell">
-                      <div className="badge-touch">
-                        <StatusBadge status={booking.status} />
-                      </div>
-                    </TableCell>
-                    <TableCell className="min-w-[80px] table-cell">
-                      <div className="badge-touch">
-                        <SourceBadge source={booking.source} />
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right min-w-[140px] table-cell">
-                      <div className="font-medium text-slate-900">
-                        {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
-                          day: 'numeric', 
-                          month: 'short',
-                          year: 'numeric'
-                        })}
-                      </div>
-                      <div className="text-sm text-slate-600">
-                        {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
-                          hour: '2-digit', 
-                          minute: '2-digit'
-                        })}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-center font-medium min-w-[100px] table-cell text-slate-900">
-                      {booking.partySize}
-                    </TableCell>
-                    {mounted && !isReadOnly && (
-                      <TableCell className="min-w-[200px] table-cell">
-                        <StatusActionButtons 
-                          booking={booking} 
-                          onStatusChange={handleStatusChange} 
-                          isPending={isPending} 
-                        />
-                      </TableCell>
-                    )}
-                    {mounted && !isReadOnly && (
-                      <TableCell className="text-center min-w-[80px] table-cell">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="h-8 w-8 p-0 touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
-                              <span className="sr-only">Open menu</span>
-                              <DotsHorizontalIcon className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="touch-spacing bg-white border-slate-200">
-                            <DropdownMenuLabel className="text-slate-900">More Actions</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => handleEdit(booking)} className="touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
-                              <Pencil2Icon className="mr-2 h-4 w-4" />
-                              Edit Details
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    )}
-                  </TableRow>
-                ))
-              ) : (
+          <div className="overflow-x-auto w-full">
+            <Table className="table-touch">
+              <TableHeader>
                 <TableRow className="table-row border-slate-200 hover:bg-slate-50">
-                  <TableCell colSpan={mounted && !isReadOnly ? 7 : 5} className="h-24 text-center table-cell text-slate-600">
-                    {(customerFilter !== undefined ? customerFilter : filterValue) ? 
-                      'No bookings found matching your search.' :
-                      hideFilters ? 
-                        'No bookings found.' :
-                        selectedDate ? 
-                          `No bookings found for ${selectedDate.toLocaleDateString('en-GB', { 
-                            day: 'numeric', 
-                            month: 'long',
-                            year: 'numeric'
-                          })}.` :
-                          'No bookings found.'
-                    }
-                  </TableCell>
+                  <TableHead className="min-w-[200px] table-cell text-slate-700">Customer</TableHead>
+                  <TableHead className="min-w-[100px] table-cell text-slate-700">Status</TableHead>
+                  <TableHead className="min-w-[80px] table-cell text-slate-700">Source</TableHead>
+                  <TableHead className="text-right min-w-[140px] table-cell text-slate-700">Booking Time</TableHead>
+                  <TableHead className="text-center min-w-[100px] table-cell text-slate-700">Party Size</TableHead>
+                  {mounted && !isReadOnly && <TableHead className="text-center min-w-[200px] table-cell text-slate-700">Quick Actions</TableHead>}
+                  {mounted && !isReadOnly && <TableHead className="text-center min-w-[80px] table-cell text-slate-700">More</TableHead>}
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredBookings.length ? (
+                  filteredBookings.map((booking) => (
+                    <TableRow key={booking.id} className="table-row border-slate-200 hover:bg-slate-50">
+                      <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
+                        <div className="font-medium text-slate-900">{booking.customerName}</div>
+                        <div className="text-sm text-slate-600">{booking.customerEmail}</div>
+                      </TableCell>
+                      <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
+                        <div className="badge-touch">
+                          <StatusBadge status={booking.status} />
+                        </div>
+                      </TableCell>
+                      <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
+                        <div className="badge-touch">
+                          <SourceBadge source={booking.source} />
+                        </div>
+                      </TableCell>
+                      <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
+                        <div className="font-medium text-slate-900">
+                          {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
+                            day: 'numeric', 
+                            month: 'short',
+                            year: 'numeric'
+                          })}
+                        </div>
+                        <div className="text-sm text-slate-600">
+                          {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
+                            hour: '2-digit', 
+                            minute: '2-digit'
+                          })}
+                        </div>
+                      </TableCell>
+                      <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
+                        <div className="font-medium min-w-[100px] table-cell text-slate-900">
+                          {booking.partySize}
+                        </div>
+                      </TableCell>
+                      {mounted && !isReadOnly && (
+                        <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
+                          <StatusActionButtons 
+                            booking={booking} 
+                            onStatusChange={handleStatusChange} 
+                            isPending={isPending} 
+                          />
+                        </TableCell>
+                      )}
+                      {mounted && !isReadOnly && (
+                        <TableCell className="p-2 sm:p-4 md:p-6 text-xs sm:text-sm md:text-base whitespace-nowrap text-center hidden sm:table-cell">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" className="h-8 w-8 p-0 touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
+                                <span className="sr-only">Open menu</span>
+                                <DotsHorizontalIcon className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="touch-spacing bg-white border-slate-200">
+                              <DropdownMenuLabel className="text-slate-900">More Actions</DropdownMenuLabel>
+                              <DropdownMenuItem onClick={() => handleEdit(booking)} className="touch-target card-action-touch text-slate-700 hover:text-slate-900 hover:bg-slate-50">
+                                <Pencil2Icon className="mr-2 h-4 w-4" />
+                                Edit Details
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow className="table-row border-slate-200 hover:bg-slate-50">
+                    <TableCell colSpan={mounted && !isReadOnly ? 7 : 5} className="h-24 text-center table-cell text-slate-600">
+                      {(customerFilter !== undefined ? customerFilter : filterValue) ? 
+                        'No bookings found matching your search.' :
+                        hideFilters ? 
+                          'No bookings found.' :
+                          selectedDate ? 
+                            `No bookings found for ${selectedDate.toLocaleDateString('en-GB', { 
+                              day: 'numeric', 
+                              month: 'long',
+                              year: 'numeric'
+                            })}.` :
+                            'No bookings found.'
+                      }
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </div>
       
