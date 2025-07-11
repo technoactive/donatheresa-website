@@ -243,6 +243,10 @@ export interface EmailAnalytics {
   
   // Recent activity
   recentEmails: EmailLog[];
+  
+  // Current daily usage (real-time)
+  currentDailyUsage?: number;
+  currentDailyLimit?: number;
 }
 
 export interface SendEmailParams {

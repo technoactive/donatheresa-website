@@ -5,19 +5,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { EmailSettingsForm } from '@/components/dashboard/email-settings-form';
-import { getEmailSettings } from './actions';
+import { getEmailSettings, getDailyEmailUsage } from './actions';
 import { 
   Mail, 
   Settings, 
   Shield,
   BarChart3,
   Zap,
-  Loader2
+  Loader2,
+  AlertTriangle
 } from 'lucide-react';
 import type { EmailSettings } from '@/lib/email/types';
 
 function EmailSettingsContent() {
   const [settings, setSettings] = useState<EmailSettings | null>(null);
+  const [dailyUsage, setDailyUsage] = useState<number>(0);
+  const [dailyLimit, setDailyLimit] = useState<number>(1000);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,13 +32,27 @@ function EmailSettingsContent() {
     try {
       setIsLoading(true);
       setError(null);
-      const result = await getEmailSettings();
       
-      if (result.error) {
-        setError(result.error);
+      // Load both settings and daily usage in parallel
+      const [settingsResult, usageResult] = await Promise.all([
+        getEmailSettings(),
+        getDailyEmailUsage()
+      ]);
+      
+      if (settingsResult.error) {
+        setError(settingsResult.error);
       } else {
-        setSettings(result.data);
+        setSettings(settingsResult.data);
       }
+      
+      if (usageResult.error) {
+        console.warn('Failed to load daily usage:', usageResult.error);
+        // Don't set error for usage issues, just use defaults
+      }
+      
+      setDailyUsage(usageResult.dailyUsage);
+      setDailyLimit(usageResult.dailyLimit);
+      
     } catch (error) {
       console.error('Failed to load email settings:', error);
       setError('Failed to load email settings');
@@ -70,8 +87,8 @@ function EmailSettingsContent() {
   }
 
   const isConfigured = settings?.api_key_encrypted && settings?.sender_email;
-  const dailyUsage = settings?.emails_sent_today || 0;
-  const dailyLimit = settings?.max_daily_emails || 1000;
+  // const dailyUsage = settings?.emails_sent_today || 0; // This line is removed
+  // const dailyLimit = settings?.max_daily_emails || 1000; // This line is removed
 
   return (
     <div className="space-y-6">
@@ -118,6 +135,11 @@ function EmailSettingsContent() {
                 style={{ width: `${Math.min((dailyUsage / dailyLimit) * 100, 100)}%` }}
               />
             </div>
+            <div className="flex justify-between text-xs text-muted-foreground mt-1">
+              <span>0</span>
+              <span>{Math.round((dailyUsage / dailyLimit) * 100)}%</span>
+              <span>{dailyLimit}</span>
+            </div>
           </CardContent>
         </Card>
 
@@ -137,9 +159,12 @@ function EmailSettingsContent() {
               Email service provider
             </p>
             {isConfigured && (
-              <p className="text-xs text-green-600 mt-1">
-                Configured & Ready
-              </p>
+              <div className="flex items-center gap-2 mt-1">
+                <div className="h-2 w-2 bg-green-500 rounded-full"></div>
+                <p className="text-xs text-green-600">
+                  Configured & Ready
+                </p>
+              </div>
             )}
           </CardContent>
         </Card>
@@ -160,6 +185,21 @@ function EmailSettingsContent() {
           <Shield className="h-4 w-4" />
           <AlertDescription>
             <strong>Email System Active:</strong> Your restaurant is ready to send booking confirmations, reminders, and staff notifications.
+            <br />
+            <span className="text-sm text-muted-foreground mt-1 block">
+              Daily usage: {dailyUsage}/{dailyLimit} emails • Last reset: {new Date().toLocaleDateString('en-GB')}
+            </span>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Usage Warning Alert */}
+      {isConfigured && dailyUsage > dailyLimit * 0.8 && (
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription>
+            <strong>High Usage Warning:</strong> You've used {Math.round((dailyUsage / dailyLimit) * 100)}% of your daily email limit. 
+            Consider increasing your daily limit in the advanced settings below.
           </AlertDescription>
         </Alert>
       )}
