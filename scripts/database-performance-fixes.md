@@ -68,6 +68,18 @@ Applied comprehensive database performance optimizations based on Supabase datab
 - Added missing `contact_id` index to `email_logs`
 - Updated table statistics
 
+### Migration 3: `optimize_email_indexes_based_on_usage`
+- Analyzed actual email system query patterns in codebase
+- Removed indexes not used by current application logic:
+  - `email_queue_recipient_idx` (no recipient filtering in queries)
+  - `email_queue_booking_idx` (booking_id only used for INSERT, not SELECT)
+  - `idx_email_queue_contact_id` (contact_id only used for INSERT, not SELECT)
+  - `idx_email_logs_contact_id` (contact_id only used for INSERT, not SELECT)
+- Kept essential email processing indexes with documentation:
+  - `email_queue_status_idx` (for `status = 'pending'` filters)
+  - `email_queue_scheduled_idx` (for `scheduled_for <= now()` filters)
+  - `idx_email_queue_priority` (for `ORDER BY priority DESC`)
+
 ## Verification
 
 ### Before Fixes
@@ -75,11 +87,35 @@ Applied comprehensive database performance optimizations based on Supabase datab
 - 1 Unindexed foreign key issue (INFO level)  
 - 17 Unused index issues (INFO level)
 
-### After Fixes
+### After Initial Fixes
 - ✅ All Auth RLS issues resolved
 - ✅ All critical foreign key indexing issues resolved
 - ✅ Significant reduction in unused indexes
 - ⚠️ Remaining: Some email queue indexes still unused (monitoring for future use)
+
+### After Final Optimization (Based on Actual Usage Analysis)
+- ✅ All critical WARN-level issues resolved (5 → 0)
+- ✅ Removed 4 additional unused indexes not needed for current query patterns
+- ⚠️ 3 Foreign key warnings remain (acceptable - not needed for current usage)
+- ⚠️ 3 Essential email processing indexes marked unused (due to small dev dataset)
+
+**Final Status: 23 → 6 issues (74% improvement)**
+
+### Understanding Remaining Issues
+
+**3 Unindexed Foreign Keys (INFO Level):**
+- `email_logs.contact_id` → `contact_messages.id`
+- `email_queue.booking_id` → `bookings.id`  
+- `email_queue.contact_id` → `contact_messages.id`
+
+These foreign keys don't have covering indexes because analysis showed they're only used for INSERT operations and foreign key constraint validation, not for SELECT filtering. Adding indexes would consume storage and slow down writes without providing query benefits.
+
+**3 Unused Email Processing Indexes (INFO Level):**
+- `email_queue_status_idx`
+- `email_queue_scheduled_idx` 
+- `idx_email_queue_priority`
+
+These indexes appear "unused" because the email_queue table only has 9 records in the development environment. PostgreSQL correctly chooses sequential scans over index scans for such small datasets. These indexes are essential for production email processing and will become utilized as email volume increases.
 
 ## Monitoring Recommendations
 
