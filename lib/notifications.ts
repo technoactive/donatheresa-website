@@ -180,7 +180,9 @@ export class NotificationManager {
 
   private constructor() {
     this.loadSettings()
+    this.loadNotificationsFromDatabase() // Add this line
     this.setupSettingsRefresh()
+    this.setupNotificationUpdates() // Add this line
   }
 
   static getInstance(): NotificationManager {
@@ -492,6 +494,76 @@ export class NotificationManager {
     return true
   }
 
+  private async loadNotificationsFromDatabase(): Promise<void> {
+    try {
+      console.log('🔄 Loading notifications from database...');
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', 'admin')
+        .order('created_at', { ascending: false })
+        .limit(this.settings?.max_notifications ?? 50)
+
+      if (error) {
+        console.error('❌ Error loading notifications from database:', error)
+        return
+      }
+
+      if (data) {
+        // Convert database notifications to our format
+        this.notifications = data.map(dbNotification => ({
+          id: dbNotification.id,
+          type: dbNotification.type as NotificationType,
+          priority: dbNotification.priority as NotificationPriority,
+          title: dbNotification.title,
+          message: dbNotification.message,
+          timestamp: new Date(dbNotification.timestamp || dbNotification.created_at),
+          read: dbNotification.read,
+          dismissed: dbNotification.dismissed,
+          actionUrl: dbNotification.action_url,
+          actionLabel: dbNotification.action_label,
+          data: {
+            bookingId: dbNotification.booking_id,
+            contactId: dbNotification.contact_id
+          }
+        }))
+
+        console.log('✅ Loaded', this.notifications.length, 'notifications from database');
+        console.log('📬 Unread notifications:', this.notifications.filter(n => !n.read).length);
+        
+        // Notify listeners
+        this.notifyListeners()
+      }
+    } catch (error) {
+      console.error('💥 Error loading notifications from database:', error)
+    }
+  }
+
+  private setupNotificationUpdates(): void {
+    // Listen for new notifications in real-time
+    const supabase = createClient()
+    supabase
+      .channel('notifications_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notifications',
+          filter: 'user_id=eq.admin'
+        },
+        (payload) => {
+          console.log('🔔 Real-time notification change:', payload.eventType);
+          // Reload notifications when database changes
+          this.loadNotificationsFromDatabase()
+        }
+      )
+      .subscribe((status) => {
+        console.log('📡 Notification subscription status:', status);
+      })
+  }
+
   public getNotifications(): Notification[] {
     return [...this.notifications]
   }
@@ -500,11 +572,31 @@ export class NotificationManager {
     return this.notifications.filter(n => !n.read).length
   }
 
-  public markAsRead(id: string): void {
+  public async markAsRead(id: string): Promise<void> {
+    console.log('✅ Marking notification as read:', id);
+    
+    // Update in memory first for immediate UI response
     const notification = this.notifications.find(n => n.id === id)
     if (notification) {
       notification.read = true
       this.notifyListeners()
+    }
+
+    // Update in database
+    try {
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('notifications')
+        .update({ read: true })
+        .eq('id', id)
+
+      if (error) {
+        console.error('❌ Failed to mark notification as read in database:', error)
+      } else {
+        console.log('✅ Notification marked as read in database');
+      }
+    } catch (error) {
+      console.error('💥 Error updating notification in database:', error)
     }
   }
 
@@ -513,9 +605,29 @@ export class NotificationManager {
     this.notifyListeners()
   }
 
-  public dismissNotification(id: string): void {
+  public async dismissNotification(id: string): Promise<void> {
+    console.log('❌ Dismissing notification:', id);
+    
+    // Update in memory first for immediate UI response
     this.notifications = this.notifications.filter(n => n.id !== id)
     this.notifyListeners()
+
+    // Update in database
+    try {
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('notifications')
+        .update({ dismissed: true })
+        .eq('id', id)
+
+      if (error) {
+        console.error('❌ Failed to dismiss notification in database:', error)
+      } else {
+        console.log('✅ Notification dismissed in database');
+      }
+    } catch (error) {
+      console.error('💥 Error dismissing notification in database:', error)
+    }
   }
 
   public clearAll(): void {
