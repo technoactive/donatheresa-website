@@ -578,6 +578,8 @@ export async function createBookingWithCustomer(bookingData: {
     source?: 'website' | 'dashboard'
   }
 }): Promise<{ customer: DatabaseCustomer; booking: Booking }> {
+  const supabase = await createClient()
+  
   // First upsert the customer
   const customer = await upsertCustomer(bookingData.customer)
   
@@ -586,6 +588,62 @@ export async function createBookingWithCustomer(bookingData: {
     customer_id: customer.id,
     ...bookingData.booking
   })
+
+  // 🔔 CREATE NOTIFICATION FOR NEW BOOKING
+  try {
+    console.log('🔔 Creating notification for new booking:', booking.id);
+    
+    // Determine notification type based on party size and source
+    const isVipBooking = bookingData.booking.party_size >= 6 || 
+                         (bookingData.customer.name.toLowerCase().includes('vip')) ||
+                         (bookingData.booking.special_requests?.toLowerCase().includes('anniversary') ||
+                          bookingData.booking.special_requests?.toLowerCase().includes('birthday') ||
+                          bookingData.booking.special_requests?.toLowerCase().includes('celebration'))
+    
+    const notificationType = isVipBooking ? 'vip_booking' : 'new_booking'
+    const priority = isVipBooking ? 'critical' : 'high'
+    
+    // Format booking details for the notification
+    const bookingDateTime = new Date(`${bookingData.booking.booking_date}T${bookingData.booking.booking_time}:00`)
+    const formattedDate = bookingDateTime.toLocaleDateString('en-GB')
+    const formattedTime = bookingDateTime.toLocaleTimeString('en-GB', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: false 
+    })
+    
+    const notificationTitle = isVipBooking 
+      ? `👑 VIP Booking: ${customer.name}`
+      : `🍽️ New Booking: ${customer.name}`
+    
+    const notificationMessage = `${customer.name} (${bookingData.booking.party_size} ${bookingData.booking.party_size === 1 ? 'guest' : 'guests'}) • ${formattedDate} at ${formattedTime}${bookingData.booking.special_requests ? ` • Special requests: ${bookingData.booking.special_requests}` : ''} • Source: ${bookingData.booking.source}`
+    
+    // Create the notification in the database
+    const { error: notificationError } = await supabase
+      .from('notifications')
+      .insert({
+        user_id: 'admin',
+        type: notificationType,
+        title: notificationTitle,
+        message: notificationMessage,
+        priority: priority,
+        booking_id: booking.id,
+        action_url: `/dashboard/bookings`,
+        action_label: 'View Booking',
+        read: false,
+        dismissed: false
+      })
+    
+    if (notificationError) {
+      console.error('❌ Failed to create notification:', notificationError)
+    } else {
+      console.log('✅ Notification created successfully for booking:', booking.id)
+    }
+    
+  } catch (notificationCreateError) {
+    console.error('🚨 Error creating notification for booking:', notificationCreateError)
+    // Don't fail the booking creation if notification fails
+  }
 
   return { customer, booking }
 }
