@@ -6,35 +6,71 @@ export type NotificationSoundType = 'new_booking' | 'vip_booking' | 'booking_can
 const generateBeep = (frequency: number, duration: number, volume: number = 0.3): Promise<void> => {
   return new Promise((resolve) => {
     if (typeof window === 'undefined') {
+      console.log('🔇 No window object, skipping sound')
       resolve()
       return
     }
 
     try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      console.log(`🎵 Generating beep: ${frequency}Hz for ${duration}s at volume ${volume}`)
       
-      const oscillator = audioContext.createOscillator()
-      const gainNode = audioContext.createGain()
-      
-      oscillator.connect(gainNode)
-      gainNode.connect(audioContext.destination)
-      
-      oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime)
-      oscillator.type = 'sine'
-      
-      gainNode.gain.setValueAtTime(0, audioContext.currentTime)
-      gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 0.01)
-      gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration)
-      
-      oscillator.start(audioContext.currentTime)
-      oscillator.stop(audioContext.currentTime + duration)
-      
-      oscillator.onended = () => {
-        audioContext.close()
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext
+      if (!AudioContextClass) {
+        console.warn('❌ Web Audio API not supported')
         resolve()
+        return
+      }
+
+      const audioContext = new AudioContextClass()
+      
+      // Resume context if suspended (required by many browsers)
+      if (audioContext.state === 'suspended') {
+        audioContext.resume().then(() => {
+          console.log('🔊 Audio context resumed')
+          playBeep()
+        }).catch((resumeError) => {
+          console.warn('❌ Failed to resume audio context:', resumeError)
+          resolve()
+        })
+      } else {
+        playBeep()
+      }
+
+      function playBeep() {
+        try {
+          const oscillator = audioContext.createOscillator()
+          const gainNode = audioContext.createGain()
+          
+          oscillator.connect(gainNode)
+          gainNode.connect(audioContext.destination)
+          
+          oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime)
+          oscillator.type = 'sine'
+          
+          gainNode.gain.setValueAtTime(0, audioContext.currentTime)
+          gainNode.gain.linearRampToValueAtTime(volume, audioContext.currentTime + 0.01)
+          gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration)
+          
+          oscillator.start(audioContext.currentTime)
+          oscillator.stop(audioContext.currentTime + duration)
+          
+          oscillator.onended = () => {
+            audioContext.close().then(() => {
+              console.log('✅ Beep played successfully')
+              resolve()
+            }).catch(() => {
+              console.log('✅ Beep played (context cleanup failed)')
+              resolve()
+            })
+          }
+        } catch (playError) {
+          console.warn('❌ Error during beep playback:', playError)
+          audioContext.close().catch(() => {})
+          resolve()
+        }
       }
     } catch (error) {
-      console.warn('Failed to generate beep:', error)
+      console.warn('❌ Failed to create audio context:', error)
       resolve()
     }
   })
