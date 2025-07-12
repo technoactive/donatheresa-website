@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import Image from "next/image"
-import { MapPin, Phone, Clock, Send, MessageSquare, CheckCircle, ArrowRight, Mail, User, Calendar, Star, MapIcon, PhoneCall } from "lucide-react"
+import { MapPin, Phone, Clock, Send, MessageSquare, CheckCircle, ArrowRight, Mail, User, Calendar, Star, Map, PhoneIcon } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { submitContactMessage } from "./actions"
@@ -169,7 +169,7 @@ export default function ContactPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             <div className="flex items-center justify-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center">
-                <PhoneCall className="w-5 h-5 text-white" />
+                <PhoneIcon className="w-5 h-5 text-white" />
               </div>
               <div className="text-left">
                 <p className="text-sm font-medium text-slate-600">Call Us</p>
@@ -181,7 +181,7 @@ export default function ContactPage() {
 
             <div className="flex items-center justify-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                <MapIcon className="w-5 h-5 text-white" />
+                <Map className="w-5 h-5 text-white" />
               </div>
               <div className="text-left">
                 <p className="text-sm font-medium text-slate-600">Visit Us</p>
