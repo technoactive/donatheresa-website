@@ -279,32 +279,30 @@ export function BookingForm() {
         </p>
       </div>
 
-      {/* Success message */}
-      {state?.success && state?.bookingId && (
-        <Alert className="mb-6 border-green-200 bg-green-50">
-          <CheckCircle2 className="h-5 w-5 text-green-600" />
-          <AlertDescription className="text-green-800">
-            <div className="font-semibold mb-1">{state.message}</div>
-            <div>{state.description}</div>
-            <div className="mt-2 text-sm text-green-700">Redirecting to home page in 5 seconds...</div>
-          </AlertDescription>
-        </Alert>
-      )}
+      {/* Success message - Show only this when booking is successful */}
+      {state?.success && state?.bookingId ? (
+        <div className="text-center py-12">
+          <CheckCircle2 className="w-16 h-16 text-green-600 mx-auto mb-6" />
+          <h3 className="text-2xl font-semibold text-gray-900 mb-3">{state.message}</h3>
+          <p className="text-lg text-gray-600 mb-6">{state.description}</p>
+          <div className="text-sm text-gray-500">Redirecting to home page in 5 seconds...</div>
+        </div>
+      ) : (
+        <>
+          {/* Error message */}
+          {state?.message && !state?.success && (
+            <Alert className="mb-6 border-red-200 bg-red-50">
+              <AlertCircle className="h-5 w-5 text-red-600" />
+              <AlertDescription className="text-red-800">
+                <div className="font-semibold">{state.message}</div>
+                {state.description && <div className="mt-1">{state.description}</div>}
+              </AlertDescription>
+            </Alert>
+          )}
 
-      {/* Error message */}
-      {state?.message && !state?.success && (
-        <Alert className="mb-6 border-red-200 bg-red-50">
-          <AlertCircle className="h-5 w-5 text-red-600" />
-          <AlertDescription className="text-red-800">
-            <div className="font-semibold">{state.message}</div>
-            {state.description && <div className="mt-1">{state.description}</div>}
-          </AlertDescription>
-        </Alert>
-      )}
-
-      {/* Form */}
-      <Form {...form}>
-        <form action={formAction} className="space-y-6">
+          {/* Form */}
+          <Form {...form}>
+            <form action={formAction} className="space-y-6">
           {/* Hidden inputs to ensure all form values are submitted */}
           <input type="hidden" name="name" value={form.watch("name")} />
           <input type="hidden" name="email" value={form.watch("email")} />
@@ -567,6 +565,8 @@ export function BookingForm() {
           </div>
         </form>
       </Form>
+      </>
+      )}
     </div>
   )
 }
