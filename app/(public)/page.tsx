@@ -87,7 +87,6 @@ export default function HomePage() {
         className="relative flex items-center overflow-hidden" 
         style={{ 
           minHeight: 'max(100vh, 700px)', 
-          marginTop: '80px',
           paddingTop: 'max(2rem, 5vh)',
           paddingBottom: 'max(2rem, 5vh)'
         }}
