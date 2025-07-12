@@ -305,6 +305,15 @@ export function BookingForm() {
       {/* Form */}
       <Form {...form}>
         <form action={formAction} className="space-y-6">
+          {/* Hidden inputs to ensure all form values are submitted */}
+          <input type="hidden" name="name" value={form.watch("name")} />
+          <input type="hidden" name="email" value={form.watch("email")} />
+          <input type="hidden" name="phone" value={form.watch("phone")} />
+          <input type="hidden" name="date" value={form.watch("date")} />
+          <input type="hidden" name="time" value={form.watch("time")} />
+          <input type="hidden" name="partySize" value={form.watch("partySize")} />
+          <input type="hidden" name="notes" value={form.watch("notes")} />
+          
           {/* Contact Information with fixed min-height */}
           <div className="space-y-6 min-h-[180px]">
             <div className="space-y-1">
@@ -494,48 +503,33 @@ export function BookingForm() {
                     Party Size *
                   </FormLabel>
                   <FormControl>
-                    <>
-                      <input 
-                        type="number" 
-                        {...field} 
-                        className="sr-only" 
-                        value={field.value}
-                        onChange={(e) => {
-                          const value = parseInt(e.target.value);
-                          if (!isNaN(value)) {
-                            field.onChange(value);
-                            setPartySize(value);
-                          }
-                        }}
-                      />
-                      <div className="flex items-center gap-4">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          onClick={decrementPartySize}
-                          disabled={partySize <= 1}
-                          className="h-12 w-12 rounded-full border-gray-200 hover:bg-gray-100 hover:border-amber-500"
-                        >
-                          <Minus className="h-4 w-4" />
-                        </Button>
-                        <div className="flex-1 text-center">
-                          <div className="text-2xl font-semibold text-gray-900">
-                            {partySize} {partySize === 1 ? 'Guest' : 'Guests'}
-                          </div>
+                    <div className="flex items-center gap-4">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={decrementPartySize}
+                        disabled={partySize <= 1}
+                        className="h-12 w-12 rounded-full border-gray-200 hover:bg-gray-100 hover:border-amber-500"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </Button>
+                      <div className="flex-1 text-center">
+                        <div className="text-2xl font-semibold text-gray-900">
+                          {partySize} {partySize === 1 ? 'Guest' : 'Guests'}
                         </div>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="icon"
-                          onClick={incrementPartySize}
-                          disabled={partySize >= (bookingSettings?.max_party_size || 8)}
-                          className="h-12 w-12 rounded-full border-gray-200 hover:bg-gray-100 hover:border-amber-500"
-                        >
-                          <Plus className="h-4 w-4" />
-                        </Button>
                       </div>
-                    </>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={incrementPartySize}
+                        disabled={partySize >= (bookingSettings?.max_party_size || 8)}
+                        className="h-12 w-12 rounded-full border-gray-200 hover:bg-gray-100 hover:border-amber-500"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
