@@ -95,7 +95,7 @@ export default function AboutPageClient() {
   return (
     <main className="bg-white text-slate-900 min-h-screen">
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] lg:min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/30">
+      <section className="relative min-h-[80vh] lg:min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/30 pt-20">
         {/* Background Elements */}
         <div className="absolute inset-0">
           <div className="absolute top-10 left-10 md:top-20 md:left-20 w-48 h-48 md:w-96 md:h-96 bg-amber-200/20 rounded-full blur-3xl"></div>

@@ -84,11 +84,9 @@ export default function HomePage() {
     <div className="bg-white text-slate-900 overflow-x-hidden min-h-screen">
       {/* Hero Section */}
       <section 
-        className="relative flex items-center overflow-hidden" 
+        className="relative flex items-center overflow-hidden pt-20" 
         style={{ 
-          minHeight: 'max(100vh, 700px)', 
-          paddingTop: 'max(2rem, 5vh)',
-          paddingBottom: 'max(2rem, 5vh)'
+          minHeight: 'max(100vh, 700px)'
         }}
         aria-label="Hero section"
       >
