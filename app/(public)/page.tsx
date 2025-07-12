@@ -72,7 +72,7 @@ export const metadata: Metadata = {
   title: "Dona Theresa | Fine Italian Restaurant in Pinner | Authentic Cuisine Since 2011",
   description: "Experience authentic Italian fine dining at Dona Theresa in Pinner. Award-winning restaurant serving modern Italian cuisine since 2011. Book your table today for an unforgettable culinary journey.",
   alternates: {
-    canonical: 'https://dona-theresa.com',
+    canonical: 'https://donatheresa.com',
   },
 }
 
