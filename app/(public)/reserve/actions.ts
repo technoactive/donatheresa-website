@@ -23,13 +23,9 @@ export async function createBooking(prevState: any, formData: FormData) {
   // Simulate network delay
   await new Promise(resolve => setTimeout(resolve, 1000))
   
-  // Debug: Log what we're receiving
-  console.log("FormData entries:", Object.fromEntries(formData.entries()))
-  
   const validatedFields = bookingSchema.safeParse(Object.fromEntries(formData.entries()))
 
   if (!validatedFields.success) {
-    console.log("Validation errors:", validatedFields.error.flatten().fieldErrors)
     return {
       message: "Please fix the errors below.",
       errors: validatedFields.error.flatten().fieldErrors,
