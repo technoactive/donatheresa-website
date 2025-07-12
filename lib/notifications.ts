@@ -510,6 +510,77 @@ export class NotificationManager {
     return true
   }
 
+  // Add notification that already exists in database (from real-time events or polling)
+  public addNotificationFromDatabase(notification: Notification): boolean {
+    console.log('📥 Adding notification from database:', notification.type, notification.title);
+    
+    // Check if we already have this notification
+    if (this.notifications.some(n => n.id === notification.id)) {
+      console.log('⏭️ Notification already exists, skipping');
+      return false;
+    }
+    
+    // Check if notifications are allowed for this type
+    if (!this.isNotificationAllowed(notification.type)) {
+      console.log('❌ Notification blocked by settings for type:', notification.type);
+      return false
+    }
+
+    console.log('✅ Adding database notification:', {
+      id: notification.id,
+      type: notification.type,
+      title: notification.title,
+      priority: notification.priority
+    });
+
+    this.notifications.unshift(notification)
+
+    // Limit notifications based on settings
+    const maxNotifications = this.settings?.max_notifications ?? 50
+    if (this.notifications.length > maxNotifications) {
+      this.notifications = this.notifications.slice(0, maxNotifications)
+    }
+
+    console.log('📊 Total notifications now:', this.notifications.length);
+    
+    // Notify listeners immediately for instant UI update
+    this.notifyListeners()
+
+    // Auto-mark as read after delay (unless it's critical and persistence is enabled)
+    const shouldPersist = this.settings?.persist_critical_notifications && 
+                         notification.priority === 'critical'
+    
+    if (!shouldPersist && !notification.read) {
+      const delay = (this.settings?.auto_mark_read_delay ?? 10) * 1000
+      setTimeout(() => {
+        this.markAsRead(notification.id)
+      }, delay)
+    }
+
+    return true
+  }
+
+  // Update notification from database real-time events
+  public updateNotificationFromDatabase(id: string, updates: { read?: boolean; dismissed?: boolean }): void {
+    console.log('📝 Updating notification from database:', id, updates);
+    
+    const notification = this.notifications.find(n => n.id === id)
+    if (!notification) {
+      console.log('⚠️ Notification not found:', id);
+      return
+    }
+
+    if (updates.read !== undefined) {
+      notification.read = updates.read
+    }
+    
+    if (updates.dismissed !== undefined) {
+      notification.dismissed = updates.dismissed
+    }
+
+    this.notifyListeners()
+  }
+
   private async saveNotificationToDatabase(notification: Notification): Promise<void> {
     try {
       console.log('💾 Saving notification to database:', notification.id);

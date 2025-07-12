@@ -1,172 +1,309 @@
 "use client"
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
-import { notificationManager, type Notification, type NotificationSettings } from '@/lib/notifications'
+import { createContext, useContext, useEffect, useState, useRef, Suspense } from 'react'
+import { Notification, notificationManager, NotificationSettings as NotificationSettingsType } from '@/lib/notifications'
+import { NotificationCenter } from './notification-center'
+import { NotificationToastContainer } from './notification-toast'
+import { createClient } from '@/lib/supabase/client'
+import { playNotificationSound } from '@/lib/notification-sounds'
+import { RealtimeChannel } from '@supabase/supabase-js'
 
 interface NotificationContextType {
   notifications: Notification[]
-  settings: NotificationSettings | null
   unreadCount: number
   markAsRead: (id: string) => void
   markAllAsRead: () => void
   dismissNotification: (id: string) => void
   clearAll: () => void
-  refreshSettings: () => Promise<void>
-  isNotificationCenterOpen: boolean
-  setNotificationCenterOpen: (open: boolean) => void
+  settings: NotificationSettingsType | null
 }
 
-interface NotificationProviderProps {
-  children: React.ReactNode
-}
+const NotificationContext = createContext<NotificationContextType>({
+  notifications: [],
+  unreadCount: 0,
+  markAsRead: () => {},
+  markAllAsRead: () => {},
+  dismissNotification: () => {},
+  clearAll: () => {},
+  settings: null
+})
 
-const NotificationContext = createContext<NotificationContextType | undefined>(undefined)
+export const useNotifications = () => useContext(NotificationContext)
 
-export function NotificationProvider({ children }: NotificationProviderProps) {
+export function NotificationProvider({ children }: { children: React.ReactNode }) {
   const [notifications, setNotifications] = useState<Notification[]>([])
-  const [settings, setSettings] = useState<NotificationSettings | null>(null)
-  const [isNotificationCenterOpen, setNotificationCenterOpen] = useState(false)
+  const [settings, setSettings] = useState<NotificationSettingsType | null>(null)
+  const supabase = createClient()
+  const channelRef = useRef<RealtimeChannel | null>(null)
+  const localNotificationIdsRef = useRef<Set<string>>(new Set())
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const lastCheckedRef = useRef<Date>(new Date())
 
-  // Calculate unread count directly from notifications
-  const unreadCount = notifications.filter(n => !n.read).length
+  const unreadCount = notifications.filter(n => !n.read && !n.dismissed).length
 
-  // Load settings and subscribe to changes
+  // Initialize notification manager
   useEffect(() => {
-    console.log('🎛️ Setting up notification settings subscription...');
+    console.log('🔄 Initializing NotificationProvider...');
     
-    const unsubscribeSettings = notificationManager.onSettingsChange((newSettings) => {
-      console.log('📊 Notification settings updated:', {
-        enabled: newSettings.notifications_enabled,
-        sound: newSettings.sound_enabled,
-        toasts: newSettings.show_toasts
-      });
-      setSettings(newSettings)
-    })
-
-    return unsubscribeSettings
-  }, [])
-
-  // Subscribe to notifications
-  useEffect(() => {
-    console.log('🔔 Setting up notification subscription...');
-    
-    let unsubscribe: (() => void) | null = null;
-    let mounted = true;
-    
-    const setupSubscription = async () => {
+    // Ensure notification manager is initialized
+    const initializeManager = async () => {
       try {
-        // Ensure NotificationManager is fully initialized
-        await notificationManager.ensureInitialized()
+        await notificationManager.ensureInitialized();
         console.log('✅ NotificationManager initialized');
         
-        // Only proceed if component is still mounted
-        if (!mounted) return;
-        
-        // Subscribe to notifications
-        unsubscribe = notificationManager.subscribe((newNotifications) => {
-          console.log('📥 Notifications updated in Provider:', newNotifications.length, 'total');
-          console.log('📬 Unread notifications in Provider:', newNotifications.filter(n => !n.read).length);
-          console.log('🔍 First few notifications:', newNotifications.slice(0, 3).map(n => ({
-            id: n.id,
-            title: n.title,
-            read: n.read
-          })));
-          
-          // Only update state if component is still mounted
-          if (mounted) {
-            setNotifications(newNotifications)
-          }
+        // Subscribe to notification changes
+        const unsubscribe = notificationManager.subscribe(() => {
+          setNotifications([...notificationManager.getNotifications()])
         })
 
-        // Get initial notifications after initialization
-        const initialNotifications = notificationManager.getNotifications();
-        console.log('🔄 Loading initial notifications:', initialNotifications.length);
-        console.log('📬 Initial unread:', initialNotifications.filter(n => !n.read).length);
-        
-        if (mounted) {
-          setNotifications(initialNotifications)
-        }
-      } catch (error) {
-        console.error('❌ Error initializing NotificationManager:', error);
-      }
-    }
+        // Load initial notifications
+        setNotifications([...notificationManager.getNotifications()])
+        setSettings(notificationManager.getSettings())
 
-    setupSubscription();
+        return unsubscribe
+      } catch (error) {
+        console.error('❌ Failed to initialize NotificationManager:', error);
+      }
+    };
+
+    const unsubscribePromise = initializeManager();
 
     return () => {
-      console.log('🧹 Cleaning up notification subscription');
-      mounted = false;
-      if (unsubscribe) {
-        unsubscribe();
-      }
+      unsubscribePromise.then(unsubscribe => {
+        if (unsubscribe) unsubscribe();
+      });
     }
   }, [])
 
-  // Log state changes
+  // Polling mechanism to check for new notifications periodically
   useEffect(() => {
-    console.log('📈 Notification provider state:', {
-      totalNotifications: notifications.length,
-      unreadCount,
-      settingsLoaded: settings !== null,
-      centerOpen: isNotificationCenterOpen
-    });
-  }, [notifications, unreadCount, settings, isNotificationCenterOpen]);
+    const pollForNotifications = async () => {
+      try {
+        const { data: newNotifications, error } = await supabase
+          .from('notifications')
+          .select('*')
+          .eq('user_id', 'admin')
+          .eq('read', false)
+          .gt('created_at', lastCheckedRef.current.toISOString())
+          .order('created_at', { ascending: false })
 
-  const markAsRead = useCallback((id: string) => {
-    console.log('✅ Provider marking as read:', id);
+        if (error) {
+          console.error('❌ Polling error:', error);
+          return;
+        }
+
+        if (newNotifications && newNotifications.length > 0) {
+          console.log('📊 Found new notifications via polling:', newNotifications.length);
+          
+          // Process each new notification
+          for (const dbNotification of newNotifications) {
+            // Skip if we already have this notification
+            if (notificationManager.getNotifications().some(n => n.id === dbNotification.id)) {
+              continue;
+            }
+
+            const notification: Notification = {
+              id: dbNotification.id,
+              type: dbNotification.type,
+              title: dbNotification.title,
+              message: dbNotification.message,
+              priority: dbNotification.priority,
+              timestamp: new Date(dbNotification.timestamp),
+              read: dbNotification.read,
+              dismissed: dbNotification.dismissed,
+              actionUrl: dbNotification.action_url,
+              actionLabel: dbNotification.action_label,
+              data: {
+                bookingId: dbNotification.booking_id,
+                contactId: dbNotification.contact_id
+              }
+            };
+
+            // Add to notification manager
+            notificationManager.addNotificationFromDatabase(notification);
+
+            // Play sound if enabled
+            if (notificationManager.shouldPlaySound(notification.type)) {
+              const volume = notificationManager.getMasterVolume();
+              await playNotificationSound(notification.type, volume);
+            }
+          }
+
+          // Update last checked time
+          lastCheckedRef.current = new Date();
+        }
+      } catch (error) {
+        console.error('💥 Polling failed:', error);
+      }
+    };
+
+    // Start polling every 2 seconds
+    console.log('🔄 Starting notification polling...');
+    pollingIntervalRef.current = setInterval(pollForNotifications, 2000);
+    
+    // Initial poll
+    pollForNotifications();
+
+    return () => {
+      if (pollingIntervalRef.current) {
+        console.log('🛑 Stopping notification polling');
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
+  }, [supabase]);
+
+  // Real-time subscription setup (keep as backup)
+  useEffect(() => {
+    console.log('🔌 Setting up real-time notification subscription...');
+    
+    const setupRealtimeSubscription = async () => {
+      try {
+        // Subscribe to notification changes
+        channelRef.current = supabase
+          .channel('notification_changes')
+          .on(
+            'postgres_changes',
+            { 
+              event: 'INSERT', 
+              schema: 'public', 
+              table: 'notifications',
+              filter: 'user_id=eq.admin'
+            },
+            async (payload) => {
+              console.log('🆕 Real-time: New notification INSERT detected:', payload.new);
+              const dbNotification = payload.new as any;
+              
+              // Skip if this is a locally created notification
+              if (localNotificationIdsRef.current.has(dbNotification.id)) {
+                console.log('⏭️ Skipping locally created notification');
+                localNotificationIdsRef.current.delete(dbNotification.id);
+                return;
+              }
+
+              // Convert database notification to app notification
+              const notification: Notification = {
+                id: dbNotification.id,
+                type: dbNotification.type,
+                title: dbNotification.title,
+                message: dbNotification.message,
+                priority: dbNotification.priority,
+                timestamp: new Date(dbNotification.timestamp),
+                read: dbNotification.read,
+                dismissed: dbNotification.dismissed,
+                actionUrl: dbNotification.action_url,
+                actionLabel: dbNotification.action_label,
+                data: {
+                  bookingId: dbNotification.booking_id,
+                  contactId: dbNotification.contact_id
+                }
+              };
+
+              console.log('📥 Adding notification from real-time event:', notification);
+              
+              // Add to notification manager
+              notificationManager.addNotificationFromDatabase(notification);
+
+              // Play sound if enabled
+              if (notificationManager.shouldPlaySound(notification.type)) {
+                const volume = notificationManager.getMasterVolume();
+                console.log('🔊 Playing sound for notification type:', notification.type);
+                await playNotificationSound(notification.type, volume);
+              }
+            }
+          )
+          .on(
+            'postgres_changes',
+            { 
+              event: 'UPDATE', 
+              schema: 'public', 
+              table: 'notifications',
+              filter: 'user_id=eq.admin'
+            },
+            (payload) => {
+              console.log('📝 Real-time: Notification UPDATE detected:', payload.new);
+              const updated = payload.new as any;
+              
+              notificationManager.updateNotificationFromDatabase(updated.id, {
+                read: updated.read,
+                dismissed: updated.dismissed
+              });
+            }
+          )
+          .subscribe((status) => {
+            console.log('📡 Real-time subscription status:', status);
+          });
+
+      } catch (error) {
+        console.error('❌ Failed to setup real-time subscription:', error);
+      }
+    };
+
+    setupRealtimeSubscription();
+
+    return () => {
+      if (channelRef.current) {
+        console.log('🔌 Cleaning up real-time subscription');
+        supabase.removeChannel(channelRef.current);
+      }
+    };
+  }, [supabase]);
+
+  // Track locally created notifications
+  useEffect(() => {
+    const originalAddNotification = notificationManager.addNotification.bind(notificationManager);
+    
+    notificationManager.addNotification = function(notification) {
+      const result = originalAddNotification(notification);
+      if (result) {
+        // Track this notification ID as locally created
+        const notifications = notificationManager.getNotifications();
+        const latestNotification = notifications[0];
+        if (latestNotification) {
+          localNotificationIdsRef.current.add(latestNotification.id);
+        }
+      }
+      return result;
+    };
+
+    return () => {
+      notificationManager.addNotification = originalAddNotification;
+    };
+  }, []);
+
+  // Handlers
+  const markAsRead = (id: string) => {
     notificationManager.markAsRead(id)
-  }, [])
-
-  const markAllAsRead = useCallback(() => {
-    console.log('✅ Provider marking all as read');
-    notificationManager.markAllAsRead()
-  }, [])
-
-  const dismissNotification = useCallback((id: string) => {
-    console.log('❌ Provider dismissing notification:', id);
-    notificationManager.dismissNotification(id)
-  }, [])
-
-  const clearAll = useCallback(() => {
-    console.log('🗑️ Provider clearing all notifications');
-    notificationManager.clearAll()
-  }, [])
-
-  const refreshSettings = useCallback(async () => {
-    console.log('🔄 Provider refreshing settings...');
-    await notificationManager.refreshSettings()
-  }, [])
-
-  const value: NotificationContextType = {
-    notifications,
-    settings,
-    unreadCount,
-    markAsRead,
-    markAllAsRead,
-    dismissNotification,
-    clearAll,
-    refreshSettings,
-    isNotificationCenterOpen,
-    setNotificationCenterOpen,
   }
 
-  console.log('🎛️ Notification provider rendering with:', {
-    notifications: notifications.length,
-    unread: unreadCount,
-    hasSettings: !!settings
-  });
+  const markAllAsRead = () => {
+    notificationManager.markAllAsRead()
+  }
+
+  const dismissNotification = (id: string) => {
+    notificationManager.dismissNotification(id)
+  }
+
+  const clearAll = () => {
+    notificationManager.clearAll()
+  }
 
   return (
-    <NotificationContext.Provider value={value}>
+    <NotificationContext.Provider
+      value={{
+        notifications,
+        unreadCount,
+        markAsRead,
+        markAllAsRead,
+        dismissNotification,
+        clearAll,
+        settings
+      }}
+    >
       {children}
+      <Suspense fallback={null}>
+        <NotificationCenter />
+        <NotificationToastContainer />
+      </Suspense>
     </NotificationContext.Provider>
   )
-}
-
-export function useNotifications() {
-  const context = useContext(NotificationContext)
-  if (context === undefined) {
-    throw new Error('useNotifications must be used within a NotificationProvider')
-  }
-  return context
 } 
