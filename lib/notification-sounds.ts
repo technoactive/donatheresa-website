@@ -1,6 +1,13 @@
 // Enhanced notification sound system with fallbacks
 
-export type NotificationSoundType = 'new_booking' | 'vip_booking' | 'booking_cancelled' | 'peak_time_booking' | 'system_alert'
+export type NotificationSoundType = 
+  | 'new_booking' 
+  | 'vip_booking' 
+  | 'booking_cancelled' 
+  | 'booking_updated'
+  | 'peak_time_booking' 
+  | 'customer_message'
+  | 'system_alert'
 
 // Fallback sound generators using Web Audio API
 const generateBeep = (frequency: number, duration: number, volume: number = 0.3): Promise<void> => {
@@ -95,9 +102,17 @@ const soundConfigs = {
     file: '/sounds/booking-cancelled.mp3',
     fallback: () => generateBeep(400, 0.5) // Lower tone for cancellation
   },
+  booking_updated: {
+    file: '/sounds/booking-updated.mp3',
+    fallback: () => generateBeep(700, 0.3) // Medium-high tone for updates
+  },
   peak_time_booking: {
     file: '/sounds/peak-time.mp3',
     fallback: () => generateBeep(600, 0.4) // Medium tone
+  },
+  customer_message: {
+    file: '/sounds/customer-message.mp3',
+    fallback: () => generateBeep(500, 0.2) // Soft tone for messages
   },
   system_alert: {
     file: '/sounds/system-alert.mp3',
