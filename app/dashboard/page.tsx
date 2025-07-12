@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Calendar, Users, TrendingUp, Clock, CheckCircle, AlertCircle, Star, ArrowUpRight, ArrowDownRight } from "lucide-react"
 import { getDashboardStats, getRecentBookings } from "@/lib/database"
 import { Badge } from "@/components/ui/badge"
-
+import { TestNotificationButton } from "@/components/dashboard/test-notification-button"
 
 // Force dynamic rendering since this page uses cookies for authentication
 export const dynamic = 'force-dynamic'
@@ -68,9 +68,14 @@ export default async function DashboardPage() {
               Monitor your restaurant's performance and bookings
             </p>
           </div>
-          <div className="hidden md:flex items-center space-x-2 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-xl px-4 py-2">
-            <Star className="w-5 h-5 text-yellow-600" />
-            <span className="text-sm font-medium text-yellow-800">Live Data</span>
+          <div className="flex items-center gap-4">
+            {/* Test Notification Button - REMOVE IN PRODUCTION */}
+            <TestNotificationButton />
+            
+            <div className="hidden md:flex items-center space-x-2 bg-gradient-to-r from-yellow-50 to-amber-50 border border-yellow-200 rounded-xl px-4 py-2">
+              <Star className="w-5 h-5 text-yellow-600" />
+              <span className="text-sm font-medium text-yellow-800">Live Data</span>
+            </div>
           </div>
         </div>
       </div>

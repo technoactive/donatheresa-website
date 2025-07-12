@@ -50,36 +50,55 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
   useEffect(() => {
     console.log('🔔 Setting up notification subscription...');
     
-    const initializeAndSubscribe = async () => {
+    let unsubscribe: (() => void) | null = null;
+    let mounted = true;
+    
+    const setupSubscription = async () => {
       try {
         // Ensure NotificationManager is fully initialized
         await notificationManager.ensureInitialized()
         console.log('✅ NotificationManager initialized');
         
+        // Only proceed if component is still mounted
+        if (!mounted) return;
+        
         // Subscribe to notifications
-        const unsubscribeNotifications = notificationManager.subscribe((newNotifications) => {
-          console.log('📥 Notifications updated:', newNotifications.length, 'total');
-          console.log('📬 Unread notifications:', newNotifications.filter(n => !n.read).length);
-          setNotifications(newNotifications)
+        unsubscribe = notificationManager.subscribe((newNotifications) => {
+          console.log('📥 Notifications updated in Provider:', newNotifications.length, 'total');
+          console.log('📬 Unread notifications in Provider:', newNotifications.filter(n => !n.read).length);
+          console.log('🔍 First few notifications:', newNotifications.slice(0, 3).map(n => ({
+            id: n.id,
+            title: n.title,
+            read: n.read
+          })));
+          
+          // Only update state if component is still mounted
+          if (mounted) {
+            setNotifications(newNotifications)
+          }
         })
 
         // Get initial notifications after initialization
         const initialNotifications = notificationManager.getNotifications();
         console.log('🔄 Loading initial notifications:', initialNotifications.length);
-        setNotifications(initialNotifications)
-
-        // Return cleanup function
-        return unsubscribeNotifications
+        console.log('📬 Initial unread:', initialNotifications.filter(n => !n.read).length);
+        
+        if (mounted) {
+          setNotifications(initialNotifications)
+        }
       } catch (error) {
         console.error('❌ Error initializing NotificationManager:', error);
-        return () => {} // Empty cleanup function
       }
     }
 
-    let unsubscribePromise = initializeAndSubscribe()
+    setupSubscription();
 
     return () => {
-      unsubscribePromise.then(unsubscribe => unsubscribe())
+      console.log('🧹 Cleaning up notification subscription');
+      mounted = false;
+      if (unsubscribe) {
+        unsubscribe();
+      }
     }
   }, [])
 

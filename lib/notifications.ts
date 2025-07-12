@@ -177,7 +177,6 @@ export class NotificationManager {
   private settings: NotificationSettings | null = null
   private listeners: Array<(notifications: Notification[]) => void> = []
   private settingsListeners: Array<(settings: NotificationSettings) => void> = []
-  private locallyCreatedIds = new Set<string>() // Track locally created notifications
 
   private constructor() {
     this.loadSettings()
@@ -481,9 +480,6 @@ export class NotificationManager {
       priority: newNotification.priority
     });
 
-    // Track this as locally created
-    this.locallyCreatedIds.add(newNotification.id)
-
     this.notifications.unshift(newNotification)
 
     // Limit notifications based on settings
@@ -610,54 +606,14 @@ export class NotificationManager {
           filter: 'user_id=eq.admin'
         },
         async (payload) => {
-          console.log('🔔 New notification inserted:', payload);
+          console.log('🔔 New notification inserted in database:', payload.new.id);
           
-          // Check if this notification was created locally
-          if (this.locallyCreatedIds.has(payload.new.id)) {
-            console.log('⏭️ Notification was created locally, skipping duplicate handling');
-            // Clean up the ID after a delay
-            setTimeout(() => {
-              this.locallyCreatedIds.delete(payload.new.id)
-            }, 5000)
-            return;
-          }
-          
-          // Check if this notification already exists locally
-          const existingNotification = this.notifications.find(n => n.id === payload.new.id);
-          if (existingNotification) {
-            console.log('⏭️ Notification already exists locally, skipping');
-            return;
-          }
-          
-          // Add the new notification directly instead of reloading everything
-          const newNotification: Notification = {
-            id: payload.new.id,
-            type: payload.new.type as NotificationType,
-            priority: payload.new.priority as NotificationPriority,
-            title: payload.new.title,
-            message: payload.new.message,
-            timestamp: new Date(payload.new.timestamp || payload.new.created_at),
-            read: payload.new.read,
-            dismissed: payload.new.dismissed,
-            actionUrl: payload.new.action_url,
-            actionLabel: payload.new.action_label,
-            data: {
-              bookingId: payload.new.booking_id,
-              contactId: payload.new.contact_id
-            }
-          };
-          
-          // Add to the beginning of the array
-          this.notifications.unshift(newNotification);
-          
-          // Limit notifications
-          const maxNotifications = this.settings?.max_notifications ?? 50;
-          if (this.notifications.length > maxNotifications) {
-            this.notifications = this.notifications.slice(0, maxNotifications);
-          }
-          
-          console.log('✅ Added new notification from real-time event');
-          this.notifyListeners();
+          // Always reload notifications from database to ensure consistency
+          // This ensures we catch all notifications, even if they were created elsewhere
+          setTimeout(() => {
+            console.log('🔄 Reloading notifications after INSERT event');
+            this.loadNotificationsFromDatabase();
+          }, 100); // Small delay to ensure database write is complete
         }
       )
       .on(
@@ -669,7 +625,7 @@ export class NotificationManager {
           filter: 'user_id=eq.admin'
         },
         (payload) => {
-          console.log('🔔 Notification updated:', payload);
+          console.log('🔔 Notification updated:', payload.new.id);
           
           // Update the notification in our local array
           const index = this.notifications.findIndex(n => n.id === payload.new.id);
@@ -690,6 +646,10 @@ export class NotificationManager {
             
             console.log('✅ Updated notification from real-time event');
             this.notifyListeners();
+          } else {
+            // If we don't have this notification locally, reload from database
+            console.log('🔄 Notification not found locally, reloading from database');
+            this.loadNotificationsFromDatabase();
           }
         }
       )
@@ -833,6 +793,9 @@ export class NotificationManager {
   }
 
   private notifyListeners(): void {
+    console.log('🔔 Notifying listeners:', this.listeners.length, 'listeners');
+    console.log('📊 Current notifications:', this.notifications.length);
+    console.log('📬 Unread count:', this.notifications.filter(n => !n.read).length);
     this.listeners.forEach(listener => listener([...this.notifications]))
   }
 }
