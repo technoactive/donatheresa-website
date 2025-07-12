@@ -19,7 +19,6 @@ import { trackReservation } from "@/components/google-analytics"
 const initialState = {
   message: "",
   success: false,
-  bookingId?: string,
 }
 
 export function BookingForm() {
@@ -107,17 +106,6 @@ export function BookingForm() {
   // Reset form after successful submission
   React.useEffect(() => {
     if (state?.success) {
-      // Track the reservation with Google Analytics
-      if (state.bookingId && date && selectedTime) {
-        trackReservation({
-          reservation_id: state.bookingId,
-          party_size: partySize,
-          date: format(date, "yyyy-MM-dd"),
-          time: selectedTime,
-          source: 'website'
-        })
-      }
-      
       setDate(undefined)
       setSelectedTime("")
       setPartySize(1)
