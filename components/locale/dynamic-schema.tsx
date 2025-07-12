@@ -32,15 +32,15 @@ export function DynamicSchema() {
     "name": localeSettings.restaurant_name || "Dona Theresa",
     "alternateName": `${localeSettings.restaurant_name || "Dona Theresa"} Restaurant`,
     "description": "Fine Italian restaurant serving authentic modern Italian cuisine since 2011. Award-winning dining experience with exceptional service.",
-    "url": "https://dona-theresa.com",
-    "logo": "https://dona-theresa.com/placeholder-logo.png",
+    "url": "https://donatheresa.com",
+    "logo": "https://donatheresa.com/placeholder-logo.png",
     "image": [
-      "https://dona-theresa.com/hero-main.png",
-      "https://dona-theresa.com/gallery-interior.png",
-      "https://dona-theresa.com/gallery-dining.png"
+      "https://donatheresa.com/hero-main.png",
+      "https://donatheresa.com/gallery-interior.png",
+      "https://donatheresa.com/gallery-dining.png"
     ],
     "telephone": localeSettings.restaurant_phone || "+442084215550",
-    "email": "info@dona-theresa.com",
+    "email": "info@donatheresa.com",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": localeSettings.restaurant_address || "451 Uxbridge Road",
@@ -98,7 +98,7 @@ export function DynamicSchema() {
         "value": true
       }
     ],
-    "hasMenu": "https://dona-theresa.com/menu",
+    "hasMenu": "https://donatheresa.com/menu",
     "sameAs": [
       "https://www.facebook.com/donatheresa",
       "https://www.instagram.com/donatheresa", 

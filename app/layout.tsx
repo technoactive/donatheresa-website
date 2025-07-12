@@ -5,6 +5,7 @@ import "./globals.css"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
+import { GoogleAnalytics } from "@/components/google-analytics"
 // import { DynamicSchema } from "@/components/locale/dynamic-schema"
 
 const inter = Inter({
@@ -32,7 +33,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://dona-theresa.com'),
+  metadataBase: new URL('https://donatheresa.com'),
   title: {
     default: "Dona Theresa | Fine Italian Restaurant in Pinner | Authentic Cuisine Since 2011",
     template: "%s | Dona Theresa Restaurant"
@@ -69,7 +70,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    url: 'https://dona-theresa.com',
+    url: 'https://donatheresa.com',
     siteName: 'Dona Theresa Restaurant',
     title: 'Dona Theresa | Fine Italian Restaurant in Pinner | Authentic Cuisine Since 2011',
     description: 'Experience authentic Italian fine dining at Dona Theresa in Pinner. Award-winning restaurant serving modern Italian cuisine since 2011. Book your table today.',
@@ -99,7 +100,7 @@ export const metadata: Metadata = {
     images: ['/hero-main.png'],
   },
   alternates: {
-    canonical: 'https://dona-theresa.com',
+    canonical: 'https://donatheresa.com',
   },
   category: 'restaurant',
   classification: 'Fine Dining Restaurant',
@@ -150,6 +151,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
+          <GoogleAnalytics />
           {children}
           <Toaster richColors />
         </ThemeProvider>
