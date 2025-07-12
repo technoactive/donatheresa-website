@@ -104,7 +104,7 @@ export default function ContactPage() {
   return (
     <div className="bg-gradient-to-b from-stone-50 to-cream-50 min-h-screen">
       {/* Elegant Italian Hero Section */}
-      <section className="relative overflow-hidden pt-20 pb-10 md:pb-16">
+      <section className="relative overflow-hidden pt-28 pb-10 md:pb-16">
         {/* Sophisticated Background Pattern */}
         <div className="absolute inset-0 bg-gradient-to-br from-stone-100 via-amber-50 to-emerald-50 opacity-60"></div>
         <div className="absolute inset-0">
