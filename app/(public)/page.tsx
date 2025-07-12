@@ -6,6 +6,9 @@ import { Star, ArrowRight, Play, Sparkles, Zap, Crown, Utensils, Quote } from "l
 import { FormattedCurrency } from "@/components/locale/formatted-date"
 import type { Metadata } from "next"
 
+// Force dynamic rendering to avoid static generation issues
+export const dynamic = 'force-dynamic'
+
 const featuredDishes = [
   {
     name: "Filleto Rossini",

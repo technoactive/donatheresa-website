@@ -4,6 +4,9 @@ import Link from "next/link"
 import { Calendar, Clock, Users, Phone, Star, Heart, Utensils, Crown, Sparkles } from "lucide-react"
 import { getBookingSettings } from "@/lib/database"
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 export default async function ReservePage() {
   // Fetch booking settings from database
   const bookingSettings = await getBookingSettings()
