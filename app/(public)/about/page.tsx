@@ -1,6 +1,9 @@
 import { Metadata } from "next"
 import AboutPageClient from "@/components/public/about-page-client"
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: "About Dona Theresa | Authentic Italian Restaurant in Hatch End",
   description: "Discover the story of Dona Theresa, Hatch End's beloved family-run Italian restaurant. Bringing authentic Italian cuisine with Portuguese hospitality since 2011.",
