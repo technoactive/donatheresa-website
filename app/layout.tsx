@@ -13,12 +13,16 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 })
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair-display",
   display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 })
 
 export const viewport: Viewport = {
@@ -134,6 +138,26 @@ export default function RootLayout({
         {/* Preconnect to external domains */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        
+        {/* Preload critical resources */}
+        <link 
+          rel="preload" 
+          href="/fonts/inter-var.woff2" 
+          as="font" 
+          type="font/woff2" 
+          crossOrigin="anonymous" 
+        />
+        
+        {/* DNS prefetch for performance */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        
+        {/* Prevent layout shift with aspect-ratio */}
+        <style dangerouslySetInnerHTML={{ __html: `
+          img { max-width: 100%; height: auto; }
+          [data-loading] { min-height: 100px; }
+          .lucide { display: inline-block; vertical-align: middle; }
+        `}} />
         
         {/* Favicon and touch icons */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
