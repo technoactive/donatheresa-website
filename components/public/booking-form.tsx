@@ -494,35 +494,36 @@ export function BookingForm() {
                     Party Size *
                   </FormLabel>
                   <FormControl>
-                    <div className="flex items-center gap-4">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={decrementPartySize}
-                        disabled={partySize <= 1}
-                        className="h-12 w-12 rounded-full border-gray-200 hover:bg-gray-100 hover:border-amber-500"
-                      >
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                      <div className="flex-1 text-center">
-                        <div className="text-2xl font-semibold text-gray-900">
-                          {partySize} {partySize === 1 ? 'Guest' : 'Guests'}
+                    <>
+                      <input type="hidden" {...field} />
+                      <div className="flex items-center gap-4">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={decrementPartySize}
+                          disabled={partySize <= 1}
+                          className="h-12 w-12 rounded-full border-gray-200 hover:bg-gray-100 hover:border-amber-500"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                        <div className="flex-1 text-center">
+                          <div className="text-2xl font-semibold text-gray-900">
+                            {partySize} {partySize === 1 ? 'Guest' : 'Guests'}
+                          </div>
                         </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={incrementPartySize}
+                          disabled={partySize >= (bookingSettings?.max_party_size || 8)}
+                          className="h-12 w-12 rounded-full border-gray-200 hover:bg-gray-100 hover:border-amber-500"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
                       </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={incrementPartySize}
-                        disabled={partySize >= (bookingSettings?.max_party_size || 8)}
-                        className="h-12 w-12 rounded-full border-gray-200 hover:bg-gray-100 hover:border-amber-500"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                      {/* Hidden input to ensure partySize is included in form submission */}
-                      <input type="hidden" name="partySize" value={partySize} />
-                    </div>
+                    </>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
