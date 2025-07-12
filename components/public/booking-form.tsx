@@ -495,7 +495,7 @@ export function BookingForm() {
                   </FormLabel>
                   <FormControl>
                     <>
-                      <input type="hidden" {...field} />
+                      <input type="hidden" name="partySize" value={partySize} />
                       <div className="flex items-center gap-4">
                         <Button
                           type="button"
