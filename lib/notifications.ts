@@ -177,6 +177,7 @@ export class NotificationManager {
   private settings: NotificationSettings | null = null
   private listeners: Array<(notifications: Notification[]) => void> = []
   private settingsListeners: Array<(settings: NotificationSettings) => void> = []
+  private locallyCreatedIds = new Set<string>() // Track locally created notifications
 
   private constructor() {
     this.loadSettings()
@@ -480,6 +481,9 @@ export class NotificationManager {
       priority: newNotification.priority
     });
 
+    // Track this as locally created
+    this.locallyCreatedIds.add(newNotification.id)
+
     this.notifications.unshift(newNotification)
 
     // Limit notifications based on settings
@@ -490,6 +494,7 @@ export class NotificationManager {
 
     console.log('📊 Total notifications now:', this.notifications.length);
     
+    // Notify listeners immediately for instant UI update
     this.notifyListeners()
 
     // Save to database for persistence
@@ -592,25 +597,115 @@ export class NotificationManager {
   private setupNotificationUpdates(): void {
     // Listen for new notifications in real-time
     const supabase = createClient()
-    supabase
+    console.log('🔄 Setting up real-time notification updates...');
+    
+    const channel = supabase
       .channel('notifications_changes')
       .on(
         'postgres_changes',
         {
-          event: '*',
+          event: 'INSERT',
+          schema: 'public',
+          table: 'notifications',
+          filter: 'user_id=eq.admin'
+        },
+        async (payload) => {
+          console.log('🔔 New notification inserted:', payload);
+          
+          // Check if this notification was created locally
+          if (this.locallyCreatedIds.has(payload.new.id)) {
+            console.log('⏭️ Notification was created locally, skipping duplicate handling');
+            // Clean up the ID after a delay
+            setTimeout(() => {
+              this.locallyCreatedIds.delete(payload.new.id)
+            }, 5000)
+            return;
+          }
+          
+          // Check if this notification already exists locally
+          const existingNotification = this.notifications.find(n => n.id === payload.new.id);
+          if (existingNotification) {
+            console.log('⏭️ Notification already exists locally, skipping');
+            return;
+          }
+          
+          // Add the new notification directly instead of reloading everything
+          const newNotification: Notification = {
+            id: payload.new.id,
+            type: payload.new.type as NotificationType,
+            priority: payload.new.priority as NotificationPriority,
+            title: payload.new.title,
+            message: payload.new.message,
+            timestamp: new Date(payload.new.timestamp || payload.new.created_at),
+            read: payload.new.read,
+            dismissed: payload.new.dismissed,
+            actionUrl: payload.new.action_url,
+            actionLabel: payload.new.action_label,
+            data: {
+              bookingId: payload.new.booking_id,
+              contactId: payload.new.contact_id
+            }
+          };
+          
+          // Add to the beginning of the array
+          this.notifications.unshift(newNotification);
+          
+          // Limit notifications
+          const maxNotifications = this.settings?.max_notifications ?? 50;
+          if (this.notifications.length > maxNotifications) {
+            this.notifications = this.notifications.slice(0, maxNotifications);
+          }
+          
+          console.log('✅ Added new notification from real-time event');
+          this.notifyListeners();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
           schema: 'public',
           table: 'notifications',
           filter: 'user_id=eq.admin'
         },
         (payload) => {
-          console.log('🔔 Real-time notification change:', payload.eventType);
-          // Reload notifications when database changes
-          this.loadNotificationsFromDatabase()
+          console.log('🔔 Notification updated:', payload);
+          
+          // Update the notification in our local array
+          const index = this.notifications.findIndex(n => n.id === payload.new.id);
+          if (index !== -1) {
+            this.notifications[index] = {
+              ...this.notifications[index],
+              read: payload.new.read,
+              dismissed: payload.new.dismissed,
+              timestamp: new Date(payload.new.timestamp || payload.new.created_at),
+              actionUrl: payload.new.action_url,
+              actionLabel: payload.new.action_label
+            };
+            
+            // Remove if dismissed
+            if (payload.new.dismissed) {
+              this.notifications.splice(index, 1);
+            }
+            
+            console.log('✅ Updated notification from real-time event');
+            this.notifyListeners();
+          }
         }
       )
       .subscribe((status) => {
         console.log('📡 Notification subscription status:', status);
-      })
+        if (status === 'SUBSCRIBED') {
+          console.log('✅ Real-time notifications are active');
+        } else if (status === 'CHANNEL_ERROR') {
+          console.error('❌ Real-time notification subscription failed');
+        }
+      });
+  }
+
+  public async refreshNotifications(): Promise<void> {
+    console.log('🔄 Manually refreshing notifications from database...');
+    await this.loadNotificationsFromDatabase();
   }
 
   public getNotifications(): Notification[] {
