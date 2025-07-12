@@ -1,160 +1,224 @@
 "use client"
 
-import type React from "react"
-import Link from "next/link"
-import { Menu, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 import { useState, useEffect } from "react"
-import { motion, useScroll, useTransform } from "framer-motion"
-import { RestaurantInfo } from "@/components/locale/restaurant-info"
-
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
-  { href: "/menu", label: "Menu" },
-  { href: "/contact", label: "Contact" },
-]
+import Link from "next/link"
+import { Menu, X, Phone, MapPin, Clock } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { usePathname } from "next/navigation"
 
 export function PublicHeader() {
-  const [isSheetOpen, setIsSheetOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const { scrollY } = useScroll()
-  
-  const headerOpacity = useTransform(scrollY, [0, 100], [0.95, 0.98])
-  const headerBlur = useTransform(scrollY, [0, 100], [8, 16])
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
+      setIsScrolled(window.scrollY > 10)
     }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const closeSheet = () => setIsSheetOpen(false)
-
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string) => {
-    if (href.startsWith("#")) {
-      e.preventDefault()
-      const elem = document.getElementById(href.substring(1))
-      elem?.scrollIntoView({ behavior: "smooth" })
-    }
-    closeSheet()
-  }
+  const navigation = [
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Menu", href: "/menu" },
+    { name: "Reserve", href: "/reserve" },
+    { name: "Contact", href: "/contact" },
+  ]
 
   return (
-    <motion.header 
-      className="fixed top-0 left-0 right-0 z-50 px-6 lg:px-8 h-20 flex items-center"
-      style={{ 
-        backgroundColor: `rgba(0, 0, 0, ${scrolled ? 0.9 : 0.7})`,
-        backdropFilter: `blur(${scrolled ? 16 : 8}px)`,
-      }}
-    >
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-zinc-900/80 to-black/80 backdrop-blur-xl" />
-      <div className="absolute inset-0 border-b border-zinc-700/50" />
-      
-      <div className="relative z-10 w-full max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="group">
-          <div className="space-y-0">
-            <div className="text-2xl font-bold bg-gradient-to-r from-white to-zinc-300 bg-clip-text text-transparent tracking-tight">
-              <RestaurantInfo type="name" fallback="DONA THERESA" className="uppercase" />
+    <>
+      {/* Top Bar with fixed height */}
+      <div className="bg-slate-900 text-white py-2 hidden md:block h-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between text-sm h-6">
+            <div className="flex items-center space-x-6">
+              <a href="tel:02084215550" className="flex items-center gap-2 hover:text-amber-400 transition-colors">
+                <Phone className="w-4 h-4" />
+                <span>020 8421 5550</span>
+              </a>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
+                <span>451 Uxbridge Road, Pinner</span>
+              </div>
             </div>
-            <div className="text-xs tracking-[0.3em] text-zinc-400 font-light -mt-1">
-              CULINARY EXCELLENCE
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4" />
+              <span>Mon-Sun: 12:00 - 22:30</span>
             </div>
           </div>
-      </Link>
+        </div>
+      </div>
 
-      {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link, index) => (
-            <div key={link.href}>
-          <Link
-            href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className="group relative text-sm font-medium text-zinc-300 hover:text-white transition-all duration-300"
-          >
-                <span className="relative z-10">{link.label}</span>
-                <div className="absolute -bottom-1 left-0 w-0 h-px bg-gradient-to-r from-amber-400 to-yellow-300 group-hover:w-full transition-all duration-300" />
-          </Link>
-            </div>
-        ))}
-          
-          <div>
-            <Button
-              asChild
-              className="group relative px-6 py-2.5 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-full text-sm font-medium border-0 overflow-hidden transition-all duration-300 hover:scale-105"
+      {/* Main Header with fixed height */}
+      <header
+        className={cn(
+          "fixed top-0 md:top-10 left-0 right-0 z-50 transition-all duration-300 h-20",
+          isScrolled
+            ? "bg-white/95 backdrop-blur-md shadow-lg"
+            : "bg-white/80 backdrop-blur-sm"
+        )}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between h-20">
+            {/* Logo with fixed dimensions */}
+            <Link 
+              href="/" 
+              className="flex items-center space-x-2 group"
             >
-              <Link href="/reserve" className="flex items-center gap-2">
-                <span>Reserve Table</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-              </Link>
-        </Button>
-          </div>
-      </nav>
-
-        {/* Mobile Menu Button */}
-        <div className="lg:hidden">
-        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-          <SheetTrigger asChild>
-              <button 
-                type="button"
-                className="relative h-10 w-10 inline-flex items-center justify-center bg-zinc-900/50 backdrop-blur-xl border border-zinc-700/50 hover:border-amber-500/70 text-white hover:bg-zinc-800/50 rounded-xl transition-all duration-300 group"
-              >
-                <Menu className="h-5 w-5 text-white group-hover:text-amber-400 transition-colors duration-300 pointer-events-none" />
-              <span className="sr-only">Open menu</span>
-            </button>
-          </SheetTrigger>
-            <SheetContent 
-              side="right" 
-              className="w-full bg-white backdrop-blur-xl border-slate-200 max-w-none"
-            >
-              <div className="p-6 border-b border-slate-200">
-                <div>
-                  <SheetTitle className="text-xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-                    <RestaurantInfo type="name" fallback="DONA THERESA" className="uppercase" />
-                  </SheetTitle>
-                  <div className="text-xs tracking-[0.2em] text-slate-500 font-light">
-                    CULINARY EXCELLENCE
-                  </div>
+              <div className="relative w-12 h-12">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-500 rounded-lg shadow-lg group-hover:shadow-xl transition-shadow" />
+                <div className="absolute inset-[2px] bg-white rounded-md flex items-center justify-center">
+                  <span className="text-2xl font-bold bg-gradient-to-br from-amber-500 to-orange-500 bg-clip-text text-transparent">
+                    DT
+                  </span>
                 </div>
-            </div>
-              
-              <nav className="flex flex-col gap-3 p-6">
-                {navLinks.map((link, index) => (
-                  <div key={link.href}>
+              </div>
+              <div className="hidden sm:block">
+                <h1 className="text-xl font-semibold text-slate-900">Dona Theresa</h1>
+                <p className="text-xs text-slate-600">Italian Restaurant</p>
+              </div>
+            </Link>
+
+            {/* Desktop Navigation with fixed height items */}
+            <nav className="hidden md:flex items-center space-x-1">
+              {navigation.map((item) => (
                 <Link
-                  href={link.href}
-                      onClick={(e) => {
-                        handleNavClick(e, link.href)
-                        closeSheet()
-                      }}
-                      className="group relative flex items-center gap-4 px-6 py-5 text-slate-700 hover:text-slate-900 rounded-xl hover:bg-slate-50 transition-all duration-300"
+                  key={item.name}
+                  href={item.href}
+                  className={cn(
+                    "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 h-10 flex items-center",
+                    pathname === item.href
+                      ? "bg-amber-100 text-amber-900"
+                      : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                  )}
                 >
-                      <div className="w-2 h-2 bg-amber-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <span className="font-semibold text-lg">{link.label}</span>
+                  {item.name}
                 </Link>
-                  </div>
               ))}
-                
-                <div className="mt-8">
-                  <Button
-                    asChild
-                    className="w-full py-6 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-xl text-xl font-semibold transition-all duration-300 hover:scale-105"
-                  >
-                    <Link href="/reserve" onClick={closeSheet} className="flex items-center justify-center gap-3">
-                      <span>Reserve Table</span>
-                      <ArrowRight className="w-5 h-5" />
+            </nav>
+
+            {/* CTA Buttons with fixed dimensions */}
+            <div className="hidden md:flex items-center space-x-3">
+              <Button
+                variant="outline"
+                size="sm"
+                asChild
+                className="border-amber-500 text-amber-600 hover:bg-amber-50 h-10 px-4"
+              >
+                <a href="tel:02084215550">
+                  <Phone className="w-4 h-4 mr-2" />
+                  Call Now
+                </a>
+              </Button>
+              
+              <Button
+                size="sm"
+                asChild
+                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl h-10 px-6"
+              >
+                <Link href="/reserve">
+                  Book Table
                 </Link>
               </Button>
+            </div>
+
+            {/* Mobile Menu Button with fixed size */}
+            <button
+              className="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors w-10 h-10 flex items-center justify-center"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Spacer to prevent content jump - matches header height */}
+      <div className="h-20 md:h-[120px]" />
+
+      {/* Mobile Menu with smooth transition */}
+      <div
+        className={cn(
+          "fixed inset-0 z-40 md:hidden transition-all duration-300",
+          isMobileMenuOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        )}
+      >
+        <div 
+          className="absolute inset-0 bg-black/20 backdrop-blur-sm"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+        
+        <div
+          className={cn(
+            "absolute right-0 top-20 bottom-0 w-80 max-w-[calc(100vw-3rem)] bg-white shadow-2xl transition-transform duration-300",
+            isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          )}
+        >
+          <nav className="p-6 space-y-1">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={cn(
+                  "block px-4 py-3 rounded-lg text-base font-medium transition-colors h-12",
+                  pathname === item.href
+                    ? "bg-amber-100 text-amber-900"
+                    : "text-slate-700 hover:bg-slate-100"
+                )}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+            
+            <div className="pt-6 space-y-3 border-t border-slate-200 mt-6">
+              <Button
+                variant="outline"
+                className="w-full justify-center border-amber-500 text-amber-600 hover:bg-amber-50 h-12"
+                asChild
+              >
+                <a href="tel:02084215550">
+                  <Phone className="w-4 h-4 mr-2" />
+                  020 8421 5550
+                </a>
+              </Button>
+              
+              <Button
+                className="w-full justify-center bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white h-12"
+                asChild
+              >
+                <Link href="/reserve" onClick={() => setIsMobileMenuOpen(false)}>
+                  Reserve Table
+                </Link>
+              </Button>
+            </div>
+            
+            <div className="pt-6 border-t border-slate-200 mt-6">
+              <div className="space-y-3 text-sm text-slate-600">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4" />
+                  <span>451 Uxbridge Road, Pinner</span>
                 </div>
-            </nav>
-          </SheetContent>
-        </Sheet>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  <span>Mon-Sun: 12:00 - 22:30</span>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
       </div>
-      </div>
-    </motion.header>
+    </>
   )
 }
