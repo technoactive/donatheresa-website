@@ -155,7 +155,11 @@ function NotificationItem({ notification, onMarkAsRead, onDismiss }: Notificatio
 }
 
 // Notification content component used by both mobile and desktop views
-function NotificationContent() {
+interface NotificationContentProps {
+  isMobile?: boolean
+}
+
+function NotificationContent({ isMobile = false }: NotificationContentProps) {
   const {
     notifications,
     unreadCount,
@@ -168,6 +172,14 @@ function NotificationContent() {
 
   const hasNotifications = notifications.length > 0
   const hasUnread = unreadCount > 0
+
+  const handleMarkAllAsRead = async () => {
+    await markAllAsRead()
+  }
+
+  const handleClearAll = async () => {
+    await clearAll()
+  }
 
   return (
     <>
@@ -184,32 +196,46 @@ function NotificationContent() {
             )}
           </h3>
           
-          {(hasUnread || hasNotifications) && (
-            <div className="flex items-center gap-2">
-              {hasUnread && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={markAllAsRead}
-                  className="h-9"
-                >
-                  <Check className="h-4 w-4 mr-1" />
-                  Mark all read
-                </Button>
-              )}
-              
-              {hasNotifications && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={clearAll}
-                  className="h-9 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-200"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            {(hasUnread || hasNotifications) && (
+              <>
+                {hasUnread && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleMarkAllAsRead}
+                    className="h-9"
+                  >
+                    <Check className="h-4 w-4 mr-1" />
+                    Mark all read
+                  </Button>
+                )}
+                
+                {hasNotifications && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleClearAll}
+                    className="h-9 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-200"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </>
+            )}
+            
+            {/* Mobile close button */}
+            {isMobile && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setNotificationCenterOpen(false)}
+                className="h-9 w-9 p-0"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
         </div>
       </div>
       
@@ -302,7 +328,7 @@ export function NotificationCenter() {
           side="right" 
           className="w-full sm:w-[400px] p-0 flex flex-col"
         >
-          <NotificationContent />
+          <NotificationContent isMobile={true} />
         </SheetContent>
       </Sheet>
     )

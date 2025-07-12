@@ -502,6 +502,7 @@ export class NotificationManager {
         .from('notifications')
         .select('*')
         .eq('user_id', 'admin')
+        .eq('dismissed', false) // Only load non-dismissed notifications
         .order('created_at', { ascending: false })
         .limit(this.settings?.max_notifications ?? 50)
 
@@ -600,9 +601,30 @@ export class NotificationManager {
     }
   }
 
-  public markAllAsRead(): void {
+  public async markAllAsRead(): Promise<void> {
+    console.log('✅ Marking all notifications as read');
+    
+    // Update in memory first for immediate UI response
     this.notifications.forEach(n => n.read = true)
     this.notifyListeners()
+
+    // Update in database
+    try {
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('notifications')
+        .update({ read: true })
+        .eq('user_id', 'admin')
+        .eq('read', false) // Only update unread notifications
+
+      if (error) {
+        console.error('❌ Failed to mark all as read in database:', error)
+      } else {
+        console.log('✅ All notifications marked as read in database');
+      }
+    } catch (error) {
+      console.error('💥 Error updating notifications in database:', error)
+    }
   }
 
   public async dismissNotification(id: string): Promise<void> {
@@ -630,9 +652,30 @@ export class NotificationManager {
     }
   }
 
-  public clearAll(): void {
+  public async clearAll(): Promise<void> {
+    console.log('🗑️ Clearing all notifications');
+    
+    // Update in memory first for immediate UI response
     this.notifications = []
     this.notifyListeners()
+
+    // Update in database - mark all as dismissed
+    try {
+      const supabase = createClient()
+      const { error } = await supabase
+        .from('notifications')
+        .update({ dismissed: true })
+        .eq('user_id', 'admin')
+        .eq('dismissed', false) // Only update non-dismissed notifications
+
+      if (error) {
+        console.error('❌ Failed to clear all notifications in database:', error)
+      } else {
+        console.log('✅ All notifications cleared in database');
+      }
+    } catch (error) {
+      console.error('💥 Error clearing notifications in database:', error)
+    }
   }
 
   public subscribe(listener: (notifications: Notification[]) => void): () => void {
