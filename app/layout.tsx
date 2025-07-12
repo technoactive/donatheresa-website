@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { GoogleAnalytics } from "@/components/google-analytics"
+import { Suspense } from "react"
 // import { DynamicSchema } from "@/components/locale/dynamic-schema"
 
 const inter = Inter({
@@ -151,7 +152,9 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
-          <GoogleAnalytics />
+          <Suspense fallback={null}>
+            <GoogleAnalytics />
+          </Suspense>
           {children}
           <Toaster richColors />
         </ThemeProvider>
