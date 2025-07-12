@@ -520,6 +520,8 @@ export function BookingForm() {
                       >
                         <Plus className="h-4 w-4" />
                       </Button>
+                      {/* Hidden input to ensure partySize is included in form submission */}
+                      <input type="hidden" name="partySize" value={partySize} />
                     </div>
                   </FormControl>
                   <FormMessage />
@@ -554,10 +556,7 @@ export function BookingForm() {
 
           {/* Submit Button */}
           <div className="pt-6">
-            <SubmitButton 
-              isValid={isFormValid}
-              className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white rounded-xl transition-all duration-300 hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            />
+            <SubmitButton />
           </div>
         </form>
       </Form>

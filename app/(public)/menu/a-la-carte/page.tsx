@@ -45,7 +45,7 @@ export default function MenuPage() {
   return (
     <div className="bg-white text-slate-900 min-h-screen">
       {/* Elegant Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/20" style={{ minHeight: '70vh' }}>
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/20 pt-20" style={{ minHeight: '70vh' }}>
         {/* Decorative Elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-amber-100/30 to-yellow-100/20 rounded-full blur-3xl"></div>
