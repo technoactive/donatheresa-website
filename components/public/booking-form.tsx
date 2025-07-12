@@ -495,7 +495,19 @@ export function BookingForm() {
                   </FormLabel>
                   <FormControl>
                     <>
-                      <input type="hidden" name="partySize" value={partySize} />
+                      <input 
+                        type="number" 
+                        {...field} 
+                        className="sr-only" 
+                        value={field.value}
+                        onChange={(e) => {
+                          const value = parseInt(e.target.value);
+                          if (!isNaN(value)) {
+                            field.onChange(value);
+                            setPartySize(value);
+                          }
+                        }}
+                      />
                       <div className="flex items-center gap-4">
                         <Button
                           type="button"
