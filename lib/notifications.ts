@@ -180,9 +180,10 @@ export class NotificationManager {
 
   private constructor() {
     this.loadSettings()
-    this.loadNotificationsFromDatabase() // Add this line
     this.setupSettingsRefresh()
-    this.setupNotificationUpdates() // Add this line
+    this.setupNotificationUpdates()
+    // Load notifications from database asynchronously
+    this.loadNotificationsFromDatabase()
   }
 
   static getInstance(): NotificationManager {
@@ -190,6 +191,17 @@ export class NotificationManager {
       NotificationManager.instance = new NotificationManager()
     }
     return NotificationManager.instance
+  }
+
+  // Add a method to ensure initialization is complete
+  public async ensureInitialized(): Promise<void> {
+    // Wait for settings to load if not already loaded
+    if (!this.settings) {
+      await this.loadSettings()
+    }
+    
+    // Always load notifications from database to ensure we have the latest data
+    await this.loadNotificationsFromDatabase()
   }
 
   private async loadSettings(): Promise<void> {
@@ -480,6 +492,9 @@ export class NotificationManager {
     
     this.notifyListeners()
 
+    // Save to database for persistence
+    this.saveNotificationToDatabase(newNotification)
+
     // Auto-mark as read after delay (unless it's critical and persistence is enabled)
     const shouldPersist = this.settings?.persist_critical_notifications && 
                          newNotification.priority === 'critical'
@@ -492,6 +507,39 @@ export class NotificationManager {
     }
 
     return true
+  }
+
+  private async saveNotificationToDatabase(notification: Notification): Promise<void> {
+    try {
+      console.log('💾 Saving notification to database:', notification.id);
+      const supabase = createClient()
+      
+      const { error } = await supabase
+        .from('notifications')
+        .insert({
+          id: notification.id,
+          user_id: 'admin',
+          type: notification.type,
+          priority: notification.priority,
+          title: notification.title,
+          message: notification.message,
+          timestamp: notification.timestamp.toISOString(),
+          read: notification.read,
+          dismissed: notification.dismissed,
+          action_url: notification.actionUrl,
+          action_label: notification.actionLabel,
+          booking_id: notification.data?.bookingId,
+          contact_id: notification.data?.contactId
+        })
+
+      if (error) {
+        console.error('❌ Failed to save notification to database:', error)
+      } else {
+        console.log('✅ Notification saved to database successfully');
+      }
+    } catch (error) {
+      console.error('💥 Error saving notification to database:', error)
+    }
   }
 
   private async loadNotificationsFromDatabase(): Promise<void> {

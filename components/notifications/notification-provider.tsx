@@ -50,18 +50,37 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
   useEffect(() => {
     console.log('🔔 Setting up notification subscription...');
     
-    const unsubscribeNotifications = notificationManager.subscribe((newNotifications) => {
-      console.log('📥 Notifications updated:', newNotifications.length, 'total');
-      console.log('📬 Unread notifications:', newNotifications.filter(n => !n.read).length);
-      setNotifications(newNotifications)
-    })
+    const initializeAndSubscribe = async () => {
+      try {
+        // Ensure NotificationManager is fully initialized
+        await notificationManager.ensureInitialized()
+        console.log('✅ NotificationManager initialized');
+        
+        // Subscribe to notifications
+        const unsubscribeNotifications = notificationManager.subscribe((newNotifications) => {
+          console.log('📥 Notifications updated:', newNotifications.length, 'total');
+          console.log('📬 Unread notifications:', newNotifications.filter(n => !n.read).length);
+          setNotifications(newNotifications)
+        })
 
-    // Initial load
-    const initialNotifications = notificationManager.getNotifications();
-    console.log('🔄 Loading initial notifications:', initialNotifications.length);
-    setNotifications(initialNotifications)
+        // Get initial notifications after initialization
+        const initialNotifications = notificationManager.getNotifications();
+        console.log('🔄 Loading initial notifications:', initialNotifications.length);
+        setNotifications(initialNotifications)
 
-    return unsubscribeNotifications
+        // Return cleanup function
+        return unsubscribeNotifications
+      } catch (error) {
+        console.error('❌ Error initializing NotificationManager:', error);
+        return () => {} // Empty cleanup function
+      }
+    }
+
+    let unsubscribePromise = initializeAndSubscribe()
+
+    return () => {
+      unsubscribePromise.then(unsubscribe => unsubscribe())
+    }
   }, [])
 
   // Log state changes
