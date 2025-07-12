@@ -92,7 +92,7 @@ export default function MenuOverviewPage() {
   return (
     <div className="bg-white text-slate-900 min-h-screen">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/20" style={{ minHeight: '80vh', marginTop: '80px' }}>
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/20" style={{ minHeight: '80vh' }}>
         {/* Enhanced Decorative Elements */}
         <div className="absolute inset-0 overflow-hidden">
           <motion.div 

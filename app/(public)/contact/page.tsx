@@ -102,7 +102,7 @@ export default function ContactPage() {
   return (
     <div className="bg-white text-slate-900 min-h-screen">
       {/* Combined Hero & Message Section */}
-      <section className="relative flex items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/20" style={{ height: '50vh', marginTop: '80px' }}>
+      <section className="relative flex items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/20" style={{ height: '50vh' }}>
         {/* Decorative Elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-20 -right-20 w-60 h-60 bg-gradient-to-br from-amber-100/30 to-yellow-100/20 rounded-full blur-3xl"></div>
