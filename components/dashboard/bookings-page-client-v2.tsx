@@ -3,14 +3,17 @@
 import React from "react"
 import { BookingsTable } from "@/components/dashboard/bookings-table"
 import { DatePickerWithClear } from "@/components/dashboard/date-picker-with-clear"
+import { EditBookingDialog } from "@/components/dashboard/edit-booking-dialog"
 import type { Booking } from "@/lib/types"
-import { Users, CalendarCheck, Clock, Users2, CalendarDays, Search, AlertCircle, ChevronRight } from "lucide-react"
+import { Users, CalendarCheck, Clock, Users2, CalendarDays, Search, AlertCircle, ChevronRight, Pencil2Icon, CheckIcon, Cross2Icon, ClockIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { toast } from "sonner"
+import { updateBookingStatusAction } from "@/app/dashboard/bookings/actions"
 
 // Helper function to check if two dates are the same day
 const isSameDay = (date1: Date, date2: Date) => {
@@ -121,6 +124,33 @@ function NewBookingsAlert({ bookings }: { bookings: Booking[] }) {
 // Upcoming bookings list component
 function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
   const [expandedDate, setExpandedDate] = React.useState<string | null>(null)
+  const [editingBooking, setEditingBooking] = React.useState<Booking | null>(null)
+  const [isPending, startTransition] = React.useTransition()
+  
+  // Action handlers
+  const handleEdit = React.useCallback((booking: Booking) => {
+    setEditingBooking(booking)
+  }, [])
+
+  const handleStatusChange = React.useCallback((bookingId: string, status: "pending" | "confirmed" | "cancelled") => {
+    startTransition(async () => {
+      try {
+        const result = await updateBookingStatusAction(bookingId, status)
+        if (result.error) {
+          toast.error(result.error)
+        } else {
+          toast.success(result.data)
+        }
+      } catch (error) {
+        toast.error("Failed to update booking status")
+      }
+    })
+  }, [])
+
+  const handleSaveBooking = React.useCallback((updatedBooking: Booking) => {
+    setEditingBooking(null)
+    toast.success("Booking updated successfully")
+  }, [])
   
   // Group bookings by date
   const bookingsByDate = bookings.reduce((acc, booking) => {
@@ -216,13 +246,59 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
                           {booking.notes && <span className="text-blue-600">📝 Has notes</span>}
                         </div>
                       </div>
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        View
-                      </Button>
+                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        {/* Edit button */}
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => handleEdit(booking)}
+                          disabled={isPending}
+                          className="h-8 w-8 text-slate-600 hover:bg-slate-100"
+                          title="Edit booking"
+                        >
+                          <Pencil2Icon className="h-4 w-4" />
+                        </Button>
+                        
+                        {/* Status buttons */}
+                        {booking.status !== "confirmed" && (
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => handleStatusChange(booking.id, "confirmed")}
+                            disabled={isPending}
+                            className="h-8 w-8 text-green-600 hover:bg-green-50"
+                            title="Confirm booking"
+                          >
+                            <CheckIcon className="h-4 w-4" />
+                          </Button>
+                        )}
+                        
+                        {booking.status !== "pending" && (
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => handleStatusChange(booking.id, "pending")}
+                            disabled={isPending}
+                            className="h-8 w-8 text-yellow-600 hover:bg-yellow-50"
+                            title="Set to pending"
+                          >
+                            <ClockIcon className="h-4 w-4" />
+                          </Button>
+                        )}
+                        
+                        {booking.status !== "cancelled" && (
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => handleStatusChange(booking.id, "cancelled")}
+                            disabled={isPending}
+                            className="h-8 w-8 text-red-600 hover:bg-red-50"
+                            title="Cancel booking"
+                          >
+                            <Cross2Icon className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -231,6 +307,16 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
           </div>
         )
       })}
+      
+      {/* Edit Booking Dialog */}
+      {editingBooking && (
+        <EditBookingDialog
+          booking={editingBooking}
+          isOpen={!!editingBooking}
+          onClose={() => setEditingBooking(null)}
+          onSave={handleSaveBooking}
+        />
+      )}
     </div>
   )
 }
