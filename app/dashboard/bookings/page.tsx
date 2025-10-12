@@ -1,5 +1,5 @@
 import React from "react"
-import { BookingsPageClient } from "@/components/dashboard/bookings-page-client"
+import { BookingsPageClientV2 } from "@/components/dashboard/bookings-page-client-v2"
 import { getBookings, getBookingSettings } from "@/lib/database"
 import type { Booking } from "@/lib/types"
 import { revalidatePath } from "next/cache"
@@ -44,7 +44,7 @@ export default async function BookingsPage() {
     return (
       <div className="space-y-6">
         {/* Client Component with Interactive Features */}
-        <BookingsPageClient bookings={bookings} />
+        <BookingsPageClientV2 bookings={bookings} />
       </div>
     )
   } catch (error) {
