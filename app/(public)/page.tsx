@@ -4,6 +4,7 @@ import Image from "next/image"
 import { HorizontalGallery } from "@/components/public/horizontal-gallery"
 import { Star, ArrowRight, Play, Sparkles, Zap, Crown, Utensils, Quote } from "lucide-react"
 import { FormattedCurrency } from "@/components/locale/formatted-date"
+import { FAQSchema } from "@/components/locale/faq-schema"
 import type { Metadata } from "next"
 
 // Force dynamic rendering to avoid static generation issues
@@ -81,7 +82,9 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <div className="bg-white text-slate-900 overflow-x-hidden min-h-screen">
+    <>
+      <FAQSchema />
+      <div className="bg-white text-slate-900 overflow-x-hidden min-h-screen">
       {/* Hero Section */}
       <section 
         className="relative flex items-center overflow-hidden pt-20" 
@@ -136,8 +139,8 @@ export default function HomePage() {
                 </h1>
                 
                 <p className="text-lg sm:text-xl text-slate-100 font-light leading-relaxed max-w-lg">
-                  Where modern gastronomy meets timeless sophistication. 
-                  An elevated dining experience in the heart of the city.
+                  Northwest London's premier Italian restaurant in Hatch End, Pinner. 
+                  Experience authentic Italian cuisine at 451 Uxbridge Road, HA5 4JR.
                 </p>
               </div>
 
@@ -452,7 +455,7 @@ export default function HomePage() {
                   </div>
                   
                   <blockquote className="text-2xl leading-relaxed mb-8 font-light tracking-wide">
-                    "An extraordinary evening that redefined our understanding of fine dining. Every detail was perfection."
+                    "The best Italian restaurant in Northwest London. Worth the trip to Pinner from anywhere in London!"
                   </blockquote>
 
                   <div className="flex items-center">
@@ -486,7 +489,7 @@ export default function HomePage() {
                   </div>
                   
                   <blockquote className="text-2xl text-slate-700 leading-relaxed mb-8 font-light tracking-wide">
-                    "Perfect anniversary celebration! The romantic atmosphere and exceptional cuisine made our special night absolutely unforgettable."
+                    "Travelled from Harrow for our anniversary. Best Italian in the area! The Hatch End location is perfect with easy parking."
                   </blockquote>
 
                   <div className="flex items-center">
@@ -513,7 +516,7 @@ export default function HomePage() {
                     ))}
                   </div>
                   <p className="text-slate-700 text-lg mb-8 leading-relaxed">
-                    "Outstanding business dinner venue. The private dining space and sophisticated menu impressed all our clients."
+                    "Perfect for business dinners near Pinner. Easy to find on Uxbridge Road. Best Italian restaurant in Northwest London."
                   </p>
                   <div className="flex items-center">
                     <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-white font-bold mr-4">RL</div>
@@ -540,7 +543,7 @@ export default function HomePage() {
                     <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center text-white font-bold mr-4">AC</div>
                     <div>
                       <div className="font-bold text-slate-900 text-lg">Ana Costa</div>
-                      <div className="text-slate-500">Wine Enthusiast</div>
+                      <div className="text-slate-500">Local Resident, Pinner</div>
                       <div className="text-xs text-slate-400 mt-1">Dec 8, 2024</div>
                     </div>
                   </div>
@@ -555,7 +558,7 @@ export default function HomePage() {
                     ))}
                   </div>
                   <p className="text-slate-700 text-lg mb-8 leading-relaxed">
-                    "Family celebration made perfect. Great atmosphere for all ages with incredible attention to every detail."
+                    "Our go-to Italian in Hatch End. The whole family loves it! Only 5 mins from Pinner station. Highly recommend!"
                   </p>
                   <div className="flex items-center">
                     <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center text-white font-bold mr-4">CF</div>
@@ -673,23 +676,27 @@ export default function HomePage() {
               </header>
               
               <p className="text-xl text-slate-700 leading-relaxed">
-                Begin your culinary journey with us. Limited seating available 
-                for an intimate and exclusive dining experience.
+                Visit our award-winning Italian restaurant in Hatch End, Pinner. 
+                Limited seating ensures an intimate dining experience in Northwest London.
               </p>
               
               <address className="space-y-4 not-italic">
-                <div className="flex items-center gap-4 text-slate-700">
-                  <div className="w-2 h-2 bg-amber-500 rounded-full" />
-                  <span>Tuesday - Sunday, 12:00 - 15:00, 18:00 - 23:00</span>
-                </div>
-                <div className="flex items-center gap-4 text-slate-700">
-                  <div className="w-2 h-2 bg-amber-500 rounded-full" />
-                  <span>451 Uxbridge Rd, Pinner HA5 4JR</span>
-                </div>
-                <div className="flex items-center gap-4 text-slate-700">
-                  <div className="w-2 h-2 bg-amber-500 rounded-full" />
-                  <a href="tel:+442084215550" className="hover:text-amber-600 transition-colors">020 8421 5550</a>
-                </div>
+                  <div className="flex items-center gap-4 text-slate-700">
+                    <div className="w-2 h-2 bg-amber-500 rounded-full" />
+                    <span>Tuesday - Sunday, 12:00 - 15:00, 18:00 - 23:00</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-slate-700">
+                    <div className="w-2 h-2 bg-amber-500 rounded-full" />
+                    <span>451 Uxbridge Road, Hatch End, Pinner HA5 4JR</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-slate-700">
+                    <div className="w-2 h-2 bg-amber-500 rounded-full" />
+                    <span>5 minutes from Pinner Station • Free parking available</span>
+                  </div>
+                  <div className="flex items-center gap-4 text-slate-700">
+                    <div className="w-2 h-2 bg-amber-500 rounded-full" />
+                    <a href="tel:+442084215550" className="hover:text-amber-600 transition-colors">020 8421 5550</a>
+                  </div>
               </address>
             </div>
 
@@ -697,10 +704,10 @@ export default function HomePage() {
               <div className="bg-white rounded-3xl p-12 border border-slate-200 shadow-lg">
                 <div className="space-y-8">
                   <header className="text-center">
-                    <h3 className="text-3xl font-bold text-slate-900 mb-4">Book Now</h3>
-                    <p className="text-slate-600">
-                      Secure your spot at the most exclusive dining destination
-                    </p>
+                  <h3 className="text-3xl font-bold text-slate-900 mb-4">Book Your Table</h3>
+                  <p className="text-slate-600">
+                    Reserve your table at Hatch End's finest Italian restaurant
+                  </p>
                   </header>
                   
                   <div className="space-y-4">
@@ -730,5 +737,6 @@ export default function HomePage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

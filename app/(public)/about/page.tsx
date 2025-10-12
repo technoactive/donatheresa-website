@@ -5,12 +5,12 @@ import AboutPageClient from "@/components/public/about-page-client"
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: "About Dona Theresa | Authentic Italian Restaurant in Hatch End",
-  description: "Discover the story of Dona Theresa, Hatch End's beloved family-run Italian restaurant. Bringing authentic Italian cuisine with Portuguese hospitality since 2011.",
-  keywords: "Dona Theresa, Italian restaurant Hatch End, family restaurant London, authentic Italian food, Portuguese hospitality, Uxbridge Road restaurant",
+  title: "About Us | Dona Theresa Italian Restaurant Hatch End Pinner",
+  description: "Family-owned Italian restaurant in Hatch End, Pinner since 2011. Located at 451 Uxbridge Road, HA5 4JR. Award-winning authentic Italian cuisine in Northwest London.",
+  keywords: "Dona Theresa about, Italian restaurant Hatch End history, family restaurant Pinner, authentic Italian Northwest London, best Italian restaurant Harrow, Uxbridge Road Pinner restaurant, HA5 4JR restaurant",
   openGraph: {
-    title: "About Dona Theresa | Authentic Italian Restaurant in Hatch End",
-    description: "Experience authentic Italian cuisine with the warmth of Portuguese hospitality at Dona Theresa, serving Hatch End since 2011.",
+    title: "About Dona Theresa | Italian Restaurant Hatch End Pinner | Since 2011",
+    description: "Family-owned Italian restaurant at 451 Uxbridge Road, Hatch End, Pinner HA5 4JR. Authentic cuisine, award-winning service in Northwest London.",
     type: "website",
     locale: "en_GB",
     url: "https://donatheresa.com/about",
