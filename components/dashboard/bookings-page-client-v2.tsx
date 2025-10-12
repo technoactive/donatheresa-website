@@ -190,8 +190,8 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
         return (
           <div key={dateKey} className="border rounded-lg overflow-hidden shadow-sm">
             <div 
-              className={`px-4 py-3 cursor-pointer transition-colors ${
-                isExpanded ? 'bg-blue-50 border-b' : 'bg-gray-50 hover:bg-gray-100'
+              className={`px-4 py-4 cursor-pointer transition-colors touch-manipulation active:opacity-80 ${
+                isExpanded ? 'bg-blue-50 border-b' : 'bg-gray-50 hover:bg-gray-100 active:bg-gray-200'
               }`}
               onClick={() => setExpandedDate(isExpanded && !isToday && !isTomorrow ? null : dateKey)}
             >
@@ -218,8 +218,8 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
             {isExpanded && (
               <div className="divide-y bg-white">
                 {dayBookings.map(booking => (
-                  <div key={booking.id} className="px-4 py-3 hover:bg-blue-50/50 transition-colors group">
-                    <div className="flex items-center justify-between">
+                  <div key={booking.id} className="px-4 py-4 md:py-3 hover:bg-blue-50/50 active:bg-blue-100/50 transition-colors group touch-manipulation">
+                    <div className="flex items-center justify-between gap-3">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-semibold text-sm">{booking.customerName}</span>
@@ -246,17 +246,17 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
                           {booking.notes && <span className="text-blue-600">📝 Has notes</span>}
                         </div>
                       </div>
-                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                         {/* Edit button */}
                         <Button
                           size="icon"
                           variant="ghost"
                           onClick={() => handleEdit(booking)}
                           disabled={isPending}
-                          className="h-8 w-8 text-slate-600 hover:bg-slate-100"
+                          className="h-11 w-11 text-slate-600 hover:bg-slate-100 active:scale-95 transition-all touch-manipulation"
                           title="Edit booking"
                         >
-                          <Pencil className="h-4 w-4" />
+                          <Pencil className="h-5 w-5" />
                         </Button>
                         
                         {/* Status buttons */}
@@ -266,10 +266,10 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
                             variant="ghost"
                             onClick={() => handleStatusChange(booking.id, "confirmed")}
                             disabled={isPending}
-                            className="h-8 w-8 text-green-600 hover:bg-green-50"
+                            className="h-11 w-11 text-green-600 hover:bg-green-50 active:scale-95 transition-all touch-manipulation"
                             title="Confirm booking"
                           >
-                            <Check className="h-4 w-4" />
+                            <Check className="h-5 w-5" />
                           </Button>
                         )}
                         
@@ -279,10 +279,10 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
                             variant="ghost"
                             onClick={() => handleStatusChange(booking.id, "pending")}
                             disabled={isPending}
-                            className="h-8 w-8 text-yellow-600 hover:bg-yellow-50"
+                            className="h-11 w-11 text-yellow-600 hover:bg-yellow-50 active:scale-95 transition-all touch-manipulation"
                             title="Set to pending"
                           >
-                            <Clock className="h-4 w-4" />
+                            <Clock className="h-5 w-5" />
                           </Button>
                         )}
                         
@@ -292,10 +292,10 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
                             variant="ghost"
                             onClick={() => handleStatusChange(booking.id, "cancelled")}
                             disabled={isPending}
-                            className="h-8 w-8 text-red-600 hover:bg-red-50"
+                            className="h-11 w-11 text-red-600 hover:bg-red-50 active:scale-95 transition-all touch-manipulation"
                             title="Cancel booking"
                           >
-                            <X className="h-4 w-4" />
+                            <X className="h-5 w-5" />
                           </Button>
                         )}
                       </div>
@@ -366,8 +366,19 @@ export function BookingsPageClientV2({ bookings }: { bookings: Booking[] }) {
   
   const pendingBookingsCount = bookings.filter(b => b.status === "pending").length
   
+  // Add iPad optimization on mount
+  React.useEffect(() => {
+    // Check if we're on an iPad or touch device
+    const isIPad = /iPad|Macintosh/i.test(navigator.userAgent) && 'ontouchend' in document
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+    
+    if (isIPad || isTouchDevice) {
+      document.body.classList.add('touch-device')
+    }
+  }, [])
+  
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 booking-management-ipad">
       {/* Page Header with global search */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

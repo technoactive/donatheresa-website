@@ -91,7 +91,7 @@ export function EditBookingDialog({ booking, isOpen, onSave, onOpenChange }: Edi
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] dialog-touch bg-white border-slate-200">
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto dialog-touch bg-white border-slate-200">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle className="text-slate-900">Edit Booking</DialogTitle>
