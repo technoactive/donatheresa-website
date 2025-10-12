@@ -5,7 +5,7 @@ import { BookingsTable } from "@/components/dashboard/bookings-table"
 import { DatePickerWithClear } from "@/components/dashboard/date-picker-with-clear"
 import { EditBookingDialog } from "@/components/dashboard/edit-booking-dialog"
 import type { Booking } from "@/lib/types"
-import { Users, CalendarCheck, Clock, Users2, CalendarDays, Search, AlertCircle, ChevronRight, Pencil2Icon, CheckIcon, Cross2Icon, ClockIcon } from "lucide-react"
+import { Users, CalendarCheck, Clock, Users2, CalendarDays, Search, AlertCircle, ChevronRight, Check, X, Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -256,7 +256,7 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
                           className="h-8 w-8 text-slate-600 hover:bg-slate-100"
                           title="Edit booking"
                         >
-                          <Pencil2Icon className="h-4 w-4" />
+                          <Pencil className="h-4 w-4" />
                         </Button>
                         
                         {/* Status buttons */}
@@ -269,7 +269,7 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
                             className="h-8 w-8 text-green-600 hover:bg-green-50"
                             title="Confirm booking"
                           >
-                            <CheckIcon className="h-4 w-4" />
+                            <Check className="h-4 w-4" />
                           </Button>
                         )}
                         
@@ -282,7 +282,7 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
                             className="h-8 w-8 text-yellow-600 hover:bg-yellow-50"
                             title="Set to pending"
                           >
-                            <ClockIcon className="h-4 w-4" />
+                            <Clock className="h-4 w-4" />
                           </Button>
                         )}
                         
@@ -295,7 +295,7 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
                             className="h-8 w-8 text-red-600 hover:bg-red-50"
                             title="Cancel booking"
                           >
-                            <Cross2Icon className="h-4 w-4" />
+                            <X className="h-4 w-4" />
                           </Button>
                         )}
                       </div>
