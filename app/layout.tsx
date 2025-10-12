@@ -159,6 +159,8 @@ export default function RootLayout({
         
         {/* Dynamic Schema.org structured data */}
         {/* <DynamicSchema /> */}
+        
+        {/* Last updated: October 12, 2025 */}
       </head>
       <body
         className={cn(
