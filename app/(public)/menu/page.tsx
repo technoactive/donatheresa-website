@@ -32,6 +32,18 @@ const menuCategories = [
     gradient: "from-emerald-500 to-red-500",
     bgGradient: "from-emerald-50 to-red-50",
   },
+  {
+    id: "lunchtime-earlybird",
+    title: "Lunchtime & Early Bird",
+    subtitle: "Exceptional value",
+    description: "2 course menu at £19.95, available Tuesday-Sunday for lunch and early dinner",
+    image: "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=800&h=600&fit=crop&crop=center",
+    icon: Clock,
+    highlight: "£19.95 - 2 Courses",
+    link: "/menu/lunchtime-earlybird",
+    gradient: "from-amber-500 to-yellow-500",
+    bgGradient: "from-amber-50 to-yellow-50",
+  },
 ]
 
 export default function MenuOverviewPage() {
