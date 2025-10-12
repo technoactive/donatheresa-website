@@ -313,7 +313,9 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
         <EditBookingDialog
           booking={editingBooking}
           isOpen={!!editingBooking}
-          onClose={() => setEditingBooking(null)}
+          onOpenChange={(open) => {
+            if (!open) setEditingBooking(null)
+          }}
           onSave={handleSaveBooking}
         />
       )}
