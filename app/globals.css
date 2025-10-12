@@ -441,3 +441,35 @@ main, div[data-nextjs-scroll-focus-boundary], .min-h-screen {
     }
   }
 }
+
+/* Booking Management iPad Optimizations */
+.booking-management-ipad {
+  /* Prevent iOS zoom on input focus */
+  input, select, textarea, button {
+    font-size: 16px !important;
+  }
+}
+
+/* iPad-specific button visibility */
+@media (min-width: 768px) and (max-width: 1024px) {
+  /* Always show action buttons on iPad */
+  .booking-management-ipad .group button {
+    opacity: 1 !important;
+  }
+}
+
+/* Touch optimization for booking management */
+.touch-manipulation {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Ensure proper touch targets for booking actions */
+@media (hover: none) and (pointer: coarse) {
+  .booking-management-ipad button[title] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
