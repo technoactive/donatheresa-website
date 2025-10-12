@@ -8,6 +8,7 @@ export const decemberChristmasMenuPricing = {
     threeCourse: { price: "£32.95", serviceCharge: "10%" }
   }
 }
+// Note: Prices shown are before service charge. A 10% service charge will be added to your bill.
 
 export const decemberChristmasMenuData = [
   {

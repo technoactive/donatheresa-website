@@ -167,9 +167,9 @@ export default function DecemberChristmasMenuPage() {
           
           <div className="text-center bg-amber-50 rounded-2xl p-6 border border-amber-200">
             <p className="text-amber-800 font-medium">
-              <span className="text-lg">All prices include</span>
-              <span className="text-xl font-bold mx-2">+{decemberChristmasMenuPricing.lunch.twoCourse.serviceCharge}</span>
-              <span className="text-lg">service charge</span>
+              <span className="text-lg">A</span>
+              <span className="text-xl font-bold mx-2">{decemberChristmasMenuPricing.lunch.twoCourse.serviceCharge}</span>
+              <span className="text-lg">service charge will be added to your bill</span>
             </p>
           </div>
         </div>
