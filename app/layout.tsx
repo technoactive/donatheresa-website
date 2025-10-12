@@ -9,7 +9,9 @@ import { GoogleAnalytics } from "@/components/google-analytics"
 import { Suspense } from "react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
-// import { DynamicSchema } from "@/components/locale/dynamic-schema"
+import { DynamicSchema } from "@/components/locale/dynamic-schema"
+import { BreadcrumbSchema } from "@/components/locale/breadcrumb-schema"
+import { FAQSchema } from "@/components/locale/faq-schema"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -42,21 +44,26 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://donatheresa.com'),
   title: {
-    default: "Dona Theresa | Fine Italian Restaurant in Pinner | Authentic Cuisine Since 2011",
-    template: "%s | Dona Theresa Restaurant"
+    default: "Dona Theresa | Italian Restaurant Hatch End Pinner | Fine Dining Northwest London",
+    template: "%s | Dona Theresa Italian Restaurant Pinner"
   },
-  description: "Experience authentic Italian fine dining at Dona Theresa in Pinner. Award-winning restaurant serving modern Italian cuisine since 2011. Book your table today for an unforgettable culinary journey.",
+  description: "Award-winning Italian restaurant in Hatch End, Pinner. Authentic fine dining on Uxbridge Road, Northwest London. Fresh pasta, wood-fired pizza, extensive wine list. Reservations: 020 8421 5550. Open Tuesday-Sunday.",
   keywords: [
+    "Italian restaurant Hatch End",
     "Italian restaurant Pinner",
-    "fine dining London", 
-    "authentic Italian cuisine",
-    "restaurant Uxbridge Road",
-    "Italian food Pinner",
-    "fine dining Pinner",
-    "restaurant reservations",
-    "modern Italian restaurant",
-    "award winning restaurant",
-    "intimate dining Pinner"
+    "fine dining Northwest London",
+    "best Italian restaurant Pinner",
+    "authentic Italian food Hatch End",
+    "restaurant Uxbridge Road Pinner",
+    "Italian restaurant HA5 4JR",
+    "pasta restaurant Pinner",
+    "pizza restaurant Hatch End",
+    "romantic restaurant Northwest London",
+    "Italian fine dining Harrow",
+    "restaurant near Pinner station",
+    "Italian restaurant 451 Uxbridge Road",
+    "Dona Theresa Pinner",
+    "Italian cuisine Northwest London"
   ],
   authors: [{ name: "Dona Theresa Restaurant" }],
   creator: "Dona Theresa Restaurant",
@@ -79,8 +86,8 @@ export const metadata: Metadata = {
     locale: 'en_GB',
     url: 'https://donatheresa.com',
     siteName: 'Dona Theresa Restaurant',
-    title: 'Dona Theresa | Fine Italian Restaurant in Pinner | Authentic Cuisine Since 2011',
-    description: 'Experience authentic Italian fine dining at Dona Theresa in Pinner. Award-winning restaurant serving modern Italian cuisine since 2011. Book your table today.',
+    title: 'Dona Theresa | Italian Restaurant Hatch End Pinner | 451 Uxbridge Road',
+    description: 'Authentic Italian restaurant in Hatch End, Pinner. Located at 451 Uxbridge Road, HA5 4JR. Award-winning fine dining, fresh pasta, extensive wine list. Reservations: 020 8421 5550.',
     images: [
       {
         url: '/hero-main.png',
@@ -102,8 +109,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@dona_theresa',
     creator: '@dona_theresa',
-    title: 'Dona Theresa | Fine Italian Restaurant in Pinner',
-    description: 'Experience authentic Italian fine dining at Dona Theresa in Pinner. Award-winning restaurant since 2011. Book your table today.',
+    title: 'Dona Theresa Italian Restaurant | Hatch End Pinner | Northwest London',
+    description: 'Italian fine dining in Hatch End, Pinner. 451 Uxbridge Road, HA5 4JR. Authentic cuisine, romantic atmosphere. Open Tue-Sun. Book: 020 8421 5550.',
     images: ['/hero-main.png'],
   },
   alternates: {
@@ -115,7 +122,7 @@ export const metadata: Metadata = {
   applicationName: 'Dona Theresa Restaurant',
   referrer: 'origin-when-cross-origin',
   verification: {
-    google: 'your-google-verification-code',
+    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || '',
     // yandex: 'your-yandex-verification-code',
     // yahoo: 'your-yahoo-verification-code',
   },
@@ -159,7 +166,8 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
         
         {/* Dynamic Schema.org structured data */}
-        {/* <DynamicSchema /> */}
+        <DynamicSchema />
+        <BreadcrumbSchema />
         
         {/* Last updated: October 12, 2025 */}
       </head>

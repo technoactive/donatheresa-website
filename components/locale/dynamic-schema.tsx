@@ -31,7 +31,7 @@ export function DynamicSchema() {
     "@type": "Restaurant",
     "name": localeSettings.restaurant_name || "Dona Theresa",
     "alternateName": `${localeSettings.restaurant_name || "Dona Theresa"} Restaurant`,
-    "description": "Fine Italian restaurant serving authentic modern Italian cuisine since 2011. Award-winning dining experience with exceptional service.",
+    "description": "Award-winning Italian restaurant in Hatch End, Pinner. Located at 451 Uxbridge Road, HA5 4JR. Authentic Italian fine dining with fresh pasta, wood-fired pizza, and extensive wine list. Open Tuesday-Sunday for lunch and dinner. Reservations: 020 8421 5550.",
     "url": "https://donatheresa.com",
     "logo": "https://donatheresa.com/placeholder-logo.png",
     "image": [
@@ -54,6 +54,53 @@ export function DynamicSchema() {
       "latitude": "51.5941",
       "longitude": "-0.3840"
     },
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "Pinner",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "London",
+          "addressCountry": "GB"
+        }
+      },
+      {
+        "@type": "City", 
+        "name": "Hatch End",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "London",
+          "addressCountry": "GB"
+        }
+      },
+      {
+        "@type": "City",
+        "name": "Harrow",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "London",
+          "addressCountry": "GB"
+        }
+      },
+      {
+        "@type": "City",
+        "name": "Northwood",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "London",
+          "addressCountry": "GB"
+        }
+      },
+      {
+        "@type": "City",
+        "name": "Ruislip",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "London",
+          "addressCountry": "GB"
+        }
+      }
+    ],
     "openingHoursSpecification": [
       {
         "@type": "OpeningHoursSpecification",
@@ -103,7 +150,57 @@ export function DynamicSchema() {
       "https://www.facebook.com/donatheresa",
       "https://www.instagram.com/donatheresa", 
       "https://twitter.com/dona_theresa"
-    ]
+    ],
+    "knowsAbout": [
+      "Italian Cuisine",
+      "Fine Dining",
+      "Wine Pairing",
+      "Fresh Pasta",
+      "Wood-Fired Pizza",
+      "Authentic Italian Recipes"
+    ],
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Menu Options",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "name": "Lunch Menu",
+          "price": "19.95",
+          "priceCurrency": localeSettings.currency_code || "GBP",
+          "description": "2 course lunch menu available Tuesday-Sunday"
+        },
+        {
+          "@type": "Offer",
+          "name": "Early Bird Menu",
+          "price": "19.95",
+          "priceCurrency": localeSettings.currency_code || "GBP",
+          "description": "2 course early dinner menu"
+        },
+        {
+          "@type": "Offer",
+          "name": "À La Carte",
+          "priceRange": "£££",
+          "description": "Full à la carte menu with premium dishes"
+        }
+      ]
+    },
+    "potentialAction": {
+      "@type": "ReserveAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://donatheresa.com/reserve",
+        "inLanguage": "en-GB",
+        "actionPlatform": [
+          "http://schema.org/DesktopWebPlatform",
+          "http://schema.org/MobileWebPlatform"
+        ]
+      },
+      "result": {
+        "@type": "Reservation",
+        "name": "Table Reservation"
+      }
+    }
   }
 
   return (
