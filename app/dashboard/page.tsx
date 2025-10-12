@@ -1,14 +1,17 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Calendar, Users, TrendingUp, Clock, CheckCircle, AlertCircle, Star, ArrowUpRight, ArrowDownRight } from "lucide-react"
-import { getDashboardStats, getRecentBookings } from "@/lib/database"
+import { Calendar, Users, TrendingUp, Clock, CheckCircle, AlertCircle, Star, ArrowUpRight, ArrowDownRight, CalendarDays, ChevronRight } from "lucide-react"
+import { getDashboardStats, getRecentBookings, getBookings } from "@/lib/database"
 import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
 // Force dynamic rendering since this page uses cookies for authentication
 export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage() {
   // Fetch real data from Supabase
-  const [dashboardStats, recentBookings] = await Promise.all([
+  const [dashboardStats, recentBookings, allBookings] = await Promise.all([
     getDashboardStats().catch(error => {
       console.error('Failed to load dashboard stats:', error)
       return {
@@ -28,8 +31,31 @@ export default async function DashboardPage() {
     getRecentBookings(5).catch(error => {
       console.error('Failed to load recent bookings:', error)
       return []
+    }),
+    getBookings().catch(error => {
+      console.error('Failed to load bookings:', error)
+      return []
     })
   ])
+  
+  // Calculate upcoming bookings for next 7 days
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const nextWeek = new Date(today)
+  nextWeek.setDate(nextWeek.getDate() + 7)
+  
+  const upcomingBookings = allBookings.filter(booking => {
+    const bookingDate = new Date(`${booking.booking_date}T${booking.booking_time}`)
+    return bookingDate >= today && bookingDate <= nextWeek && booking.status !== 'cancelled'
+  })
+  
+  const pendingUpcomingBookings = upcomingBookings.filter(b => b.status === 'pending')
+  const tomorrowBookings = upcomingBookings.filter(booking => {
+    const bookingDate = new Date(`${booking.booking_date}T${booking.booking_time}`)
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    return bookingDate.toDateString() === tomorrow.toDateString()
+  })
 
   // Format change indicators
   const formatChange = (change: number) => {
@@ -56,6 +82,37 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
+      {/* Upcoming Bookings Alert */}
+      {upcomingBookings.length > 0 && (
+        <Alert className="border-blue-200 bg-blue-50">
+          <CalendarDays className="h-4 w-4 text-blue-600" />
+          <AlertTitle className="text-blue-900">Upcoming Bookings Summary</AlertTitle>
+          <AlertDescription className="space-y-2">
+            <div className="text-blue-800">
+              You have <span className="font-semibold">{upcomingBookings.length} bookings</span> in the next 7 days
+              {pendingUpcomingBookings.length > 0 && (
+                <span className="text-orange-700">
+                  {' '}• <span className="font-semibold">{pendingUpcomingBookings.length} pending confirmation</span>
+                </span>
+              )}
+              {tomorrowBookings.length > 0 && (
+                <span>
+                  {' '}• <span className="font-semibold">{tomorrowBookings.length} tomorrow</span>
+                </span>
+              )}
+            </div>
+            <div className="pt-2">
+              <Button asChild size="sm" variant="outline" className="border-blue-300 hover:bg-blue-100">
+                <Link href="/dashboard/bookings" className="flex items-center gap-2">
+                  View All Bookings
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
+      
       {/* Header Section */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
         <div className="flex items-center justify-between">
