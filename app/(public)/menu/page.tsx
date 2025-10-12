@@ -22,9 +22,9 @@ const menuCategories = [
   },
   {
     id: "december-christmas-menu",
-    title: "December Set Menu",
+    title: "December Menu",
     subtitle: "Festive celebration",
-    description: "Enjoy our special December set menu with 2 or 3 course options, featuring seasonal favorites with an Italian twist",
+    description: "Enjoy our special December menu with 2 or 3 course options, featuring seasonal favorites with an Italian twist",
     image: "https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=800&h=600&fit=crop&crop=center",
     icon: Sparkles,
     highlight: "December Special",
