@@ -21,18 +21,6 @@ const menuCategories = [
     bgGradient: "from-amber-50 to-orange-50",
   },
   {
-    id: "december-christmas-menu",
-    title: "December Menu",
-    subtitle: "Festive celebration",
-    description: "Enjoy our special December menu with 2 or 3 course options, featuring seasonal favorites with an Italian twist",
-    image: "https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=800&h=600&fit=crop&crop=center",
-    icon: Sparkles,
-    highlight: "December Special",
-    link: "/menu/december-christmas-menu",
-    gradient: "from-emerald-500 to-red-500",
-    bgGradient: "from-emerald-50 to-red-50",
-  },
-  {
     id: "lunchtime-earlybird",
     title: "Lunchtime & Early Bird",
     subtitle: "Exceptional value",
@@ -43,6 +31,18 @@ const menuCategories = [
     link: "/menu/lunchtime-earlybird",
     gradient: "from-amber-500 to-yellow-500",
     bgGradient: "from-amber-50 to-yellow-50",
+  },
+  {
+    id: "december-christmas-menu",
+    title: "December Menu",
+    subtitle: "Festive celebration",
+    description: "Enjoy our special December menu with 2 or 3 course options, featuring seasonal favorites with an Italian twist",
+    image: "https://images.unsplash.com/photo-1481391319762-47dff72954d9?w=800&h=600&fit=crop&crop=center",
+    icon: Sparkles,
+    highlight: "December Special",
+    link: "/menu/december-christmas-menu",
+    gradient: "from-emerald-500 to-red-500",
+    bgGradient: "from-emerald-50 to-red-50",
   },
 ]
 
