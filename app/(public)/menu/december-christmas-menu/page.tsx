@@ -1,23 +1,20 @@
 "use client"
 
-import { decemberChristmasMenuData } from "@/lib/december-christmas-menu-data"
-import { Utensils, Star, Crown, Sparkles, ChefHat, Wine, Scroll, Coffee, TreePine, Snowflake, Gift, Calendar } from "lucide-react"
+import { decemberChristmasMenuData, decemberChristmasMenuPricing, decemberChristmasMenuNote } from "@/lib/december-christmas-menu-data"
+import { Utensils, Star, Crown, Sparkles, ChefHat, Wine, Scroll, Coffee, TreePine, Snowflake, Gift, Calendar, Clock } from "lucide-react"
 import { useState } from "react"
-import { FormattedPrice } from "@/components/locale/formatted-price"
 import Image from "next/image"
 
 const categoryIcons = {
-  "December Festive Starters": Sparkles,
-  "December Festive Mains": Crown,
-  "December Festive Desserts": Gift,
-  // Add more category icons as needed
+  "Starters": Sparkles,
+  "Main Course": Crown,
+  "Dessert": Gift,
 }
 
 const categoryDescriptions = {
-  "December Festive Starters": "Seasonal starters to begin your December celebration",
-  "December Festive Mains": "Hearty main courses perfect for the festive season",
-  "December Festive Desserts": "Delightful desserts to end your December feast",
-  // Add more descriptions as needed
+  "Starters": "Choose one to begin your festive meal",
+  "Main Course": "Select your preferred main dish",
+  "Dessert": "Complete your experience with a sweet treat",
 }
 
 export default function DecemberChristmasMenuPage() {
@@ -121,6 +118,63 @@ export default function DecemberChristmasMenuPage() {
         </div>
       </section>
 
+      {/* Pricing Section */}
+      <section className="py-16 bg-white">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
+            {/* Lunch Pricing */}
+            <div className="bg-gradient-to-br from-emerald-50 to-white rounded-3xl p-8 border border-emerald-200">
+              <div className="text-center mb-6">
+                <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                  <Clock className="w-4 h-4" />
+                  <span>Lunch Service</span>
+                </div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-2">Lunch Menu</h3>
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-4 bg-white rounded-xl border border-emerald-100">
+                  <span className="font-medium text-slate-700">Two Course Lunch</span>
+                  <span className="text-xl font-bold text-emerald-600">{decemberChristmasMenuPricing.lunch.twoCourse.price}</span>
+                </div>
+                <div className="flex justify-between items-center p-4 bg-white rounded-xl border border-emerald-100">
+                  <span className="font-medium text-slate-700">Three Course Lunch</span>
+                  <span className="text-xl font-bold text-emerald-600">{decemberChristmasMenuPricing.lunch.threeCourse.price}</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Dinner Pricing */}
+            <div className="bg-gradient-to-br from-red-50 to-white rounded-3xl p-8 border border-red-200">
+              <div className="text-center mb-6">
+                <div className="inline-flex items-center gap-2 bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                  <Star className="w-4 h-4" />
+                  <span>Dinner Service</span>
+                </div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-2">Dinner Menu</h3>
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center p-4 bg-white rounded-xl border border-red-100">
+                  <span className="font-medium text-slate-700">Two Course Dinner</span>
+                  <span className="text-xl font-bold text-red-600">{decemberChristmasMenuPricing.dinner.twoCourse.price}</span>
+                </div>
+                <div className="flex justify-between items-center p-4 bg-white rounded-xl border border-red-100">
+                  <span className="font-medium text-slate-700">Three Course Dinner</span>
+                  <span className="text-xl font-bold text-red-600">{decemberChristmasMenuPricing.dinner.threeCourse.price}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="text-center bg-amber-50 rounded-2xl p-6 border border-amber-200">
+            <p className="text-amber-800 font-medium">
+              <span className="text-lg">All prices include</span>
+              <span className="text-xl font-bold mx-2">+{decemberChristmasMenuPricing.lunch.twoCourse.serviceCharge}</span>
+              <span className="text-lg">service charge</span>
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Menu Sections */}
       <section className="py-20 bg-gradient-to-b from-white to-slate-50/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -165,37 +219,17 @@ export default function DecemberChristmasMenuPage() {
                         {/* Background Pattern */}
                         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-emerald-50/10 to-red-50/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         
-                        <div className="relative p-8">
-                          <div className="flex justify-between items-start gap-6">
-                            {/* Item Info */}
-                            <div className="flex-1 space-y-3">
-                              <div className="flex items-start gap-4">
-                                <div className="flex-1">
-                                  <h3 className="text-2xl font-bold text-slate-900 group-hover:text-emerald-700 transition-colors duration-300 leading-tight">
-                                    {item.name}
-                                  </h3>
-                                  
-                                  {item.description && (
-                                    <p className="text-slate-600 group-hover:text-slate-700 transition-colors duration-300 leading-relaxed mt-2 text-lg">
-                                      {item.description}
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                              
-                              {/* Decorative Line */}
-                              <div className="flex items-center gap-3 mt-4">
-                                <div className="flex-1 h-px bg-gradient-to-r from-slate-200 via-emerald-200 to-slate-200 group-hover:from-emerald-200 group-hover:via-red-300 group-hover:to-emerald-200 transition-all duration-300"></div>
-                                <div className="w-2 h-2 bg-emerald-400 rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-300"></div>
-                              </div>
-                            </div>
-
-                            {/* Price */}
-                            <div className="text-right">
-                              <div className="text-3xl font-bold text-slate-900 group-hover:text-emerald-600 transition-colors duration-300">
-                                <FormattedPrice price={item.price} fallback={item.price} />
-                              </div>
-                            </div>
+                        <div className="relative p-6">
+                          <div className="space-y-2">
+                            <h3 className="text-xl font-bold text-slate-900 group-hover:text-emerald-700 transition-colors duration-300 leading-tight">
+                              {item.name}
+                            </h3>
+                            
+                            {item.description && (
+                              <p className="text-slate-600 group-hover:text-slate-700 transition-colors duration-300 leading-relaxed">
+                                {item.description}
+                              </p>
+                            )}
                           </div>
                         </div>
 
@@ -236,6 +270,13 @@ export default function DecemberChristmasMenuPage() {
             
             <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
               Everything you need to know for your December visit
+            </p>
+          </div>
+
+          {/* Dietary Note */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-12 max-w-3xl mx-auto">
+            <p className="text-slate-600 text-center italic">
+              {decemberChristmasMenuNote}
             </p>
           </div>
 
