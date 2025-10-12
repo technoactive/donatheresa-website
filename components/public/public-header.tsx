@@ -80,17 +80,11 @@ export function PublicHeader() {
                 className={cn(
                   "group relative text-sm font-medium transition-all duration-300",
                   pathname === link.href 
-                    ? "text-white" 
+                    ? "text-amber-400" 
                     : "text-zinc-300 hover:text-white"
                 )}
               >
                 <span className="relative z-10">{link.label}</span>
-                <div className={cn(
-                  "absolute -bottom-1 left-0 h-px bg-gradient-to-r from-amber-400 to-yellow-300 transition-all duration-300",
-                  pathname === link.href 
-                    ? "w-full" 
-                    : "w-0 group-hover:w-full"
-                )} />
               </Link>
             </div>
           ))}
@@ -144,9 +138,19 @@ export function PublicHeader() {
                         handleNavClick(e, link.href)
                         closeSheet()
                       }}
-                      className="group relative flex items-center gap-4 px-6 py-5 text-slate-700 hover:text-slate-900 rounded-xl hover:bg-slate-50 transition-all duration-300"
+                      className={cn(
+                        "group relative flex items-center gap-4 px-6 py-5 rounded-xl hover:bg-slate-50 transition-all duration-300",
+                        pathname === link.href
+                          ? "text-amber-600 bg-amber-50/50"
+                          : "text-slate-700 hover:text-slate-900"
+                      )}
                     >
-                      <div className="w-2 h-2 bg-amber-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className={cn(
+                        "w-2 h-2 bg-amber-400 rounded-full transition-opacity",
+                        pathname === link.href
+                          ? "opacity-100"
+                          : "opacity-0 group-hover:opacity-100"
+                      )} />
                       <span className="font-semibold text-lg">{link.label}</span>
                     </Link>
                   </div>
