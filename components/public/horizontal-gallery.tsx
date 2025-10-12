@@ -8,24 +8,6 @@ import { Button } from "@/components/ui/button"
 
 const galleryImages = [
   { 
-    src: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1200&h=800&fit=crop&crop=center", 
-    alt: "Elegant restaurant interior with warm lighting",
-    title: "Sophisticated Interior",
-    subtitle: "Architectural Excellence",
-    description: "Thoughtfully designed spaces that create the perfect ambiance for your dining experience.",
-    tags: ["Interior", "Ambiance", "Luxury"],
-    location: "Main Dining Room"
-  },
-  { 
-    src: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&h=800&fit=crop&crop=center", 
-    alt: "Chef plating an exquisite dish",
-    title: "Culinary Artistry",
-    subtitle: "Master Craftsmanship", 
-    description: "Each plate is a masterpiece, crafted with precision and artistic flair.",
-    tags: ["Fine Dining", "Artistry"],
-    location: "Executive Kitchen"
-  },
-  { 
     src: "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=1200&h=800&fit=crop&crop=center", 
     alt: "Elegant table setting with wine glasses",
     title: "Intimate Dining",
