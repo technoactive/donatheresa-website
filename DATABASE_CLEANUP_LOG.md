@@ -20,7 +20,14 @@ All test data has been successfully removed from the Supabase database. The syst
 ### Verification:
 All tables confirmed empty with 0 rows after cleanup.
 
+### Authentication Cleanup (Added later):
+- **Auth Users**: 2 admin users deleted
+  - donatheresahatchend@gmail.com
+  - info@technoactive.co.uk
+- **Profiles**: 2 admin profiles deleted
+- **User Profiles**: 1 user profile deleted
+
 ### Notes:
 - Configuration tables (booking_config, email_settings, etc.) were preserved
-- User profiles and authentication data were preserved
 - This cleanup was performed because the system was running in test mode until now
+- **IMPORTANT**: All authentication users have been removed. New admin accounts must be created to access the dashboard.
