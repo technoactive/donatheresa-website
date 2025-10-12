@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { GoogleAnalytics } from "@/components/google-analytics"
 import { Suspense } from "react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 // import { DynamicSchema } from "@/components/locale/dynamic-schema"
 
 const inter = Inter({
@@ -176,6 +177,7 @@ export default function RootLayout({
           {children}
           <Toaster richColors />
           <SpeedInsights />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
