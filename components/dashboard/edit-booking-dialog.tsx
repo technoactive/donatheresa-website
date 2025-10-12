@@ -20,11 +20,12 @@ import { useRouter } from "next/navigation"
 
 interface EditBookingDialogProps {
   booking: Booking
+  isOpen: boolean
   onSave: (updatedBooking: Booking) => void
   onOpenChange: (open: boolean) => void
 }
 
-export function EditBookingDialog({ booking, onSave, onOpenChange }: EditBookingDialogProps) {
+export function EditBookingDialog({ booking, isOpen, onSave, onOpenChange }: EditBookingDialogProps) {
   const [isPending, setIsPending] = React.useState(false)
   const router = useRouter()
 
@@ -89,7 +90,7 @@ export function EditBookingDialog({ booking, onSave, onOpenChange }: EditBooking
   }
 
   return (
-    <Dialog open={true} onOpenChange={onOpenChange}>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px] dialog-touch bg-white border-slate-200">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
