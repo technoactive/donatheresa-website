@@ -1,8 +1,9 @@
 "use client"
 
 import { decemberChristmasMenuData, decemberChristmasMenuPricing, decemberChristmasMenuNote } from "@/lib/december-christmas-menu-data"
-import { Utensils, Star, Crown, Sparkles, ChefHat, Wine, Scroll, Coffee, TreePine, Snowflake, Gift, Calendar, Clock } from "lucide-react"
+import { Utensils, Star, Crown, Sparkles, ChefHat, Wine, Scroll, Coffee, TreePine, Snowflake, Gift, Calendar, Clock, Flame, Leaf } from "lucide-react"
 import { useState } from "react"
+import { motion } from "framer-motion"
 import Image from "next/image"
 
 const categoryIcons = {
@@ -12,9 +13,9 @@ const categoryIcons = {
 }
 
 const categoryDescriptions = {
-  "Starters": "Choose one to begin your festive meal",
-  "Main Course": "Select your preferred main dish",
-  "Dessert": "Complete your experience with a sweet treat",
+  "Starters": "Begin your festive journey with our selection of appetizers",
+  "Main Course": "Savor the heart of your celebration",
+  "Dessert": "Sweet endings to complete your festive experience",
 }
 
 export default function DecemberChristmasMenuPage() {
@@ -35,59 +36,139 @@ export default function DecemberChristmasMenuPage() {
 
   return (
     <div className="bg-white text-slate-900 min-h-screen">
-      {/* Elegant Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-red-50/20 pt-20" style={{ minHeight: '70vh' }}>
-        {/* Decorative Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-emerald-100/30 to-red-100/20 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-red-100/20 to-emerald-100/30 rounded-full blur-3xl"></div>
+      {/* Festive Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-red-900 via-emerald-800 to-red-900 pt-20" style={{ minHeight: '80vh' }}>
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"></div>
+          
+          {/* Floating Ornaments */}
+          <motion.div
+            animate={{ 
+              y: [0, -30, 0],
+              rotate: [0, 10, 0]
+            }}
+            transition={{ 
+              duration: 8, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            className="absolute top-20 left-20 w-24 h-24 bg-gradient-to-br from-red-400/20 to-red-600/20 rounded-full blur-2xl"
+          />
+          <motion.div
+            animate={{ 
+              y: [0, 20, 0],
+              rotate: [0, -10, 0]
+            }}
+            transition={{ 
+              duration: 10, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 2
+            }}
+            className="absolute bottom-20 right-20 w-32 h-32 bg-gradient-to-br from-emerald-400/20 to-emerald-600/20 rounded-full blur-2xl"
+          />
+          <motion.div
+            animate={{ 
+              scale: [1, 1.2, 1],
+              opacity: [0.2, 0.3, 0.2]
+            }}
+            transition={{ 
+              duration: 12, 
+              repeat: Infinity, 
+              ease: "easeInOut",
+              delay: 1
+            }}
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-br from-yellow-400/10 to-amber-400/10 rounded-full blur-3xl"
+          />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-center min-h-[70vh]">
-          <div className="text-center space-y-8 py-16">
-            {/* Premium Badge */}
-            <div className="inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm border border-emerald-200/50 text-slate-700 px-8 py-4 rounded-full text-sm font-medium shadow-lg">
-              <Calendar className="w-4 h-4 text-emerald-600" />
-              <span className="tracking-[0.2em] uppercase">December Christmas Menu</span>
-              <Snowflake className="w-4 h-4 text-red-600" />
-            </div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-center min-h-[80vh]">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center space-y-8 py-16"
+          >
+            {/* Festive Badge */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-full text-sm font-medium shadow-2xl"
+            >
+              <Snowflake className="w-5 h-5 animate-pulse" />
+              <span className="tracking-[0.3em] uppercase font-light">December Festivities</span>
+              <TreePine className="w-5 h-5 animate-pulse" />
+            </motion.div>
             
             {/* Main Title */}
             <div className="space-y-6">
               <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-tight tracking-tight">
-                <span className="block text-slate-900">DECEMBER</span>
-                <span className="block bg-gradient-to-r from-emerald-600 via-emerald-500 to-red-600 bg-clip-text text-transparent">
-                  DELIGHTS
-                </span>
+                <motion.span 
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4, duration: 0.8 }}
+                  className="block text-white drop-shadow-2xl"
+                >
+                  FESTIVE
+                </motion.span>
+                <motion.span 
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.6, duration: 0.8 }}
+                  className="block text-transparent bg-gradient-to-r from-yellow-300 via-amber-300 to-yellow-300 bg-clip-text drop-shadow-2xl"
+                >
+                  DECEMBER
+                </motion.span>
               </h1>
               
-              <div className="max-w-4xl mx-auto space-y-6">
-                <p className="text-2xl md:text-3xl text-slate-600 font-light leading-relaxed">
-                  A Month of Festive Flavors
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.6 }}
+                className="max-w-4xl mx-auto space-y-6"
+              >
+                <p className="text-2xl md:text-3xl text-white/90 font-light leading-relaxed">
+                  A Celebration of Seasonal Flavors
                 </p>
                 
-                <div className="w-24 h-px bg-gradient-to-r from-transparent via-emerald-500 to-transparent mx-auto"></div>
+                <div className="flex items-center justify-center gap-4">
+                  <div className="w-16 h-px bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
+                  <Sparkles className="w-6 h-6 text-amber-300 animate-pulse" />
+                  <div className="w-16 h-px bg-gradient-to-l from-transparent via-white/50 to-transparent"></div>
+                </div>
                 
-                <p className="text-lg md:text-xl text-slate-500 leading-relaxed max-w-3xl mx-auto">
-                  Throughout December, experience our extended festive menu featuring 
-                  seasonal specialties and holiday favorites with Italian flair.
+                <p className="text-lg md:text-xl text-white/80 leading-relaxed max-w-3xl mx-auto">
+                  Indulge in our specially curated set menus, where Italian tradition meets festive magic.
+                  Available throughout December for lunch and dinner.
                 </p>
-              </div>
+              </motion.div>
             </div>
 
             {/* Decorative Elements */}
-            <div className="flex items-center justify-center gap-8 pt-8">
-              <div className="flex items-center gap-2 text-emerald-600">
-                <TreePine className="w-5 h-5" />
-                <span className="text-sm font-medium">Extended Menu</span>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 0.6 }}
+              className="flex items-center justify-center gap-6 sm:gap-8 pt-8"
+            >
+              <div className="flex items-center gap-2 text-amber-300">
+                <Flame className="w-5 h-5" />
+                <span className="text-sm font-medium">Warm & Festive</span>
               </div>
-              <div className="w-px h-6 bg-slate-300"></div>
-              <div className="flex items-center gap-2 text-red-600">
-                <Star className="w-5 h-5" />
-                <span className="text-sm font-medium">All December Long</span>
+              <div className="w-px h-6 bg-white/30"></div>
+              <div className="flex items-center gap-2 text-amber-300">
+                <Wine className="w-5 h-5" />
+                <span className="text-sm font-medium">Wine Pairings</span>
               </div>
-            </div>
-          </div>
+              <div className="w-px h-6 bg-white/30"></div>
+              <div className="flex items-center gap-2 text-amber-300">
+                <Gift className="w-5 h-5" />
+                <span className="text-sm font-medium">Special Occasions</span>
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
@@ -118,60 +199,161 @@ export default function DecemberChristmasMenuPage() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6">
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
-            {/* Lunch Pricing */}
-            <div className="bg-gradient-to-br from-emerald-50 to-white rounded-3xl p-8 border border-emerald-200">
-              <div className="text-center mb-6">
-                <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
-                  <Clock className="w-4 h-4" />
-                  <span>Lunch Service</span>
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">Lunch Menu</h3>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center p-4 bg-white rounded-xl border border-emerald-100">
-                  <span className="font-medium text-slate-700">Two Course Lunch</span>
-                  <span className="text-xl font-bold text-emerald-600">{decemberChristmasMenuPricing.lunch.twoCourse.price}</span>
-                </div>
-                <div className="flex justify-between items-center p-4 bg-white rounded-xl border border-emerald-100">
-                  <span className="font-medium text-slate-700">Three Course Lunch</span>
-                  <span className="text-xl font-bold text-emerald-600">{decemberChristmasMenuPricing.lunch.threeCourse.price}</span>
-                </div>
-              </div>
-            </div>
+      {/* Festive Pricing Section */}
+      <section className="py-20 bg-gradient-to-b from-white via-red-50/10 to-emerald-50/10 relative overflow-hidden">
+        {/* Decorative Background */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-red-600 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-emerald-600 to-transparent rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
+          {/* Section Header */}
+          <div className="text-center mb-16">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-4 mb-8"
+            >
+              <div className="w-16 h-px bg-gradient-to-r from-transparent to-red-300"></div>
+              <Sparkles className="w-8 h-8 text-red-600" />
+              <div className="w-16 h-px bg-gradient-to-l from-transparent to-red-300"></div>
+            </motion.div>
             
-            {/* Dinner Pricing */}
-            <div className="bg-gradient-to-br from-red-50 to-white rounded-3xl p-8 border border-red-200">
-              <div className="text-center mb-6">
-                <div className="inline-flex items-center gap-2 bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-medium mb-4">
-                  <Star className="w-4 h-4" />
-                  <span>Dinner Service</span>
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">Dinner Menu</h3>
-              </div>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center p-4 bg-white rounded-xl border border-red-100">
-                  <span className="font-medium text-slate-700">Two Course Dinner</span>
-                  <span className="text-xl font-bold text-red-600">{decemberChristmasMenuPricing.dinner.twoCourse.price}</span>
-                </div>
-                <div className="flex justify-between items-center p-4 bg-white rounded-xl border border-red-100">
-                  <span className="font-medium text-slate-700">Three Course Dinner</span>
-                  <span className="text-xl font-bold text-red-600">{decemberChristmasMenuPricing.dinner.threeCourse.price}</span>
-                </div>
-              </div>
-            </div>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-5xl md:text-6xl font-bold text-slate-900 mb-4"
+            >
+              Choose Your Experience
+            </motion.h2>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-xl text-slate-600 max-w-2xl mx-auto"
+            >
+              Select from our carefully curated lunch and dinner options
+            </motion.p>
           </div>
           
-          <div className="text-center bg-amber-50 rounded-2xl p-6 border border-amber-200">
-            <p className="text-amber-800 font-medium">
-              <span className="text-lg">A</span>
-              <span className="text-xl font-bold mx-2">{decemberChristmasMenuPricing.lunch.twoCourse.serviceCharge}</span>
-              <span className="text-lg">service charge will be added to your bill</span>
-            </p>
+          <div className="grid lg:grid-cols-2 gap-8 mb-12">
+            {/* Lunch Pricing Card */}
+            <motion.div 
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-white to-amber-50 opacity-50"></div>
+              <div className="relative p-10">
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center gap-3 bg-gradient-to-r from-amber-100 to-yellow-100 text-amber-800 px-6 py-3 rounded-full text-sm font-medium mb-6 shadow-md">
+                    <Clock className="w-5 h-5" />
+                    <span className="tracking-wider uppercase">Lunch Service</span>
+                  </div>
+                  <h3 className="text-3xl font-bold text-slate-900 mb-2">Festive Lunch</h3>
+                  <p className="text-slate-600">12:00 PM - 3:00 PM</p>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="relative group/item">
+                    <div className="absolute inset-0 bg-gradient-to-r from-amber-100 to-transparent opacity-0 group-hover/item:opacity-50 transition-opacity duration-300 rounded-2xl"></div>
+                    <div className="relative flex justify-between items-center p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-amber-200/50 hover:border-amber-300 transition-all duration-300">
+                      <div>
+                        <span className="text-lg font-semibold text-slate-800">Two Course Lunch</span>
+                        <p className="text-sm text-slate-500 mt-1">Starter + Main or Main + Dessert</p>
+                      </div>
+                      <span className="text-2xl font-bold text-amber-600">{decemberChristmasMenuPricing.lunch.twoCourse.price}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="relative group/item">
+                    <div className="absolute inset-0 bg-gradient-to-r from-amber-100 to-transparent opacity-0 group-hover/item:opacity-50 transition-opacity duration-300 rounded-2xl"></div>
+                    <div className="relative flex justify-between items-center p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-amber-200/50 hover:border-amber-300 transition-all duration-300">
+                      <div>
+                        <span className="text-lg font-semibold text-slate-800">Three Course Lunch</span>
+                        <p className="text-sm text-slate-500 mt-1">Complete festive experience</p>
+                      </div>
+                      <span className="text-2xl font-bold text-amber-600">{decemberChristmasMenuPricing.lunch.threeCourse.price}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+            
+            {/* Dinner Pricing Card */}
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="group relative bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-red-900 via-emerald-900 to-red-900 opacity-95"></div>
+              <div className="relative p-10 text-white">
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-center gap-3 bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-full text-sm font-medium mb-6 shadow-md border border-white/20">
+                    <Star className="w-5 h-5" />
+                    <span className="tracking-wider uppercase">Dinner Service</span>
+                  </div>
+                  <h3 className="text-3xl font-bold mb-2">Festive Dinner</h3>
+                  <p className="text-white/80">5:30 PM - 10:30 PM</p>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="relative group/item">
+                    <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+                    <div className="relative flex justify-between items-center p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:border-white/40 transition-all duration-300">
+                      <div>
+                        <span className="text-lg font-semibold">Two Course Dinner</span>
+                        <p className="text-sm text-white/70 mt-1">Starter + Main or Main + Dessert</p>
+                      </div>
+                      <span className="text-2xl font-bold text-amber-300">{decemberChristmasMenuPricing.dinner.twoCourse.price}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="relative group/item">
+                    <div className="absolute inset-0 bg-white/10 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+                    <div className="relative flex justify-between items-center p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:border-white/40 transition-all duration-300">
+                      <div>
+                        <span className="text-lg font-semibold">Three Course Dinner</span>
+                        <p className="text-sm text-white/70 mt-1">Complete festive experience</p>
+                      </div>
+                      <span className="text-2xl font-bold text-amber-300">{decemberChristmasMenuPricing.dinner.threeCourse.price}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
           </div>
+          
+          {/* Service Charge Notice */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="text-center bg-gradient-to-r from-red-100 via-white to-emerald-100 rounded-3xl p-8 border border-red-200/50 shadow-lg"
+          >
+            <div className="flex items-center justify-center gap-4 mb-2">
+              <Snowflake className="w-6 h-6 text-red-600" />
+              <p className="text-slate-800 text-lg">
+                <span className="font-medium">A</span>
+                <span className="text-xl font-bold mx-2 text-red-600">{decemberChristmasMenuPricing.lunch.twoCourse.serviceCharge}</span>
+                <span className="font-medium">service charge will be added to your bill</span>
+              </p>
+              <Snowflake className="w-6 h-6 text-emerald-600" />
+            </div>
+            <p className="text-slate-600 text-sm">All prices shown are before service charge</p>
+          </motion.div>
         </div>
       </section>
 
@@ -189,53 +371,100 @@ export default function DecemberChristmasMenuPage() {
                   className="scroll-mt-32"
                 >
                   {/* Section Header */}
-                  <div className="text-center mb-16">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                    className="text-center mb-16"
+                  >
                     <div className="inline-flex items-center gap-4 mb-8">
-                      <div className="w-16 h-px bg-gradient-to-r from-transparent to-emerald-300"></div>
-                      <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg">
-                        <IconComponent className="w-8 h-8 text-white" />
-                      </div>
-                      <div className="w-16 h-px bg-gradient-to-l from-transparent to-red-300"></div>
+                      <motion.div 
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="w-24 h-px bg-gradient-to-r from-transparent via-red-300 to-transparent origin-center"
+                      />
+                      <motion.div 
+                        initial={{ scale: 0, rotate: -180 }}
+                        whileInView={{ scale: 1, rotate: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8, delay: 0.3, type: "spring", stiffness: 200 }}
+                        className="relative"
+                      >
+                        <div className="w-20 h-20 bg-gradient-to-br from-red-600 to-emerald-600 rounded-2xl flex items-center justify-center shadow-xl">
+                          <IconComponent className="w-10 h-10 text-white" />
+                        </div>
+                        {/* Festive sparkles */}
+                        <div className="absolute -top-2 -right-2 w-4 h-4 bg-amber-400 rounded-full animate-pulse"></div>
+                        <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-red-400 rounded-full animate-pulse delay-300"></div>
+                      </motion.div>
+                      <motion.div 
+                        initial={{ scaleX: 0 }}
+                        whileInView={{ scaleX: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="w-24 h-px bg-gradient-to-l from-transparent via-emerald-300 to-transparent origin-center"
+                      />
                     </div>
                     
                     <div className="space-y-4 max-w-4xl mx-auto">
-                      <h2 className="text-5xl md:text-6xl font-bold text-slate-900 leading-tight">
+                      <motion.h2 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-red-800 via-red-600 to-emerald-700 bg-clip-text text-transparent"
+                      >
                         {section.category}
-                      </h2>
+                      </motion.h2>
                       
-                      <p className="text-xl text-slate-600 leading-relaxed">
+                      <motion.p 
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.5 }}
+                        className="text-xl text-slate-600 leading-relaxed italic"
+                      >
                         {categoryDescriptions[section.category as keyof typeof categoryDescriptions]}
-                      </p>
+                      </motion.p>
                     </div>
-                  </div>
+                  </motion.div>
 
                   {/* Menu Items Grid */}
-                  <div className="grid gap-6 max-w-5xl mx-auto">
+                  <div className="grid md:grid-cols-2 gap-4 max-w-6xl mx-auto">
                     {section.items.map((item, itemIndex) => (
-                      <div
+                      <motion.div
                         key={item.name}
-                        className="group relative bg-white rounded-3xl border border-slate-200 hover:border-emerald-300 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: itemIndex * 0.05 }}
+                        className="group relative"
                       >
-                        {/* Background Pattern */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-emerald-50/10 to-red-50/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        
-                        <div className="relative p-6">
-                          <div className="space-y-2">
-                            <h3 className="text-xl font-bold text-slate-900 group-hover:text-emerald-700 transition-colors duration-300 leading-tight">
-                              {item.name}
-                            </h3>
-                            
-                            {item.description && (
-                              <p className="text-slate-600 group-hover:text-slate-700 transition-colors duration-300 leading-relaxed">
-                                {item.description}
-                              </p>
-                            )}
+                        <div className="relative bg-white rounded-2xl p-6 hover:shadow-lg transition-all duration-300 border border-slate-100 hover:border-red-200/50 overflow-hidden">
+                          {/* Festive Corner Decoration */}
+                          <div className="absolute -top-1 -right-1 w-20 h-20 bg-gradient-to-br from-red-100 via-emerald-100 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-bl-3xl"></div>
+                          
+                          <div className="relative">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1">
+                                <h3 className="text-lg font-semibold text-slate-800 group-hover:text-red-700 transition-colors duration-300">
+                                  {item.name}
+                                </h3>
+                                {item.description && (
+                                  <p className="text-sm text-slate-600 mt-1 leading-relaxed">
+                                    {item.description}
+                                  </p>
+                                )}
+                              </div>
+                              {/* Festive Star */}
+                              <Sparkles className="w-4 h-4 text-red-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 mt-1" />
+                            </div>
                           </div>
                         </div>
-
-                        {/* Hover Border Effect */}
-                        <div className="absolute inset-0 border-2 border-transparent group-hover:border-emerald-200 rounded-3xl transition-all duration-300"></div>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
                 </div>
