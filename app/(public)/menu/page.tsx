@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
-import { Crown, Wine, Coffee, Star, Utensils, Calendar, Clock, Heart, Sparkles, ChefHat, ArrowRight } from "lucide-react"
+import { Crown, Wine, Coffee, Star, Utensils, Clock, Sparkles, ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
 import { useEffect } from "react"
 
@@ -31,33 +31,6 @@ const menuCategories = [
     link: "/menu/december-christmas-menu",
     gradient: "from-emerald-500 to-red-500",
     bgGradient: "from-emerald-50 to-red-50",
-  },
-]
-
-const specialExperiences = [
-  {
-    title: "Chef's Tasting Menu",
-    description: "A seven-course journey through our finest creations",
-    price: "£85 per person",
-    icon: ChefHat,
-    features: ["7 Courses", "Wine Pairing Available", "Chef's Selection"],
-    gradient: "from-slate-600 to-slate-800",
-  },
-  {
-    title: "Romantic Evening",
-    description: "Perfect for special occasions and intimate celebrations",
-    price: "£120 for two",
-    icon: Heart,
-    features: ["3 Courses Each", "Bottle of Prosecco", "Special Table Setting"],
-    gradient: "from-red-600 to-rose-800",
-  },
-  {
-    title: "Business Lunch",
-    description: "Express menu designed for the working professional",
-    price: "£28 per person",
-    icon: Calendar,
-    features: ["2 Courses", "Express Service", "Available 12-3pm"],
-    gradient: "from-blue-600 to-indigo-800",
   },
 ]
 
@@ -350,93 +323,6 @@ export default function MenuOverviewPage() {
                       <Link href={menu.link} className="flex items-center justify-center gap-2">
                         <span>Explore Menu</span>
                         <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Special Experiences */}
-      <section className="py-24 bg-gradient-to-br from-slate-50 to-white relative overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-40 right-40 w-96 h-96 bg-gradient-to-br from-amber-100/30 to-orange-100/20 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-40 left-40 w-80 h-80 bg-gradient-to-br from-yellow-100/20 to-amber-100/30 rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
-          {/* Section Header */}
-          <div className="text-center mb-20">
-            <div className="inline-flex items-center gap-3 mb-6">
-              <div className="w-8 h-px bg-gradient-to-r from-transparent to-amber-300"></div>
-              <span className="text-sm tracking-[0.3em] text-slate-600 font-light uppercase">
-                Special Occasions
-              </span>
-              <div className="w-8 h-px bg-gradient-to-l from-transparent to-amber-300"></div>
-            </div>
-            
-            <h2 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-              Curated Experiences
-            </h2>
-            
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Specially designed dining experiences for life's most important moments, 
-              each thoughtfully crafted to create lasting memories.
-            </p>
-          </div>
-
-          {/* Experience Cards */}
-          <div className="grid md:grid-cols-3 gap-8">
-            {specialExperiences.map((experience, index) => {
-              const IconComponent = experience.icon
-              return (
-                <div
-                  key={experience.title}
-                  className="group relative"
-                >
-                  <div className={`bg-gradient-to-br ${experience.gradient} rounded-3xl p-8 text-white shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 h-full`}>
-                    {/* Icon */}
-                    <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                      <IconComponent className="w-8 h-8 text-white" />
-                    </div>
-
-                    {/* Content */}
-                    <div className="space-y-4 mb-6">
-                      <h3 className="text-2xl font-bold leading-tight">
-                        {experience.title}
-                      </h3>
-                      
-                      <p className="text-white/90 leading-relaxed">
-                        {experience.description}
-                      </p>
-                      
-                      <div className="text-2xl font-bold text-amber-300">
-                        {experience.price}
-                      </div>
-                    </div>
-
-                    {/* Features */}
-                    <div className="space-y-2 mb-6">
-                      {experience.features.map((feature, idx) => (
-                        <div key={idx} className="flex items-center gap-2 text-white/90">
-                          <div className="w-1.5 h-1.5 bg-amber-300 rounded-full"></div>
-                          <span className="text-sm">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* CTA */}
-                    <Button
-                      asChild
-                      className="w-full bg-white/20 hover:bg-white/30 text-white border border-white/30 hover:border-white/50 rounded-2xl py-3 transition-all duration-300 backdrop-blur-sm"
-                    >
-                      <Link href="/reserve" className="flex items-center justify-center gap-2">
-                        <span>Reserve Experience</span>
-                        <ArrowRight className="w-4 h-4" />
                       </Link>
                     </Button>
                   </div>
