@@ -3,7 +3,6 @@
 import { lunchtimeEarlybirdMenuData, lunchtimeEarlybirdMenuPricing, lunchtimeEarlybirdMenuDetails, lunchtimeEarlybirdMenuNotes } from "@/lib/lunchtime-earlybird-menu-data"
 import { Clock, Sun, Moon, Utensils, Leaf, Coffee, Info, Calendar, Star, ChevronRight, Sparkles, Timer, AlertCircle } from "lucide-react"
 import { useState } from "react"
-import { motion } from "framer-motion"
 import Image from "next/image"
 
 export const dynamic = 'force-dynamic'
@@ -20,7 +19,6 @@ const categoryDescriptions = {
 
 export default function LunchtimeEarlybirdMenuPage() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null)
 
   const scrollToSection = (category: string) => {
     const element = document.getElementById(`section-${category.replace(/\s+/g, '-').toLowerCase()}`)
@@ -37,205 +35,117 @@ export default function LunchtimeEarlybirdMenuPage() {
 
   return (
     <div className="bg-white text-slate-900 min-h-screen">
-      {/* Enhanced Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-amber-900 via-orange-800 to-yellow-700 pt-20" style={{ minHeight: '85vh' }}>
-        {/* Animated Background Pattern */}
+      {/* Clean Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-amber-50 to-white pt-20" style={{ minHeight: '70vh' }}>
+        {/* Subtle Background Pattern */}
         <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%220.03%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-10"></div>
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2240%22 height=%2240%22 viewBox=%220 0 40 40%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23d97706%22 fill-opacity=%220.02%22%3E%3Cpath d=%22M0 40L40 0H20L0 20M40 40V20L20 40%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
           
-          {/* Gradient Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-          
-          {/* Animated Decorative Elements */}
-          <motion.div
-            animate={{ 
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3]
-            }}
-            transition={{ 
-              duration: 8, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
-            }}
-            className="absolute top-10 right-10 w-64 h-64 bg-gradient-to-br from-yellow-400/20 to-amber-400/20 rounded-full blur-3xl"
-          />
-          <motion.div
-            animate={{ 
-              scale: [1.2, 1, 1.2],
-              opacity: [0.2, 0.4, 0.2]
-            }}
-            transition={{ 
-              duration: 10, 
-              repeat: Infinity, 
-              ease: "easeInOut",
-              delay: 2
-            }}
-            className="absolute bottom-10 left-10 w-80 h-80 bg-gradient-to-br from-orange-400/20 to-red-400/20 rounded-full blur-3xl"
-          />
+          {/* Simple Decorative Elements */}
+          <div className="absolute top-20 right-20 w-40 h-40 bg-gradient-to-br from-amber-200/20 to-yellow-200/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 left-20 w-48 h-48 bg-gradient-to-br from-orange-200/20 to-amber-200/20 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-center min-h-[85vh]">
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center space-y-8 py-16"
-          >
-            {/* Premium Badge */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-md border border-white/20 text-white px-8 py-4 rounded-full text-sm font-medium shadow-2xl"
-            >
-              <Star className="w-5 h-5 text-yellow-300" />
-              <span className="tracking-[0.3em] uppercase font-light">Exceptional Value Menu</span>
-              <Star className="w-5 h-5 text-yellow-300" />
-            </motion.div>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-center min-h-[70vh]">
+          <div className="text-center space-y-8 py-16">
+            {/* Clean Badge */}
+            <div className="inline-flex items-center gap-3 bg-amber-100 text-amber-800 px-6 py-3 rounded-full text-sm font-medium border border-amber-200">
+              <Clock className="w-4 h-4" />
+              <span className="tracking-wider uppercase">Exceptional Value Menu</span>
+              <Sun className="w-4 h-4" />
+            </div>
             
-            {/* Main Title with Animation */}
+            {/* Simple Title */}
             <div className="space-y-6">
-              <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-tight tracking-tight">
-                <motion.span 
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4, duration: 0.8 }}
-                  className="block text-white drop-shadow-2xl"
-                >
-                  LUNCHTIME
-                </motion.span>
-                <motion.span 
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.6, duration: 0.8 }}
-                  className="block text-transparent bg-gradient-to-r from-yellow-300 via-amber-200 to-yellow-300 bg-clip-text drop-shadow-2xl"
-                >
-                  SPECIALS
-                </motion.span>
+              <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
+                <span className="block text-slate-900">
+                  Lunchtime &
+                </span>
+                <span className="block text-amber-600">
+                  Early Bird Special
+                </span>
               </h1>
               
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8, duration: 0.6 }}
-                className="max-w-4xl mx-auto space-y-6"
-              >
-                <p className="text-2xl md:text-3xl text-white/90 font-light leading-relaxed">
-                  Exquisite Dining at an Unbeatable Price
+              <div className="max-w-3xl mx-auto space-y-6">
+                <p className="text-xl md:text-2xl text-slate-700 font-light leading-relaxed">
+                  Enjoy our carefully selected menu at an exceptional price
                 </p>
                 
                 {/* Time Display */}
-                <div className="flex flex-wrap items-center justify-center gap-6 text-white/80">
+                <div className="flex flex-wrap items-center justify-center gap-6 text-slate-600">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-5 h-5 text-amber-300" />
-                    <span className="font-medium">{lunchtimeEarlybirdMenuDetails.days}</span>
+                    <Calendar className="w-4 h-4 text-amber-600" />
+                    <span>{lunchtimeEarlybirdMenuDetails.days}</span>
                   </div>
-                  <div className="hidden sm:block w-px h-6 bg-white/30"></div>
+                  <div className="hidden sm:block w-px h-5 bg-slate-300"></div>
                   <div className="flex items-center gap-2">
-                    <Timer className="w-5 h-5 text-amber-300" />
+                    <Timer className="w-4 h-4 text-amber-600" />
                     <span>{lunchtimeEarlybirdMenuDetails.orderCutoff}</span>
                   </div>
                 </div>
                 
                 {/* Friday/Saturday Alert */}
-                <motion.div 
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 1, duration: 0.5 }}
-                  className="inline-flex items-center gap-3 bg-red-600/20 backdrop-blur-sm border border-red-400/30 text-red-100 px-6 py-3 rounded-full text-sm font-medium"
-                >
-                  <AlertCircle className="w-5 h-5 animate-pulse" />
+                <div className="inline-flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-lg text-sm font-medium">
+                  <AlertCircle className="w-4 h-4" />
                   <span>{lunchtimeEarlybirdMenuDetails.fridaySaturdayNote}</span>
-                </motion.div>
-              </motion.div>
-            </div>
-
-            {/* Enhanced Price Display */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2, duration: 0.6 }}
-              className="relative"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-amber-400 blur-xl opacity-50"></div>
-              <div className="relative bg-white/95 backdrop-blur-sm rounded-3xl p-10 shadow-2xl border border-amber-200 max-w-md mx-auto transform hover:scale-105 transition-transform duration-300">
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <div className="bg-gradient-to-r from-amber-600 to-orange-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg">
-                    SPECIAL OFFER
-                  </div>
-                </div>
-                
-                <div className="text-center space-y-4">
-                  <p className="text-amber-700 text-lg font-bold uppercase tracking-wider">2 Course Menu</p>
-                  <div className="relative">
-                    <p className="text-7xl font-black text-transparent bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text">
-                      {lunchtimeEarlybirdMenuPricing.twoCourse.price}
-                    </p>
-                    <div className="absolute -right-8 top-0">
-                      <Sparkles className="w-8 h-8 text-amber-500 animate-pulse" />
-                    </div>
-                  </div>
-                  <p className="text-slate-600 text-sm">Plus {lunchtimeEarlybirdMenuPricing.twoCourse.serviceCharge} service charge</p>
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+
+            {/* Clean Price Display */}
+            <div className="bg-white rounded-2xl p-8 shadow-lg border border-amber-200 max-w-sm mx-auto">
+              <div className="text-center space-y-3">
+                <p className="text-amber-700 text-sm font-semibold uppercase tracking-wider">2 Course Menu</p>
+                <p className="text-5xl font-bold text-slate-900">
+                  {lunchtimeEarlybirdMenuPricing.twoCourse.price}
+                </p>
+                <p className="text-slate-500 text-sm">Plus {lunchtimeEarlybirdMenuPricing.twoCourse.serviceCharge} service charge</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Enhanced Navigation Menu */}
-      <section className="py-6 md:py-10 bg-gradient-to-b from-white to-amber-50/30 border-b border-amber-200 sticky top-20 z-40 backdrop-blur-md">
+      {/* Navigation Menu */}
+      <section className="py-4 md:py-6 bg-white border-b border-slate-200 sticky top-20 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+          <div className="flex flex-wrap justify-center gap-3 md:gap-4">
             {lunchtimeEarlybirdMenuData.map((section) => {
               const IconComponent = categoryIcons[section.category as keyof typeof categoryIcons] || Utensils
               return (
-                <motion.button
+                <button
                   key={section.category}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
                   onClick={() => scrollToSection(section.category)}
-                  className="group relative px-6 py-4 md:px-8 md:py-5 bg-white hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 rounded-2xl border-2 border-amber-200 hover:border-amber-400 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  className="group relative px-4 py-3 md:px-6 md:py-3 bg-amber-50 hover:bg-amber-100 rounded-xl border border-amber-200 hover:border-amber-300 transition-all duration-200"
                 >
-                  <div className="flex items-center gap-3 md:gap-4">
-                    <div className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg transition-all duration-300">
-                      <IconComponent className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+                      <IconComponent className="w-4 h-4 text-amber-700" />
                     </div>
-                    <div className="text-left">
-                      <span className="text-slate-900 font-bold text-sm md:text-base block group-hover:text-amber-700 transition-colors">
-                        {section.category}
-                      </span>
-                      <span className="text-xs text-slate-500">
-                        {section.items.length} Options
-                      </span>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-amber-600 group-hover:translate-x-1 transition-transform" />
+                    <span className="text-slate-700 font-medium text-sm group-hover:text-amber-800 transition-colors">
+                      {section.category}
+                    </span>
                   </div>
-                </motion.button>
+                </button>
               )
             })}
           </div>
         </div>
       </section>
 
-      {/* Important Information Banner - Enhanced */}
-      <section className="bg-gradient-to-r from-amber-100 via-yellow-50 to-amber-100 border-y-2 border-amber-300">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8">
-          <div className="flex items-center gap-4 bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-amber-200">
-            <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0">
-              <Info className="w-6 h-6 text-white" />
-            </div>
-            <div>
-              <p className="text-amber-900 font-bold text-lg">Important Notice</p>
-              <p className="text-amber-800 text-sm mt-1">
-                {lunchtimeEarlybirdMenuDetails.partyRestriction}
-              </p>
-            </div>
+      {/* Important Information Banner */}
+      <section className="bg-amber-50 border-y border-amber-200">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center gap-3">
+            <Info className="w-5 h-5 text-amber-600 flex-shrink-0" />
+            <p className="text-amber-800 text-sm">
+              {lunchtimeEarlybirdMenuDetails.partyRestriction}
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Enhanced Menu Items Sections */}
+      {/* Menu Items Sections */}
       {lunchtimeEarlybirdMenuData.map((section, sectionIndex) => {
         const IconComponent = categoryIcons[section.category as keyof typeof categoryIcons] || Utensils
         
@@ -243,85 +153,52 @@ export default function LunchtimeEarlybirdMenuPage() {
           <section 
             key={section.category} 
             id={`section-${section.category.replace(/\s+/g, '-').toLowerCase()}`}
-            className={`py-24 ${sectionIndex % 2 === 0 ? 'bg-gradient-to-b from-white to-amber-50/20' : 'bg-gradient-to-b from-amber-50/20 to-white'} relative overflow-hidden`}
+            className={`py-16 ${sectionIndex % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}
           >
-            {/* Background Decoration */}
-            <div className="absolute inset-0 opacity-5">
-              <div className={`absolute ${sectionIndex % 2 === 0 ? 'top-0 right-0' : 'top-0 left-0'} w-96 h-96 bg-gradient-to-br ${sectionIndex === 0 ? 'from-amber-600' : 'from-orange-600'} to-transparent rounded-full blur-3xl`}></div>
-            </div>
-            
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 relative">
-              {/* Enhanced Category Header */}
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="mb-20"
-              >
-                <div className="flex items-center justify-center gap-6 mb-8">
-                  <div className="h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent flex-1 max-w-xs"></div>
-                  <motion.div 
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    className="w-20 h-20 bg-gradient-to-br from-amber-400 to-orange-500 rounded-3xl flex items-center justify-center shadow-2xl"
-                  >
-                    <IconComponent className="w-10 h-10 text-white" />
-                  </motion.div>
-                  <div className="h-px bg-gradient-to-r from-transparent via-amber-400 to-transparent flex-1 max-w-xs"></div>
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              {/* Category Header */}
+              <div className="mb-12">
+                <div className="flex items-center justify-center gap-4 mb-6">
+                  <div className="h-px bg-amber-200 flex-1 max-w-xs"></div>
+                  <div className="w-14 h-14 bg-amber-100 rounded-xl flex items-center justify-center">
+                    <IconComponent className="w-7 h-7 text-amber-700" />
+                  </div>
+                  <div className="h-px bg-amber-200 flex-1 max-w-xs"></div>
                 </div>
                 
-                <h2 className="text-5xl md:text-6xl font-black text-center text-transparent bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text mb-4">
+                <h2 className="text-3xl md:text-4xl font-bold text-center text-slate-900 mb-3">
                   {section.category}
                 </h2>
                 
-                <p className="text-xl text-slate-600 text-center max-w-2xl mx-auto font-light">
+                <p className="text-slate-600 text-center max-w-2xl mx-auto">
                   {categoryDescriptions[section.category as keyof typeof categoryDescriptions]}
                 </p>
-              </motion.div>
+              </div>
 
-              {/* Enhanced Menu Items Grid */}
-              <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+              {/* Menu Items Grid */}
+              <div className="grid md:grid-cols-2 gap-4 max-w-5xl mx-auto">
                 {section.items.map((item, itemIndex) => (
-                  <motion.div
+                  <div
                     key={itemIndex}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: itemIndex * 0.05 }}
-                    whileHover={{ scale: 1.02 }}
-                    onHoverStart={() => setHoveredItem(`${section.category}-${itemIndex}`)}
-                    onHoverEnd={() => setHoveredItem(null)}
-                    className="group relative"
+                    className="group p-5 bg-white rounded-xl border border-amber-100 hover:border-amber-300 transition-colors duration-200"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-amber-400 to-orange-400 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-                    <div className="relative p-8 bg-white rounded-2xl border-2 border-amber-100 hover:border-amber-300 transition-all duration-300 shadow-lg hover:shadow-xl">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1 space-y-2">
-                          <h3 className="text-xl font-bold text-slate-900 group-hover:text-amber-700 transition-colors flex items-center gap-2">
-                            {item.name}
-                            {item.name.includes("(V)") && (
-                              <span className="inline-flex items-center gap-1 bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">
-                                <Leaf className="w-3 h-3" />
-                                Vegetarian
-                              </span>
-                            )}
-                          </h3>
-                          {item.description && (
-                            <p className="text-slate-600 leading-relaxed">
-                              {item.description}
-                            </p>
-                          )}
-                        </div>
-                        
-                        {/* Hover Indicator */}
-                        <div className={`transition-all duration-300 ${hoveredItem === `${section.category}-${itemIndex}` ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
-                          <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-                            <Star className="w-5 h-5 text-white" />
-                          </div>
-                        </div>
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-slate-900 group-hover:text-amber-700 transition-colors">
+                          {item.name}
+                        </h3>
+                        {item.description && (
+                          <p className="mt-1 text-slate-600 text-sm">
+                            {item.description}
+                          </p>
+                        )}
                       </div>
+                      
+                      {item.name.includes("(V)") && (
+                        <Leaf className="w-5 h-5 text-green-600 flex-shrink-0" />
+                      )}
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
@@ -329,91 +206,50 @@ export default function LunchtimeEarlybirdMenuPage() {
         )
       })}
 
-      {/* Enhanced Menu Notes */}
-      <section className="py-16 bg-gradient-to-b from-white via-amber-50/50 to-white">
+      {/* Menu Notes */}
+      <section className="py-12 bg-slate-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200 rounded-3xl p-10 shadow-xl"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-600 rounded-xl flex items-center justify-center">
-                <Info className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="text-2xl font-bold text-slate-900">Good to Know</h3>
-            </div>
-            <div className="space-y-3">
+          <div className="bg-white border border-amber-200 rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Important Information</h3>
+            <div className="space-y-2">
               {lunchtimeEarlybirdMenuNotes.map((note, index) => (
-                <motion.p 
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="text-slate-700 flex items-start gap-3"
-                >
-                  <span className="text-amber-600 text-xl mt-0.5">•</span>
-                  <span className="leading-relaxed">{note}</span>
-                </motion.p>
+                <p key={index} className="text-slate-700 text-sm flex items-start gap-2">
+                  <span className="text-amber-600 mt-0.5">•</span>
+                  <span>{note}</span>
+                </p>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
-      {/* Enhanced Call to Action */}
-      <section className="py-24 bg-gradient-to-br from-amber-900 via-orange-800 to-yellow-700 relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=%2260%22 height=%2260%22 viewBox=%220 0 60 60%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cg fill=%22none%22 fill-rule=%22evenodd%22%3E%3Cg fill=%22%23ffffff%22 fill-opacity=%220.03%22%3E%3Cpath d=%22M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-10"></div>
-        </div>
-        
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full text-sm font-medium mb-10 border border-white/20">
-              <Calendar className="w-5 h-5" />
-              <span className="tracking-wider uppercase">Limited Time Offer</span>
-              <Clock className="w-5 h-5 animate-pulse" />
-            </div>
+      {/* Call to Action */}
+      <section className="py-16 bg-amber-600">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Reserve Your Table Today
+          </h2>
+          
+          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            Experience exceptional cuisine at an unbeatable price
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="/reserve"
+              className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-white text-amber-700 font-semibold rounded-lg hover:bg-amber-50 transition-colors duration-200"
+            >
+              <span>Book Your Table</span>
+              <Clock className="w-4 h-4" />
+            </a>
             
-            <h2 className="text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
-              Don't Miss Out on This<br />
-              <span className="text-transparent bg-gradient-to-r from-yellow-300 to-amber-300 bg-clip-text">
-                Incredible Value
-              </span>
-            </h2>
-            
-            <p className="text-2xl text-white/90 mb-12 max-w-2xl mx-auto font-light">
-              Experience exceptional cuisine at an unbeatable price. Perfect for business lunches or early dinners.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                href="/reserve"
-                className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-amber-700 font-bold text-lg rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300"
-              >
-                <span>Reserve Your Table</span>
-                <ChevronRight className="w-5 h-5" />
-              </motion.a>
-              
-              <motion.a
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                href="tel:+442084215550"
-                className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-transparent text-white font-bold text-lg rounded-full border-2 border-white/30 hover:border-white/60 backdrop-blur-sm transition-all duration-300"
-              >
-                <span>Call +44 20 8421 5550</span>
-              </motion.a>
-            </div>
-          </motion.div>
+            <a
+              href="tel:+442084215550"
+              className="inline-flex items-center justify-center gap-2 px-8 py-3 bg-transparent text-white font-semibold rounded-lg border-2 border-white hover:bg-white/10 transition-colors duration-200"
+            >
+              <span>Call +44 20 8421 5550</span>
+            </a>
+          </div>
         </div>
       </section>
     </div>
