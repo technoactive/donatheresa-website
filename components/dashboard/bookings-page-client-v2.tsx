@@ -120,6 +120,8 @@ function NewBookingsAlert({ bookings }: { bookings: Booking[] }) {
 
 // Upcoming bookings list component
 function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
+  const [expandedDate, setExpandedDate] = React.useState<string | null>(null)
+  
   // Group bookings by date
   const bookingsByDate = bookings.reduce((acc, booking) => {
     const dateKey = new Date(booking.bookingTime).toDateString()
@@ -136,7 +138,7 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
   )
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {sortedDates.map(dateKey => {
         const date = new Date(dateKey)
         const dayBookings = bookingsByDate[dateKey]
@@ -152,43 +154,80 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
           return tomorrow
         })())
         
+        const pendingCount = dayBookings.filter(b => b.status === "pending").length
+        const isExpanded = expandedDate === dateKey || isToday || isTomorrow
+        
         return (
-          <div key={dateKey} className="border rounded-lg overflow-hidden">
-            <div className="bg-gray-50 px-4 py-2 border-b">
+          <div key={dateKey} className="border rounded-lg overflow-hidden shadow-sm">
+            <div 
+              className={`px-4 py-3 cursor-pointer transition-colors ${
+                isExpanded ? 'bg-blue-50 border-b' : 'bg-gray-50 hover:bg-gray-100'
+              }`}
+              onClick={() => setExpandedDate(isExpanded && !isToday && !isTomorrow ? null : dateKey)}
+            >
               <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-sm">
-                  {isToday ? 'Today' : isTomorrow ? 'Tomorrow' : 
-                   date.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
-                </h3>
-                <Badge variant="secondary">{dayBookings.length} bookings</Badge>
+                <div className="flex items-center gap-3">
+                  <h3 className="font-semibold text-sm">
+                    {isToday ? '📍 TODAY' : isTomorrow ? '📅 TOMORROW' : 
+                     date.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
+                  </h3>
+                  {pendingCount > 0 && (
+                    <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 text-xs">
+                      {pendingCount} pending
+                    </Badge>
+                  )}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary" className="text-xs">{dayBookings.length} bookings</Badge>
+                  <ChevronRight className={`h-4 w-4 text-gray-500 transition-transform ${
+                    isExpanded ? 'rotate-90' : ''
+                  }`} />
+                </div>
               </div>
             </div>
-            <div className="divide-y">
-              {dayBookings.map(booking => (
-                <div key={booking.id} className="px-4 py-3 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-sm">{booking.customerName}</span>
-                        <Badge variant={booking.status === "confirmed" ? "default" : "outline"} 
-                               className="text-xs">
-                          {booking.status}
-                        </Badge>
+            {isExpanded && (
+              <div className="divide-y bg-white">
+                {dayBookings.map(booking => (
+                  <div key={booking.id} className="px-4 py-3 hover:bg-blue-50/50 transition-colors group">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-semibold text-sm">{booking.customerName}</span>
+                          <Badge 
+                            variant={booking.status === "confirmed" ? "default" : "outline"} 
+                            className={`text-xs ${
+                              booking.status === "confirmed" 
+                                ? "bg-green-100 text-green-800 border-green-200"
+                                : "bg-yellow-100 text-yellow-800 border-yellow-200"
+                            }`}
+                          >
+                            {booking.status}
+                          </Badge>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                          <span className="font-medium text-black">
+                            🕐 {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
+                              hour: '2-digit', 
+                              minute: '2-digit' 
+                            })}
+                          </span>
+                          <span>👥 {booking.partySize} guests</span>
+                          <span className="truncate">📧 {booking.customerEmail}</span>
+                          {booking.notes && <span className="text-blue-600">📝 Has notes</span>}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-4 mt-1 text-xs text-muted-foreground">
-                        <span>{new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
-                          hour: '2-digit', 
-                          minute: '2-digit' 
-                        })}</span>
-                        <span>{booking.partySize} guests</span>
-                        <span>{booking.customerEmail}</span>
-                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        View
+                      </Button>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         )
       })}
@@ -200,7 +239,7 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
 export function BookingsPageClientV2({ bookings }: { bookings: Booking[] }) {
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(undefined)
   const [globalSearchTerm, setGlobalSearchTerm] = React.useState("")
-  const [activeTab, setActiveTab] = React.useState("upcoming")
+  const [activeTab, setActiveTab] = React.useState("all-upcoming")
   
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -230,6 +269,12 @@ export function BookingsPageClientV2({ bookings }: { bookings: Booking[] }) {
   
   const next7DaysBookings = getDateRangeBookings(searchFilteredBookings, today, nextWeek)
     .sort((a, b) => new Date(a.bookingTime).getTime() - new Date(b.bookingTime).getTime())
+  
+  // Get ALL upcoming bookings (from today onwards)
+  const allUpcomingBookings = searchFilteredBookings.filter(booking => {
+    const bookingDate = new Date(booking.bookingTime)
+    return bookingDate >= today && booking.status !== "cancelled"
+  }).sort((a, b) => new Date(a.bookingTime).getTime() - new Date(b.bookingTime).getTime())
   
   const pendingBookingsCount = bookings.filter(b => b.status === "pending").length
   
@@ -269,15 +314,21 @@ export function BookingsPageClientV2({ bookings }: { bookings: Booking[] }) {
       
       {/* Tabbed Interface */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid grid-cols-4 w-full">
-          <TabsTrigger value="upcoming" className="flex items-center gap-2">
+        <TabsList className="grid grid-cols-5 w-full">
+          <TabsTrigger value="all-upcoming" className="flex items-center gap-2">
             <CalendarDays className="h-4 w-4" />
-            <span className="hidden sm:inline">Next 7 Days</span>
-            <span className="sm:hidden">7 Days</span>
+            <span className="hidden sm:inline">All Upcoming</span>
+            <span className="sm:hidden">All</span>
+            {allUpcomingBookings.length > 0 && (
+              <Badge variant="secondary" className="ml-1 h-5 px-1">
+                {allUpcomingBookings.length}
+              </Badge>
+            )}
           </TabsTrigger>
           <TabsTrigger value="today" className="flex items-center gap-2">
             <CalendarCheck className="h-4 w-4" />
-            Today
+            <span className="hidden sm:inline">Today</span>
+            <span className="sm:hidden">Today</span>
             {todayBookings.length > 0 && (
               <Badge variant="secondary" className="ml-1 h-5 px-1">
                 {todayBookings.length}
@@ -286,19 +337,75 @@ export function BookingsPageClientV2({ bookings }: { bookings: Booking[] }) {
           </TabsTrigger>
           <TabsTrigger value="tomorrow" className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
-            Tomorrow
+            <span className="hidden sm:inline">Tomorrow</span>
+            <span className="sm:hidden">Tmrw</span>
             {tomorrowBookings.length > 0 && (
               <Badge variant="secondary" className="ml-1 h-5 px-1">
                 {tomorrowBookings.length}
               </Badge>
             )}
           </TabsTrigger>
+          <TabsTrigger value="upcoming" className="flex items-center gap-2">
+            <CalendarDays className="h-4 w-4" />
+            <span className="hidden sm:inline">Next 7 Days</span>
+            <span className="sm:hidden">7 Days</span>
+          </TabsTrigger>
           <TabsTrigger value="custom" className="flex items-center gap-2">
             <Search className="h-4 w-4" />
-            <span className="hidden sm:inline">Custom Date</span>
-            <span className="sm:hidden">Custom</span>
+            <span className="hidden sm:inline">Custom</span>
+            <span className="sm:hidden">Date</span>
           </TabsTrigger>
         </TabsList>
+        
+        {/* All Upcoming Bookings View */}
+        <TabsContent value="all-upcoming" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>All Upcoming Bookings</CardTitle>
+              <CardDescription>
+                Complete list of all future bookings in chronological order
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {allUpcomingBookings.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  No upcoming bookings found
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {/* Summary Stats */}
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                      <div className="text-2xl font-bold text-blue-900">{allUpcomingBookings.length}</div>
+                      <p className="text-sm text-blue-700">Total Bookings</p>
+                    </div>
+                    <div className="bg-green-50 rounded-lg p-4 border border-green-200">
+                      <div className="text-2xl font-bold text-green-900">
+                        {allUpcomingBookings.reduce((sum, b) => sum + b.partySize, 0)}
+                      </div>
+                      <p className="text-sm text-green-700">Total Guests</p>
+                    </div>
+                    <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+                      <div className="text-2xl font-bold text-emerald-900">
+                        {allUpcomingBookings.filter(b => b.status === "confirmed").length}
+                      </div>
+                      <p className="text-sm text-emerald-700">Confirmed</p>
+                    </div>
+                    <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+                      <div className="text-2xl font-bold text-yellow-900">
+                        {allUpcomingBookings.filter(b => b.status === "pending").length}
+                      </div>
+                      <p className="text-sm text-yellow-700">Pending</p>
+                    </div>
+                  </div>
+                  
+                  {/* Bookings List */}
+                  <UpcomingBookingsList bookings={allUpcomingBookings} />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
         
         {/* Upcoming 7 Days View */}
         <TabsContent value="upcoming" className="space-y-4">
