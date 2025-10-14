@@ -15,7 +15,7 @@ import {
   generateTimeSlotsFromPeriods,
   type ServicePeriod
 } from "@/lib/database"
-import { createClient, createSupabaseAdminClient } from "@/lib/supabase/server"
+import { createClient } from "@/lib/supabase/server"
 import { type ActionState } from "@/lib/types"
 
 const updateBookingSchema = z.object({

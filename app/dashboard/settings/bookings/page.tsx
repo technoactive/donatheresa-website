@@ -249,7 +249,8 @@ export default function BookingSettingsPage() {
         console.log('[CLIENT] Service periods saved successfully')
       } catch (servicePeriodError) {
         console.error('[CLIENT] Error saving service periods:', servicePeriodError)
-        throw servicePeriodError
+        // Don't throw - continue with booking settings save
+        // throw servicePeriodError
       }
       
       // Then save other booking settings (no time slots needed)
