@@ -242,9 +242,7 @@ export function BookingForm({ bookingSettings: serverBookingSettings }: BookingF
   }
 
   // Show maintenance message if booking is disabled
-  console.log('BookingForm - Checking booking_enabled:', bookingSettings?.booking_enabled)
   if (bookingSettings && !bookingSettings.booking_enabled) {
-    console.log('BookingForm - Showing suspension message')
     return (
       <div className="text-center py-12">
         <AlertCircle className="w-12 h-12 text-amber-500 mx-auto mb-4" />

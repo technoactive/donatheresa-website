@@ -102,6 +102,9 @@ export default function BookingSettingsPage() {
       setIsLoading(true)
       const settings = await getBookingSettingsAction()
       
+      console.log('[CLIENT] Settings received from server:', settings)
+      console.log('[CLIENT] booking_enabled value from server:', settings.booking_enabled)
+      
       // Ensure total_seats has a default value
       const settingsWithDefaults = {
         ...settings,
@@ -243,7 +246,11 @@ export default function BookingSettingsPage() {
       
       // Then save other booking settings (no time slots needed)
       const formData = new FormData()
+      
+      console.log('[CLIENT] Current booking_enabled state:', bookingSettings.booking_enabled)
       formData.append('isBookingEnabled', bookingSettings.booking_enabled ? 'on' : 'off')
+      console.log('[CLIENT] FormData isBookingEnabled value:', bookingSettings.booking_enabled ? 'on' : 'off')
+      
       formData.append('suspensionMessage', bookingSettings.suspension_message)
       formData.append('maxPartySize', (bookingSettings.max_party_size || 8).toString())
       formData.append('maxAdvanceDays', (bookingSettings.max_advance_days || 30).toString())

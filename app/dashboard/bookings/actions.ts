@@ -195,7 +195,12 @@ export async function getBookingSettingsAction() {
 
 export async function updateBookingSettingsAction(formData: FormData): Promise<ActionState> {
   try {
-    const isBookingEnabled = formData.get("isBookingEnabled") === "on"
+    const isBookingEnabledValue = formData.get("isBookingEnabled")
+    console.log('[UPDATE BOOKING SETTINGS] Raw isBookingEnabled value:', isBookingEnabledValue)
+    
+    const isBookingEnabled = isBookingEnabledValue === "on"
+    console.log('[UPDATE BOOKING SETTINGS] Parsed booking_enabled:', isBookingEnabled)
+    
     const suspensionMessage = formData.get("suspensionMessage") as string
     const maxPartySize = parseInt(formData.get("maxPartySize") as string)
     const maxAdvanceDays = parseInt(formData.get("maxAdvanceDays") as string)
@@ -240,7 +245,9 @@ export async function updateBookingSettingsAction(formData: FormData): Promise<A
       // Note: available_times are now managed by saveServicePeriodsAction
     }
 
+    console.log('[UPDATE BOOKING SETTINGS] Updates object being sent to database:', updates)
     await updateBookingSettings(updates)
+    console.log('[UPDATE BOOKING SETTINGS] Database update completed')
     
     // Revalidate all pages that use booking settings
     revalidatePath("/dashboard/settings/bookings")
