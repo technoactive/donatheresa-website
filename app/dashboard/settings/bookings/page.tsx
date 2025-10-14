@@ -30,7 +30,8 @@ import {
 import { 
   getBookingSettingsAction,
   updateBookingSettingsAction,
-  saveServicePeriodsAction
+  saveServicePeriodsAction,
+  toggleBookingStatusAction
 } from "../../bookings/actions"
 import { type BookingSettings, type ServicePeriod } from "@/lib/types"
 import { SettingsLayout } from "@/components/dashboard/settings-layout"
@@ -242,7 +243,14 @@ export default function BookingSettingsPage() {
       }))
       
       // Save service periods first (this generates and saves the correct time slots)
-      await saveServicePeriodsAction(dbServicePeriods)
+      console.log('[CLIENT] Saving service periods...')
+      try {
+        await saveServicePeriodsAction(dbServicePeriods)
+        console.log('[CLIENT] Service periods saved successfully')
+      } catch (servicePeriodError) {
+        console.error('[CLIENT] Error saving service periods:', servicePeriodError)
+        throw servicePeriodError
+      }
       
       // Then save other booking settings (no time slots needed)
       const formData = new FormData()
@@ -263,16 +271,21 @@ export default function BookingSettingsPage() {
       formData.append('closedDates', JSON.stringify(bookingSettings.closed_dates))
       formData.append('closedDaysOfWeek', JSON.stringify(bookingSettings.closed_days_of_week || []))
       
+      console.log('[CLIENT] About to call updateBookingSettingsAction')
       const result = await updateBookingSettingsAction(formData)
+      console.log('[CLIENT] updateBookingSettingsAction result:', result)
       
       if (result.success) {
         toast.success('All settings saved successfully!')
+        console.log('[CLIENT] Settings saved successfully, reloading data...')
         await loadData()
       } else {
+        console.error('[CLIENT] Save failed with message:', result.message)
+        console.error('[CLIENT] Save failed with errors:', result.errors)
         toast.error(result.message || 'Failed to save settings')
       }
     } catch (error) {
-      console.error('Error saving settings:', error)
+      console.error('[CLIENT] Caught error in handleSaveSettings:', error)
       toast.error('Failed to save settings')
     } finally {
       setIsSaving(false)
@@ -345,6 +358,33 @@ export default function BookingSettingsPage() {
                     setBookingSettings(prev => ({...prev, booking_enabled: checked}))
                   }}
                 />
+              </div>
+              
+              {/* Test button for direct toggle */}
+              <div className="pt-4 border-t">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    console.log('[CLIENT] Testing direct toggle...')
+                    try {
+                      const result = await toggleBookingStatusAction()
+                      console.log('[CLIENT] Toggle result:', result)
+                      if (result.success) {
+                        toast.success('Direct toggle successful!')
+                        await loadData()
+                      } else {
+                        toast.error('Direct toggle failed')
+                      }
+                    } catch (error) {
+                      console.error('[CLIENT] Direct toggle error:', error)
+                      toast.error('Direct toggle error')
+                    }
+                  }}
+                >
+                  Test Direct Toggle
+                </Button>
+                <p className="text-xs text-slate-500 mt-1">Debug: Directly toggle booking status</p>
               </div>
             </CardContent>
           </Card>

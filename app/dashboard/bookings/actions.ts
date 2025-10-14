@@ -266,11 +266,15 @@ export async function updateBookingSettingsAction(formData: FormData): Promise<A
       message: "Booking settings updated successfully"
     }
   } catch (error) {
-    console.error('Error updating booking settings:', error)
+    console.error('[UPDATE BOOKING SETTINGS] Error details:', error)
+    console.error('[UPDATE BOOKING SETTINGS] Error type:', typeof error)
+    console.error('[UPDATE BOOKING SETTINGS] Error message:', error instanceof Error ? error.message : 'Unknown error')
+    console.error('[UPDATE BOOKING SETTINGS] Error stack:', error instanceof Error ? error.stack : 'No stack trace')
+    
     return {
       success: false,
-      message: "Failed to update booking settings",
-      errors: { general: ["An error occurred while updating settings"] }
+      message: error instanceof Error ? error.message : "Failed to update booking settings",
+      errors: { general: [error instanceof Error ? error.message : "An error occurred while updating settings"] }
     }
   }
 }
