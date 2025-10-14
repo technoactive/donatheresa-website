@@ -248,8 +248,13 @@ export default function BookingSettingsPage() {
       const formData = new FormData()
       
       console.log('[CLIENT] Current booking_enabled state:', bookingSettings.booking_enabled)
-      formData.append('isBookingEnabled', bookingSettings.booking_enabled ? 'on' : 'off')
-      console.log('[CLIENT] FormData isBookingEnabled value:', bookingSettings.booking_enabled ? 'on' : 'off')
+      console.log('[CLIENT] Type of booking_enabled:', typeof bookingSettings.booking_enabled)
+      
+      // This is the issue - we're sending 'off' but the server only checks for 'on'
+      // Let's see what value we're actually setting
+      const bookingEnabledValue = bookingSettings.booking_enabled ? 'on' : 'off'
+      console.log('[CLIENT] Setting FormData isBookingEnabled to:', bookingEnabledValue)
+      formData.append('isBookingEnabled', bookingEnabledValue)
       
       formData.append('suspensionMessage', bookingSettings.suspension_message)
       formData.append('maxPartySize', (bookingSettings.max_party_size || 8).toString())
@@ -335,9 +340,10 @@ export default function BookingSettingsPage() {
                 </div>
                 <Switch
                   checked={bookingSettings.booking_enabled}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={(checked) => {
+                    console.log('[CLIENT] Switch changed to:', checked)
                     setBookingSettings(prev => ({...prev, booking_enabled: checked}))
-                  }
+                  }}
                 />
               </div>
             </CardContent>
