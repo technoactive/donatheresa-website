@@ -283,16 +283,7 @@ export async function toggleBookingStatusAction() {
   try {
     console.log('[TOGGLE ACTION] Starting toggle action...')
     
-    // Try to use admin client, fallback to regular client if not available
-    let supabase;
-    try {
-      supabase = await createSupabaseAdminClient()
-      console.log('[TOGGLE ACTION] Using admin client for database operations')
-    } catch (adminError) {
-      console.log('[TOGGLE ACTION] Admin client not available, using regular client')
-      console.log('[TOGGLE ACTION] Admin error:', adminError)
-      supabase = await createClient()
-    }
+    const supabase = await createClient()
     
     // First, get current status
     const { data: currentData, error: readError } = await supabase

@@ -527,15 +527,7 @@ export async function getBookingSettings(): Promise<BookingSettings> {
 }
 
 export async function updateBookingSettings(settings: Partial<BookingSettings>): Promise<void> {
-  // Try to use admin client, fallback to regular client if not available
-  let supabase;
-  try {
-    supabase = await createSupabaseAdminClient()
-    console.log('[DATABASE] Using admin client for update')
-  } catch (error) {
-    console.log('[DATABASE] Admin client not available, using regular client')
-    supabase = await createClient()
-  }
+  const supabase = await createClient()
   
   try {
     console.log('[DATABASE] updateBookingSettings called with:', settings)
@@ -560,7 +552,6 @@ export async function updateBookingSettings(settings: Partial<BookingSettings>):
     if (settings.closed_days_of_week !== undefined) updateData.closed_days_of_week = settings.closed_days_of_week
     
     console.log('[DATABASE] Final updateData object:', updateData)
-    console.log('[DATABASE] Using admin client for update...')
     
     const { data, error } = await supabase
       .from('booking_config')
