@@ -530,11 +530,16 @@ export async function updateBookingSettings(settings: Partial<BookingSettings>):
   const supabase = await createClient()
   
   try {
+    console.log('[DATABASE] updateBookingSettings called with:', settings)
+    
     // Prepare the update object with proper array handling
     const updateData: any = {}
     
     // Handle regular fields
-    if (settings.booking_enabled !== undefined) updateData.booking_enabled = settings.booking_enabled
+    if (settings.booking_enabled !== undefined) {
+      updateData.booking_enabled = settings.booking_enabled
+      console.log('[DATABASE] Setting booking_enabled to:', settings.booking_enabled)
+    }
     if (settings.max_advance_days !== undefined) updateData.max_advance_days = settings.max_advance_days
     if (settings.max_party_size !== undefined) updateData.max_party_size = settings.max_party_size
     if (settings.total_seats !== undefined) updateData.total_seats = settings.total_seats
@@ -546,17 +551,30 @@ export async function updateBookingSettings(settings: Partial<BookingSettings>):
     if (settings.closed_dates !== undefined) updateData.closed_dates = settings.closed_dates
     if (settings.closed_days_of_week !== undefined) updateData.closed_days_of_week = settings.closed_days_of_week
     
+    console.log('[DATABASE] Final updateData object:', updateData)
+    
     const { error } = await supabase
       .from('booking_config')
       .update(updateData)
       .eq('id', 1)
 
     if (error) {
-      console.error('Error updating booking settings:', error)
+      console.error('[DATABASE] Error updating booking settings:', error)
       throw error
     }
     
-    console.log('Booking settings updated successfully:', updateData)
+    console.log('[DATABASE] Booking settings updated successfully:', updateData)
+    
+    // Verify the update by reading back
+    const { data: verifyData, error: verifyError } = await supabase
+      .from('booking_config')
+      .select('booking_enabled')
+      .eq('id', 1)
+      .single()
+    
+    if (!verifyError && verifyData) {
+      console.log('[DATABASE] Verification - booking_enabled is now:', verifyData.booking_enabled)
+    }
   } catch (error) {
     console.error('Database error in updateBookingSettings:', error)
     throw error

@@ -198,6 +198,8 @@ export async function updateBookingSettingsAction(formData: FormData): Promise<A
     const isBookingEnabledValue = formData.get("isBookingEnabled")
     console.log('[UPDATE BOOKING SETTINGS] Raw isBookingEnabled value:', isBookingEnabledValue)
     
+    // The issue: when false, FormData doesn't include the field at all OR sends 'off'
+    // We need to handle both cases
     const isBookingEnabled = isBookingEnabledValue === "on"
     console.log('[UPDATE BOOKING SETTINGS] Parsed booking_enabled:', isBookingEnabled)
     
