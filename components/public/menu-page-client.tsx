@@ -64,160 +64,122 @@ export default function MenuPageClient() {
 
   return (
     <div className="bg-white text-slate-900 min-h-screen">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-amber-50/20 pt-20" style={{ minHeight: '80vh' }}>
-        {/* Enhanced Decorative Elements */}
+      {/* Premium Hero Section */}
+      <section className="relative overflow-hidden pt-28 md:pt-32 lg:pt-36 pb-20 md:pb-28">
+        {/* Premium Gradient Background */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-white to-orange-50"></div>
+          <div className="absolute top-0 left-0 w-full h-full opacity-30" style={{backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`}}></div>
+        </div>
+        
+        {/* Floating Animated Elements */}
         <div className="absolute inset-0 overflow-hidden">
-          <motion.div 
-            animate={{ 
-              y: [0, -20, 0],
-              rotate: [0, 5, 0]
-            }}
-            transition={{ 
-              duration: 6, 
-              repeat: Infinity, 
-              ease: "easeInOut" 
-            }}
-            className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-amber-100/30 to-yellow-100/20 rounded-full blur-3xl"
-          />
-          <motion.div 
-            animate={{ 
-              y: [0, 15, 0],
-              rotate: [0, -3, 0]
-            }}
-            transition={{ 
-              duration: 8, 
-              repeat: Infinity, 
-              ease: "easeInOut",
-              delay: 1
-            }}
-            className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-orange-100/20 to-amber-100/30 rounded-full blur-3xl"
-          />
-          <motion.div 
-            animate={{ 
-              scale: [1, 1.1, 1],
-              opacity: [0.3, 0.5, 0.3]
-            }}
-            transition={{ 
-              duration: 10, 
-              repeat: Infinity, 
-              ease: "easeInOut",
-              delay: 2
-            }}
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-amber-100/10 to-transparent rounded-full blur-3xl"
-          />
+          <div className="absolute top-20 right-10 w-72 h-72 bg-amber-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+          <div className="absolute bottom-20 left-10 w-72 h-72 bg-orange-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center w-full"
-          >
-            {/* Decorative Top Element */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-10">
+            {/* Premium Badge */}
             <motion.div 
-              initial={{ scale: 0, rotate: -180 }}
-              animate={{ scale: 1, rotate: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex justify-center mb-6"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="flex justify-center"
             >
-              <div className="relative">
-                <Utensils className="w-16 h-16 text-amber-500" />
-                <motion.div 
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-0 w-16 h-16"
-                >
-                  <Sparkles className="w-4 h-4 text-amber-400 absolute -top-2 left-1/2 transform -translate-x-1/2" />
-                  <Sparkles className="w-3 h-3 text-amber-300 absolute -right-2 top-1/2 transform -translate-y-1/2" />
-                  <Sparkles className="w-4 h-4 text-amber-400 absolute -bottom-2 left-1/2 transform -translate-x-1/2" />
-                  <Sparkles className="w-3 h-3 text-amber-300 absolute -left-2 top-1/2 transform -translate-y-1/2" />
-                </motion.div>
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-600 to-orange-600 rounded-full blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+                <div className="relative bg-white/95 backdrop-blur-md border-0 shadow-xl px-8 py-3 rounded-full">
+                  <div className="flex items-center space-x-2">
+                    <Wine className="w-4 h-4 text-amber-600" />
+                    <span className="text-sm font-medium tracking-wide text-slate-800">Authentic Italian Cuisine</span>
+                  </div>
+                </div>
               </div>
             </motion.div>
 
-            {/* Title with Animation */}
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="text-5xl md:text-7xl font-bold mb-6"
-            >
-              <span className="block text-slate-900 mb-2">Our</span>
-              <span className="block bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500 bg-clip-text text-transparent animate-gradient-x">
-                Exquisite Menus
-              </span>
-            </motion.h1>
-
-            {/* Subtitle */}
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto mb-8 leading-relaxed"
-            >
-              Discover our carefully curated selection of authentic Italian dishes, 
-              from traditional favorites to modern interpretations
-            </motion.p>
-
-            {/* Call to Action Buttons */}
+            {/* Premium Heading */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="space-y-6"
+            >
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+                <span className="block text-slate-900">Discover Our</span>
+                <span className="block mt-2">
+                  <span className="relative inline-block">
+                    <span className="absolute inset-0 bg-gradient-to-r from-amber-600 to-orange-500 blur-xl opacity-30"></span>
+                    <span className="relative bg-gradient-to-r from-amber-600 via-orange-500 to-amber-500 bg-clip-text text-transparent">
+                      Exquisite Menus
+                    </span>
+                  </span>
+                </span>
+              </h1>
+
+              
+              <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-light">
+                Savor authentic Italian flavors through our carefully selected dishes, 
+                each prepared with dedication and served with genuine Italian hospitality
+              </p>
+            </motion.div>
+
+            {/* Premium CTA Buttons */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-4"
             >
               <Button 
                 size="lg" 
-                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-6 text-lg group"
+                className="group relative overflow-hidden bg-slate-900 hover:bg-slate-800 text-white shadow-2xl transition-all duration-300 px-10 py-7 text-lg rounded-full"
                 onClick={() => document.getElementById('menu-categories')?.scrollIntoView({ behavior: 'smooth' })}
               >
-                <span>Explore Our Menus</span>
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <span className="absolute inset-0 bg-gradient-to-r from-amber-600 to-orange-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                <span className="relative flex items-center">
+                  <Utensils className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" />
+                  Explore Our Menus
+                </span>
               </Button>
-              
+                
               <Button 
                 variant="outline" 
                 size="lg" 
-                className="border-amber-500 text-amber-700 hover:bg-amber-50 px-8 py-6 text-lg"
+                className="group border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white px-10 py-7 text-lg rounded-full transition-all duration-300"
                 asChild
               >
                 <Link href="/reserve">
-                  Book a Table
+                  <Clock className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" />
+                  Reserve Your Table
                 </Link>
               </Button>
             </motion.div>
 
-            {/* Decorative Divider */}
+            {/* Quick Stats */}
             <motion.div 
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="w-24 h-1 bg-gradient-to-r from-amber-400 to-orange-400 mx-auto mt-12 rounded-full"
-            />
-          </motion.div>
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-12"
+            >
+              <div className="text-center">
+                <div className="text-3xl font-bold text-slate-900">100+</div>
+                <div className="text-sm text-slate-600 mt-1">Authentic Dishes</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-slate-900">50+</div>
+                <div className="text-sm text-slate-600 mt-1">Italian Wines</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-slate-900">Since 2011</div>
+                <div className="text-sm text-slate-600 mt-1">Serving Excellence</div>
+              </div>
+            </motion.div>
+          </div>
         </div>
 
-        {/* Animated Scroll Indicator */}
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.5 }}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-6 h-10 border-2 border-amber-400 rounded-full flex justify-center"
-          >
-            <motion.div 
-              animate={{ y: [0, 16, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-1 h-3 bg-amber-400 rounded-full mt-2"
-            />
-          </motion.div>
-        </motion.div>
       </section>
 
       {/* Menu Categories Section */}
