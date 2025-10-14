@@ -241,7 +241,11 @@ export async function updateBookingSettingsAction(formData: FormData): Promise<A
     }
 
     await updateBookingSettings(updates)
-    // revalidatePath("/dashboard/settings/bookings")
+    
+    // Revalidate all pages that use booking settings
+    revalidatePath("/dashboard/settings/bookings")
+    revalidatePath("/reserve")
+    revalidatePath("/")
     
     return {
       success: true,
