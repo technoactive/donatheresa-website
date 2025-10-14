@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { useState, useActionState, useEffect, useMemo } from "react"
 import { Calendar, Clock, Users, Phone, Mail, MessageSquare, Plus, Minus, Loader2 } from "lucide-react"
-import { createBooking, getBookingSettingsForClient } from "@/app/(public)/reserve/actions"
+import { createBooking } from "@/app/(public)/reserve/actions"
 import { format, addDays, isBefore, startOfDay, parse } from "date-fns"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -65,32 +65,24 @@ function BookingFormSkeleton() {
   )
 }
 
-export function BookingForm() {
+interface BookingFormProps {
+  bookingSettings: BookingSettings
+}
+
+export function BookingForm({ bookingSettings: serverBookingSettings }: BookingFormProps) {
   const router = useRouter()
   const [state, formAction] = useActionState<FormState, FormData>(createBooking, {})
-  const [isLoading, setIsLoading] = useState(true)
-  const [bookingSettings, setBookingSettings] = useState<BookingSettings | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [bookingSettings, setBookingSettings] = useState<BookingSettings | null>(serverBookingSettings)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>()
   const [selectedTime, setSelectedTime] = useState<string>("")
   const [partySize, setPartySize] = useState(2)
   const [isFormValid, setIsFormValid] = useState(false)
 
-  // Load booking settings on mount
+  // Use server-provided settings
   useEffect(() => {
-    const loadSettings = async () => {
-      try {
-        const result = await getBookingSettingsForClient()
-        if (result.success && result.settings) {
-          setBookingSettings(result.settings)
-        }
-      } catch (error) {
-        console.error("Failed to load booking settings:", error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    loadSettings()
-  }, [])
+    setBookingSettings(serverBookingSettings)
+  }, [serverBookingSettings])
 
   // Define the booking form schema based on settings
   const bookingFormSchema = useMemo(() => z.object({
