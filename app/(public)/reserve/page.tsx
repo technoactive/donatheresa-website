@@ -6,8 +6,10 @@ import { Calendar, Clock, Users, Phone, Star, Heart, Utensils, Crown, Sparkles }
 import { getBookingSettings } from "@/lib/database"
 import { Suspense } from "react"
 
-// Force dynamic rendering
+// Force dynamic rendering and disable all caching
 export const dynamic = 'force-dynamic'
+export const revalidate = 0
+export const fetchCache = 'force-no-store'
 
 export const metadata: Metadata = {
   title: "Book a Table | Dona Theresa Italian Restaurant Hatch End Pinner",
