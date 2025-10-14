@@ -15,7 +15,7 @@ import {
   generateTimeSlotsFromPeriods,
   type ServicePeriod
 } from "@/lib/database"
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createSupabaseAdminClient } from "@/lib/supabase/server"
 import { type ActionState } from "@/lib/types"
 
 const updateBookingSchema = z.object({
@@ -281,23 +281,74 @@ export async function updateBookingSettingsAction(formData: FormData): Promise<A
 
 export async function toggleBookingStatusAction() {
   try {
-    const currentSettings = await getBookingSettings()
-    await updateBookingSettings({
-      booking_enabled: !currentSettings.booking_enabled
-    })
+    console.log('[TOGGLE ACTION] Starting toggle action...')
+    
+    // Try to use admin client, fallback to regular client if not available
+    let supabase;
+    try {
+      supabase = await createSupabaseAdminClient()
+      console.log('[TOGGLE ACTION] Using admin client for database operations')
+    } catch (adminError) {
+      console.log('[TOGGLE ACTION] Admin client not available, using regular client')
+      console.log('[TOGGLE ACTION] Admin error:', adminError)
+      supabase = await createClient()
+    }
+    
+    // First, get current status
+    const { data: currentData, error: readError } = await supabase
+      .from('booking_config')
+      .select('booking_enabled')
+      .eq('id', 1)
+      .single()
+    
+    if (readError) {
+      console.error('[TOGGLE ACTION] Error reading current status:', readError)
+      console.error('[TOGGLE ACTION] Read error code:', readError.code)
+      console.error('[TOGGLE ACTION] Read error details:', readError.details)
+      throw readError
+    }
+    
+    console.log('[TOGGLE ACTION] Current booking_enabled:', currentData?.booking_enabled)
+    
+    const newStatus = !currentData.booking_enabled
+    console.log('[TOGGLE ACTION] Setting booking_enabled to:', newStatus)
+    
+    // Update directly with admin client
+    const { data: updateData, error: updateError } = await supabase
+      .from('booking_config')
+      .update({ booking_enabled: newStatus })
+      .eq('id', 1)
+      .select()
+      .single()
+    
+    if (updateError) {
+      console.error('[TOGGLE ACTION] Error updating:', updateError)
+      console.error('[TOGGLE ACTION] Update error code:', updateError.code)
+      console.error('[TOGGLE ACTION] Update error details:', updateError.details)
+      console.error('[TOGGLE ACTION] Update error hint:', updateError.hint)
+      throw updateError
+    }
+    
+    console.log('[TOGGLE ACTION] Update result:', updateData)
+    console.log('[TOGGLE ACTION] Update completed, revalidating paths...')
 
+    revalidatePath("/dashboard/settings/bookings")
     revalidatePath("/dashboard/bookings")
     revalidatePath("/reserve")
+    revalidatePath("/")
 
     return { 
       success: true, 
-      message: `Bookings ${!currentSettings.booking_enabled ? 'enabled' : 'suspended'}`
+      message: `Bookings ${newStatus ? 'enabled' : 'suspended'}`
     }
   } catch (error) {
-    console.error("Error toggling booking status:", error)
+    console.error('[TOGGLE ACTION] Error details:', error)
+    console.error('[TOGGLE ACTION] Error type:', typeof error)
+    console.error('[TOGGLE ACTION] Error message:', error instanceof Error ? error.message : 'Unknown error')
+    
     return { 
       success: false, 
-      error: "Failed to toggle booking status" 
+      error: error instanceof Error ? error.message : "Failed to toggle booking status" 
     }
   }
 }

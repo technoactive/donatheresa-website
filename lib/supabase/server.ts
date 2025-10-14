@@ -43,6 +43,9 @@ export async function createSupabaseAdminClient() {
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
   if (!supabaseUrl || !supabaseServiceKey) {
+    console.error('[ADMIN CLIENT] Missing environment variables')
+    console.error('[ADMIN CLIENT] NEXT_PUBLIC_SUPABASE_URL:', !!supabaseUrl)
+    console.error('[ADMIN CLIENT] SUPABASE_SERVICE_ROLE_KEY:', !!supabaseServiceKey)
     throw new Error('Missing Supabase environment variables for admin client. Please check your .env.local file.')
   }
 
