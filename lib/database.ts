@@ -1,5 +1,5 @@
 import "server-only"
-import { createClient, createSupabaseAdminClient } from "@/lib/supabase/server"
+import { createClient } from "@/lib/supabase/server"
 import { DatabaseCustomer, LocaleSettings } from "@/lib/types"
 
 // Types for the database
