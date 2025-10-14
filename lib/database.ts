@@ -1,5 +1,5 @@
 import "server-only"
-import { createClient } from "@/lib/supabase/server"
+import { createClient, createSupabaseAdminClient } from "@/lib/supabase/server"
 import { DatabaseCustomer, LocaleSettings } from "@/lib/types"
 
 // Types for the database
@@ -527,7 +527,15 @@ export async function getBookingSettings(): Promise<BookingSettings> {
 }
 
 export async function updateBookingSettings(settings: Partial<BookingSettings>): Promise<void> {
-  const supabase = await createClient()
+  // Try to use admin client, fallback to regular client if not available
+  let supabase;
+  try {
+    supabase = await createSupabaseAdminClient()
+    console.log('[DATABASE] Using admin client for update')
+  } catch (error) {
+    console.log('[DATABASE] Admin client not available, using regular client')
+    supabase = await createClient()
+  }
   
   try {
     console.log('[DATABASE] updateBookingSettings called with:', settings)
@@ -552,31 +560,26 @@ export async function updateBookingSettings(settings: Partial<BookingSettings>):
     if (settings.closed_days_of_week !== undefined) updateData.closed_days_of_week = settings.closed_days_of_week
     
     console.log('[DATABASE] Final updateData object:', updateData)
+    console.log('[DATABASE] Using admin client for update...')
     
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('booking_config')
       .update(updateData)
       .eq('id', 1)
+      .select()
+      .single()
 
     if (error) {
       console.error('[DATABASE] Error updating booking settings:', error)
+      console.error('[DATABASE] Error code:', error.code)
+      console.error('[DATABASE] Error details:', error.details)
+      console.error('[DATABASE] Error hint:', error.hint)
       throw error
     }
     
-    console.log('[DATABASE] Booking settings updated successfully:', updateData)
-    
-    // Verify the update by reading back
-    const { data: verifyData, error: verifyError } = await supabase
-      .from('booking_config')
-      .select('booking_enabled')
-      .eq('id', 1)
-      .single()
-    
-    if (!verifyError && verifyData) {
-      console.log('[DATABASE] Verification - booking_enabled is now:', verifyData.booking_enabled)
-    }
+    console.log('[DATABASE] Booking settings updated successfully:', data)
   } catch (error) {
-    console.error('Database error in updateBookingSettings:', error)
+    console.error('[DATABASE] Database error in updateBookingSettings:', error)
     throw error
   }
 }
