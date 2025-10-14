@@ -1,18 +1,13 @@
 "use client"
 
-// Force dynamic rendering
-export const dynamic = 'force-dynamic'
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import Image from "next/image"
-import { MapPin, Phone, Clock, Send, MessageSquare, CheckCircle, ArrowRight, Mail, User, Calendar, Star, Map, PhoneIcon } from "lucide-react"
+import { MapPin, Phone, Clock, Send, MessageSquare, CheckCircle, ArrowRight, Mail, User, Calendar, Star, Map as MapIcon, PhoneIcon, Navigation, ChefHat } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { submitContactMessage } from "@/app/(public)/contact/actions"
@@ -102,314 +97,415 @@ export default function ContactPageClient() {
   }
 
   return (
-    <div className="bg-gradient-to-b from-stone-50 to-cream-50 min-h-screen">
-      {/* Elegant Italian Hero Section */}
-      <section className="relative overflow-hidden pt-28 pb-10 md:pb-16">
-        {/* Sophisticated Background Pattern */}
-        <div className="absolute inset-0 bg-gradient-to-br from-stone-100 via-amber-50 to-emerald-50 opacity-60"></div>
+    <div className="bg-white min-h-screen">
+      {/* Premium Hero Section */}
+      <section className="relative overflow-hidden pt-40 md:pt-48 lg:pt-52 pb-16 md:pb-24">
+        {/* Premium Gradient Background */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,_rgba(133,77,14,0.08)_0%,_transparent_50%)]"></div>
-          <div className="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_70%_80%,_rgba(21,128,61,0.06)_0%,_transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-white to-emerald-50"></div>
+          <div className="absolute top-0 left-0 w-full h-full opacity-40" style={{backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`}}></div>
         </div>
         
+        {/* Floating Elements */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-amber-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute top-40 right-10 w-72 h-72 bg-emerald-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-20 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+        
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-8">
-            {/* Elegant Badge */}
-            <div className="flex justify-center">
-              <Badge variant="outline" className="bg-white/90 backdrop-blur-sm border-amber-600/30 text-amber-800 px-6 py-2 text-sm font-medium">
-                <MessageSquare className="w-4 h-4 mr-2" />
-                Get in Touch
-              </Badge>
-            </div>
-
-            {/* Elegant Italian Heading */}
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-800 leading-tight">
-                We'd Love to
-                <span className="block bg-gradient-to-r from-amber-700 via-yellow-600 to-amber-800 bg-clip-text text-transparent">
-                  Hear from You
+          <div className="text-center space-y-10">
+            {/* Premium Heading */}
+            <div className="space-y-6">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+                <span className="block text-slate-900">Let's Start a</span>
+                <span className="block mt-2">
+                  <span className="relative inline-block">
+                    <span className="absolute inset-0 bg-gradient-to-r from-amber-600 to-amber-500 blur-xl opacity-20"></span>
+                    <span className="relative bg-gradient-to-r from-amber-700 via-amber-600 to-amber-500 bg-clip-text text-transparent">
+                      Conversation
+                    </span>
+                  </span>
                 </span>
               </h1>
               
-              <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-                Questions about our menu? Want to share feedback? Ready to plan your perfect dining experience?
+              <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-light">
+                Whether you're planning a special celebration, have questions about our authentic Italian cuisine, 
+                or simply want to share your thoughts – we're all ears.
               </p>
             </div>
 
-            {/* Elegant CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                              <Button 
-                  size="lg" 
-                  className="bg-gradient-to-r from-amber-700 to-amber-600 hover:from-amber-800 hover:to-amber-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 px-8 py-6 text-lg"
-                  onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
-                >
-                  <Send className="w-5 h-5 mr-2" />
-                  Send Message
-                </Button>
-                
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="border-emerald-600 text-emerald-700 hover:bg-emerald-50 px-8 py-6 text-lg"
-                  asChild
-                >
-                  <Link href="/reserve">
-                    <Calendar className="w-5 h-5 mr-2" />
-                    Make Reservation
-                  </Link>
-                </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Elegant Contact Info Bar */}
-      <section className="py-6 bg-white/70 backdrop-blur-sm border-y border-stone-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            <div className="flex items-center justify-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-amber-700 to-amber-600 rounded-full flex items-center justify-center">
-                <PhoneIcon className="w-5 h-5 text-white" />
-              </div>
-              <div className="text-left">
-                <p className="text-sm font-medium text-stone-600">Call Us</p>
-                <RestaurantPhoneLink className="text-slate-800 font-semibold hover:text-amber-700 transition-colors">
-                  <RestaurantInfo type="phone" fallback="020 8421 5550" />
-                </RestaurantPhoneLink>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-emerald-700 to-emerald-600 rounded-full flex items-center justify-center">
-                <Map className="w-5 h-5 text-white" />
-              </div>
-              <div className="text-left">
-                <p className="text-sm font-medium text-stone-600">Visit Us</p>
-                <p className="text-slate-800 font-semibold">
-                  <RestaurantInfo type="address" fallback="451 Uxbridge Rd" />
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-yellow-600 to-amber-600 rounded-full flex items-center justify-center">
-                <Clock className="w-5 h-5 text-white" />
-              </div>
-              <div className="text-left">
-                <p className="text-sm font-medium text-stone-600">Open Hours</p>
-                <p className="text-slate-800 font-semibold">Tue-Sun 12:00-23:00</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Elegant Italian Contact Form Section */}
-      <section id="contact-form" className="py-16 md:py-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className="shadow-2xl border-0 overflow-hidden bg-white/95 backdrop-blur-sm">
-            <div className="bg-gradient-to-r from-emerald-800 to-emerald-700 p-6 md:p-8">
-              <CardHeader className="p-0">
-                <CardTitle className="text-3xl md:text-4xl font-bold text-white flex items-center">
-                  <MessageSquare className="w-8 h-8 mr-3" />
+            {/* Premium CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6">
+              <Button 
+                size="lg" 
+                className="group relative overflow-hidden bg-slate-900 hover:bg-slate-800 text-white shadow-2xl transition-all duration-300 px-10 py-7 text-lg rounded-full"
+                onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-amber-600 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                <span className="relative flex items-center">
+                  <Send className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" />
                   Send Us a Message
-                </CardTitle>
-                <CardDescription className="text-emerald-100 text-lg mt-2">
-                  We typically respond within 24 hours. For urgent matters, please call us directly.
-                </CardDescription>
-              </CardHeader>
+                </span>
+              </Button>
+                
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="group border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white px-10 py-7 text-lg rounded-full transition-all duration-300"
+                asChild
+              >
+                <Link href="/reserve">
+                  <Calendar className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" />
+                  Book a Table
+                </Link>
+              </Button>
             </div>
 
-            <CardContent className="p-6 md:p-8 lg:p-12">
+            {/* Quick Stats */}
+            <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-12">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-slate-900">24h</div>
+                <div className="text-sm text-slate-600 mt-1">Response Time</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-slate-900">7</div>
+                <div className="text-sm text-slate-600 mt-1">Days a Week</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-slate-900">100%</div>
+                <div className="text-sm text-slate-600 mt-1">Satisfaction</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Premium Contact Info Bar */}
+      <section className="relative bg-slate-50 py-10 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-50 via-white to-slate-50"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="flex items-start space-x-4">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-amber-500 rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                  <div className="relative w-12 h-12 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <PhoneIcon className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-slate-500 mb-1">Direct Line</p>
+                  <RestaurantPhoneLink className="text-lg font-semibold text-slate-900 hover:text-amber-600 transition-colors flex items-center group">
+                    <RestaurantInfo type="phone" fallback="020 8421 5550" />
+                    <ArrowRight className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </RestaurantPhoneLink>
+                </div>
+              </div>
+            </div>
+
+            <div className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="flex items-start space-x-4">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-emerald-500 rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                  <div className="relative w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <Navigation className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-slate-500 mb-1">Location</p>
+                  <p className="text-lg font-semibold text-slate-900">
+                    <RestaurantInfo type="address" fallback="451 Uxbridge Rd" />
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <div className="flex items-start space-x-4">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-yellow-500 rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                  <div className="relative w-12 h-12 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <Clock className="w-6 h-6 text-white" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-slate-500 mb-1">Open Today</p>
+                  <p className="text-lg font-semibold text-slate-900">12:00 - 23:00</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Premium Contact Form Section */}
+      <section id="contact-form" className="py-20 md:py-32 relative bg-gradient-to-b from-white to-slate-50">
+        <div className="absolute inset-0">
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Card className="relative shadow-2xl border-0 overflow-hidden bg-white">
+            {/* Premium Form Header */}
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-900 to-slate-800"></div>
+              <div className="absolute inset-0" style={{backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`}}></div>
+              <div className="relative p-8 md:p-12">
+                <CardHeader className="p-0 space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                      <MessageSquare className="w-7 h-7 text-white" />
+                    </div>
+                    <CardTitle className="text-3xl md:text-4xl font-bold text-white">
+                      Get in Touch
+                    </CardTitle>
+                  </div>
+                  <CardDescription className="text-slate-200 text-lg leading-relaxed">
+                    Have a question? Need to make a special arrangement? We're here to help make your dining experience perfect.
+                  </CardDescription>
+                </CardHeader>
+              </div>
+            </div>
+
+            <CardContent className="p-8 md:p-10 lg:p-12">
               {!isSubmitted ? (
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-10">
                   {/* Personal Information */}
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-2 mb-4">
-                      <User className="w-5 h-5 text-amber-700" />
-                      <h3 className="text-lg font-semibold text-slate-800">Personal Information</h3>
+                  <div className="space-y-8">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-amber-100 to-amber-50 rounded-xl flex items-center justify-center">
+                        <User className="w-5 h-5 text-amber-700" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-slate-900">Your Information</h3>
+                        <p className="text-sm text-slate-500">Tell us who you are</p>
+                      </div>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-700 flex items-center">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-3">
+                        <label className="text-sm font-medium text-slate-700 tracking-wide">
                           Full Name *
                         </label>
-                        <Input
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          placeholder="Enter your full name"
-                          className="h-12 text-base border-stone-300 focus:border-amber-600 focus:ring-amber-600 transition-all duration-200"
-                          required
-                        />
+                        <div className="relative">
+                          <Input
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            placeholder="John Doe"
+                            className="h-14 pl-4 pr-4 text-base border-slate-200 bg-slate-50/50 focus:bg-white focus:border-slate-400 focus:ring-2 focus:ring-slate-900/10 rounded-xl transition-all duration-200"
+                            required
+                          />
+                        </div>
                       </div>
                       
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-700 flex items-center">
+                      <div className="space-y-3">
+                        <label className="text-sm font-medium text-slate-700 tracking-wide">
                           Email Address *
                         </label>
-                        <Input
-                          name="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          placeholder="your@email.com"
-                          className="h-12 text-base border-stone-300 focus:border-amber-600 focus:ring-amber-600 transition-all duration-200"
-                          required
-                        />
+                        <div className="relative">
+                          <Input
+                            name="email"
+                            type="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            placeholder="john@example.com"
+                            className="h-14 pl-4 pr-4 text-base border-slate-200 bg-slate-50/50 focus:bg-white focus:border-slate-400 focus:ring-2 focus:ring-slate-900/10 rounded-xl transition-all duration-200"
+                            required
+                          />
+                        </div>
                       </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-slate-700">
-                        Phone Number <span className="text-stone-500">(Optional)</span>
+                    <div className="space-y-3">
+                      <label className="text-sm font-medium text-slate-700 tracking-wide">
+                        Phone Number <span className="text-slate-400 font-normal">(Optional)</span>
                       </label>
-                      <Input
-                        name="phone"
-                        type="tel"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        placeholder="020 1234 5678"
-                        className="h-12 text-base border-stone-300 focus:border-amber-600 focus:ring-amber-600 transition-all duration-200"
-                      />
+                      <div className="relative">
+                        <Input
+                          name="phone"
+                          type="tel"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          placeholder="020 1234 5678"
+                          className="h-14 pl-4 pr-4 text-base border-slate-200 bg-slate-50/50 focus:bg-white focus:border-slate-400 focus:ring-2 focus:ring-slate-900/10 rounded-xl transition-all duration-200"
+                        />
+                      </div>
                     </div>
                   </div>
 
-                  <Separator className="my-8 bg-stone-200" />
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-slate-200"></div>
+                    </div>
+                    <div className="relative flex justify-center">
+                      <span className="px-4 bg-white text-sm text-slate-500">Message Details</span>
+                    </div>
+                  </div>
 
                   {/* Message Details */}
-                  <div className="space-y-6">
-                    <div className="flex items-center space-x-2 mb-4">
-                      <Mail className="w-5 h-5 text-amber-700" />
-                      <h3 className="text-lg font-semibold text-slate-800">Message Details</h3>
+                  <div className="space-y-8">
+                    <div className="flex items-center space-x-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-xl flex items-center justify-center">
+                        <Mail className="w-5 h-5 text-emerald-700" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-slate-900">Your Message</h3>
+                        <p className="text-sm text-slate-500">How can we help you today?</p>
+                      </div>
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-slate-700">
+                    <div className="space-y-3">
+                      <label className="text-sm font-medium text-slate-700 tracking-wide">
                         Subject *
                       </label>
                       <Select onValueChange={handleSelectChange} required>
-                        <SelectTrigger className="h-12 text-base border-stone-300 focus:border-amber-600 focus:ring-amber-600 transition-all duration-200">
-                          <SelectValue placeholder="What can we help you with?" />
+                        <SelectTrigger className="h-14 text-base border-slate-200 bg-slate-50/50 focus:bg-white focus:border-slate-400 focus:ring-2 focus:ring-slate-900/10 rounded-xl transition-all duration-200">
+                          <SelectValue placeholder="Select a topic" />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="general">General Question</SelectItem>
-                          <SelectItem value="menu">Menu Inquiry</SelectItem>
-                          <SelectItem value="feedback">Feedback & Reviews</SelectItem>
-                          <SelectItem value="private-events">Private Events</SelectItem>
-                          <SelectItem value="catering">Catering Services</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
+                        <SelectContent className="rounded-xl">
+                          <SelectItem value="general" className="py-3">General Question</SelectItem>
+                          <SelectItem value="menu" className="py-3">Menu Inquiry</SelectItem>
+                          <SelectItem value="feedback" className="py-3">Feedback & Reviews</SelectItem>
+                          <SelectItem value="private-events" className="py-3">Private Events</SelectItem>
+                          <SelectItem value="catering" className="py-3">Catering Services</SelectItem>
+                          <SelectItem value="other" className="py-3">Other</SelectItem>
                         </SelectContent>
                       </Select>
                       {/* Hidden input to ensure subject is included in FormData */}
                       <input type="hidden" name="subject" value={formData.subject} />
                     </div>
 
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-slate-700">
+                    <div className="space-y-3">
+                      <label className="text-sm font-medium text-slate-700 tracking-wide">
                         Your Message *
                       </label>
-                      <Textarea
-                        name="message"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        placeholder="Please share your thoughts, questions, or special requests. We'd love to hear from you!"
-                        className="min-h-[120px] text-base border-stone-300 focus:border-amber-600 focus:ring-amber-600 transition-all duration-200 resize-none"
-                        required
-                      />
+                      <div className="relative">
+                        <Textarea
+                          name="message"
+                          value={formData.message}
+                          onChange={handleInputChange}
+                          placeholder="Tell us more about your inquiry. The more details you provide, the better we can assist you..."
+                          className="min-h-[150px] pl-4 pr-4 py-4 text-base border-slate-200 bg-slate-50/50 focus:bg-white focus:border-slate-400 focus:ring-2 focus:ring-slate-900/10 rounded-xl transition-all duration-200 resize-none"
+                          required
+                        />
+                        <div className="absolute bottom-3 right-3 text-xs text-slate-400">
+                          {formData.message.length}/500
+                        </div>
+                      </div>
                     </div>
                   </div>
 
                   {/* Submit Button */}
-                  <div className="pt-4">
+                  <div className="pt-6">
                     <Button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full h-14 bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-800 hover:to-emerald-700 text-white text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
+                      className="group relative w-full h-16 bg-slate-900 hover:bg-slate-800 text-white text-lg font-medium rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed overflow-hidden"
                     >
-                                              {isSubmitting ? (
-                          <div className="flex items-center space-x-2">
+                      <span className="absolute inset-0 bg-gradient-to-r from-amber-600 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                      <span className="relative">
+                        {isSubmitting ? (
+                          <div className="flex items-center justify-center space-x-3">
                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            <span>Sending Message...</span>
+                            <span>Sending Your Message...</span>
                           </div>
                         ) : (
-                          <div className="flex items-center space-x-2">
-                            <Send className="w-5 h-5" />
+                          <div className="flex items-center justify-center space-x-3">
+                            <Send className="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
                             <span>Send Message</span>
                           </div>
                         )}
+                      </span>
                     </Button>
                   </div>
 
-                  {/* Help Text */}
-                                      <Alert className="border-amber-200 bg-amber-50/50">
-                      <AlertDescription className="text-amber-800">
-                        <strong>Need immediate help?</strong> Call us at{' '}
-                        <RestaurantPhoneLink className="font-semibold text-amber-700 hover:text-amber-600 underline">
-                          <RestaurantInfo type="phone" fallback="020 8421 5550" />
-                        </RestaurantPhoneLink>{' '}
-                        or{' '}
-                        <Link href="/reserve" className="font-semibold text-amber-700 hover:text-amber-600 underline">
-                          make a reservation online
-                        </Link>
-                        .
-                      </AlertDescription>
-                    </Alert>
-                </form>
-              ) : (
-                <div className="text-center py-12">
-                  <div className="w-24 h-24 bg-gradient-to-r from-emerald-600 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl">
-                    <CheckCircle className="w-12 h-12 text-white" />
-                  </div>
-                  
-                                      <div className="space-y-6">
-                      <div className="space-y-2">
-                        <h3 className="text-3xl md:text-4xl font-bold text-slate-800">
-                          Message Sent Successfully!
-                        </h3>
-                        <div className="flex justify-center">
-                          <div className="flex space-x-1">
-                            {[...Array(5)].map((_, i) => (
-                              <Star key={i} className="w-5 h-5 text-yellow-500 fill-current" />
-                            ))}
+                  {/* Premium Help Section */}
+                  <div className="relative">
+                    <Alert className="relative border-0 bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-xl p-6">
+                      <div className="absolute top-0 right-0 w-24 h-24 bg-amber-200 rounded-full mix-blend-multiply filter blur-xl opacity-20"></div>
+                      <AlertDescription className="relative text-slate-700 leading-relaxed">
+                        <div className="flex items-start space-x-3">
+                          <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <div>
+                            <span className="font-semibold text-slate-900">Need immediate assistance?</span>
+                            <p className="mt-1">
+                              Call us directly at{' '}
+                              <RestaurantPhoneLink className="font-semibold text-amber-600 hover:text-amber-700 underline decoration-amber-300 underline-offset-2 transition-colors">
+                                <RestaurantInfo type="phone" fallback="020 8421 5550" />
+                              </RestaurantPhoneLink>{' '}
+                              or{' '}
+                              <Link href="/reserve" className="font-semibold text-emerald-600 hover:text-emerald-700 underline decoration-emerald-300 underline-offset-2 transition-colors">
+                                book a table online
+                              </Link>
+                              .
+                            </p>
                           </div>
                         </div>
-                      </div>
-                      
-                      <div className="space-y-4 max-w-2xl mx-auto">
-                        <p className="text-xl text-slate-600 font-medium">
-                          Thank you for reaching out to Dona Theresa!
-                        </p>
-                        
-                        <p className="text-lg text-slate-500 leading-relaxed">
-                          Your message has been received and our team will respond within 24 hours. 
-                          We appreciate your interest and look forward to serving you.
-                        </p>
-                      </div>
-                      
-                      <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-                        <Button
-                          onClick={resetForm}
-                          variant="outline"
-                          size="lg"
-                          className="border-amber-600 text-amber-700 hover:bg-amber-50 px-8 py-6"
-                        >
-                          Send Another Message
-                        </Button>
-                        
-                        <Button
-                          size="lg"
-                          className="bg-gradient-to-r from-emerald-700 to-emerald-600 hover:from-emerald-800 hover:to-emerald-700 text-white px-8 py-6"
-                          asChild
-                        >
-                          <Link href="/reserve">
-                            <Calendar className="w-5 h-5 mr-2" />
-                            Make a Reservation
-                          </Link>
-                        </Button>
+                      </AlertDescription>
+                    </Alert>
+                  </div>
+                </form>
+              ) : (
+                <div className="text-center py-16">
+                  {/* Success Animation Container */}
+                  <div className="relative inline-block mb-10">
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full blur-2xl opacity-30 animate-pulse"></div>
+                    <div className="relative w-28 h-28 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-full flex items-center justify-center shadow-2xl">
+                      <CheckCircle className="w-14 h-14 text-white" />
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-8">
+                    <div className="space-y-4">
+                      <h3 className="text-3xl md:text-4xl font-bold text-slate-900">
+                        Message Delivered!
+                      </h3>
+                      <div className="flex justify-center space-x-2">
+                        {[...Array(5)].map((_, i) => (
+                          <div key={i} className="relative">
+                            <Star className="w-6 h-6 text-amber-400 fill-current" />
+                            <div className="absolute inset-0 bg-amber-400 blur-sm opacity-50"></div>
+                          </div>
+                        ))}
                       </div>
                     </div>
+                    
+                    <div className="space-y-4 max-w-2xl mx-auto">
+                      <p className="text-xl text-slate-700 font-medium leading-relaxed">
+                        Thank you for contacting Dona Theresa
+                      </p>
+                      
+                      <p className="text-lg text-slate-600 leading-relaxed">
+                        We've received your message and will respond within 24 hours. 
+                        Our team is excited to assist you with your inquiry.
+                      </p>
+                    </div>
+                    
+                    <div className="flex flex-col sm:flex-row gap-6 justify-center pt-8">
+                      <Button
+                        onClick={resetForm}
+                        variant="outline"
+                        size="lg"
+                        className="group border-2 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white px-10 py-6 rounded-xl transition-all duration-300"
+                      >
+                        <MessageSquare className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" />
+                        Send Another Message
+                      </Button>
+                      
+                      <Button
+                        size="lg"
+                        className="group relative overflow-hidden bg-slate-900 hover:bg-slate-800 text-white px-10 py-6 rounded-xl transition-all duration-300"
+                        asChild
+                      >
+                        <Link href="/reserve">
+                          <span className="absolute inset-0 bg-gradient-to-r from-amber-600 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                          <span className="relative flex items-center">
+                            <Calendar className="w-5 h-5 mr-3 group-hover:rotate-12 transition-transform duration-300" />
+                            Book Your Table
+                          </span>
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               )}
             </CardContent>
@@ -417,106 +513,160 @@ export default function ContactPageClient() {
         </div>
       </section>
 
-      {/* Elegant Italian Contact Information Cards */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-stone-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Header */}
-          <div className="text-center mb-16">
-            <Badge variant="outline" className="bg-white border-amber-600/30 text-amber-700 mb-4">
-              Contact Information
-            </Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
-              Multiple Ways to Connect
+      {/* Premium Contact Information Cards */}
+      <section className="py-24 md:py-32 relative bg-gradient-to-b from-slate-50 to-white">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+        </div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Premium Section Header */}
+          <div className="text-center mb-20">
+            <div className="inline-block mb-8">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-emerald-500 rounded-full blur-xl opacity-20"></div>
+                <Badge className="relative bg-white border-0 shadow-lg text-slate-800 px-8 py-3 text-sm font-medium tracking-wide">
+                  <ChefHat className="w-4 h-4 mr-2 text-amber-600" />
+                  Visit Dona Theresa
+                </Badge>
+              </div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+              We're Always Here for You
             </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Choose the most convenient way to reach us for reservations, inquiries, or special requests.
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              Whether you prefer to call, visit, or message us online – we're ready to help make your experience exceptional.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Location Card */}
-            <Card className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0 shadow-lg overflow-hidden">
-              <div className="bg-gradient-to-br from-amber-700 to-amber-600 p-6">
-                <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-4">
-                  <MapPin className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Visit Our Restaurant</h3>
-                <p className="text-amber-100">Find us in the heart of Pinner</p>
-              </div>
-              <CardContent className="p-6">
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-slate-800">
-                      <RestaurantInfo type="address" fallback="451 Uxbridge Rd" />
-                    </p>
-                    <p className="text-slate-600">
-                      <RestaurantInfo type="city" fallback="Pinner" />, <RestaurantInfo type="postalCode" fallback="HA5 4JR" />
-                    </p>
-                  </div>
-                  <Separator className="bg-stone-200" />
-                  <div className="text-sm text-slate-500">
-                    <p>🚗 Free parking available</p>
-                    <p>🚇 5 minutes from Pinner Station</p>
-                    <p>♿ Wheelchair accessible</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {/* Premium Location Card */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500 to-amber-600 rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+              <Card className="relative h-full border-0 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden rounded-2xl bg-white">
+                <div className="relative h-48 bg-gradient-to-br from-amber-500 to-amber-600 p-8">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                  <div className="relative">
+                    <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6">
+                      <Navigation className="w-7 h-7 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">Find Us</h3>
+                    <p className="text-amber-100">In the heart of Pinner</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+                <CardContent className="p-8">
+                  <div className="space-y-6">
+                    <div>
+                      <p className="text-lg font-semibold text-slate-900 mb-1">
+                        <RestaurantInfo type="address" fallback="451 Uxbridge Rd" />
+                      </p>
+                      <p className="text-slate-600">
+                        <RestaurantInfo type="city" fallback="Pinner" />, <RestaurantInfo type="postalCode" fallback="HA5 4JR" />
+                      </p>
+                    </div>
+                    <div className="space-y-3 pt-4 border-t border-slate-100">
+                      <div className="flex items-center space-x-3 text-sm text-slate-600">
+                        <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                        <p>Free parking available on-site</p>
+                      </div>
+                      <div className="flex items-center space-x-3 text-sm text-slate-600">
+                        <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                        <p>5 minutes walk from Pinner Station</p>
+                      </div>
+                      <div className="flex items-center space-x-3 text-sm text-slate-600">
+                        <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                        <p>Fully wheelchair accessible</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-            {/* Phone Card */}
-            <Card className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0 shadow-lg overflow-hidden">
-              <div className="bg-gradient-to-br from-emerald-700 to-emerald-600 p-6">
-                <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-4">
-                  <Phone className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Call Us Directly</h3>
-                <p className="text-emerald-100">Immediate assistance available</p>
-              </div>
-              <CardContent className="p-6">
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-slate-800">
-                      <RestaurantPhoneLink className="hover:text-emerald-600 transition-colors">
-                        <RestaurantInfo type="phone" fallback="020 8421 5550" />
-                      </RestaurantPhoneLink>
-                    </p>
-                    <p className="text-slate-600">Available during opening hours</p>
-                  </div>
-                  <Separator className="bg-stone-200" />
-                  <div className="text-sm text-slate-500">
-                    <p>📞 Reservations & inquiries</p>
-                    <p>🎉 Private events planning</p>
-                    <p>🍽️ Special dietary requests</p>
+            {/* Premium Phone Card */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+              <Card className="relative h-full border-0 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden rounded-2xl bg-white">
+                <div className="relative h-48 bg-gradient-to-br from-emerald-500 to-emerald-600 p-8">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                  <div className="relative">
+                    <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6">
+                      <Phone className="w-7 h-7 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">Call Us</h3>
+                    <p className="text-emerald-100">Direct line available</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+                <CardContent className="p-8">
+                  <div className="space-y-6">
+                    <div>
+                      <p className="text-lg font-semibold text-slate-900 mb-1">
+                        <RestaurantPhoneLink className="hover:text-emerald-600 transition-colors flex items-center group">
+                          <RestaurantInfo type="phone" fallback="020 8421 5550" />
+                          <ArrowRight className="w-4 h-4 ml-2 opacity-0 group-hover:opacity-100 transition-all" />
+                        </RestaurantPhoneLink>
+                      </p>
+                      <p className="text-slate-600">Available during service hours</p>
+                    </div>
+                    <div className="space-y-3 pt-4 border-t border-slate-100">
+                      <div className="flex items-center space-x-3 text-sm text-slate-600">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                        <p>Table reservations & enquiries</p>
+                      </div>
+                      <div className="flex items-center space-x-3 text-sm text-slate-600">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                        <p>Private events & celebrations</p>
+                      </div>
+                      <div className="flex items-center space-x-3 text-sm text-slate-600">
+                        <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                        <p>Dietary requirements & allergies</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
 
-            {/* Hours Card */}
-            <Card className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-0 shadow-lg overflow-hidden">
-              <div className="bg-gradient-to-br from-yellow-600 to-amber-600 p-6">
-                <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-4">
-                  <Clock className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Opening Hours</h3>
-                <p className="text-yellow-100">Tuesday to Sunday</p>
-              </div>
-              <CardContent className="p-6">
-                <div className="space-y-3">
-                  <div>
-                    <p className="font-semibold text-slate-800">Lunch: 12:00 - 15:00</p>
-                    <p className="font-semibold text-slate-800">Dinner: 18:00 - 23:00</p>
-                    <p className="text-slate-600">Closed Mondays</p>
-                  </div>
-                  <Separator className="bg-stone-200" />
-                  <div className="text-sm text-slate-500">
-                    <p>🕐 Last orders: 22:30</p>
-                    <p>🍷 Happy hour: 18:00 - 19:30</p>
-                    <p>📅 Holiday hours may vary</p>
+            {/* Premium Hours Card */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-yellow-500 to-amber-500 rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+              <Card className="relative h-full border-0 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 overflow-hidden rounded-2xl bg-white">
+                <div className="relative h-48 bg-gradient-to-br from-yellow-500 to-amber-500 p-8">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                  <div className="relative">
+                    <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6">
+                      <Clock className="w-7 h-7 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">Open Hours</h3>
+                    <p className="text-yellow-100">Tuesday to Sunday</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+                <CardContent className="p-8">
+                  <div className="space-y-6">
+                    <div>
+                      <p className="text-lg font-semibold text-slate-900">Lunch Service</p>
+                      <p className="text-slate-600 mb-3">12:00 PM - 3:00 PM</p>
+                      <p className="text-lg font-semibold text-slate-900">Dinner Service</p>
+                      <p className="text-slate-600">6:00 PM - 11:00 PM</p>
+                    </div>
+                    <div className="space-y-3 pt-4 border-t border-slate-100">
+                      <div className="flex items-center space-x-3 text-sm text-slate-600">
+                        <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                        <p>Last orders at 10:30 PM</p>
+                      </div>
+                      <div className="flex items-center space-x-3 text-sm text-slate-600">
+                        <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                        <p>Happy hour: 6:00 PM - 7:30 PM</p>
+                      </div>
+                      <div className="flex items-center space-x-3 text-sm text-slate-600">
+                        <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                        <p>Closed Mondays</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
