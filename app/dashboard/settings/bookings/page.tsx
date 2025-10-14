@@ -30,8 +30,7 @@ import {
 import { 
   getBookingSettingsAction,
   updateBookingSettingsAction,
-  saveServicePeriodsAction,
-  toggleBookingStatusAction
+  saveServicePeriodsAction
 } from "../../bookings/actions"
 import { type BookingSettings, type ServicePeriod } from "@/lib/types"
 import { SettingsLayout } from "@/components/dashboard/settings-layout"
@@ -359,33 +358,6 @@ export default function BookingSettingsPage() {
                     setBookingSettings(prev => ({...prev, booking_enabled: checked}))
                   }}
                 />
-              </div>
-              
-              {/* Test button for direct toggle */}
-              <div className="pt-4 border-t">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={async () => {
-                    console.log('[CLIENT] Testing direct toggle...')
-                    try {
-                      const result = await toggleBookingStatusAction()
-                      console.log('[CLIENT] Toggle result:', result)
-                      if (result.success) {
-                        toast.success('Direct toggle successful!')
-                        await loadData()
-                      } else {
-                        toast.error('Direct toggle failed')
-                      }
-                    } catch (error) {
-                      console.error('[CLIENT] Direct toggle error:', error)
-                      toast.error('Direct toggle error')
-                    }
-                  }}
-                >
-                  Test Direct Toggle
-                </Button>
-                <p className="text-xs text-slate-500 mt-1">Debug: Directly toggle booking status</p>
               </div>
             </CardContent>
           </Card>
