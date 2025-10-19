@@ -12,8 +12,8 @@ export const revalidate = 0
 export const fetchCache = 'force-no-store'
 
 export const metadata: Metadata = {
-  title: "Book a Table | Dona Theresa Italian Restaurant Hatch End Pinner",
-  description: "Reserve your table at Dona Theresa Italian Restaurant, 451 Uxbridge Road, Hatch End, Pinner HA5 4JR. Online booking available. Call 020 8421 5550.",
+  title: "Book Table Online | Italian Restaurant Pinner | Dona Theresa Reservations",
+  description: "📅 Book your table at Dona Theresa Italian Restaurant. Easy online reservations. Lunch £19.95. 📍 451 Uxbridge Road, Pinner HA5 4JR. 📞 020 8421 5550.",
   keywords: [
     "book table Italian restaurant Hatch End",
     "restaurant reservation Pinner",
@@ -27,8 +27,8 @@ export const metadata: Metadata = {
     "lunch booking Italian Pinner"
   ],
   openGraph: {
-    title: "Book a Table | Dona Theresa Italian Restaurant",
-    description: "Reserve your table online at Dona Theresa, Hatch End's premier Italian restaurant. 451 Uxbridge Road, Pinner HA5 4JR.",
+    title: "Book Table Online | Dona Theresa Italian Restaurant Pinner",
+    description: "Reserve your table at Dona Theresa. Online booking 24/7. Lunch specials £19.95. Authentic Italian dining in Hatch End.",
     type: "website",
     locale: "en_GB",
     url: "https://donatheresa.com/reserve",
@@ -44,8 +44,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Reserve a Table | Dona Theresa",
-    description: "Book your table at Dona Theresa Italian Restaurant. Easy online reservations.",
+    title: "Book Online | Dona Theresa Italian Restaurant Pinner",
+    description: "Quick & easy table booking at Dona Theresa. Lunch £19.95. Open Tue-Sun. Book now for tonight!",
     images: ["https://donatheresa.com/og-reserve.jpg"]
   },
   alternates: {
