@@ -5,8 +5,8 @@ import MenuPageClient from "@/components/public/menu-page-client"
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: "Menu | Dona Theresa Italian Restaurant Hatch End Pinner",
-  description: "View our authentic Italian menu at Dona Theresa, Hatch End. Fresh pasta, wood-fired pizza, seafood specials. Lunch menu £19.95. Located at 451 Uxbridge Road, Pinner HA5 4JR.",
+  title: "Italian Restaurant Menu Pinner | Lunch £19.95 | Dona Theresa Hatch End",
+  description: "📋 View Dona Theresa's Italian menu with prices. Lunch special £19.95 (Tue-Sun). À la carte dinner menu. Fresh ingredients daily. Book: 020 8421 5550.",
   keywords: [
     "Italian restaurant menu Hatch End",
     "Dona Theresa menu Pinner",
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
     "Italian restaurant HA5 4JR menu"
   ],
   openGraph: {
-    title: "Italian Menu | Dona Theresa Restaurant Hatch End Pinner",
-    description: "Authentic Italian cuisine menu. Fresh pasta, pizzas, seafood. Lunch specials from £19.95. 451 Uxbridge Road, Pinner HA5 4JR.",
+    title: "Italian Menu with Prices | Dona Theresa Restaurant Pinner",
+    description: "View our full Italian menu. Lunch menu £19.95. À la carte options. 451 Uxbridge Road, Hatch End. Book online or call 020 8421 5550.",
     type: "website",
     locale: "en_GB",
     url: "https://donatheresa.com/menu",
@@ -37,8 +37,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Menu | Dona Theresa Italian Restaurant",
-    description: "View our authentic Italian menu. Fresh ingredients, traditional recipes. Lunch specials available.",
+    title: "Italian Menu | Dona Theresa Pinner | Lunch £19.95",
+    description: "Authentic Italian menu with lunch specials £19.95. Fresh daily ingredients. Book online for best availability.",
     images: ["https://donatheresa.com/og-menu.jpg"]
   },
   alternates: {

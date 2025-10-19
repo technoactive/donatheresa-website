@@ -10,8 +10,8 @@ import { Suspense } from "react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
 import { DynamicSchema } from "@/components/locale/dynamic-schema"
-import { BreadcrumbSchema } from "@/components/locale/breadcrumb-schema"
 import { FAQSchema } from "@/components/locale/faq-schema"
+import { BreadcrumbSchema } from "@/components/locale/breadcrumb-schema"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -44,10 +44,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://donatheresa.com'),
   title: {
-    default: "Dona Theresa | Italian Restaurant Hatch End Pinner | Fine Dining Northwest London",
+    default: "Italian Restaurant Pinner | Dona Theresa | Book Table Online | Hatch End",
     template: "%s | Dona Theresa Italian Restaurant Pinner"
   },
-  description: "Award-winning Italian restaurant in Hatch End, Pinner. Authentic fine dining on Uxbridge Road, Northwest London. Fresh pasta, wood-fired pizza, extensive wine list. Reservations: 020 8421 5550. Open Tuesday-Sunday.",
+  description: "Authentic Italian restaurant in Hatch End, Pinner HA5 4JR. ⭐ 4.9 rating. Book online for lunch specials £19.95. 📍 451 Uxbridge Road. 📞 020 8421 5550. Open Tue-Sun.",
   keywords: [
     "Italian restaurant Hatch End",
     "Italian restaurant Pinner",
@@ -167,6 +167,7 @@ export default function RootLayout({
         
         {/* Dynamic Schema.org structured data */}
         <DynamicSchema />
+        <FAQSchema />
         <BreadcrumbSchema />
         
         {/* Last updated: October 12, 2025 */}
