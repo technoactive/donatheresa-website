@@ -18,8 +18,30 @@ declare global {
 
 export function GoogleAnalytics() {
   const [settings, setSettings] = useState<GoogleAnalyticsSettings | null>(null)
+  const [hasConsent, setHasConsent] = useState(false)
   const pathname = usePathname()
   const searchParams = useSearchParams()
+
+  // Check for cookie consent
+  useEffect(() => {
+    const checkConsent = () => {
+      const preferences = localStorage.getItem('dona-theresa-cookie-preferences')
+      if (preferences) {
+        const parsed = JSON.parse(preferences)
+        setHasConsent(parsed.analytics === true)
+      }
+    }
+
+    checkConsent()
+    
+    // Listen for storage changes (when user updates consent)
+    const handleStorageChange = () => {
+      checkConsent()
+    }
+    
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
+  }, [])
 
   // Fetch GA settings from the database
   useEffect(() => {
@@ -40,17 +62,17 @@ export function GoogleAnalytics() {
 
   // Track page views when route changes
   useEffect(() => {
-    if (settings?.enabled && settings?.measurement_id && window.gtag) {
+    if (settings?.enabled && settings?.measurement_id && hasConsent && window.gtag) {
       const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
       
       window.gtag('config', settings.measurement_id, {
         page_path: url,
       })
     }
-  }, [pathname, searchParams, settings])
+  }, [pathname, searchParams, settings, hasConsent])
 
-  // Don't render anything if GA is not enabled or no measurement ID
-  if (!settings?.enabled || !settings?.measurement_id) {
+  // Don't render anything if GA is not enabled, no measurement ID, or no consent
+  if (!settings?.enabled || !settings?.measurement_id || !hasConsent) {
     return null
   }
 
@@ -71,6 +93,15 @@ export function GoogleAnalytics() {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
+            
+            // Set consent mode
+            gtag('consent', 'default', {
+              'analytics_storage': 'granted',
+              'functionality_storage': 'granted',
+              'personalization_storage': 'granted',
+              'ad_storage': 'denied'
+            });
+            
             gtag('config', '${gaMeasurementId}', {
               page_path: window.location.pathname,
               cookie_flags: 'max-age=7200;secure;samesite=none'
