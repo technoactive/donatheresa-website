@@ -23,6 +23,13 @@ const footerLinks = [
       { label: "Chef's Table", href: "/contact" },
       { label: "Wine Pairing", href: "/contact" }
     ]
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Cookie Policy", href: "/cookie-policy" },
+      { label: "Sitemap", href: "/sitemap.xml" }
+    ]
   }
 ]
 
@@ -48,7 +55,7 @@ export function PublicFooter() {
       <div className="relative z-10">
         {/* Main Footer Content */}
         <div className="max-w-7xl mx-auto px-6 py-20">
-          <div className="grid lg:grid-cols-4 gap-12">
+          <div className="grid lg:grid-cols-5 gap-12">
             {/* Brand Section */}
             <div className="lg:col-span-2 space-y-8">
               <div>

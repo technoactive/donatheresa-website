@@ -12,6 +12,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { DynamicSchema } from "@/components/locale/dynamic-schema"
 import { FAQSchema } from "@/components/locale/faq-schema"
 import { BreadcrumbSchema } from "@/components/locale/breadcrumb-schema"
+import { CookieConsent } from "@/components/cookie-consent"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -187,6 +188,7 @@ export default function RootLayout({
           <Toaster richColors />
           <SpeedInsights />
           <Analytics />
+          <CookieConsent />
         </ThemeProvider>
       </body>
     </html>
