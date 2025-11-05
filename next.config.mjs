@@ -94,6 +94,12 @@ const nextConfig = {
         destination: '/reserve',
         permanent: true,
       },
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.donatheresa.com' }],
+        destination: 'https://donatheresa.com/:path*',
+        permanent: true,
+      },
     ]
   },
 }
