@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { GoogleAnalytics } from "@/components/google-analytics"
-import { GoogleAnalyticsVerification } from "@/components/google-analytics-verification"
+import { GoogleAnalyticsServer } from "@/components/google-analytics-server"
 import { Suspense } from "react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
@@ -172,6 +172,9 @@ export default function RootLayout({
         <FAQSchema />
         <BreadcrumbSchema />
         
+        {/* Google Analytics Server Component - Loads GA script immediately */}
+        <GoogleAnalyticsServer />
+        
         {/* Last updated: October 12, 2025 */}
       </head>
       <body
@@ -184,7 +187,6 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           <Suspense fallback={null}>
             <GoogleAnalytics />
-            <GoogleAnalyticsVerification />
           </Suspense>
           {children}
           <Toaster richColors />

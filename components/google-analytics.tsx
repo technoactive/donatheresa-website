@@ -1,23 +1,17 @@
 'use client'
 
-import Script from 'next/script'
 import { useEffect, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
-
-interface GoogleAnalyticsSettings {
-  measurement_id: string | null
-  enabled: boolean
-}
 
 declare global {
   interface Window {
     gtag: (...args: any[]) => void
     dataLayer: any[]
+    GA_MEASUREMENT_ID: string | undefined
   }
 }
 
 export function GoogleAnalytics() {
-  const [settings, setSettings] = useState<GoogleAnalyticsSettings | null>(null)
   const [hasConsent, setHasConsent] = useState(false)
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -43,74 +37,40 @@ export function GoogleAnalytics() {
     return () => window.removeEventListener('storage', handleStorageChange)
   }, [])
 
-  // Fetch GA settings from the database
+  // Update consent mode when it changes
   useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const response = await fetch('/api/google-analytics-settings')
-        if (response.ok) {
-          const data = await response.json()
-          setSettings(data)
-        }
-      } catch (error) {
-        console.error('Failed to fetch Google Analytics settings:', error)
+    if (typeof window !== 'undefined' && window.gtag) {
+      if (hasConsent) {
+        window.gtag('consent', 'update', {
+          'analytics_storage': 'granted',
+          'functionality_storage': 'granted',
+          'personalization_storage': 'granted'
+        })
+        console.log('Google Analytics consent granted')
+      } else {
+        window.gtag('consent', 'update', {
+          'analytics_storage': 'denied',
+          'functionality_storage': 'denied',
+          'personalization_storage': 'denied'
+        })
+        console.log('Google Analytics consent denied')
       }
     }
+  }, [hasConsent])
 
-    fetchSettings()
-  }, [])
-
-  // Track page views when route changes
+  // Track page views when route changes (only if consent given)
   useEffect(() => {
-    if (settings?.enabled && settings?.measurement_id && hasConsent && window.gtag) {
+    if (hasConsent && window.gtag && window.GA_MEASUREMENT_ID) {
       const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
       
-      window.gtag('config', settings.measurement_id, {
+      window.gtag('config', window.GA_MEASUREMENT_ID, {
         page_path: url,
       })
     }
-  }, [pathname, searchParams, settings, hasConsent])
+  }, [pathname, searchParams, hasConsent])
 
-  // Don't render anything if GA is not enabled, no measurement ID, or no consent
-  if (!settings?.enabled || !settings?.measurement_id || !hasConsent) {
-    return null
-  }
-
-  const gaMeasurementId = settings.measurement_id
-
-  return (
-    <>
-      {/* Google Analytics Scripts */}
-      <Script
-        src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}
-        strategy="afterInteractive"
-      />
-      <Script
-        id="google-analytics"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            
-            // Set consent mode
-            gtag('consent', 'default', {
-              'analytics_storage': 'granted',
-              'functionality_storage': 'granted',
-              'personalization_storage': 'granted',
-              'ad_storage': 'denied'
-            });
-            
-            gtag('config', '${gaMeasurementId}', {
-              page_path: window.location.pathname,
-              cookie_flags: 'max-age=7200;secure;samesite=none'
-            });
-          `,
-        }}
-      />
-    </>
-  )
+  // This component now only handles consent and tracking, not script loading
+  return null
 }
 
 // Event tracking utilities
