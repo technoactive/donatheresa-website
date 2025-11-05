@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import Script from 'next/script'
 
 async function getGoogleAnalyticsSettings() {
   try {
@@ -33,42 +32,19 @@ export async function GoogleAnalyticsServer() {
   
   const measurementId = settings.measurement_id
   
-  // Return the GA script directly in the server component
-  // This ensures it's part of the initial HTML response
+  // Return the exact format Google expects - raw script tags
   return (
     <>
-      <Script
-        id="google-analytics-gtag"
-        strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
-      />
-      <Script
-        id="google-analytics-config"
-        strategy="afterInteractive"
+      {/* Google tag (gtag.js) - Exact format from Google */}
+      <script async src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}></script>
+      <script
         dangerouslySetInnerHTML={{
           __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            
-            // Set default consent mode
-            gtag('consent', 'default', {
-              'analytics_storage': 'denied',
-              'functionality_storage': 'denied',
-              'personalization_storage': 'denied',
-              'ad_storage': 'denied'
-            });
-            
-            // Configure GA
-            gtag('config', '${measurementId}', {
-              page_path: window.location.pathname,
-              cookie_flags: 'max-age=7200;secure;samesite=none'
-            });
-            
-            // Make measurement ID available globally
-            window.GA_MEASUREMENT_ID = '${measurementId}';
-            
-            console.log('Google Analytics loaded with ID:', '${measurementId}');
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '${measurementId}');
           `,
         }}
       />

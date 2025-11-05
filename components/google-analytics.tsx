@@ -37,13 +37,22 @@ export function GoogleAnalytics() {
     return () => window.removeEventListener('storage', handleStorageChange)
   }, [])
 
-  // Update consent mode when it changes
+  // Set initial consent mode and update when it changes
   useEffect(() => {
     if (typeof window !== 'undefined' && window.gtag) {
+      // First, set default consent mode (on initial load)
+      window.gtag('consent', 'default', {
+        'analytics_storage': hasConsent ? 'granted' : 'denied',
+        'functionality_storage': hasConsent ? 'granted' : 'denied',
+        'personalization_storage': hasConsent ? 'granted' : 'denied',
+        'ad_storage': 'denied'
+      })
+      
+      // Then update if consent changes
       if (hasConsent) {
         window.gtag('consent', 'update', {
           'analytics_storage': 'granted',
-          'functionality_storage': 'granted',
+          'functionality_storage': 'granted', 
           'personalization_storage': 'granted'
         })
         console.log('Google Analytics consent granted')
@@ -60,10 +69,11 @@ export function GoogleAnalytics() {
 
   // Track page views when route changes (only if consent given)
   useEffect(() => {
-    if (hasConsent && window.gtag && window.GA_MEASUREMENT_ID) {
+    if (hasConsent && window.gtag) {
       const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
       
-      window.gtag('config', window.GA_MEASUREMENT_ID, {
+      // Use the measurement ID from the database (already configured in server component)
+      window.gtag('event', 'page_view', {
         page_path: url,
       })
     }
