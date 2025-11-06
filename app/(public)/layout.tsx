@@ -3,6 +3,7 @@
 import type React from "react"
 import { PublicHeader } from "@/components/public/public-header"
 import { PublicFooter } from "@/components/public/public-footer"
+import { LocaleProvider } from "@/lib/locale-provider"
 
 export default function PublicLayout({
   children,
@@ -10,12 +11,14 @@ export default function PublicLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen flex flex-col">
-      <PublicHeader />
-      <main className="flex-1">
-        {children}
-      </main>
-      <PublicFooter />
-    </div>
+    <LocaleProvider>
+      <div className="min-h-screen flex flex-col">
+        <PublicHeader />
+        <main className="flex-1">
+          {children}
+        </main>
+        <PublicFooter />
+      </div>
+    </LocaleProvider>
   )
 }
