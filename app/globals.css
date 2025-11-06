@@ -470,6 +470,25 @@ main, div[data-nextjs-scroll-focus-boundary], .min-h-screen {
   animation-delay: 4s;
 }
 
+/* Optimized fade-in animation for better performance */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+/* Performance optimizations */
+.contain-paint {
+  contain: paint;
+}
+
 /* Booking Management iPad Optimizations */
 .booking-management-ipad {
   /* Prevent iOS zoom on input focus */
