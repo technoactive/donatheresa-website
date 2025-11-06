@@ -4,12 +4,13 @@ import Link from 'next/link'
 import { Search, Home, MapPin, Phone, Clock, ChefHat, Calendar, Mail } from 'lucide-react'
 import { NotFoundTracker } from '@/components/not-found-tracker'
 import { PublicFooter } from '@/components/public/public-footer'
+import { LocaleProvider } from '@/lib/locale-provider'
 
 export function NotFoundPageContent() {
   return (
-    <>
-      <NotFoundTracker />
+    <LocaleProvider>
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
+        <NotFoundTracker />
         {/* Main Content */}
         <main className="flex-1 flex items-center justify-center px-4 py-16">
           <div className="max-w-4xl w-full">
@@ -182,6 +183,6 @@ export function NotFoundPageContent() {
         </main>
         <PublicFooter />
       </div>
-    </>
+    </LocaleProvider>
   )
 }
