@@ -88,14 +88,14 @@ export function CookieConsent() {
 
   return (
     <>
-      {/* Backdrop for mobile */}
+      {/* Backdrop */}
       <AnimatePresence>
         {showBanner && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
             onClick={() => setShowBanner(false)}
           />
         )}
@@ -103,20 +103,26 @@ export function CookieConsent() {
 
       {/* Cookie Banner */}
       <AnimatePresence>
-        <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        <div
           className={cn(
             "fixed z-50",
             "bottom-0 left-0 right-0", // Mobile: full width bottom sheet
-            "lg:bottom-6 lg:left-6 lg:right-auto lg:w-[440px]", // Desktop: bottom left corner
+            "lg:bottom-auto lg:left-1/2 lg:right-auto lg:top-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:w-[480px]", // Desktop: centered
             "px-4 pb-4 pt-0", // Mobile padding
             "lg:p-0" // Desktop: no extra padding
           )}
         >
-          <div className={cn(
+          <motion.div
+            initial={{ y: "100%", opacity: 0, scale: 0.95 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: "100%", opacity: 0, scale: 0.95 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 30,
+              opacity: { duration: 0.2 }
+            }}
+            className={cn(
             "bg-white dark:bg-gray-900 overflow-hidden",
             "rounded-t-3xl", // Mobile: rounded top corners
             "lg:rounded-2xl", // Desktop: fully rounded
@@ -370,8 +376,8 @@ export function CookieConsent() {
                 </div>
               </div>
             )}
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </AnimatePresence>
     </>
   )
