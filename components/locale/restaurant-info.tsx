@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { type LocaleSettings } from '@/lib/types'
+import { useLocale } from '@/lib/locale-provider'
 
 interface RestaurantInfoProps {
   type: 'name' | 'phone' | 'address' | 'city' | 'postalCode' | 'full-address'
@@ -10,28 +11,7 @@ interface RestaurantInfoProps {
 }
 
 export function RestaurantInfo({ type, className, fallback }: RestaurantInfoProps) {
-  const [localeSettings, setLocaleSettings] = React.useState<LocaleSettings | null>(null)
-  const [loading, setLoading] = React.useState(true)
-
-  React.useEffect(() => {
-    const loadSettings = async () => {
-      try {
-        const response = await fetch('/api/locale-settings')
-        if (response.ok) {
-          const settings = await response.json()
-          setLocaleSettings(settings)
-        } else {
-          console.warn('Failed to load locale settings from API')
-        }
-      } catch (error) {
-        console.error('Error loading locale settings:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadSettings()
-  }, [])
+  const { localeSettings, isLoading } = useLocale()
 
   const getValue = () => {
     if (!localeSettings) return fallback || ''
@@ -55,7 +35,7 @@ export function RestaurantInfo({ type, className, fallback }: RestaurantInfoProp
   }
 
   // Show loading skeleton only briefly to avoid flash
-  if (loading && !fallback) {
+  if (isLoading && !fallback) {
     return <span className={className}>...</span>
   }
 
@@ -68,33 +48,14 @@ interface RestaurantPhoneLinkProps {
 }
 
 export function RestaurantPhoneLink({ className, children }: RestaurantPhoneLinkProps) {
-  const [phone, setPhone] = React.useState<string | null>(null)
-  const [loading, setLoading] = React.useState(true)
+  const { localeSettings, isLoading } = useLocale()
 
-  React.useEffect(() => {
-    const loadPhone = async () => {
-      try {
-        const response = await fetch('/api/locale-settings')
-        if (response.ok) {
-          const settings = await response.json()
-          setPhone(settings.restaurant_phone)
-        } else {
-          console.warn('Failed to load phone from API')
-        }
-      } catch (error) {
-        console.error('Error loading phone:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    loadPhone()
-  }, [])
-
-  if (loading) {
+  if (isLoading) {
     return <span className={className}>{children || '...'}</span>
   }
 
+  const phone = localeSettings?.restaurant_phone
+  
   if (!phone) {
     return <span className={className}>{children || 'Phone not available'}</span>
   }

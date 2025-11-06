@@ -6,9 +6,32 @@ import { NotFoundTracker } from '@/components/not-found-tracker'
 import { PublicFooter } from '@/components/public/public-footer'
 import { LocaleProvider } from '@/lib/locale-provider'
 
+// Default locale settings for 404 page
+const defaultLocaleSettings = {
+  id: 1,
+  restaurant_timezone: 'Europe/London',
+  country_code: 'GB',
+  language_code: 'en-GB',
+  currency_code: 'GBP',
+  currency_symbol: '£',
+  currency_decimal_places: 2,
+  date_format: 'dd/MM/yyyy',
+  time_format: 'HH:mm',
+  first_day_of_week: 1,
+  decimal_separator: '.',
+  thousands_separator: ',',
+  restaurant_name: 'Dona Theresa',
+  restaurant_phone: '+44 20 8421 5550',
+  restaurant_address: '451 Uxbridge Road',
+  restaurant_city: 'Pinner',
+  restaurant_postal_code: 'HA5 4JR',
+  created_at: '',
+  updated_at: ''
+}
+
 export function NotFoundPageContent() {
   return (
-    <LocaleProvider>
+    <LocaleProvider initialSettings={defaultLocaleSettings}>
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
         <NotFoundTracker />
         {/* Main Content */}
