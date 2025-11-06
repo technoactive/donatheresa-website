@@ -13,7 +13,9 @@ export default function NotFound() {
   return (
     <>
       <NotFoundTracker />
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex items-center justify-center px-4 py-16">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white flex flex-col">
+        {/* Main Content */}
+        <main className="flex-1 flex items-center justify-center px-4 py-16">
       <div className="max-w-4xl w-full">
         {/* Hero Section */}
         <div className="text-center mb-12 animate-fade-in">
@@ -43,7 +45,7 @@ export default function NotFound() {
               type="search"
               name="q"
               placeholder="Search for menu items, reservations..."
-              className="w-full px-12 py-4 text-lg border border-gray-300 rounded-full focus:outline-none focus:border-amber-500 transition-colors"
+              className="w-full px-12 py-4 text-lg border border-gray-300 rounded-full focus:outline-none focus:border-amber-500 transition-colors placeholder:text-gray-400"
               autoComplete="off"
             />
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -181,7 +183,50 @@ export default function NotFound() {
           Error Code: 404 | <span className="font-mono">not_found</span>
         </div>
       </div>
-    </div>
+        </main>
+        
+        {/* Simple Footer */}
+        <footer className="bg-gray-900 text-white py-12">
+          <div className="max-w-7xl mx-auto px-4 text-center">
+            <div className="mb-6">
+              <h3 className="text-xl font-bold text-amber-400 mb-2">Dona Theresa Italian Restaurant</h3>
+              <p className="text-gray-400">Authentic Italian Cuisine Since 2011</p>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+              <a href="tel:02084215550" className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors">
+                <Phone className="w-4 h-4" />
+                020 8421 5550
+              </a>
+              <span className="hidden sm:inline text-gray-600">•</span>
+              <a href="mailto:reservations@donatheresa.com" className="flex items-center gap-2 text-amber-400 hover:text-amber-300 transition-colors">
+                <Mail className="w-4 h-4" />
+                reservations@donatheresa.com
+              </a>
+            </div>
+            
+            <div className="flex items-center justify-center gap-2 text-gray-400 mb-6">
+              <MapPin className="w-4 h-4" />
+              451 Uxbridge Road, Pinner HA5 4JR
+            </div>
+            
+            <div className="border-t border-gray-800 pt-6">
+              <div className="flex flex-wrap gap-4 justify-center text-sm">
+                <Link href="/" className="text-gray-400 hover:text-amber-400 transition-colors">Home</Link>
+                <Link href="/menu" className="text-gray-400 hover:text-amber-400 transition-colors">Menu</Link>
+                <Link href="/reserve" className="text-gray-400 hover:text-amber-400 transition-colors">Reservations</Link>
+                <Link href="/contact" className="text-gray-400 hover:text-amber-400 transition-colors">Contact</Link>
+                <Link href="/cookie-policy" className="text-gray-400 hover:text-amber-400 transition-colors">Cookie Policy</Link>
+                <Link href="/sitemap.xml" className="text-gray-400 hover:text-amber-400 transition-colors">Sitemap</Link>
+              </div>
+              
+              <p className="text-gray-600 mt-4 text-xs">
+                © {new Date().getFullYear()} Dona Theresa Restaurant. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </footer>
+      </div>
     </>
   )
 }
