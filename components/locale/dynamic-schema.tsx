@@ -30,8 +30,8 @@ export function DynamicSchema() {
     "@context": "https://schema.org",
     "@type": "Restaurant",
     "name": localeSettings.restaurant_name || "Dona Theresa",
-    "alternateName": `${localeSettings.restaurant_name || "Dona Theresa"} Restaurant`,
-    "description": "Award-winning Italian restaurant in Hatch End, Pinner. Located at 451 Uxbridge Road, HA5 4JR. Authentic Italian fine dining with fresh pasta, wood-fired pizza, and extensive wine list. Open Tuesday-Sunday for lunch and dinner. Reservations: 020 8421 5550.",
+    "alternateName": ["Donna Teresa", "Dona Teresa", "Donna Theresa", "Dona Theresa Italian Restaurant"],
+    "description": "Best Italian restaurant Pinner & Hatch End. Award-winning authentic Italian cuisine, lunch specials £19.95, steaks. Top restaurants in Pinner on Uxbridge Road. Book now!",
     "url": "https://donatheresa.com",
     "logo": "https://donatheresa.com/placeholder-logo.png",
     "image": [
@@ -44,7 +44,7 @@ export function DynamicSchema() {
     "address": {
       "@type": "PostalAddress",
       "streetAddress": localeSettings.restaurant_address || "451 Uxbridge Road",
-      "addressLocality": localeSettings.restaurant_city || "Pinner",
+      "addressLocality": "Pinner, Hatch End",
       "postalCode": localeSettings.restaurant_postal_code || "HA5 4JR",
       "addressCountry": localeSettings.country_code || "GB",
       "addressRegion": "London"
@@ -155,9 +155,9 @@ export function DynamicSchema() {
       "Italian Cuisine",
       "Fine Dining",
       "Wine Pairing",
-      "Fresh Pasta",
-      "Wood-Fired Pizza",
-      "Authentic Italian Recipes"
+      "Authentic Italian Recipes",
+      "Italian Steaks",
+      "Lunch Specials"
     ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",

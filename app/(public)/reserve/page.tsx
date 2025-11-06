@@ -12,19 +12,23 @@ export const revalidate = 0
 export const fetchCache = 'force-no-store'
 
 export const metadata: Metadata = {
-  title: "Book Table Online | Italian Restaurant Pinner | Dona Theresa Reservations",
-  description: "📅 Book your table at Dona Theresa Italian Restaurant. Easy online reservations. Lunch £19.95. 📍 451 Uxbridge Road, Pinner HA5 4JR. 📞 020 8421 5550.",
+  title: "Book Table | Best Italian Restaurant Pinner & Hatch End | Reserve Online",
+  description: "Book table at Dona Theresa - best Italian restaurant near me in Pinner & Hatch End. Online reservations for lunch £19.95 & dinner. Top restaurants Pinner.",
   keywords: [
-    "book table Italian restaurant Hatch End",
-    "restaurant reservation Pinner",
-    "Dona Theresa booking",
-    "reserve table Northwest London",
-    "Italian restaurant booking HA5 4JR",
-    "online reservation Pinner restaurant",
-    "book Italian restaurant near Pinner station",
-    "restaurant booking Uxbridge Road",
-    "dinner reservation Hatch End",
-    "lunch booking Italian Pinner"
+    "restaurants near me booking",
+    "italian restaurant near me reserve",
+    "best restaurants pinner booking",
+    "best restaurants hatch end booking",
+    "restaurants pinner reserve",
+    "restaurants hatch end book table",
+    "dona theresa booking",
+    "donna teresa reservations",
+    "italian pinner booking",
+    "italian hatch end reserve",
+    "lunch booking pinner",
+    "lunch reservations hatch end",
+    "places to eat pinner booking",
+    "restaurant booking uxbridge road"
   ],
   openGraph: {
     title: "Book Table Online | Dona Theresa Italian Restaurant Pinner",

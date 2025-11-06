@@ -73,8 +73,9 @@ const customerReviews = [
 ]
 
 export const metadata: Metadata = {
-  title: "Dona Theresa | Fine Italian Restaurant in Pinner | Authentic Cuisine Since 2011",
-  description: "Experience authentic Italian fine dining at Dona Theresa in Pinner. Award-winning restaurant serving modern Italian cuisine since 2011. Book your table today for an unforgettable culinary journey.",
+  title: "Dona Theresa Italian Restaurant Pinner & Hatch End | Best Italian Food Near Me",
+  description: "Award-winning Italian restaurant in Pinner & Hatch End. Authentic Italian cuisine, lunch specials £19.95, steaks, fresh pasta. Best restaurants Pinner on Uxbridge Road. Book now!",
+  keywords: "italian restaurant pinner, italian restaurant hatch end, best restaurants pinner, restaurants hatch end, italian near me, dona theresa, donna teresa, lunch pinner, italian food",
   alternates: {
     canonical: 'https://donatheresa.com',
   },
@@ -139,8 +140,8 @@ export default function HomePage() {
                 </h1>
                 
                 <p className="text-lg sm:text-xl text-slate-100 font-light leading-relaxed max-w-lg">
-                  Northwest London's premier Italian restaurant in Hatch End, Pinner. 
-                  Experience authentic Italian cuisine at 451 Uxbridge Road, HA5 4JR.
+                  Best Italian restaurant Pinner & Hatch End. Award-winning authentic 
+                  Italian cuisine. Lunch £19.95. 451 Uxbridge Road, HA5 4JR.
                 </p>
               </div>
 
@@ -654,6 +655,75 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Why Choose Section - SEO Optimized */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-4">
+              <span className="text-slate-900">Why We're The </span>
+              <span className="bg-gradient-to-r from-amber-500 to-yellow-400 bg-clip-text text-transparent">
+                Best Italian Restaurant
+              </span>
+              <span className="text-slate-900"> in Pinner & Hatch End</span>
+            </h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              Discover why locals consistently vote us among the best restaurants in Pinner and Hatch End
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl">🏆</span>
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-3">Award-Winning</h3>
+              <p className="text-slate-600">Voted best Italian restaurant Pinner & Hatch End by TripAdvisor reviewers</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl">📍</span>
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-3">Prime Location</h3>
+              <p className="text-slate-600">Conveniently located on Uxbridge Road, 5 minutes from Pinner station with free parking</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-20 h-20 bg-gradient-to-br from-amber-100 to-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <span className="text-3xl">🍝</span>
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-3">Authentic Italian</h3>
+              <p className="text-slate-600">Traditional recipes, fresh ingredients daily, extensive Italian wine selection</p>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-12 text-center">
+            <h3 className="text-3xl font-bold text-slate-900 mb-4">
+              Join Thousands of Happy Diners
+            </h3>
+            <p className="text-xl text-slate-700 mb-8 max-w-3xl mx-auto">
+              Experience why we're consistently rated among the top restaurants near me 
+              by locals searching for the best Italian food in Northwest London
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button
+                asChild
+                className="px-10 py-6 bg-slate-900 text-white hover:bg-slate-800 rounded-full text-lg font-medium"
+              >
+                <Link href="/menu">View Our Menu</Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="px-10 py-6 border-slate-900 text-slate-900 hover:bg-slate-900 hover:text-white rounded-full text-lg font-medium"
+              >
+                <Link href="/reserve">Book Your Table</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
       <section className="py-32 relative overflow-hidden bg-slate-50" aria-labelledby="contact-heading">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
@@ -676,8 +746,8 @@ export default function HomePage() {
               </header>
               
               <p className="text-xl text-slate-700 leading-relaxed">
-                Visit our award-winning Italian restaurant in Hatch End, Pinner. 
-                Limited seating ensures an intimate dining experience in Northwest London.
+                Visit the best Italian restaurant near me in Pinner & Hatch End. 
+                Top-rated among all restaurants Pinner. Limited seating for intimate dining.
               </p>
               
               <address className="space-y-4 not-italic">
@@ -706,7 +776,7 @@ export default function HomePage() {
                   <header className="text-center">
                   <h3 className="text-3xl font-bold text-slate-900 mb-4">Book Your Table</h3>
                   <p className="text-slate-600">
-                    Reserve your table at Hatch End's finest Italian restaurant
+                    Reserve at the best Italian restaurant Pinner & Hatch End - Dona Theresa
                   </p>
                   </header>
                   

@@ -5,19 +5,23 @@ import ContactPageClient from "@/components/public/contact-page-client"
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: "Contact Us | Dona Theresa Italian Restaurant Hatch End Pinner",
-  description: "Contact Dona Theresa Italian Restaurant at 451 Uxbridge Road, Hatch End, Pinner HA5 4JR. Call 020 8421 5550 for reservations. Open Tuesday-Sunday.",
+  title: "Contact | Best Italian Restaurant Pinner & Hatch End | Dona Theresa",
+  description: "Contact Dona Theresa - best Italian restaurant near me in Pinner & Hatch End. 📍451 Uxbridge Road HA5 4JR 📞020 8421 5550. Top restaurants Pinner.",
   keywords: [
-    "contact Dona Theresa",
-    "Italian restaurant contact Hatch End",
-    "restaurant phone number Pinner",
-    "book table Italian restaurant Northwest London",
-    "Dona Theresa address",
-    "Italian restaurant HA5 4JR contact",
-    "restaurant Uxbridge Road contact",
-    "Italian restaurant near Pinner station",
-    "contact Italian restaurant Harrow",
-    "restaurant reservation Hatch End"
+    "restaurants near me contact",
+    "italian restaurant near me",
+    "best restaurants pinner contact",
+    "best restaurants hatch end contact",
+    "dona theresa contact",
+    "donna teresa contact",
+    "restaurants pinner address",
+    "restaurants hatch end phone",
+    "italian pinner contact", 
+    "italian hatch end contact",
+    "uxbridge road restaurants",
+    "451 uxbridge road",
+    "places to eat pinner",
+    "places to eat hatch end"
   ],
   openGraph: {
     title: "Contact Dona Theresa | Italian Restaurant Hatch End Pinner",

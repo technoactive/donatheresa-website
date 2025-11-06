@@ -5,19 +5,23 @@ import MenuPageClient from "@/components/public/menu-page-client"
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: "Italian Restaurant Menu Pinner | Lunch £19.95 | Dona Theresa Hatch End",
-  description: "📋 View Dona Theresa's Italian menu with prices. Lunch special £19.95 (Tue-Sun). À la carte dinner menu. Fresh ingredients daily. Book: 020 8421 5550.",
+  title: "Menu | Best Italian Restaurant Pinner & Hatch End | Lunch £19.95 | Steak",
+  description: "Menu at Dona Theresa - best Italian restaurant Pinner & Hatch End. Lunch special £19.95, authentic Italian steaks, pasta. Top restaurants near me.",
   keywords: [
-    "Italian restaurant menu Hatch End",
-    "Dona Theresa menu Pinner",
-    "Italian food menu Northwest London",
-    "lunch menu Pinner",
-    "Italian restaurant prices Hatch End",
-    "pasta menu Pinner",
-    "pizza menu Hatch End",
-    "Italian wine list Northwest London",
-    "early bird menu Pinner",
-    "Italian restaurant HA5 4JR menu"
+    "restaurants pinner menu",
+    "restaurants hatch end menu",
+    "italian restaurant menu",
+    "lunch",
+    "lunch pinner",
+    "lunch hatch end", 
+    "steak",
+    "italian restaurant near me menu",
+    "best restaurants pinner menu",
+    "best restaurants hatch end menu",
+    "dona theresa menu",
+    "donna teresa menu",
+    "italian pinner menu",
+    "italian hatch end menu"
   ],
   openGraph: {
     title: "Italian Menu with Prices | Dona Theresa Restaurant Pinner",
