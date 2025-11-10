@@ -66,27 +66,27 @@ export default function BestItalianRestaurantNearMePage() {
       <DynamicSchema />
       
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-b from-amber-50 to-white overflow-hidden">
+      <section className="relative pt-32 pb-20 bg-gradient-to-b from-amber-50 to-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-amber-100/20 to-transparent"></div>
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+          <div className="text-center max-w-4xl mx-auto space-y-6">
+            <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-semibold">
               <Award className="w-4 h-4" />
               <span>AWARD-WINNING ITALIAN RESTAURANT</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
               <span className="text-slate-900">The </span>
               <span className="text-amber-600">Best Italian Restaurant</span>
               <span className="text-slate-900"> Near You</span>
             </h1>
             
-            <p className="text-xl text-slate-700 mb-8">
+            <p className="text-lg md:text-xl text-slate-700 max-w-3xl mx-auto">
               Discover authentic Italian cuisine at Dona Theresa. Located in Pinner & Hatch End, 
               we're your nearest destination for exceptional Italian dining.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button asChild size="lg" className="text-lg bg-amber-600 hover:bg-amber-700">
                 <Link href="/reserve">Book Your Table</Link>
               </Button>

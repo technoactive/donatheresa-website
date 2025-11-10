@@ -57,27 +57,27 @@ export default function LunchPinnerPage() {
       <DynamicSchema />
       
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-b from-amber-50 via-white to-amber-50">
+      <section className="relative pt-32 pb-20 bg-gradient-to-b from-amber-50 via-white to-amber-50">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+          <div className="text-center max-w-4xl mx-auto space-y-6">
+            <div className="inline-flex items-center gap-2 bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold">
               <TrendingUp className="w-4 h-4" />
               <span>PINNER'S BEST VALUE LUNCH</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
               <span className="text-slate-900">Lunch in </span>
               <span className="text-amber-600">Pinner</span>
               <span className="text-slate-900"> from </span>
               <span className="text-green-600">£19.95</span>
             </h1>
             
-            <p className="text-xl text-slate-700 mb-8">
+            <p className="text-lg md:text-xl text-slate-700 max-w-3xl mx-auto">
               Discover why Dona Theresa is the top choice for lunch in Pinner. 
               Quick service, authentic Italian cuisine, and incredible value.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button asChild size="lg" className="text-lg bg-green-600 hover:bg-green-700">
                 <Link href="/reserve">Book Lunch Table</Link>
               </Button>
@@ -86,7 +86,7 @@ export default function LunchPinnerPage() {
               </Button>
             </div>
             
-            <div className="mt-8 flex flex-wrap justify-center gap-6 text-slate-600">
+            <div className="flex flex-wrap justify-center gap-6 text-slate-600 pt-4">
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-amber-600" />
                 <span>Tue-Sun 12:00-15:00</span>

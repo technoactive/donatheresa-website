@@ -67,18 +67,18 @@ export default function RestaurantsHatchEndPage() {
       <DynamicSchema />
       
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-b from-amber-50 to-white">
+      <section className="relative pt-32 pb-20 bg-gradient-to-b from-amber-50 to-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+          <div className="text-center max-w-4xl mx-auto space-y-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
               <span className="text-slate-900">Restaurants in </span>
               <span className="text-amber-600">Hatch End</span>
             </h1>
-            <p className="text-xl text-slate-700 mb-8">
+            <p className="text-lg md:text-xl text-slate-700 max-w-3xl mx-auto">
               Discover why Dona Theresa is consistently voted the best Italian restaurant 
               among all Hatch End restaurants. Located on Uxbridge Road with free parking.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button asChild size="lg" className="text-lg">
                 <Link href="/reserve">Book Your Table</Link>
               </Button>

@@ -73,18 +73,18 @@ export default function RestaurantsPinnerPage() {
       <DynamicSchema />
       
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-b from-slate-50 to-white">
+      <section className="relative pt-32 pb-20 bg-gradient-to-b from-slate-50 to-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+          <div className="text-center max-w-4xl mx-auto space-y-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
               <span className="text-slate-900">Best </span>
               <span className="text-amber-600">Pinner Restaurants</span>
             </h1>
-            <p className="text-xl text-slate-700 mb-8">
+            <p className="text-lg md:text-xl text-slate-700 max-w-3xl mx-auto">
               Experience why Dona Theresa is the most beloved Italian restaurant among all 
               restaurants in Pinner. Just 5 minutes from Pinner station with free parking.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button asChild size="lg" className="text-lg bg-amber-600 hover:bg-amber-700">
                 <Link href="/reserve">Reserve Your Table</Link>
               </Button>
