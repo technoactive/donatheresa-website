@@ -424,7 +424,7 @@ class RobustEmailService {
       restaurantAddress: localeSettings?.restaurant_address || '451 Uxbridge Road, Pinner HA5 4JR',
       brandColor: settings.brand_color || '#1e3a8a',
       customFooter,
-      websiteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com',
+      websiteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://www.donatheresa.com',
       guestText: (Number(data.partySize) === 1) ? 'guest' : 'guests',
       createdAt: new Date().toLocaleString('en-GB'),
       ...data

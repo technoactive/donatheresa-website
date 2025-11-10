@@ -94,6 +94,16 @@ const nextConfig = {
         destination: '/reserve',
         permanent: true,
       },
+      {
+        source: '/our-menus.html',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/our-menus',
+        destination: '/menu',
+        permanent: true,
+      },
     ]
   },
 }

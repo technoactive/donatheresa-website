@@ -32,12 +32,12 @@ export function DynamicSchema() {
     "name": localeSettings.restaurant_name || "Dona Theresa",
     "alternateName": ["Donna Teresa", "Dona Teresa", "Donna Theresa", "Dona Theresa Italian Restaurant"],
     "description": "Best Italian restaurant Pinner & Hatch End. Award-winning authentic Italian cuisine, lunch specials £19.95, steaks. Top restaurants in Pinner on Uxbridge Road. Book now!",
-    "url": "https://donatheresa.com",
-    "logo": "https://donatheresa.com/placeholder-logo.png",
+    "url": "https://www.donatheresa.com",
+    "logo": "https://www.donatheresa.com/placeholder-logo.png",
     "image": [
-      "https://donatheresa.com/hero-main.png",
-      "https://donatheresa.com/gallery-interior.png",
-      "https://donatheresa.com/gallery-dining.png"
+      "https://www.donatheresa.com/hero-main.png",
+      "https://www.donatheresa.com/gallery-interior.png",
+      "https://www.donatheresa.com/gallery-dining.png"
     ],
     "telephone": localeSettings.restaurant_phone || "+442084215550",
     "email": "info@donatheresa.com",
@@ -145,7 +145,7 @@ export function DynamicSchema() {
         "value": true
       }
     ],
-    "hasMenu": "https://donatheresa.com/menu",
+    "hasMenu": "https://www.donatheresa.com/menu",
     "sameAs": [
       "https://www.facebook.com/donatheresa",
       "https://www.instagram.com/donatheresa", 
@@ -189,7 +189,7 @@ export function DynamicSchema() {
       "@type": "ReserveAction",
       "target": {
         "@type": "EntryPoint",
-        "urlTemplate": "https://donatheresa.com/reserve",
+        "urlTemplate": "https://www.donatheresa.com/reserve",
         "inLanguage": "en-GB",
         "actionPlatform": [
           "http://schema.org/DesktopWebPlatform",
