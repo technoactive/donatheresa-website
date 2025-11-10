@@ -25,6 +25,15 @@ const footerLinks = [
     ]
   },
   {
+    title: "Dining",
+    links: [
+      { label: "Restaurants in Hatch End", href: "/restaurants-hatch-end" },
+      { label: "Restaurants in Pinner", href: "/restaurants-pinner" },
+      { label: "Lunch in Pinner", href: "/lunch-pinner" },
+      { label: "Best Italian Near Me", href: "/best-italian-restaurant-near-me" }
+    ]
+  },
+  {
     title: "Legal",
     links: [
       { label: "Cookie Policy", href: "/cookie-policy" },
