@@ -13,16 +13,26 @@
   "categories": ["food", "restaurant", "dining"],
   "icons": [
     {
-      "src": "/placeholder-logo.png",
+      "src": "/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/placeholder-logo.png",
+      "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
     }
   ],
   "shortcuts": [
@@ -33,7 +43,7 @@
       "url": "/reserve",
       "icons": [
         {
-          "src": "/placeholder-logo.png",
+          "src": "/favicon-96x96.png",
           "sizes": "96x96"
         }
       ]
@@ -45,7 +55,7 @@
       "url": "/menu",
       "icons": [
         {
-          "src": "/placeholder-logo.png",
+          "src": "/favicon-96x96.png",
           "sizes": "96x96"
         }
       ]
