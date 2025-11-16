@@ -5,8 +5,8 @@ import MenuPageClient from "@/components/public/menu-page-client"
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: "Menu | Best Italian Restaurant Pinner & Hatch End | Lunch £19.95 | Steak",
-  description: "Menu at Dona Theresa - best Italian restaurant Pinner & Hatch End. Lunch special £19.95, authentic Italian steaks, pasta. Top restaurants near me.",
+  title: "Menu | Dona Theresa Italian Restaurant | £19.95 Lunch",
+  description: "Italian menu at Dona Theresa. Lunch £19.95, steaks, pasta, wines. 451 Uxbridge Road, Pinner. Book: 020 8421 5550",
   keywords: [
     "restaurants pinner menu",
     "restaurants hatch end menu",

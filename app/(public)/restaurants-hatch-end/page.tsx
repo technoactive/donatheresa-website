@@ -7,8 +7,8 @@ import { RestaurantInfo } from '@/components/locale/restaurant-info'
 import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
-  title: 'Hatch End Restaurants | Best Italian Restaurant in Hatch End | Dona Theresa',
-  description: 'Looking for restaurants in Hatch End? Dona Theresa offers award-winning Italian cuisine, lunch specials £19.95. Top rated Hatch End restaurant on Uxbridge Road. Book now!',
+  title: 'Hatch End Restaurants | Dona Theresa Italian Restaurant',
+  description: 'Top-rated Italian restaurant in Hatch End. Award-winning cuisine, lunch £19.95. 451 Uxbridge Road, Pinner HA5 4JR. Book: 020 8421 5550',
   keywords: [
     'hatch end restaurants',
     'restaurants in hatch end',

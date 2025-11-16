@@ -46,10 +46,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.donatheresa.com'),
   title: {
-    default: "Dona Theresa Italian Restaurant Pinner & Hatch End | Best Restaurants Near Me",
-    template: "%s | Dona Theresa Italian Restaurant Pinner"
+    default: "Dona Theresa | Best Italian Restaurant Pinner & Hatch End",
+    template: "%s | Dona Theresa Italian Restaurant"
   },
-  description: "Best Italian restaurant Pinner & Hatch End. Award-winning authentic Italian cuisine, lunch £19.95, steaks. Top restaurants Uxbridge Road. Dona Theresa (Donna Teresa). Book now!",
+  description: "Award-winning Italian restaurant in Pinner & Hatch End. Authentic cuisine, lunch £19.95, steaks. 451 Uxbridge Road. Book now! 📍020 8421 5550",
   keywords: [
     "restaurants",
     "hatch end restaurants",

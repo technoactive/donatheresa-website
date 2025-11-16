@@ -7,8 +7,8 @@ import { RestaurantInfo } from '@/components/locale/restaurant-info'
 import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
-  title: 'Best Italian Restaurant Near Me | Italian Restaurants Near Me | Dona Theresa',
-  description: 'Find the best Italian restaurant near you in Pinner & Hatch End. Dona Theresa offers authentic Italian cuisine, lunch £19.95, romantic atmosphere. Top rated on TripAdvisor.',
+  title: 'Best Italian Restaurant Near Me | Dona Theresa Pinner',
+  description: 'Award-winning Italian restaurant in Pinner & Hatch End. Authentic cuisine, lunch £19.95, romantic atmosphere. Top rated. Book: 020 8421 5550',
   keywords: [
     'best italian restaurant near me',
     'italian restaurant near me',

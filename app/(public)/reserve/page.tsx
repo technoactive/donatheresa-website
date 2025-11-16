@@ -12,8 +12,8 @@ export const revalidate = 0
 export const fetchCache = 'force-no-store'
 
 export const metadata: Metadata = {
-  title: "Book Table | Best Italian Restaurant Pinner & Hatch End | Reserve Online",
-  description: "Book table at Dona Theresa - best Italian restaurant near me in Pinner & Hatch End. Online reservations for lunch £19.95 & dinner. Top restaurants Pinner.",
+  title: "Book Table | Dona Theresa Italian Restaurant Pinner",
+  description: "Book your table at Dona Theresa Italian restaurant. Online reservations for lunch £19.95 & dinner. Call: 020 8421 5550",
   keywords: [
     "restaurants near me booking",
     "italian restaurant near me reserve",

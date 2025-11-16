@@ -7,7 +7,7 @@ import { RestaurantInfo } from '@/components/locale/restaurant-info'
 import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
-  title: 'Pinner Restaurants | Best Italian Restaurant in Pinner | Dona Theresa',
+  title: 'Pinner Restaurants | Dona Theresa Italian Restaurant',
   description: 'Looking for restaurants in Pinner? Dona Theresa is the top-rated Italian restaurant on Uxbridge Road. Lunch £19.95, romantic dinners, free parking. Book now!',
   keywords: [
     'pinner restaurants',
