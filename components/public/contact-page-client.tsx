@@ -372,6 +372,15 @@ export default function ContactPageClient() {
                       </Select>
                       {/* Hidden input to ensure subject is included in FormData */}
                       <input type="hidden" name="subject" value={formData.subject} />
+                      {/* Honeypot field - hidden from users but visible to bots */}
+                      <input 
+                        type="text" 
+                        name="website" 
+                        className="absolute -left-[9999px] w-1 h-1 opacity-0 pointer-events-none"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        aria-hidden="true"
+                      />
                     </div>
 
                     <div className="space-y-3">
