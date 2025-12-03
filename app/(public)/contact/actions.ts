@@ -99,7 +99,13 @@ export async function submitContactMessage(formData: FormData) {
     
     return {
       success: true,
-      message: 'Message sent successfully! We\'ll get back to you within 24 hours.'
+      message: 'Message sent successfully! We\'ll get back to you within 24 hours.',
+      // Include conversion data for client-side tracking
+      conversionData: {
+        messageId: contactMessage.id,
+        subject: sanitizedData.subject,
+        contactType: 'contact_form'
+      }
     }
   } catch (error) {
     console.error('Error sending message:', error)

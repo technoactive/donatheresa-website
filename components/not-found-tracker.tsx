@@ -2,11 +2,15 @@
 
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
+import { ErrorTracker } from '@/lib/error-tracking'
 
 export function NotFoundTracker() {
   const pathname = usePathname()
 
   useEffect(() => {
+    // Get referrer information
+    const referrer = typeof document !== 'undefined' ? document.referrer : null
+    
     // Track 404 in Google Analytics if available
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'page_view', {
@@ -20,12 +24,25 @@ export function NotFoundTracker() {
         error_type: '404_not_found',
         error_page: pathname,
         error_url: window.location.href,
+        error_referrer: referrer || 'direct',
       })
     }
 
-    // Log to console for debugging (remove in production)
+    // Use our error tracking system
+    ErrorTracker.log404(window.location.href, referrer)
+
+    // Check if it's a bot/scanner
+    if (ErrorTracker.isLikelyBot(pathname)) {
+      console.log('[404 Bot Detected] Likely bot/scanner attempt:', pathname)
+    }
+
+    // Log to console for debugging
     if (process.env.NODE_ENV === 'development') {
-      console.log('[404 Error] Page not found:', pathname)
+      console.log('[404 Error] Page not found:', {
+        pathname,
+        referrer: referrer || 'direct access',
+        fullUrl: window.location.href
+      })
     }
   }, [pathname])
 

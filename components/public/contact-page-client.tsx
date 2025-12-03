@@ -60,6 +60,15 @@ export default function ContactPageClient() {
           subject: "",
           message: ""
         })
+        
+        // Track conversion in Google Analytics
+        if (result.conversionData) {
+          import('@/lib/analytics').then(({ trackContactFormEvent }) => {
+            trackContactFormEvent('submit', {
+              contact_type: result.conversionData.subject
+            })
+          })
+        }
       } else {
         toast.error(result.error)
       }

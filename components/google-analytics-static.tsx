@@ -15,7 +15,16 @@ export function GoogleAnalyticsStatic() {
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '${measurementId}');
+  gtag('config', '${measurementId}', {
+    currency: 'GBP',
+    country: 'GB'
+  });
+  
+  // Initialize enhanced ecommerce for conversion tracking
+  gtag('set', {
+    'currency': 'GBP',
+    'country': 'GB'
+  });
           `,
         }}
       />

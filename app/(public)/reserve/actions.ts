@@ -220,6 +220,13 @@ export async function createBooking(prevState: any, formData: FormData) {
       description: `Thank you, ${name}. Your reservation for ${partySize} ${partySize === 1 ? 'person' : 'people'} on ${formattedDate} at ${formattedTime} is confirmed. ${email && email.includes('@') && !email.includes('phone-only.local') ? "You'll receive a confirmation email shortly." : "We'll contact you if we need to discuss any special requests."}`,
       success: true,
       bookingId: booking.id,
+      // Include conversion data for client-side tracking
+      conversionData: {
+        bookingId: booking.id,
+        partySize,
+        bookingDate: date,
+        bookingTime: time,
+      }
     }
   } catch (error) {
     console.error("Booking creation error:", error)
