@@ -263,7 +263,6 @@ export function BookingForm({ bookingSettings: serverBookingSettings }: BookingF
             }
           })
         })
-        })
       }
       
       const timer = setTimeout(() => {
