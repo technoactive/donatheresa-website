@@ -147,8 +147,20 @@ export function BookingForm({ bookingSettings: serverBookingSettings }: BookingF
     // Track when user starts filling the form (only once)
     if (!hasStartedBooking && (watchedValues.name || watchedValues.email || watchedValues.phone || watchedValues.date || watchedValues.time)) {
       setHasStartedBooking(true)
-      import('@/lib/analytics').then(({ trackReservationEvent }) => {
+      import('@/lib/analytics').then(({ trackReservationEvent, trackEvent }) => {
         trackReservationEvent('start')
+        
+        // Also track form start for better funnel analysis
+        trackEvent('form_start', {
+          form_id: 'booking_form',
+          form_name: 'Table Reservation Form',
+          form_destination: '/reserve',
+          first_field_interacted: watchedValues.name ? 'name' : 
+                                 watchedValues.email ? 'email' : 
+                                 watchedValues.phone ? 'phone' :
+                                 watchedValues.date ? 'date' : 
+                                 watchedValues.time ? 'time' : 'unknown'
+        })
       })
     }
   }, [watchedValues, hasStartedBooking])
@@ -158,12 +170,99 @@ export function BookingForm({ bookingSettings: serverBookingSettings }: BookingF
     if (state?.success && state?.bookingId) {
       // Track booking conversion in Google Analytics
       if (state.conversionData) {
-        import('@/lib/analytics').then(({ trackReservationEvent }) => {
+        import('@/lib/analytics').then(({ trackReservationEvent, trackEvent, GA_EVENTS }) => {
+          // Track standard reservation event
           trackReservationEvent('complete', {
             booking_date: state.conversionData.bookingDate,
             booking_time: state.conversionData.bookingTime,
             party_size: state.conversionData.partySize
           })
+          
+          // Import configuration for dynamic values
+          import('@/lib/analytics-config').then(({ calculateBookingValue, categorizeBooking, ANALYTICS_CONFIG }) => {
+            const bookingValue = calculateBookingValue(
+              state.conversionData.partySize,
+              state.conversionData.bookingDate,
+              state.conversionData.bookingTime
+            )
+            
+            const categories = categorizeBooking(
+              state.conversionData.partySize,
+              state.conversionData.bookingDate,
+              state.conversionData.bookingTime
+            )
+            
+            // Enhanced ecommerce purchase event (industry standard)
+            trackEvent(GA_EVENTS.PURCHASE, {
+              // Transaction details
+              transaction_id: state.conversionData.bookingId,
+              value: bookingValue,                              // Dynamic value calculation
+              currency: ANALYTICS_CONFIG.values.currency,
+              tax: 0,                                          // Add if applicable
+              shipping: 0,                                     // Not applicable for restaurants
+              
+              // Enhanced parameters
+              affiliation: 'Dona Theresa Website',
+              coupon: '',                                      // For future promo codes
+              
+              // Booking analytics
+              booking_date: state.conversionData.bookingDate,
+              booking_time: state.conversionData.bookingTime,
+              booking_day_of_week: new Date(state.conversionData.bookingDate).toLocaleDateString('en-GB', { weekday: 'long' }),
+              party_size: state.conversionData.partySize,
+              booking_lead_time_hours: Math.round((new Date(state.conversionData.bookingDate + 'T' + state.conversionData.bookingTime) - new Date()) / (1000 * 60 * 60)),
+              
+              // Categorization
+              party_size_category: categories.partySizeCategory,
+              time_slot_category: categories.timeSlotCategory,
+              lead_time_category: categories.leadTimeCategory,
+              is_vip_booking: categories.isVip,
+              is_peak_time: categories.isPeakTime,
+              is_last_minute: categories.isLastMinute,
+              
+              // Source and device tracking
+              booking_source: 'website',
+              booking_channel: 'organic',                      // Update if you track campaigns
+              device_category: /mobile|android|iphone/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+              browser: navigator.userAgent.includes('Chrome') ? 'Chrome' : 
+                       navigator.userAgent.includes('Safari') ? 'Safari' :
+                       navigator.userAgent.includes('Firefox') ? 'Firefox' : 'Other',
+              
+              // Items array (enhanced ecommerce required)
+              items: [{
+                item_id: 'table_reservation',
+                item_name: `Table for ${state.conversionData.partySize}`,
+                affiliation: 'Dona Theresa',
+                coupon: '',
+                currency: ANALYTICS_CONFIG.values.currency,
+                discount: 0,
+                index: 0,
+                item_brand: 'Dona Theresa',
+                item_category: 'Restaurant Booking',
+                item_category2: categories.partySizeCategory,
+                item_category3: categories.timeSlotCategory,
+                item_category4: new Date(state.conversionData.bookingDate).toLocaleDateString('en-GB', { weekday: 'long' }),
+                item_category5: categories.leadTimeCategory,
+                item_list_id: 'booking_form',
+                item_list_name: 'Online Reservations',
+                item_variant: categories.isPeakTime ? 'Peak Time' : 'Standard Time',
+                location_id: 'main_restaurant',
+                price: bookingValue / state.conversionData.partySize,  // Per person price
+                quantity: state.conversionData.partySize
+              }]
+            })
+            
+            // Additional high-value booking event
+            if (categories.isVip || bookingValue >= 200) {
+              trackEvent('vip_booking', {
+                booking_id: state.conversionData.bookingId,
+                party_size: state.conversionData.partySize,
+                booking_value: bookingValue,
+                booking_type: categories.isVip ? 'Large Party' : 'High Value'
+              })
+            }
+          })
+        })
         })
       }
       

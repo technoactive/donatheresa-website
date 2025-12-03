@@ -44,7 +44,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://www.donatheresa.com'),
+  metadataBase: new URL('https://donatheresa.com'),
   title: {
     default: "Dona Theresa | Best Italian Restaurant Pinner & Hatch End",
     template: "%s | Dona Theresa Italian Restaurant"

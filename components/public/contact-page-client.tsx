@@ -25,6 +25,7 @@ export default function ContactPageClient() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [hasStartedForm, setHasStartedForm] = useState(false)
 
   useEffect(() => {
     // Auto-scroll to contact form when page loads from navigation - MOBILE ONLY
@@ -65,8 +66,8 @@ export default function ContactPageClient() {
         if (result.conversionData) {
           import('@/lib/analytics').then(({ trackContactFormEvent }) => {
             trackContactFormEvent('submit', {
-              contact_type: result.conversionData.contactType,
-              subject: result.conversionData.subject
+              contact_type: result.conversionData.contactType,  // Fixed: use contactType for proper categorization
+              subject: result.conversionData.subject            // Include subject as additional parameter
             })
           })
         }
@@ -86,6 +87,23 @@ export default function ContactPageClient() {
       ...prev,
       [e.target.name]: e.target.value
     }))
+    
+    // Track form start (only once)
+    if (!hasStartedForm) {
+      setHasStartedForm(true)
+      import('@/lib/analytics').then(({ trackContactFormEvent, trackEvent }) => {
+        trackContactFormEvent('start')
+        
+        // Additional form_start event for funnel analysis
+        trackEvent('form_start', {
+          form_id: 'contact_page_form',
+          form_name: 'Contact Form',
+          form_destination: '/contact',
+          first_field_interacted: e.target.name,
+          device_type: /mobile|android|iphone/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
+        })
+      })
+    }
   }
 
   const handleSelectChange = (value: string) => {
@@ -93,6 +111,23 @@ export default function ContactPageClient() {
       ...prev,
       subject: value
     }))
+    
+    // Track form start if selecting subject is the first interaction
+    if (!hasStartedForm) {
+      setHasStartedForm(true)
+      import('@/lib/analytics').then(({ trackContactFormEvent, trackEvent }) => {
+        trackContactFormEvent('start')
+        
+        trackEvent('form_start', {
+          form_id: 'contact_page_form',
+          form_name: 'Contact Form',
+          form_destination: '/contact',
+          first_field_interacted: 'subject',
+          selected_subject: value,
+          device_type: /mobile|android|iphone/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
+        })
+      })
+    }
   }
 
   const resetForm = () => {
