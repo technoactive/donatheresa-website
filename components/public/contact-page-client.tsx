@@ -65,7 +65,8 @@ export default function ContactPageClient() {
         if (result.conversionData) {
           import('@/lib/analytics').then(({ trackContactFormEvent }) => {
             trackContactFormEvent('submit', {
-              contact_type: result.conversionData.subject
+              contact_type: result.conversionData.contactType,
+              subject: result.conversionData.subject
             })
           })
         }

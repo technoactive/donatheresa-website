@@ -26,6 +26,12 @@ type FormState = {
   success?: boolean
   description?: string
   bookingId?: string
+  conversionData?: {
+    bookingId: string
+    partySize: number
+    bookingDate: string
+    bookingTime: string
+  }
 }
 
 // Loading skeleton for the form
@@ -78,10 +84,16 @@ export function BookingForm({ bookingSettings: serverBookingSettings }: BookingF
   const [selectedTime, setSelectedTime] = useState<string>("")
   const [partySize, setPartySize] = useState(2)
   const [isFormValid, setIsFormValid] = useState(false)
+  const [hasStartedBooking, setHasStartedBooking] = useState(false)
 
   // Use server-provided settings
   useEffect(() => {
     setBookingSettings(serverBookingSettings)
+    
+    // Track reservation page view on mount
+    import('@/lib/analytics').then(({ trackReservationEvent }) => {
+      trackReservationEvent('view')
+    })
   }, [serverBookingSettings])
 
   // Define the booking form schema based on settings
@@ -131,11 +143,30 @@ export function BookingForm({ bookingSettings: serverBookingSettings }: BookingF
   useEffect(() => {
     const isValid = watchedValues.name && watchedValues.phone && watchedValues.date && watchedValues.time
     setIsFormValid(!!isValid)
-  }, [watchedValues])
+    
+    // Track when user starts filling the form (only once)
+    if (!hasStartedBooking && (watchedValues.name || watchedValues.email || watchedValues.phone || watchedValues.date || watchedValues.time)) {
+      setHasStartedBooking(true)
+      import('@/lib/analytics').then(({ trackReservationEvent }) => {
+        trackReservationEvent('start')
+      })
+    }
+  }, [watchedValues, hasStartedBooking])
 
   // Handle success redirect
   useEffect(() => {
     if (state?.success && state?.bookingId) {
+      // Track booking conversion in Google Analytics
+      if (state.conversionData) {
+        import('@/lib/analytics').then(({ trackReservationEvent }) => {
+          trackReservationEvent('complete', {
+            booking_date: state.conversionData.bookingDate,
+            booking_time: state.conversionData.bookingTime,
+            party_size: state.conversionData.partySize
+          })
+        })
+      }
+      
       const timer = setTimeout(() => {
         router.push('/')
       }, 5000)
