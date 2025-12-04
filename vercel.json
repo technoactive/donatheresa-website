@@ -7,18 +7,5 @@
     "app/**/page.tsx": {
       "maxDuration": 60
     }
-  },
-  "redirects": [
-    {
-      "source": "/(.*)",
-      "destination": "https://donatheresa.com/$1", 
-      "permanent": true,
-      "has": [
-        {
-          "type": "host",
-          "value": "www.donatheresa.com"
-        }
-      ]
-    }
-  ]
+  }
 }
