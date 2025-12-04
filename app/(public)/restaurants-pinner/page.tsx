@@ -7,8 +7,8 @@ import { RestaurantInfo } from '@/components/locale/restaurant-info'
 import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
-  title: 'Pinner Restaurants | Dona Theresa Italian Restaurant',
-  description: 'Looking for restaurants in Pinner? Dona Theresa is the top-rated Italian restaurant on Uxbridge Road. Lunch £19.95, romantic dinners, free parking. Book now!',
+  title: 'Restaurants in Pinner | Best Italian Restaurant Near Me | Dona Theresa',
+  description: 'Searching for restaurants in Pinner? Top-rated Italian on Uxbridge Road. Fresh pasta, pizza, steaks. Lunch £19.95. Free parking. Book online or call 020 8421 5550!',
   keywords: [
     'pinner restaurants',
     'restaurants in pinner',
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Pinner Restaurants | Dona Theresa Italian Restaurant',
     description: 'Discover the best Italian restaurant in Pinner. Award-winning cuisine, convenient location, free parking. Your perfect dining destination.',
-    url: 'https://www.donatheresa.com/restaurants-pinner',
+    url: 'https://donatheresa.com/restaurants-pinner',
     siteName: 'Dona Theresa Restaurant',
     images: [
       {
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     type: 'website'
   },
   alternates: {
-    canonical: 'https://www.donatheresa.com/restaurants-pinner'
+    canonical: 'https://donatheresa.com/restaurants-pinner'
   }
 }
 
