@@ -2,15 +2,10 @@
   "regions": ["lhr1"],
   "functions": {
     "app/api/**/route.ts": {
-      "maxDuration": 60,
-      "regions": ["lhr1"]
+      "maxDuration": 60
     },
     "app/**/page.tsx": {
-      "maxDuration": 60,
-      "regions": ["lhr1"]
-    },
-    "middleware.ts": {
-      "regions": ["lhr1"]
+      "maxDuration": 60
     }
   }
 }
