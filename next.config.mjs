@@ -82,7 +82,7 @@ const nextConfig = {
       },
     ]
   },
-  async redirects() {
+  async     redirects() {
     return [
       {
         source: '/home',
@@ -102,6 +102,11 @@ const nextConfig = {
       {
         source: '/our-menus',
         destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/lunchtime-early-bird-menu',
+        destination: '/menu/lunchtime-earlybird',
         permanent: true,
       },
     ]
