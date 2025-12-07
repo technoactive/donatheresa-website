@@ -109,6 +109,11 @@ const nextConfig = {
         destination: '/menu/lunchtime-earlybird',
         permanent: true,
       },
+      {
+        source: '/a-la-carte-old',
+        destination: '/menu/a-la-carte',
+        permanent: true,
+      },
     ]
   },
 }
