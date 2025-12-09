@@ -83,5 +83,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/restaurants-harrow`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/restaurants-northwood`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
   ]
 } 
