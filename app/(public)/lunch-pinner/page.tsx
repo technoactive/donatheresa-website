@@ -26,11 +26,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Lunch in Pinner - £19.95 Special | Dona Theresa Italian Restaurant',
     description: 'Best lunch deal in Pinner! Enjoy authentic Italian cuisine with our £19.95 lunch special. Perfect for business lunches or casual dining.',
-    url: 'https://www.donatheresa.com/lunch-pinner',
+    url: 'https://donatheresa.com/lunch-pinner',
     siteName: 'Dona Theresa Restaurant',
     images: [
       {
-        url: 'https://www.donatheresa.com/og-lunch.jpg',
+        url: 'https://donatheresa.com/og-lunch.jpg',
         width: 1200,
         height: 630,
         alt: 'Dona Theresa Lunch Special - Best Lunch in Pinner'
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     type: 'website'
   },
   alternates: {
-    canonical: 'https://www.donatheresa.com/lunch-pinner'
+    canonical: 'https://donatheresa.com/lunch-pinner'
   }
 }
 

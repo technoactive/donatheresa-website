@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     siteName: 'Dona Theresa Restaurant',
     images: [
       {
-        url: 'https://www.donatheresa.com/og-pinner.jpg',
+        url: 'https://donatheresa.com/og-pinner.jpg',
         width: 1200,
         height: 630,
         alt: 'Dona Theresa - Best Restaurant in Pinner'

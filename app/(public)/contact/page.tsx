@@ -28,11 +28,11 @@ export const metadata: Metadata = {
     description: "Get in touch with Dona Theresa. Located at 451 Uxbridge Road, Pinner HA5 4JR. Call 020 8421 5550. Open Tue-Sun for lunch and dinner.",
     type: "website",
     locale: "en_GB",
-    url: "https://www.donatheresa.com/contact",
+    url: "https://donatheresa.com/contact",
     siteName: "Dona Theresa Restaurant",
     images: [
       {
-        url: "https://www.donatheresa.com/og-contact.jpg",
+        url: "https://donatheresa.com/og-contact.jpg",
         width: 1200,
         height: 630,
         alt: "Contact Dona Theresa Italian Restaurant"
@@ -43,10 +43,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Contact | Dona Theresa Italian Restaurant",
     description: "451 Uxbridge Road, Pinner HA5 4JR. Call 020 8421 5550. Open Tuesday-Sunday.",
-    images: ["https://www.donatheresa.com/og-contact.jpg"]
+    images: ["https://donatheresa.com/og-contact.jpg"]
   },
   alternates: {
-    canonical: "https://www.donatheresa.com/contact"
+    canonical: "https://donatheresa.com/contact"
   }
 }
 

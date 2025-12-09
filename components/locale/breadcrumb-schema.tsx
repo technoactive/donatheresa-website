@@ -12,7 +12,7 @@ export function BreadcrumbSchema() {
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": "https://www.donatheresa.com"
+        "item": "https://donatheresa.com"
       }
     ]
     
@@ -21,35 +21,35 @@ export function BreadcrumbSchema() {
         "@type": "ListItem",
         "position": 2,
         "name": "Menu",
-        "item": "https://www.donatheresa.com/menu"
+        "item": "https://donatheresa.com/menu"
       })
     } else if (pathname === '/about') {
       items.push({
         "@type": "ListItem",
         "position": 2,
         "name": "About Us",
-        "item": "https://www.donatheresa.com/about"
+        "item": "https://donatheresa.com/about"
       })
     } else if (pathname === '/contact') {
       items.push({
         "@type": "ListItem",
         "position": 2,
         "name": "Contact",
-        "item": "https://www.donatheresa.com/contact"
+        "item": "https://donatheresa.com/contact"
       })
     } else if (pathname === '/reserve') {
       items.push({
         "@type": "ListItem",
         "position": 2,
         "name": "Reservations",
-        "item": "https://www.donatheresa.com/reserve"
+        "item": "https://donatheresa.com/reserve"
       })
     } else if (pathname.startsWith('/menu/')) {
       items.push({
         "@type": "ListItem",
         "position": 2,
         "name": "Menu",
-        "item": "https://www.donatheresa.com/menu"
+        "item": "https://donatheresa.com/menu"
       })
       
       // Add specific menu section if applicable
@@ -67,7 +67,7 @@ export function BreadcrumbSchema() {
             "@type": "ListItem",
             "position": 3,
             "name": sectionNames[menuSection],
-            "item": `https://www.donatheresa.com/menu/${menuSection}`
+            "item": `https://donatheresa.com/menu/${menuSection}`
           })
         }
       }

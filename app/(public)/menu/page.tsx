@@ -28,11 +28,11 @@ export const metadata: Metadata = {
     description: "View our full Italian menu. Lunch menu £19.95. À la carte options. 451 Uxbridge Road, Hatch End. Book online or call 020 8421 5550.",
     type: "website",
     locale: "en_GB",
-    url: "https://www.donatheresa.com/menu",
+    url: "https://donatheresa.com/menu",
     siteName: "Dona Theresa Restaurant",
     images: [
       {
-        url: "https://www.donatheresa.com/og-menu.jpg",
+        url: "https://donatheresa.com/og-menu.jpg",
         width: 1200,
         height: 630,
         alt: "Dona Theresa Italian Restaurant Menu"
@@ -43,10 +43,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Italian Menu | Dona Theresa Pinner | Lunch £19.95",
     description: "Authentic Italian menu with lunch specials £19.95. Fresh daily ingredients. Book online for best availability.",
-    images: ["https://www.donatheresa.com/og-menu.jpg"]
+    images: ["https://donatheresa.com/og-menu.jpg"]
   },
   alternates: {
-    canonical: "https://www.donatheresa.com/menu"
+    canonical: "https://donatheresa.com/menu"
   }
 }
 

@@ -35,11 +35,11 @@ export const metadata: Metadata = {
     description: "Reserve your table at Dona Theresa. Online booking 24/7. Lunch specials £19.95. Authentic Italian dining in Hatch End.",
     type: "website",
     locale: "en_GB",
-    url: "https://www.donatheresa.com/reserve",
+    url: "https://donatheresa.com/reserve",
     siteName: "Dona Theresa Restaurant",
     images: [
       {
-        url: "https://www.donatheresa.com/og-reserve.jpg",
+        url: "https://donatheresa.com/og-reserve.jpg",
         width: 1200,
         height: 630,
         alt: "Book a table at Dona Theresa Italian Restaurant"
@@ -50,10 +50,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Book Online | Dona Theresa Italian Restaurant Pinner",
     description: "Quick & easy table booking at Dona Theresa. Lunch £19.95. Open Tue-Sun. Book now for tonight!",
-    images: ["https://www.donatheresa.com/og-reserve.jpg"]
+    images: ["https://donatheresa.com/og-reserve.jpg"]
   },
   alternates: {
-    canonical: "https://www.donatheresa.com/reserve"
+    canonical: "https://donatheresa.com/reserve"
   }
 }
 
