@@ -95,5 +95,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.85,
     },
+    {
+      url: `${baseUrl}/restaurants-watford`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
+    {
+      url: `${baseUrl}/restaurants-ruislip`,
+      lastModified,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
   ]
 } 
