@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useRef, useCallback } from 'react'
+import React, { useEffect, useRef, useCallback, useState } from 'react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useNotifications } from './notification-provider'
@@ -48,23 +48,23 @@ function getPriorityStyle(priority: Notification['priority']) {
     case 'critical':
       return {
         className: 'border-red-200 bg-red-50',
-        duration: Infinity,
+        duration: 10000, // 10 seconds for critical (not infinite to prevent blocking)
       }
     case 'high':
       return {
         className: 'border-amber-200 bg-amber-50',
-        duration: 15000,
+        duration: 8000,
       }
     case 'medium':
       return {
         className: 'border-blue-200 bg-blue-50',
-        duration: 8000,
+        duration: 6000,
       }
     case 'low':
     default:
       return {
         className: 'border-slate-200 bg-white',
-        duration: 5000,
+        duration: 4000,
       }
   }
 }
@@ -73,13 +73,20 @@ function getPriorityStyle(priority: Notification['priority']) {
 export function NotificationToastContainer() {
   const router = useRouter()
   const { notifications, markAsRead, dismissNotification, settings } = useNotifications()
+  
+  // Track which notifications we've already seen/shown
   const shownNotificationsRef = useRef<Set<string>>(new Set())
+  
+  // Track initial notification IDs on first load - we won't show toasts for these
+  const initialNotificationIdsRef = useRef<Set<string> | null>(null)
+  
+  // Track if component has initialized
+  const [isInitialized, setIsInitialized] = useState(false)
 
-  // Handle navigation - using useCallback to ensure stable reference
+  // Handle navigation
   const handleNavigate = useCallback((url: string, notificationId: string) => {
     markAsRead(notificationId)
     toast.dismiss(notificationId)
-    // Use router.push for client-side navigation
     router.push(url)
   }, [router, markAsRead])
 
@@ -89,26 +96,51 @@ export function NotificationToastContainer() {
     toast.dismiss(notificationId)
   }, [markAsRead])
 
-  // Monitor for new notifications and show them as Sonner toasts
+  // Initialize: capture which notifications already exist on page load
   useEffect(() => {
-    if (!settings) return
+    if (notifications.length > 0 && initialNotificationIdsRef.current === null) {
+      // First time we have notifications - record all their IDs
+      // We won't show toasts for these (they existed before page load)
+      initialNotificationIdsRef.current = new Set(notifications.map(n => n.id))
+      
+      // Also add them to shown set so they never trigger a toast
+      notifications.forEach(n => {
+        shownNotificationsRef.current.add(n.id)
+      })
+      
+      // Mark as initialized after a short delay to allow initial notifications to settle
+      setTimeout(() => {
+        setIsInitialized(true)
+      }, 1000)
+    }
+  }, [notifications])
 
+  // Show toasts only for NEW notifications (ones that arrive after initialization)
+  useEffect(() => {
+    // Don't show any toasts until we're fully initialized
+    if (!isInitialized || !settings) return
+
+    // Filter to only truly new notifications
     const newNotifications = notifications.filter(notification => {
+      // Skip if already shown
+      if (shownNotificationsRef.current.has(notification.id)) return false
+      
+      // Skip if it was in the initial set (existed on page load)
+      if (initialNotificationIdsRef.current?.has(notification.id)) return false
+      
+      // Skip if dismissed
+      if (notification.dismissed) return false
+      
+      // Check user settings
       const shouldShowToast = settings[`${notification.type}_toast` as keyof typeof settings] as boolean
       const isGloballyEnabled = settings.show_toasts
       
-      const shouldShow = (
-        isGloballyEnabled &&
-        shouldShowToast && 
-        !notification.dismissed &&
-        !shownNotificationsRef.current.has(notification.id)
-      )
-      
-      return shouldShow
+      return isGloballyEnabled && shouldShowToast
     })
 
-    // Show each new notification as a Sonner toast
+    // Show toast for each new notification
     newNotifications.forEach(notification => {
+      // Mark as shown immediately to prevent duplicates
       shownNotificationsRef.current.add(notification.id)
       
       const priorityStyle = getPriorityStyle(notification.priority)
@@ -120,13 +152,13 @@ export function NotificationToastContainer() {
         () => (
           <div 
             className={cn(
-              "w-full max-w-md rounded-xl border p-4 shadow-lg cursor-pointer",
+              "w-full max-w-sm rounded-xl border p-4 shadow-lg",
+              "bg-white",
               "transition-all duration-200 ease-out",
-              "hover:shadow-xl hover:scale-[1.01]",
+              notification.actionUrl && "cursor-pointer hover:shadow-xl",
               priorityStyle.className
             )}
             onClick={(e) => {
-              // Make entire toast clickable if there's an action URL
               if (notification.actionUrl) {
                 e.stopPropagation()
                 handleNavigate(notification.actionUrl, notification.id)
@@ -134,12 +166,10 @@ export function NotificationToastContainer() {
             }}
           >
             <div className="flex items-start gap-3 w-full">
-              {/* Icon */}
               <div className="flex-shrink-0 mt-0.5">
                 {getNotificationIcon(notification.type)}
               </div>
               
-              {/* Content */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <h4 className="font-semibold text-sm text-slate-900 truncate">
@@ -150,55 +180,39 @@ export function NotificationToastContainer() {
                       Urgent
                     </span>
                   )}
-                  {notification.priority === 'high' && (
-                    <span className="flex-shrink-0 px-1.5 py-0.5 text-xs font-medium bg-amber-100 text-amber-700 rounded">
-                      Important
-                    </span>
-                  )}
                 </div>
                 
-                <p className="text-sm text-slate-600 line-clamp-2 mb-1">
+                <p className="text-sm text-slate-600 line-clamp-2">
                   {notification.message}
                 </p>
                 
-                {/* Action buttons */}
                 {hasAction && (
                   <div className="flex items-center gap-2 mt-3">
                     {notification.actionUrl && (
                       <button
                         type="button"
-                        className={cn(
-                          "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium",
-                          "bg-slate-900 text-white hover:bg-slate-800",
-                          "transition-colors duration-150",
-                          "focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
-                        )}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-slate-900 text-white hover:bg-slate-800 transition-colors"
                         onClick={(e) => {
                           e.stopPropagation()
                           handleNavigate(notification.actionUrl!, notification.id)
                         }}
                       >
                         <ExternalLink className="w-3 h-3" />
-                        {notification.actionLabel || 'View Booking'}
+                        View
                       </button>
                     )}
                     
                     {showAcknowledge && (
                       <button
                         type="button"
-                        className={cn(
-                          "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium",
-                          "bg-emerald-600 text-white hover:bg-emerald-700",
-                          "transition-colors duration-150",
-                          "focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-                        )}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition-colors"
                         onClick={(e) => {
                           e.stopPropagation()
                           handleAcknowledge(notification.id)
                         }}
                       >
                         <Check className="w-3 h-3" />
-                        Acknowledge
+                        OK
                       </button>
                     )}
                   </div>
@@ -212,23 +226,10 @@ export function NotificationToastContainer() {
           duration: priorityStyle.duration,
           position: 'bottom-right',
           dismissible: true,
-          onDismiss: () => {
-            shownNotificationsRef.current.delete(notification.id)
-          },
-          onAutoClose: () => {
-            shownNotificationsRef.current.delete(notification.id)
-          },
         }
       )
     })
-  }, [notifications, settings, markAsRead, dismissNotification, handleNavigate, handleAcknowledge])
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      shownNotificationsRef.current.clear()
-    }
-  }, [])
+  }, [notifications, settings, isInitialized, handleNavigate, handleAcknowledge])
 
   return null
 }

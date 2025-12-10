@@ -802,53 +802,54 @@ export class NotificationManager {
   }
 
   public async dismissNotification(id: string): Promise<void> {
-    console.log('❌ Dismissing notification:', id);
-    
     // Update in memory first for immediate UI response
     this.notifications = this.notifications.filter(n => n.id !== id)
     this.notifyListeners()
 
-    // Update in database
+    // DELETE from database (not just mark as dismissed)
     try {
       const supabase = createClient()
       const { error } = await supabase
         .from('notifications')
-        .update({ dismissed: true })
+        .delete()
         .eq('id', id)
 
       if (error) {
-        console.error('❌ Failed to dismiss notification in database:', error)
-      } else {
-        console.log('✅ Notification dismissed in database');
+        console.error('Failed to delete notification from database:', error)
+        // Fallback: try to mark as dismissed instead
+        await supabase
+          .from('notifications')
+          .update({ dismissed: true })
+          .eq('id', id)
       }
     } catch (error) {
-      console.error('💥 Error dismissing notification in database:', error)
+      console.error('Error deleting notification from database:', error)
     }
   }
 
   public async clearAll(): Promise<void> {
-    console.log('🗑️ Clearing all notifications');
-    
     // Update in memory first for immediate UI response
     this.notifications = []
     this.notifyListeners()
 
-    // Update in database - mark all as dismissed
+    // DELETE all from database
     try {
       const supabase = createClient()
       const { error } = await supabase
         .from('notifications')
-        .update({ dismissed: true })
+        .delete()
         .eq('user_id', 'admin')
-        .eq('dismissed', false) // Only update non-dismissed notifications
 
       if (error) {
-        console.error('❌ Failed to clear all notifications in database:', error)
-      } else {
-        console.log('✅ All notifications cleared in database');
+        console.error('Failed to delete all notifications from database:', error)
+        // Fallback: mark as dismissed
+        await supabase
+          .from('notifications')
+          .update({ dismissed: true })
+          .eq('user_id', 'admin')
       }
     } catch (error) {
-      console.error('💥 Error clearing notifications in database:', error)
+      console.error('Error clearing notifications from database:', error)
     }
   }
 
