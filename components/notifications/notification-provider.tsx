@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, useRef, Suspense } from 'react'
 import { Notification, notificationManager, NotificationSettings as NotificationSettingsType } from '@/lib/notifications'
 import { NotificationCenter } from './notification-center'
-import { NotificationToastContainer } from './notification-toast'
+import { NotificationToastContainer, NotificationToaster } from './notification-toast'
 import { createClient } from '@/lib/supabase/client'
 import { playNotificationSound } from '@/lib/notification-sounds'
 import { RealtimeChannel } from '@supabase/supabase-js'
@@ -16,6 +16,8 @@ interface NotificationContextType {
   dismissNotification: (id: string) => void
   clearAll: () => void
   settings: NotificationSettingsType | null
+  isNotificationCenterOpen: boolean
+  setNotificationCenterOpen: (open: boolean) => void
 }
 
 const NotificationContext = createContext<NotificationContextType>({
@@ -25,7 +27,9 @@ const NotificationContext = createContext<NotificationContextType>({
   markAllAsRead: () => {},
   dismissNotification: () => {},
   clearAll: () => {},
-  settings: null
+  settings: null,
+  isNotificationCenterOpen: false,
+  setNotificationCenterOpen: () => {},
 })
 
 export const useNotifications = () => useContext(NotificationContext)
@@ -33,6 +37,7 @@ export const useNotifications = () => useContext(NotificationContext)
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [settings, setSettings] = useState<NotificationSettingsType | null>(null)
+  const [isNotificationCenterOpen, setNotificationCenterOpen] = useState(false)
   const supabase = createClient()
   const channelRef = useRef<RealtimeChannel | null>(null)
   const localNotificationIdsRef = useRef<Set<string>>(new Set())
@@ -43,13 +48,9 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
   // Initialize notification manager
   useEffect(() => {
-    console.log('🔄 Initializing NotificationProvider...');
-    
-    // Ensure notification manager is initialized
     const initializeManager = async () => {
       try {
-        await notificationManager.ensureInitialized();
-        console.log('✅ NotificationManager initialized');
+        await notificationManager.ensureInitialized()
         
         // Subscribe to notification changes
         const unsubscribe = notificationManager.subscribe(() => {
@@ -62,16 +63,16 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
 
         return unsubscribe
       } catch (error) {
-        console.error('❌ Failed to initialize NotificationManager:', error);
+        console.error('Failed to initialize NotificationManager:', error)
       }
-    };
+    }
 
-    const unsubscribePromise = initializeManager();
+    const unsubscribePromise = initializeManager()
 
     return () => {
       unsubscribePromise.then(unsubscribe => {
-        if (unsubscribe) unsubscribe();
-      });
+        if (unsubscribe) unsubscribe()
+      })
     }
   }, [])
 
@@ -87,19 +88,14 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
           .gt('created_at', lastCheckedRef.current.toISOString())
           .order('created_at', { ascending: false })
 
-        if (error) {
-          console.error('❌ Polling error:', error);
-          return;
-        }
+        if (error) return
 
         if (newNotifications && newNotifications.length > 0) {
-          console.log('📊 Found new notifications via polling:', newNotifications.length);
-          
           // Process each new notification
           for (const dbNotification of newNotifications) {
             // Skip if we already have this notification
             if (notificationManager.getNotifications().some(n => n.id === dbNotification.id)) {
-              continue;
+              continue
             }
 
             const notification: Notification = {
@@ -117,48 +113,43 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
                 bookingId: dbNotification.booking_id,
                 contactId: dbNotification.contact_id
               }
-            };
+            }
 
             // Add to notification manager
-            notificationManager.addNotificationFromDatabase(notification);
+            notificationManager.addNotificationFromDatabase(notification)
 
             // Play sound if enabled
             if (notificationManager.shouldPlaySound(notification.type)) {
-              const volume = notificationManager.getMasterVolume();
-              await playNotificationSound(notification.type, volume);
+              const volume = notificationManager.getMasterVolume()
+              await playNotificationSound(notification.type, volume)
             }
           }
 
           // Update last checked time
-          lastCheckedRef.current = new Date();
+          lastCheckedRef.current = new Date()
         }
       } catch (error) {
-        console.error('💥 Polling failed:', error);
+        // Silent fail for polling
       }
-    };
+    }
 
-    // Start polling every 2 seconds
-    console.log('🔄 Starting notification polling...');
-    pollingIntervalRef.current = setInterval(pollForNotifications, 2000);
+    // Start polling every 3 seconds (less aggressive)
+    pollingIntervalRef.current = setInterval(pollForNotifications, 3000)
     
     // Initial poll
-    pollForNotifications();
+    pollForNotifications()
 
     return () => {
       if (pollingIntervalRef.current) {
-        console.log('🛑 Stopping notification polling');
-        clearInterval(pollingIntervalRef.current);
+        clearInterval(pollingIntervalRef.current)
       }
-    };
-  }, [supabase]);
+    }
+  }, [supabase])
 
-  // Real-time subscription setup (keep as backup)
+  // Real-time subscription setup (backup to polling)
   useEffect(() => {
-    console.log('🔌 Setting up real-time notification subscription...');
-    
     const setupRealtimeSubscription = async () => {
       try {
-        // Subscribe to notification changes
         channelRef.current = supabase
           .channel('notification_changes')
           .on(
@@ -170,17 +161,14 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
               filter: 'user_id=eq.admin'
             },
             async (payload) => {
-              console.log('🆕 Real-time: New notification INSERT detected:', payload.new);
-              const dbNotification = payload.new as any;
+              const dbNotification = payload.new as any
               
               // Skip if this is a locally created notification
               if (localNotificationIdsRef.current.has(dbNotification.id)) {
-                console.log('⏭️ Skipping locally created notification');
-                localNotificationIdsRef.current.delete(dbNotification.id);
-                return;
+                localNotificationIdsRef.current.delete(dbNotification.id)
+                return
               }
 
-              // Convert database notification to app notification
               const notification: Notification = {
                 id: dbNotification.id,
                 type: dbNotification.type,
@@ -196,18 +184,14 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
                   bookingId: dbNotification.booking_id,
                   contactId: dbNotification.contact_id
                 }
-              };
+              }
 
-              console.log('📥 Adding notification from real-time event:', notification);
-              
-              // Add to notification manager
-              notificationManager.addNotificationFromDatabase(notification);
+              notificationManager.addNotificationFromDatabase(notification)
 
               // Play sound if enabled
               if (notificationManager.shouldPlaySound(notification.type)) {
-                const volume = notificationManager.getMasterVolume();
-                console.log('🔊 Playing sound for notification type:', notification.type);
-                await playNotificationSound(notification.type, volume);
+                const volume = notificationManager.getMasterVolume()
+                await playNotificationSound(notification.type, volume)
               }
             }
           )
@@ -220,33 +204,28 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
               filter: 'user_id=eq.admin'
             },
             (payload) => {
-              console.log('📝 Real-time: Notification UPDATE detected:', payload.new);
-              const updated = payload.new as any;
-              
+              const updated = payload.new as any
               notificationManager.updateNotificationFromDatabase(updated.id, {
                 read: updated.read,
                 dismissed: updated.dismissed
-              });
+              })
             }
           )
-          .subscribe((status) => {
-            console.log('📡 Real-time subscription status:', status);
-          });
+          .subscribe()
 
       } catch (error) {
-        console.error('❌ Failed to setup real-time subscription:', error);
+        // Silent fail - polling will handle it
       }
-    };
+    }
 
-    setupRealtimeSubscription();
+    setupRealtimeSubscription()
 
     return () => {
       if (channelRef.current) {
-        console.log('🔌 Cleaning up real-time subscription');
-        supabase.removeChannel(channelRef.current);
+        supabase.removeChannel(channelRef.current)
       }
-    };
-  }, [supabase]);
+    }
+  }, [supabase])
 
   // Track locally created notifications
   useEffect(() => {
@@ -296,13 +275,16 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
         markAllAsRead,
         dismissNotification,
         clearAll,
-        settings
+        settings,
+        isNotificationCenterOpen,
+        setNotificationCenterOpen,
       }}
     >
       {children}
       <Suspense fallback={null}>
         <NotificationCenter />
         <NotificationToastContainer />
+        <NotificationToaster />
       </Suspense>
     </NotificationContext.Provider>
   )
