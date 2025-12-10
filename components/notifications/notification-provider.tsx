@@ -13,8 +13,6 @@ interface NotificationContextType {
   dismissNotification: (id: string) => void
   clearAll: () => void
   settings: NotificationSettingsType | null
-  isNotificationCenterOpen: boolean
-  setNotificationCenterOpen: (open: boolean) => void
 }
 
 const NotificationContext = createContext<NotificationContextType>({
@@ -25,8 +23,6 @@ const NotificationContext = createContext<NotificationContextType>({
   dismissNotification: () => {},
   clearAll: () => {},
   settings: null,
-  isNotificationCenterOpen: false,
-  setNotificationCenterOpen: () => {},
 })
 
 export const useNotifications = () => useContext(NotificationContext)
@@ -34,7 +30,6 @@ export const useNotifications = () => useContext(NotificationContext)
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [settings, setSettings] = useState<NotificationSettingsType | null>(null)
-  const [isNotificationCenterOpen, setNotificationCenterOpen] = useState(false)
 
   const unreadCount = notifications.filter(n => !n.read && !n.dismissed).length
 
@@ -99,8 +94,6 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
         dismissNotification,
         clearAll,
         settings,
-        isNotificationCenterOpen,
-        setNotificationCenterOpen,
       }}
     >
       {children}
