@@ -1,7 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { DotsHorizontalIcon, Pencil2Icon, Cross2Icon, CheckIcon, ClockIcon } from "@radix-ui/react-icons"
+import { DotsHorizontalIcon, Pencil2Icon, Cross2Icon, CheckIcon, ClockIcon, ChatBubbleIcon } from "@radix-ui/react-icons"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -117,6 +118,37 @@ const MobileBookingCard = React.memo(({
               </svg>
             )}
           </div>
+          {/* Notes indicator with popover */}
+          {booking.notes && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <button 
+                  className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                  title="View customer notes"
+                >
+                  <ChatBubbleIcon className="w-3.5 h-3.5" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent 
+                className="w-72 bg-white border-slate-200 shadow-lg"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <ChatBubbleIcon className="h-4 w-4 text-blue-600" />
+                    <h4 className="font-semibold text-sm text-slate-900">Customer Notes</h4>
+                  </div>
+                  <div className="text-sm text-slate-700 bg-slate-50 rounded-md p-3 border border-slate-100">
+                    {booking.notes}
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    From: {booking.customerName}
+                  </p>
+                </div>
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
       </div>
       
@@ -374,7 +406,39 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                   <TableRow key={booking.id} className="table-row border-slate-200 hover:bg-slate-50">
                     <TableCell className="truncate">
                       <div className="truncate">
-                        <div className="font-medium text-slate-900 truncate">{booking.customerName}</div>
+                        <div className="flex items-center gap-2">
+                          <div className="font-medium text-slate-900 truncate">{booking.customerName}</div>
+                          {booking.notes && (
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <button 
+                                  className="inline-flex items-center text-blue-600 hover:text-blue-800 transition-colors flex-shrink-0"
+                                  onClick={(e) => e.stopPropagation()}
+                                  title="View customer notes"
+                                >
+                                  <ChatBubbleIcon className="w-4 h-4" />
+                                </button>
+                              </PopoverTrigger>
+                              <PopoverContent 
+                                className="w-80 bg-white border-slate-200 shadow-lg"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <div className="space-y-2">
+                                  <div className="flex items-center gap-2">
+                                    <ChatBubbleIcon className="h-4 w-4 text-blue-600" />
+                                    <h4 className="font-semibold text-sm text-slate-900">Customer Notes</h4>
+                                  </div>
+                                  <div className="text-sm text-slate-700 bg-slate-50 rounded-md p-3 border border-slate-100 whitespace-pre-wrap">
+                                    {booking.notes}
+                                  </div>
+                                  <p className="text-xs text-slate-500">
+                                    From: {booking.customerName}
+                                  </p>
+                                </div>
+                              </PopoverContent>
+                            </Popover>
+                          )}
+                        </div>
                         <div className="text-sm text-slate-600 truncate">{booking.customerEmail}</div>
                       </div>
                     </TableCell>

@@ -5,7 +5,8 @@ import { BookingsTable } from "@/components/dashboard/bookings-table"
 import { DatePickerWithClear } from "@/components/dashboard/date-picker-with-clear"
 import { EditBookingDialog } from "@/components/dashboard/edit-booking-dialog"
 import type { Booking } from "@/lib/types"
-import { Users, CalendarCheck, Clock, Users2, CalendarDays, Search, AlertCircle, ChevronRight, Check, X, Pencil } from "lucide-react"
+import { Users, CalendarCheck, Clock, Users2, CalendarDays, Search, AlertCircle, ChevronRight, Check, X, Pencil, MessageSquare } from "lucide-react"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -243,7 +244,36 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
                           </span>
                           <span>👥 {booking.partySize} guests</span>
                           <span className="truncate">📧 {booking.customerEmail}</span>
-                          {booking.notes && <span className="text-blue-600">📝 Has notes</span>}
+                          {booking.notes && (
+                            <Popover>
+                              <PopoverTrigger asChild>
+                                <button 
+                                  className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800 hover:underline cursor-pointer transition-colors"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <MessageSquare className="h-3 w-3" />
+                                  <span>View notes</span>
+                                </button>
+                              </PopoverTrigger>
+                              <PopoverContent 
+                                className="w-80 bg-white border-slate-200 shadow-lg"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <div className="space-y-2">
+                                  <div className="flex items-center gap-2">
+                                    <MessageSquare className="h-4 w-4 text-blue-600" />
+                                    <h4 className="font-semibold text-sm text-slate-900">Customer Notes</h4>
+                                  </div>
+                                  <div className="text-sm text-slate-700 bg-slate-50 rounded-md p-3 border border-slate-100">
+                                    {booking.notes}
+                                  </div>
+                                  <p className="text-xs text-slate-500">
+                                    From: {booking.customerName}
+                                  </p>
+                                </div>
+                              </PopoverContent>
+                            </Popover>
+                          )}
                         </div>
                       </div>
                       <div className="flex items-center gap-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">

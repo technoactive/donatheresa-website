@@ -100,6 +100,18 @@ export function EditBookingDialog({ booking, isOpen, onSave, onOpenChange }: Edi
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4 dialog-content touch-spacing-lg">
+            {/* Customer Notes - Read Only */}
+            {booking.notes && (
+              <div className="space-y-2 bg-blue-50 rounded-lg p-4 border border-blue-100">
+                <Label className="text-blue-800 font-semibold flex items-center gap-2">
+                  📝 Customer Notes
+                </Label>
+                <p className="text-sm text-blue-900 whitespace-pre-wrap">
+                  {booking.notes}
+                </p>
+              </div>
+            )}
+            
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="customerName" className="text-slate-900">
