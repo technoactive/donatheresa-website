@@ -1,7 +1,8 @@
 "use client"
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useCallback } from 'react'
 import { toast, Toaster } from 'sonner'
+import { useRouter } from 'next/navigation'
 import { useNotifications } from './notification-provider'
 import { Notification, NotificationSettings } from '@/lib/notifications'
 import { 
@@ -15,9 +16,7 @@ import {
   Bell,
   ExternalLink,
   Check,
-  X
 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 // Get the appropriate icon component for notification type
@@ -49,123 +48,52 @@ function getPriorityStyle(priority: Notification['priority']) {
     case 'critical':
       return {
         className: 'border-red-200 bg-red-50',
-        duration: Infinity, // Persist until dismissed
+        duration: Infinity,
       }
     case 'high':
       return {
         className: 'border-amber-200 bg-amber-50',
-        duration: 15000, // 15 seconds
+        duration: 15000,
       }
     case 'medium':
       return {
         className: 'border-blue-200 bg-blue-50',
-        duration: 8000, // 8 seconds
+        duration: 8000,
       }
     case 'low':
     default:
       return {
         className: 'border-slate-200 bg-white',
-        duration: 5000, // 5 seconds
+        duration: 5000,
       }
   }
 }
 
-// Custom toast component for rich notifications
-interface NotificationToastContentProps {
-  notification: Notification
-  onMarkAsRead: () => void
-  onDismiss: () => void
-  onAction?: () => void
-}
-
-function NotificationToastContent({ 
-  notification, 
-  onMarkAsRead, 
-  onDismiss, 
-  onAction 
-}: NotificationToastContentProps) {
-  const staticSettings = NotificationSettings[notification.type]
-  const showAcknowledge = staticSettings.requiresAction && !notification.read
-
-  return (
-    <div className="flex items-start gap-3 w-full">
-      {/* Icon */}
-      <div className="flex-shrink-0 mt-0.5">
-        {getNotificationIcon(notification.type)}
-      </div>
-      
-      {/* Content */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-1">
-          <h4 className="font-semibold text-sm text-slate-900 truncate">
-            {notification.title}
-          </h4>
-          {notification.priority === 'critical' && (
-            <span className="flex-shrink-0 px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-700 rounded">
-              Urgent
-            </span>
-          )}
-          {notification.priority === 'high' && (
-            <span className="flex-shrink-0 px-1.5 py-0.5 text-xs font-medium bg-amber-100 text-amber-700 rounded">
-              Important
-            </span>
-          )}
-        </div>
-        
-        <p className="text-sm text-slate-600 line-clamp-2">
-          {notification.message}
-        </p>
-        
-        {/* Action buttons */}
-        {(notification.actionUrl || showAcknowledge) && (
-          <div className="flex items-center gap-2 mt-3">
-            {notification.actionUrl && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 text-xs bg-white hover:bg-slate-50"
-                onClick={() => {
-                  window.location.href = notification.actionUrl!
-                  onMarkAsRead()
-                }}
-              >
-                <ExternalLink className="w-3 h-3 mr-1" />
-                {notification.actionLabel || 'View Details'}
-              </Button>
-            )}
-            
-            {showAcknowledge && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-7 text-xs bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-100"
-                onClick={() => {
-                  onMarkAsRead()
-                  toast.dismiss(notification.id)
-                }}
-              >
-                <Check className="w-3 h-3 mr-1" />
-                Acknowledge
-              </Button>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
 // Main toast container using Sonner
 export function NotificationToastContainer() {
+  const router = useRouter()
   const { notifications, markAsRead, dismissNotification, settings } = useNotifications()
   const shownNotificationsRef = useRef<Set<string>>(new Set())
+
+  // Handle navigation - using useCallback to ensure stable reference
+  const handleNavigate = useCallback((url: string, notificationId: string) => {
+    markAsRead(notificationId)
+    toast.dismiss(notificationId)
+    // Use router.push for client-side navigation
+    router.push(url)
+  }, [router, markAsRead])
+
+  // Handle acknowledge
+  const handleAcknowledge = useCallback((notificationId: string) => {
+    markAsRead(notificationId)
+    toast.dismiss(notificationId)
+  }, [markAsRead])
 
   // Monitor for new notifications and show them as Sonner toasts
   useEffect(() => {
     if (!settings) return
 
     const newNotifications = notifications.filter(notification => {
-      // Check if this notification should be shown as a toast
       const shouldShowToast = settings[`${notification.type}_toast` as keyof typeof settings] as boolean
       const isGloballyEnabled = settings.show_toasts
       
@@ -184,24 +112,99 @@ export function NotificationToastContainer() {
       shownNotificationsRef.current.add(notification.id)
       
       const priorityStyle = getPriorityStyle(notification.priority)
-      
+      const staticSettings = NotificationSettings[notification.type]
+      const showAcknowledge = staticSettings.requiresAction && !notification.read
+      const hasAction = notification.actionUrl || showAcknowledge
+
       toast.custom(
-        (t) => (
+        () => (
           <div 
             className={cn(
-              "w-full max-w-md rounded-lg border p-4 shadow-lg",
-              "transition-all duration-300 ease-out",
+              "w-full max-w-md rounded-xl border p-4 shadow-lg cursor-pointer",
+              "transition-all duration-200 ease-out",
+              "hover:shadow-xl hover:scale-[1.01]",
               priorityStyle.className
             )}
+            onClick={(e) => {
+              // Make entire toast clickable if there's an action URL
+              if (notification.actionUrl) {
+                e.stopPropagation()
+                handleNavigate(notification.actionUrl, notification.id)
+              }
+            }}
           >
-            <NotificationToastContent
-              notification={notification}
-              onMarkAsRead={() => markAsRead(notification.id)}
-              onDismiss={() => {
-                dismissNotification(notification.id)
-                toast.dismiss(t)
-              }}
-            />
+            <div className="flex items-start gap-3 w-full">
+              {/* Icon */}
+              <div className="flex-shrink-0 mt-0.5">
+                {getNotificationIcon(notification.type)}
+              </div>
+              
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <h4 className="font-semibold text-sm text-slate-900 truncate">
+                    {notification.title}
+                  </h4>
+                  {notification.priority === 'critical' && (
+                    <span className="flex-shrink-0 px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-700 rounded">
+                      Urgent
+                    </span>
+                  )}
+                  {notification.priority === 'high' && (
+                    <span className="flex-shrink-0 px-1.5 py-0.5 text-xs font-medium bg-amber-100 text-amber-700 rounded">
+                      Important
+                    </span>
+                  )}
+                </div>
+                
+                <p className="text-sm text-slate-600 line-clamp-2 mb-1">
+                  {notification.message}
+                </p>
+                
+                {/* Action buttons */}
+                {hasAction && (
+                  <div className="flex items-center gap-2 mt-3">
+                    {notification.actionUrl && (
+                      <button
+                        type="button"
+                        className={cn(
+                          "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium",
+                          "bg-slate-900 text-white hover:bg-slate-800",
+                          "transition-colors duration-150",
+                          "focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
+                        )}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleNavigate(notification.actionUrl!, notification.id)
+                        }}
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                        {notification.actionLabel || 'View Booking'}
+                      </button>
+                    )}
+                    
+                    {showAcknowledge && (
+                      <button
+                        type="button"
+                        className={cn(
+                          "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium",
+                          "bg-emerald-600 text-white hover:bg-emerald-700",
+                          "transition-colors duration-150",
+                          "focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                        )}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleAcknowledge(notification.id)
+                        }}
+                      >
+                        <Check className="w-3 h-3" />
+                        Acknowledge
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         ),
         {
@@ -210,7 +213,6 @@ export function NotificationToastContainer() {
           position: 'bottom-right',
           dismissible: true,
           onDismiss: () => {
-            // Clean up when toast is dismissed
             shownNotificationsRef.current.delete(notification.id)
           },
           onAutoClose: () => {
@@ -219,7 +221,7 @@ export function NotificationToastContainer() {
         }
       )
     })
-  }, [notifications, settings, markAsRead, dismissNotification])
+  }, [notifications, settings, markAsRead, dismissNotification, handleNavigate, handleAcknowledge])
 
   // Cleanup on unmount
   useEffect(() => {
@@ -228,7 +230,7 @@ export function NotificationToastContainer() {
     }
   }, [])
 
-  return null // Sonner renders its own container
+  return null
 }
 
 // Sonner Toaster configuration for the app
@@ -243,15 +245,13 @@ export function NotificationToaster() {
       visibleToasts={4}
       toastOptions={{
         style: {
-          background: 'white',
-          border: '1px solid #e2e8f0',
-          borderRadius: '12px',
-          boxShadow: '0 10px 40px -10px rgba(0, 0, 0, 0.15)',
+          background: 'transparent',
+          border: 'none',
+          boxShadow: 'none',
+          padding: 0,
         },
-        className: 'notification-toast',
-        descriptionClassName: 'text-slate-600',
+        className: 'notification-toast-wrapper',
       }}
-      // Smooth animations
       offset="24px"
     />
   )

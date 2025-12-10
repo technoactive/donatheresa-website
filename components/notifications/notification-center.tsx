@@ -25,6 +25,7 @@ import { Bell, BellRing, Check, X, ExternalLink, Settings, Trash2 } from 'lucide
 import { formatDistanceToNow } from 'date-fns'
 import { cn } from '@/lib/utils'
 import { useMediaQuery } from '@/hooks/use-mobile'
+import { useRouter } from 'next/navigation'
 
 // Notification priority colors following restaurant industry standards
 const getPriorityColors = (priority: NotificationPriority) => {
@@ -67,18 +68,26 @@ interface NotificationItemProps {
   notification: Notification
   onMarkAsRead: (id: string) => void
   onDismiss: (id: string) => void
+  onNavigate: (url: string, id: string) => void
 }
 
-function NotificationItem({ notification, onMarkAsRead, onDismiss }: NotificationItemProps) {
+function NotificationItem({ notification, onMarkAsRead, onDismiss, onNavigate }: NotificationItemProps) {
   const priorityColors = getPriorityColors(notification.priority)
   const icon = getPriorityIcon(notification)
   
   return (
-    <Card className={cn(
-      "mb-3 transition-all duration-200 hover:shadow-md cursor-pointer border",
-      priorityColors,
-      !notification.read && "ring-2 ring-amber-400"
-    )}>
+    <Card 
+      className={cn(
+        "mb-3 transition-all duration-200 hover:shadow-md cursor-pointer border",
+        priorityColors,
+        !notification.read && "ring-2 ring-amber-400"
+      )}
+      onClick={() => {
+        if (notification.actionUrl) {
+          onNavigate(notification.actionUrl, notification.id)
+        }
+      }}
+    >
       <CardContent className="p-4">
         {/* Header with icon, title, and unread indicator */}
         <div className="flex items-start gap-3 mb-2">
@@ -109,14 +118,14 @@ function NotificationItem({ notification, onMarkAsRead, onDismiss }: Notificatio
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 px-3 hover:bg-slate-50"
+                className="h-9 px-3 bg-slate-900 text-white hover:bg-slate-800 border-slate-900"
                 onClick={(e) => {
                   e.stopPropagation()
-                  window.location.href = notification.actionUrl!
+                  onNavigate(notification.actionUrl!, notification.id)
                 }}
               >
                 <ExternalLink className="w-4 h-4 mr-1" />
-                View
+                View Booking
               </Button>
             )}
             
@@ -160,6 +169,7 @@ interface NotificationContentProps {
 }
 
 function NotificationContent({ isMobile = false }: NotificationContentProps) {
+  const router = useRouter()
   const {
     notifications,
     unreadCount,
@@ -179,6 +189,12 @@ function NotificationContent({ isMobile = false }: NotificationContentProps) {
 
   const handleClearAll = async () => {
     await clearAll()
+  }
+
+  const handleNavigate = (url: string, notificationId: string) => {
+    markAsRead(notificationId)
+    setNotificationCenterOpen(false)
+    router.push(url)
   }
 
   return (
@@ -249,6 +265,7 @@ function NotificationContent({ isMobile = false }: NotificationContentProps) {
                 notification={notification}
                 onMarkAsRead={markAsRead}
                 onDismiss={dismissNotification}
+                onNavigate={handleNavigate}
               />
             ))}
           </div>
@@ -271,7 +288,7 @@ function NotificationContent({ isMobile = false }: NotificationContentProps) {
             className="w-full justify-start"
             onClick={() => {
               setNotificationCenterOpen(false)
-              window.location.href = '/dashboard/settings/notifications'
+              router.push('/dashboard/settings/notifications')
             }}
           >
             <Settings className="h-4 w-4 mr-2" />
