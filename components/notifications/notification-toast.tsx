@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useRef, useCallback } from 'react'
-import { toast, Toaster } from 'sonner'
+import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useNotifications } from './notification-provider'
 import { Notification, NotificationSettings } from '@/lib/notifications'
@@ -231,28 +231,4 @@ export function NotificationToastContainer() {
   }, [])
 
   return null
-}
-
-// Sonner Toaster configuration for the app
-export function NotificationToaster() {
-  return (
-    <Toaster
-      position="bottom-right"
-      expand={false}
-      richColors
-      closeButton
-      gap={12}
-      visibleToasts={4}
-      toastOptions={{
-        style: {
-          background: 'transparent',
-          border: 'none',
-          boxShadow: 'none',
-          padding: 0,
-        },
-        className: 'notification-toast-wrapper',
-      }}
-      offset="24px"
-    />
-  )
 }

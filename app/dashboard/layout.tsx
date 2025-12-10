@@ -2,7 +2,6 @@ import type React from "react"
 import { Sidebar } from "@/components/dashboard/sidebar"
 import { Header } from "@/components/dashboard/header"
 import { NotificationProvider } from "@/components/notifications/notification-provider"
-import { RealtimeNotifications } from "@/components/notifications/realtime-notifications"
 import { DynamicSchema } from "@/components/locale/dynamic-schema"
 
 // Force dynamic rendering for all dashboard routes
@@ -24,7 +23,6 @@ export default function DashboardLayout({
             {children}
           </main>
         </div>
-        <RealtimeNotifications />
       </div>
     </NotificationProvider>
   )

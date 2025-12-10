@@ -218,7 +218,23 @@ export default function RootLayout({
             <GoogleAnalytics />
           </Suspense>
           {children}
-          <Toaster richColors />
+          <Toaster 
+            position="bottom-right"
+            expand={false}
+            richColors
+            closeButton
+            gap={12}
+            visibleToasts={4}
+            offset="24px"
+            toastOptions={{
+              style: {
+                background: 'transparent',
+                border: 'none',
+                boxShadow: 'none',
+                padding: 0,
+              },
+            }}
+          />
           <SpeedInsights />
           <Analytics />
           <CookieConsent />

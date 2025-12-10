@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState, useRef, Suspense } from 'react'
 import { Notification, notificationManager, NotificationSettings as NotificationSettingsType } from '@/lib/notifications'
 import { NotificationCenter } from './notification-center'
-import { NotificationToastContainer, NotificationToaster } from './notification-toast'
+import { NotificationToastContainer } from './notification-toast'
 import { createClient } from '@/lib/supabase/client'
 import { playNotificationSound } from '@/lib/notification-sounds'
 import { RealtimeChannel } from '@supabase/supabase-js'
@@ -85,6 +85,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
           .select('*')
           .eq('user_id', 'admin')
           .eq('read', false)
+          .eq('dismissed', false) // Don't fetch dismissed notifications
           .gt('created_at', lastCheckedRef.current.toISOString())
           .order('created_at', { ascending: false })
 
@@ -97,6 +98,9 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
             if (notificationManager.getNotifications().some(n => n.id === dbNotification.id)) {
               continue
             }
+
+            // Skip if already dismissed
+            if (dbNotification.dismissed) continue
 
             const notification: Notification = {
               id: dbNotification.id,
@@ -133,8 +137,8 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       }
     }
 
-    // Start polling every 3 seconds (less aggressive)
-    pollingIntervalRef.current = setInterval(pollForNotifications, 3000)
+    // Start polling every 5 seconds (less aggressive)
+    pollingIntervalRef.current = setInterval(pollForNotifications, 5000)
     
     // Initial poll
     pollForNotifications()
@@ -284,7 +288,6 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       <Suspense fallback={null}>
         <NotificationCenter />
         <NotificationToastContainer />
-        <NotificationToaster />
       </Suspense>
     </NotificationContext.Provider>
   )
