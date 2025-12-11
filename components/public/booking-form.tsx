@@ -168,101 +168,67 @@ export function BookingForm({ bookingSettings: serverBookingSettings }: BookingF
   // Handle success redirect
   useEffect(() => {
     if (state?.success && state?.bookingId) {
-      // Track booking conversion in Google Analytics
-      if (state.conversionData) {
-        import('@/lib/analytics').then(({ trackReservationEvent, trackEvent, GA_EVENTS }) => {
-          // Track standard reservation event
-          trackReservationEvent('complete', {
-            booking_date: state.conversionData.bookingDate,
-            booking_time: state.conversionData.bookingTime,
-            party_size: state.conversionData.partySize
-          })
-          
-          // Import configuration for dynamic values
-          import('@/lib/analytics-config').then(({ calculateBookingValue, categorizeBooking, ANALYTICS_CONFIG }) => {
-            const bookingValue = calculateBookingValue(
-              state.conversionData.partySize,
-              state.conversionData.bookingDate,
-              state.conversionData.bookingTime
-            )
-            
-            const categories = categorizeBooking(
-              state.conversionData.partySize,
-              state.conversionData.bookingDate,
-              state.conversionData.bookingTime
-            )
-            
-            // Enhanced ecommerce purchase event (industry standard)
-            trackEvent(GA_EVENTS.PURCHASE, {
-              // Transaction details
-              transaction_id: state.conversionData.bookingId,
-              value: bookingValue,                              // Dynamic value calculation
-              currency: ANALYTICS_CONFIG.values.currency,
-              tax: 0,                                          // Add if applicable
-              shipping: 0,                                     // Not applicable for restaurants
-              
-              // Enhanced parameters
-              affiliation: 'Dona Theresa Website',
-              coupon: '',                                      // For future promo codes
-              
-              // Booking analytics
-              booking_date: state.conversionData.bookingDate,
-              booking_time: state.conversionData.bookingTime,
-              booking_day_of_week: new Date(state.conversionData.bookingDate).toLocaleDateString('en-GB', { weekday: 'long' }),
-              party_size: state.conversionData.partySize,
-              booking_lead_time_hours: Math.round((new Date(state.conversionData.bookingDate + 'T' + state.conversionData.bookingTime) - new Date()) / (1000 * 60 * 60)),
-              
-              // Categorization
-              party_size_category: categories.partySizeCategory,
-              time_slot_category: categories.timeSlotCategory,
-              lead_time_category: categories.leadTimeCategory,
-              is_vip_booking: categories.isVip,
-              is_peak_time: categories.isPeakTime,
-              is_last_minute: categories.isLastMinute,
-              
-              // Source and device tracking
-              booking_source: 'website',
-              booking_channel: 'organic',                      // Update if you track campaigns
-              device_category: /mobile|android|iphone/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
-              browser: navigator.userAgent.includes('Chrome') ? 'Chrome' : 
-                       navigator.userAgent.includes('Safari') ? 'Safari' :
-                       navigator.userAgent.includes('Firefox') ? 'Firefox' : 'Other',
-              
-              // Items array (enhanced ecommerce required)
-              items: [{
-                item_id: 'table_reservation',
-                item_name: `Table for ${state.conversionData.partySize}`,
-                affiliation: 'Dona Theresa',
-                coupon: '',
-                currency: ANALYTICS_CONFIG.values.currency,
-                discount: 0,
-                index: 0,
-                item_brand: 'Dona Theresa',
-                item_category: 'Restaurant Booking',
-                item_category2: categories.partySizeCategory,
-                item_category3: categories.timeSlotCategory,
-                item_category4: new Date(state.conversionData.bookingDate).toLocaleDateString('en-GB', { weekday: 'long' }),
-                item_category5: categories.leadTimeCategory,
-                item_list_id: 'booking_form',
-                item_list_name: 'Online Reservations',
-                item_variant: categories.isPeakTime ? 'Peak Time' : 'Standard Time',
-                location_id: 'main_restaurant',
-                price: bookingValue / state.conversionData.partySize,  // Per person price
-                quantity: state.conversionData.partySize
-              }]
-            })
-            
-            // Additional high-value booking event
-            if (categories.isVip || bookingValue >= 200) {
-              trackEvent('vip_booking', {
-                booking_id: state.conversionData.bookingId,
-                party_size: state.conversionData.partySize,
-                booking_value: bookingValue,
-                booking_type: categories.isVip ? 'Large Party' : 'High Value'
-              })
-            }
-          })
+      // Track booking conversion in Google Analytics SYNCHRONOUSLY using window.gtag
+      if (state.conversionData && typeof window !== 'undefined' && window.gtag) {
+        const { bookingId, partySize, bookingDate, bookingTime } = state.conversionData
+        
+        // Calculate booking value (£25 per person average)
+        const bookingValue = partySize * 25
+        
+        // Determine categories
+        const hour = parseInt(bookingTime.split(':')[0], 10)
+        const dayOfWeek = new Date(bookingDate).getDay()
+        const isWeekend = dayOfWeek === 0 || dayOfWeek === 5 || dayOfWeek === 6
+        const isPeakTime = (hour >= 18 && hour <= 21) || (hour >= 12 && hour <= 14)
+        const isVip = partySize >= 8
+        
+        console.log('[GA4] Tracking purchase event:', { bookingId, partySize, bookingValue })
+        
+        // Fire purchase event DIRECTLY - no async imports
+        window.gtag('event', 'purchase', {
+          transaction_id: bookingId,
+          value: bookingValue,
+          currency: 'GBP',
+          tax: 0,
+          shipping: 0,
+          affiliation: 'Dona Theresa Website',
+          booking_date: bookingDate,
+          booking_time: bookingTime,
+          booking_day_of_week: new Date(bookingDate).toLocaleDateString('en-GB', { weekday: 'long' }),
+          party_size: partySize,
+          is_vip_booking: isVip,
+          is_peak_time: isPeakTime,
+          is_weekend: isWeekend,
+          booking_source: 'website',
+          device_category: /mobile|android|iphone/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+          items: [{
+            item_id: 'table_reservation',
+            item_name: `Table for ${partySize}`,
+            item_brand: 'Dona Theresa',
+            item_category: 'Restaurant Booking',
+            price: 25,
+            quantity: partySize
+          }]
         })
+        
+        // Also fire a simpler booking_complete event for easier tracking
+        window.gtag('event', 'booking_complete', {
+          booking_id: bookingId,
+          party_size: partySize,
+          booking_date: bookingDate,
+          booking_time: bookingTime,
+          value: bookingValue,
+          currency: 'GBP'
+        })
+        
+        // Fire VIP event for large parties
+        if (isVip) {
+          window.gtag('event', 'vip_booking', {
+            booking_id: bookingId,
+            party_size: partySize,
+            booking_value: bookingValue
+          })
+        }
       }
       
       const timer = setTimeout(() => {
