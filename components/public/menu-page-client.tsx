@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
-import { Crown, Wine, Clock, Sparkles, ArrowRight, Utensils } from "lucide-react"
+import { Crown, Wine, Clock, Sparkles, ArrowRight, Utensils, TreePine, PartyPopper, Gift } from "lucide-react"
 import { useEffect, useState } from "react"
 
 const menuCategories = [
@@ -12,7 +12,7 @@ const menuCategories = [
     title: "À La Carte Menu",
     subtitle: "Our signature collection",
     description: "Experience our full range of carefully crafted dishes, from exquisite starters to premium main courses",
-    image: "/dish-filleto-rossini.png", // Using local optimized image
+    image: "/dish-filleto-rossini.png",
     icon: Crown,
     highlight: "Signature Dishes",
     link: "/menu/a-la-carte",
@@ -24,7 +24,7 @@ const menuCategories = [
     title: "Lunchtime & Early Bird",
     subtitle: "Exceptional value",
     description: "2 course menu at £19.95, available Tuesday-Sunday for lunch and early dinner",
-    image: "/pasta-carbonara.jpg", // Using local optimized image
+    image: "/pasta-carbonara.jpg",
     icon: Clock,
     highlight: "£19.95 - 2 Courses",
     link: "/menu/lunchtime-earlybird",
@@ -36,12 +36,36 @@ const menuCategories = [
     title: "December Menu",
     subtitle: "Festive celebration",
     description: "Enjoy our special December menu with 2 or 3 course options, featuring seasonal favorites with an Italian twist",
-    image: "/pera-alforno.jpg", // Using local optimized image
+    image: "/pera-alforno.jpg",
     icon: Sparkles,
     highlight: "December Special",
     link: "/menu/december-christmas-menu",
     gradient: "from-emerald-500 to-red-500",
     bgColor: "bg-red-50",
+  },
+  {
+    id: "christmas-day",
+    title: "Christmas Day",
+    subtitle: "25th December 2025",
+    description: "Celebrate Christmas with your loved ones. Three-course Italian feast for a magical family celebration",
+    image: "/christmas-dinner.jpg",
+    icon: TreePine,
+    highlight: "£78.95 per person",
+    link: "/menu/christmas-day",
+    gradient: "from-red-600 to-emerald-600",
+    bgColor: "bg-red-50",
+  },
+  {
+    id: "new-year",
+    title: "New Year's Eve",
+    subtitle: "31st December 2025",
+    description: "Welcome 2026 in style with an elegant three-course dinner and celebratory atmosphere",
+    image: "/new-year-celebration.jpg",
+    icon: PartyPopper,
+    highlight: "£78.95 per person",
+    link: "/menu/new-year",
+    gradient: "from-slate-900 to-amber-600",
+    bgColor: "bg-amber-50",
   },
 ]
 

@@ -178,7 +178,7 @@ export function BookingForm({ bookingSettings: serverBookingSettings }: BookingF
         // Determine categories
         const hour = parseInt(bookingTime.split(':')[0], 10)
         const dayOfWeek = new Date(bookingDate).getDay()
-        const isWeekend = dayOfWeek === 0 || dayOfWeek === 5 || dayOfWeek === 6
+        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6
         const isPeakTime = (hour >= 18 && hour <= 21) || (hour >= 12 && hour <= 14)
         const isVip = partySize >= 8
         
