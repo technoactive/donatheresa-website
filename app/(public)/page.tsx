@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
 import { HorizontalGallery } from "@/components/public/horizontal-gallery"
-import { Star, ArrowRight, Play, Sparkles, Zap, Crown, Utensils, Quote } from "lucide-react"
+import { Star, ArrowRight, Play, Sparkles, Zap, Crown, Utensils, Quote, TreePine, PartyPopper, Gift, Calendar } from "lucide-react"
 import { FormattedCurrency } from "@/components/locale/formatted-date"
 import { FAQSchema } from "@/components/locale/faq-schema"
 import type { Metadata } from "next"
@@ -373,6 +373,198 @@ export default function HomePage() {
             >
               <Link href="/menu" className="flex items-center gap-2">
                 <span>Full Menu</span>
+                <ArrowRight className="w-5 h-5" aria-hidden="true" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Special Celebrations Section */}
+      <section className="py-24 relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" aria-labelledby="celebrations-heading">
+        {/* Festive Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-red-500/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-emerald-500/5 rounded-full blur-3xl" />
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <header className="text-center mb-16">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <Gift className="w-5 h-5 text-amber-400" aria-hidden="true" />
+              <span className="text-sm tracking-[0.3em] text-amber-400 font-light uppercase">
+                Special Celebrations
+              </span>
+            </div>
+            
+            <h2 id="celebrations-heading" className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+              <span className="text-white">Celebrate With </span>
+              <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">
+                Us
+              </span>
+            </h2>
+            
+            <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+              Make your festive celebrations unforgettable with our special seasonal menus
+            </p>
+          </header>
+
+          {/* Three Cards Grid */}
+          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+            {/* December Menu Card */}
+            <Link href="/menu/december-christmas-menu" className="group">
+              <div className="relative bg-gradient-to-br from-emerald-900/50 to-red-900/50 rounded-3xl overflow-hidden border border-white/10 hover:border-amber-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/20 hover:-translate-y-2">
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src="/pera-alforno.jpg"
+                    alt="December Christmas Menu"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
+                  
+                  {/* Badge */}
+                  <div className="absolute top-4 right-4">
+                    <div className="px-3 py-1.5 bg-gradient-to-r from-emerald-500 to-red-500 text-white rounded-full text-xs font-semibold shadow-lg">
+                      Available Now
+                    </div>
+                  </div>
+
+                  {/* Icon */}
+                  <div className="absolute bottom-4 left-4">
+                    <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
+                      <Sparkles className="w-6 h-6 text-emerald-600" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <div className="flex items-center gap-2 text-amber-400 text-sm mb-2">
+                    <Calendar className="w-4 h-4" />
+                    <span>All December</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-amber-400 transition-colors">
+                    December Menu
+                  </h3>
+                  <p className="text-slate-300 text-sm mb-4 leading-relaxed">
+                    Festive 2 or 3 course options with seasonal Italian favorites
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold text-amber-400">From £25.95</span>
+                    <ArrowRight className="w-5 h-5 text-amber-400 group-hover:translate-x-2 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* Christmas Day Card - Featured/Larger */}
+            <Link href="/menu/christmas-day" className="group">
+              <div className="relative bg-gradient-to-br from-red-900/60 to-emerald-900/60 rounded-3xl overflow-hidden border border-white/10 hover:border-amber-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/20 hover:-translate-y-2">
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src="/christmas-dinner.jpg"
+                    alt="Christmas Day Menu"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
+                  
+                  {/* Badge */}
+                  <div className="absolute top-4 right-4">
+                    <div className="px-3 py-1.5 bg-gradient-to-r from-red-600 to-emerald-600 text-white rounded-full text-xs font-semibold shadow-lg flex items-center gap-1">
+                      <TreePine className="w-3 h-3" />
+                      Book Now
+                    </div>
+                  </div>
+
+                  {/* Icon */}
+                  <div className="absolute bottom-4 left-4">
+                    <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
+                      <TreePine className="w-6 h-6 text-red-600" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <div className="flex items-center gap-2 text-amber-400 text-sm mb-2">
+                    <Calendar className="w-4 h-4" />
+                    <span>25th December 2025</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-amber-400 transition-colors">
+                    Christmas Day
+                  </h3>
+                  <p className="text-slate-300 text-sm mb-4 leading-relaxed">
+                    Three-course Italian feast for a magical family celebration
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold text-amber-400">£78.95 per person</span>
+                    <ArrowRight className="w-5 h-5 text-amber-400 group-hover:translate-x-2 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* New Year's Eve Card */}
+            <Link href="/menu/new-year" className="group">
+              <div className="relative bg-gradient-to-br from-slate-900/80 to-amber-900/50 rounded-3xl overflow-hidden border border-white/10 hover:border-amber-400/50 transition-all duration-500 hover:shadow-2xl hover:shadow-amber-500/20 hover:-translate-y-2">
+                <div className="relative h-48 overflow-hidden">
+                  <Image
+                    src="/new-year-celebration.jpg"
+                    alt="New Year's Eve Menu"
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/50 to-transparent" />
+                  
+                  {/* Badge */}
+                  <div className="absolute top-4 right-4">
+                    <div className="px-3 py-1.5 bg-gradient-to-r from-slate-800 to-amber-600 text-white rounded-full text-xs font-semibold shadow-lg flex items-center gap-1">
+                      <PartyPopper className="w-3 h-3" />
+                      Ring in 2026
+                    </div>
+                  </div>
+
+                  {/* Icon */}
+                  <div className="absolute bottom-4 left-4">
+                    <div className="w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
+                      <PartyPopper className="w-6 h-6 text-amber-600" />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-6">
+                  <div className="flex items-center gap-2 text-amber-400 text-sm mb-2">
+                    <Calendar className="w-4 h-4" />
+                    <span>31st December 2025</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-amber-400 transition-colors">
+                    New Year's Eve
+                  </h3>
+                  <p className="text-slate-300 text-sm mb-4 leading-relaxed">
+                    Welcome 2026 in style with an elegant three-course dinner
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold text-amber-400">£78.95 per person</span>
+                    <ArrowRight className="w-5 h-5 text-amber-400 group-hover:translate-x-2 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* CTA Button */}
+          <div className="text-center mt-12">
+            <Button
+              asChild
+              className="px-10 py-6 bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-600 hover:to-yellow-500 text-white rounded-full text-lg font-medium transition-all duration-300 shadow-xl hover:shadow-amber-500/30"
+            >
+              <Link href="/reserve" className="flex items-center gap-2">
+                <Calendar className="w-5 h-5" />
+                <span>Book Your Celebration</span>
                 <ArrowRight className="w-5 h-5" aria-hidden="true" />
               </Link>
             </Button>
