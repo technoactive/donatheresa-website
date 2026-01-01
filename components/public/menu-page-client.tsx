@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
-import { Crown, Wine, Clock, Sparkles, ArrowRight, Utensils, TreePine, PartyPopper, Gift } from "lucide-react"
+import { Crown, Wine, Clock, ArrowRight, Utensils } from "lucide-react"
 import { useEffect, useState } from "react"
 
 const menuCategories = [
@@ -30,42 +30,6 @@ const menuCategories = [
     link: "/menu/lunchtime-earlybird",
     gradient: "from-amber-500 to-yellow-500",
     bgColor: "bg-yellow-50",
-  },
-  {
-    id: "december-christmas-menu",
-    title: "December Menu",
-    subtitle: "Festive celebration",
-    description: "Enjoy our special December menu with 2 or 3 course options, featuring seasonal favorites with an Italian twist",
-    image: "/pera-alforno.jpg",
-    icon: Sparkles,
-    highlight: "December Special",
-    link: "/menu/december-christmas-menu",
-    gradient: "from-emerald-500 to-red-500",
-    bgColor: "bg-red-50",
-  },
-  {
-    id: "christmas-day",
-    title: "Christmas Day",
-    subtitle: "25th December 2025",
-    description: "Celebrate Christmas with your loved ones. Three-course Italian feast for a magical family celebration",
-    image: "/christmas-dinner.jpg",
-    icon: TreePine,
-    highlight: "£78.95 per person",
-    link: "/menu/christmas-day",
-    gradient: "from-red-600 to-emerald-600",
-    bgColor: "bg-red-50",
-  },
-  {
-    id: "new-year",
-    title: "New Year's Eve",
-    subtitle: "31st December 2025",
-    description: "Welcome 2026 in style with an elegant three-course dinner and celebratory atmosphere",
-    image: "/new-year-celebration.jpg",
-    icon: PartyPopper,
-    highlight: "£78.95 per person",
-    link: "/menu/new-year",
-    gradient: "from-slate-900 to-amber-600",
-    bgColor: "bg-amber-50",
   },
 ]
 
@@ -226,7 +190,7 @@ export default function MenuPageClient() {
           </div>
 
           {/* Menu Cards Grid - Optimized */}
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {menuCategories.map((category, index) => (
               <div
                 key={category.id}

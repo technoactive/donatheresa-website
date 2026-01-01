@@ -30,28 +30,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
-      url: `${baseUrl}/menu/december-christmas-menu`,
-      lastModified,
-      changeFrequency: 'weekly',
-      priority: 0.85,
-    },
-    {
       url: `${baseUrl}/menu/a-la-carte`,
       lastModified,
       changeFrequency: 'weekly',
       priority: 0.85,
-    },
-    {
-      url: `${baseUrl}/menu/christmas-day`,
-      lastModified,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/menu/new-year`,
-      lastModified,
-      changeFrequency: 'weekly',
-      priority: 0.9,
     },
     {
       url: `${baseUrl}/contact`,
