@@ -62,13 +62,29 @@ export default function ContactPageClient() {
           message: ""
         })
         
-        // Track conversion in Google Analytics
-        if (result.conversionData) {
-          import('@/lib/analytics').then(({ trackContactFormEvent }) => {
-            trackContactFormEvent('submit', {
-              contact_type: result.conversionData.contactType,  // Fixed: use contactType for proper categorization
-              subject: result.conversionData.subject            // Include subject as additional parameter
-            })
+        // Track conversion in Google Analytics SYNCHRONOUSLY
+        if (result.conversionData && typeof window !== 'undefined' && window.gtag) {
+          const { messageId, subject, contactType } = result.conversionData
+          
+          console.log('[GA4] Tracking generate_lead event:', { messageId, subject, contactType })
+          
+          // Fire generate_lead event (this is what GA4 counts as a lead)
+          window.gtag('event', 'generate_lead', {
+            currency: 'GBP',
+            value: 10, // Estimated value of a contact form lead
+            lead_source: 'website_contact_form',
+            form_id: 'contact_page_form',
+            form_name: 'Contact Form',
+            contact_type: contactType,
+            subject_category: subject,
+            device_type: /mobile|android|iphone/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
+          })
+          
+          // Also fire a contact_form_submit event for easier tracking
+          window.gtag('event', 'contact_form_submit', {
+            message_id: messageId,
+            subject: subject,
+            contact_type: contactType
           })
         }
       } else {
