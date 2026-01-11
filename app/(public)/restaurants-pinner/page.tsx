@@ -313,19 +313,19 @@ export default function RestaurantsPinnerPage() {
             
             <div className="bg-white rounded-2xl p-8 shadow-lg">
               <h3 className="text-2xl font-bold mb-4 text-amber-600">
-                Christmas Menu Available
+                À La Carte Dining
               </h3>
               <p className="text-slate-700 mb-6">
-                Celebrate the festive season at one of Pinner's most atmospheric restaurants. 
-                Special Christmas menu now available for booking.
+                Experience authentic Italian cuisine at one of Pinner's finest restaurants. 
+                Our à la carte menu features traditional recipes with fresh, quality ingredients.
               </p>
               <ul className="space-y-2 text-slate-700 mb-6">
-                <li>• 3-course festive menu</li>
-                <li>• Group bookings welcome</li>
-                <li>• Limited availability</li>
+                <li>• Authentic Italian dishes</li>
+                <li>• Fresh pasta made daily</li>
+                <li>• Extensive wine selection</li>
               </ul>
               <Button asChild className="w-full">
-                <Link href="/menu/december-christmas-menu">View Christmas Menu</Link>
+                <Link href="/menu/a-la-carte">View Full Menu</Link>
               </Button>
             </div>
           </div>

@@ -114,6 +114,22 @@ const nextConfig = {
         destination: '/menu/a-la-carte',
         permanent: true,
       },
+      // Redirect old seasonal menus to main menu
+      {
+        source: '/menu/december-christmas-menu',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/menu/christmas-day',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/menu/new-year',
+        destination: '/menu',
+        permanent: true,
+      },
     ]
   },
 }

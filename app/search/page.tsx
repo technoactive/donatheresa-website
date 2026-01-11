@@ -26,8 +26,8 @@ export default function SearchPage({
         router.push('/about')
       } else if (query.includes('lunch')) {
         router.push('/menu/lunchtime-earlybird')
-      } else if (query.includes('christmas')) {
-        router.push('/menu/december-christmas-menu')
+      } else if (query.includes('carte') || query.includes('dinner')) {
+        router.push('/menu/a-la-carte')
       } else {
         // If no match, redirect to homepage
         router.push('/')

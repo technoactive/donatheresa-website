@@ -118,11 +118,6 @@ export default function NotFound() {
                       À La Carte Menu
                     </Link>
                   </li>
-                  <li>
-                    <Link href="/menu/december-christmas-menu" className="text-amber-600 hover:text-amber-700 transition-colors">
-                      Christmas Menu
-                    </Link>
-                  </li>
                 </ul>
               </div>
               <div>
