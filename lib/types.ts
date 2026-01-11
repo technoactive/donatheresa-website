@@ -38,11 +38,13 @@ export type Booking = {
   id: string
   customerName: string
   customerEmail: string
+  customerPhone?: string
   partySize: number
   bookingTime: Date
-  status: "pending" | "confirmed" | "cancelled"
+  status: "pending" | "confirmed" | "cancelled" | "completed"
   source: "website" | "dashboard"
   notes?: string
+  bookingReference?: string
 }
 
 export interface ServicePeriod {

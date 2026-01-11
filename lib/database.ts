@@ -10,7 +10,7 @@ export interface Booking {
   booking_time: string
   booking_reference?: string
   party_size: number
-  status: 'pending' | 'confirmed' | 'cancelled'
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed'
   source: 'website' | 'dashboard'
   special_requests?: string
   created_at: string

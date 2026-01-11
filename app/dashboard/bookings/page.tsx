@@ -34,11 +34,13 @@ export default async function BookingsPage() {
       id: booking.id,
       customerName: booking.customer.name,
       customerEmail: booking.customer.email,
+      customerPhone: booking.customer.phone,
       partySize: booking.party_size,
       bookingTime: new Date(`${booking.booking_date}T${booking.booking_time}`),
-      status: booking.status as "pending" | "confirmed" | "cancelled",
+      status: booking.status as "pending" | "confirmed" | "cancelled" | "completed",
       source: booking.source as "website" | "dashboard",
-      notes: booking.special_requests || ""
+      notes: booking.special_requests || "",
+      bookingReference: booking.booking_reference
     }))
 
     return (

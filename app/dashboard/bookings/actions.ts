@@ -103,12 +103,12 @@ export async function cancelBookingAction(bookingId: string) {
   }
 }
 
-export async function updateBookingStatusAction(bookingId: string, status: "pending" | "confirmed" | "cancelled") {
+export async function updateBookingStatusAction(bookingId: string, status: "pending" | "confirmed" | "cancelled" | "completed") {
   if (!bookingId) {
     return { error: "Booking ID is required." }
   }
 
-  if (!status || !["pending", "confirmed", "cancelled"].includes(status)) {
+  if (!status || !["pending", "confirmed", "cancelled", "completed"].includes(status)) {
     return { error: "Valid status is required." }
   }
 
@@ -150,10 +150,11 @@ export async function updateBookingStatusAction(bookingId: string, status: "pend
 
     revalidatePath("/dashboard/bookings")
     
-    const statusMessages = {
+    const statusMessages: Record<string, string> = {
       confirmed: "Booking confirmed successfully.",
       pending: "Booking moved to pending.",
-      cancelled: "Booking cancelled."
+      cancelled: "Booking cancelled.",
+      completed: "Booking marked as completed."
     }
     
     return { data: statusMessages[status] }

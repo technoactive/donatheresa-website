@@ -32,13 +32,15 @@ interface BookingsTableProps {
 
 const StatusBadge = React.memo(({ status }: { status: string }) => (
   <Badge
-    variant={status === "confirmed" ? "default" : status === "pending" ? "outline" : "destructive"}
+    variant={status === "confirmed" ? "default" : status === "pending" ? "outline" : status === "completed" ? "secondary" : "destructive"}
     className={cn(
       "capitalize text-xs", // Added text-xs for smaller badge
       status === "confirmed" &&
         "bg-green-100 text-green-800 border-green-200",
       status === "pending" &&
         "bg-yellow-100 text-yellow-800 border-yellow-200",
+      status === "completed" &&
+        "bg-blue-100 text-blue-800 border-blue-200",
     )}
   >
     {status}
@@ -79,7 +81,7 @@ const MobileBookingCard = React.memo(({
   booking: Booking
   onEdit: (booking: Booking) => void
   onCancel: (booking: Booking) => void
-  onStatusChange: (bookingId: string, status: "pending" | "confirmed" | "cancelled") => void
+  onStatusChange: (bookingId: string, status: "pending" | "confirmed" | "cancelled" | "completed") => void
   isReadOnly: boolean
   isPending: boolean
 }) => (
@@ -90,6 +92,11 @@ const MobileBookingCard = React.memo(({
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2 flex-wrap">
           <h4 className="font-medium text-sm text-slate-900 truncate">{booking.customerName}</h4>
+          {booking.bookingReference && (
+            <span className="text-xs font-mono bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">
+              #{booking.bookingReference}
+            </span>
+          )}
           <span className="text-xs text-slate-600">
             {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
               hour: '2-digit', 
@@ -155,8 +162,8 @@ const MobileBookingCard = React.memo(({
       {/* Right side - Action buttons */}
       {!isReadOnly && (
         <div className="flex items-center gap-2"> {/* Increased gap from gap-1 to gap-2 */}
-          {/* Accept button - show if not confirmed */}
-          {booking.status !== "confirmed" && (
+          {/* Accept button - show if not confirmed and not completed */}
+          {booking.status !== "confirmed" && booking.status !== "completed" && (
             <Button
               size="icon"
               variant="ghost"
@@ -169,8 +176,22 @@ const MobileBookingCard = React.memo(({
             </Button>
           )}
           
-          {/* Pending button - show if not pending */}
-          {booking.status !== "pending" && (
+          {/* Completed button - show if confirmed (past bookings) */}
+          {booking.status === "confirmed" && (
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => onStatusChange(booking.id, "completed")}
+              disabled={isPending}
+              className="h-11 w-11 text-blue-600 hover:bg-blue-50"
+              title="Mark as completed"
+            >
+              <CheckIcon className="h-5 w-5" />
+            </Button>
+          )}
+          
+          {/* Pending button - show if not pending and not completed */}
+          {booking.status !== "pending" && booking.status !== "completed" && (
             <Button
               size="icon"
               variant="ghost"
@@ -183,8 +204,8 @@ const MobileBookingCard = React.memo(({
             </Button>
           )}
           
-          {/* Cancel button - show if not cancelled */}
-          {booking.status !== "cancelled" && (
+          {/* Cancel button - show if not cancelled and not completed */}
+          {booking.status !== "cancelled" && booking.status !== "completed" && (
             <Button
               size="icon"
               variant="ghost"
@@ -260,7 +281,7 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
     })
   }, [])
 
-  const handleStatusChange = React.useCallback((bookingId: string, status: "pending" | "confirmed" | "cancelled") => {
+  const handleStatusChange = React.useCallback((bookingId: string, status: "pending" | "confirmed" | "cancelled" | "completed") => {
     startTransition(async () => {
       try {
         const result = await updateBookingStatusAction(bookingId, status)
@@ -408,6 +429,11 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                       <div className="truncate">
                         <div className="flex items-center gap-2">
                           <div className="font-medium text-slate-900 truncate">{booking.customerName}</div>
+                          {booking.bookingReference && (
+                            <span className="text-xs font-mono bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded flex-shrink-0">
+                              #{booking.bookingReference}
+                            </span>
+                          )}
                           {booking.notes && (
                             <Popover>
                               <PopoverTrigger asChild>
@@ -474,42 +500,56 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                       <TableCell className="text-right">
                         <div className="flex justify-end items-center gap-1 flex-wrap">
                           {/* Same icon buttons as mobile/tablet */}
-                          {booking.status !== "confirmed" && (
+                          {booking.status !== "confirmed" && booking.status !== "completed" && (
                             <Button
                               size="icon"
                               variant="ghost"
                               onClick={() => handleStatusChange(booking.id, "confirmed")}
                               disabled={isPending}
-                              className="h-10 w-10 text-green-600 hover:bg-green-50" // Reduced from h-11 w-11
+                              className="h-10 w-10 text-green-600 hover:bg-green-50"
                               title="Accept booking"
                             >
-                              <CheckIcon className="h-4 w-4" /> {/* Reduced from h-5 w-5 */}
+                              <CheckIcon className="h-4 w-4" />
                             </Button>
                           )}
                           
-                          {booking.status !== "pending" && (
+                          {/* Completed button - show if confirmed (past bookings) */}
+                          {booking.status === "confirmed" && (
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => handleStatusChange(booking.id, "completed")}
+                              disabled={isPending}
+                              className="h-10 w-10 text-blue-600 hover:bg-blue-50"
+                              title="Mark as completed"
+                            >
+                              <CheckIcon className="h-4 w-4" />
+                            </Button>
+                          )}
+                          
+                          {booking.status !== "pending" && booking.status !== "completed" && (
                             <Button
                               size="icon"
                               variant="ghost"
                               onClick={() => handleStatusChange(booking.id, "pending")}
                               disabled={isPending}
-                              className="h-10 w-10 text-yellow-600 hover:bg-yellow-50" // Reduced from h-11 w-11
+                              className="h-10 w-10 text-yellow-600 hover:bg-yellow-50"
                               title="Set to pending"
                             >
-                              <ClockIcon className="h-4 w-4" /> {/* Reduced from h-5 w-5 */}
+                              <ClockIcon className="h-4 w-4" />
                             </Button>
                           )}
                           
-                          {booking.status !== "cancelled" && (
+                          {booking.status !== "cancelled" && booking.status !== "completed" && (
                             <Button
                               size="icon"
                               variant="ghost"
                               onClick={() => handleStatusChange(booking.id, "cancelled")}
                               disabled={isPending}
-                              className="h-10 w-10 text-red-600 hover:bg-red-50" // Reduced from h-11 w-11
+                              className="h-10 w-10 text-red-600 hover:bg-red-50"
                               title="Cancel booking"
                             >
-                              <Cross2Icon className="h-4 w-4" /> {/* Reduced from h-5 w-5 */}
+                              <Cross2Icon className="h-4 w-4" />
                             </Button>
                           )}
                           
@@ -517,10 +557,10 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                             size="icon"
                             variant="ghost"
                             onClick={() => handleEdit(booking)}
-                            className="h-10 w-10 text-slate-600 hover:bg-slate-50" // Reduced from h-11 w-11
+                            className="h-10 w-10 text-slate-600 hover:bg-slate-50"
                             title="Edit booking"
                           >
-                            <Pencil2Icon className="h-4 w-4" /> {/* Reduced from h-5 w-5 */}
+                            <Pencil2Icon className="h-4 w-4" />
                           </Button>
                         </div>
                       </TableCell>

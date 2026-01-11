@@ -5,7 +5,7 @@ import { BookingsTable } from "@/components/dashboard/bookings-table"
 import { DatePickerWithClear } from "@/components/dashboard/date-picker-with-clear"
 import { EditBookingDialog } from "@/components/dashboard/edit-booking-dialog"
 import type { Booking } from "@/lib/types"
-import { Users, CalendarCheck, Clock, Users2, CalendarDays, Search, AlertCircle, ChevronRight, Check, X, Pencil, MessageSquare } from "lucide-react"
+import { Users, CalendarCheck, Clock, Users2, CalendarDays, Search, AlertCircle, ChevronRight, Check, X, Pencil, MessageSquare, Download } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -353,6 +353,59 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
   )
 }
 
+// CSV Export utility function
+function exportBookingsToCSV(bookings: Booking[], filename: string = 'bookings') {
+  // Define CSV headers
+  const headers = [
+    'Booking Reference',
+    'Customer Name',
+    'Email',
+    'Phone',
+    'Date',
+    'Time',
+    'Party Size',
+    'Status',
+    'Source',
+    'Special Requests'
+  ]
+  
+  // Convert bookings to CSV rows
+  const rows = bookings.map(booking => {
+    const bookingDate = new Date(booking.bookingTime)
+    return [
+      booking.bookingReference || booking.id.substring(0, 8),
+      booking.customerName,
+      booking.customerEmail,
+      booking.customerPhone || '',
+      bookingDate.toLocaleDateString('en-GB'),
+      bookingDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+      booking.partySize.toString(),
+      booking.status,
+      booking.source,
+      (booking.notes || '').replace(/"/g, '""') // Escape quotes
+    ]
+  })
+  
+  // Build CSV content
+  const csvContent = [
+    headers.join(','),
+    ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+  ].join('\n')
+  
+  // Create and download file
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+  const link = document.createElement('a')
+  const url = URL.createObjectURL(blob)
+  
+  const dateStr = new Date().toISOString().split('T')[0]
+  link.setAttribute('href', url)
+  link.setAttribute('download', `${filename}_${dateStr}.csv`)
+  link.style.visibility = 'hidden'
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
 // Main improved client component
 export function BookingsPageClientV2({ bookings }: { bookings: Booking[] }) {
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(undefined)
@@ -417,14 +470,26 @@ export function BookingsPageClientV2({ bookings }: { bookings: Booking[] }) {
             Manage your restaurant bookings efficiently
           </p>
         </div>
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <Search className="h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search all bookings by name or email..."
-            value={globalSearchTerm}
-            onChange={(e) => setGlobalSearchTerm(e.target.value)}
-            className="w-full sm:w-80"
-          />
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+          <div className="flex items-center gap-2 flex-1 sm:flex-initial">
+            <Search className="h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search all bookings by name or email..."
+              value={globalSearchTerm}
+              onChange={(e) => setGlobalSearchTerm(e.target.value)}
+              className="w-full sm:w-80"
+            />
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => exportBookingsToCSV(allUpcomingBookings, 'upcoming_bookings')}
+            className="flex items-center gap-2"
+          >
+            <Download className="h-4 w-4" />
+            <span className="hidden sm:inline">Export CSV</span>
+            <span className="sm:hidden">Export</span>
+          </Button>
         </div>
       </div>
       

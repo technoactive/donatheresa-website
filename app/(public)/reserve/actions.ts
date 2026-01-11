@@ -109,6 +109,36 @@ export async function createBooking(prevState: any, formData: FormData) {
       }
     }
 
+    // Check for duplicate booking (same phone number on same date)
+    const { createClient } = await import('@/lib/supabase/server')
+    const supabase = await createClient()
+    
+    // First check if customer exists with this phone
+    const { data: existingCustomer } = await supabase
+      .from('customers')
+      .select('id')
+      .eq('phone', phone)
+      .single()
+    
+    if (existingCustomer) {
+      // Check if they already have a booking on this date
+      const { data: existingBooking } = await supabase
+        .from('bookings')
+        .select('id, booking_time')
+        .eq('customer_id', existingCustomer.id)
+        .eq('booking_date', date)
+        .neq('status', 'cancelled')
+        .single()
+      
+      if (existingBooking) {
+        return {
+          message: "You already have a booking on this date.",
+          description: `You have an existing reservation at ${existingBooking.booking_time}. Please call us at 020 8421 5550 if you need to modify your booking.`,
+          success: false,
+        }
+      }
+    }
+
     // Create customer and booking
     const { customer, booking } = await createBookingWithCustomer({
       customer: {
@@ -215,11 +245,15 @@ export async function createBooking(prevState: any, formData: FormData) {
     const formattedDate = formatDateWithLocale(bookingDateTime, localeSettings.date_format, localeSettings.language_code)
     const formattedTime = format(bookingDateTime, localeSettings.time_format === 'HH:mm' ? 'HH:mm' : 'h:mm a')
     
+    // Build confirmation message with booking reference
+    const bookingRef = booking.booking_reference || booking.id.substring(0, 8).toUpperCase()
+    
     return {
       message: `Booking confirmed for ${name}!`,
-      description: `Thank you, ${name}. Your reservation for ${partySize} ${partySize === 1 ? 'person' : 'people'} on ${formattedDate} at ${formattedTime} is confirmed. ${email && email.includes('@') && !email.includes('phone-only.local') ? "You'll receive a confirmation email shortly." : "We'll contact you if we need to discuss any special requests."}`,
+      description: `Thank you, ${name}. Your reservation (Ref: ${bookingRef}) for ${partySize} ${partySize === 1 ? 'person' : 'people'} on ${formattedDate} at ${formattedTime} is confirmed. ${email && email.includes('@') && !email.includes('phone-only.local') ? "You'll receive a confirmation email shortly." : "We'll contact you if we need to discuss any special requests."}`,
       success: true,
       bookingId: booking.id,
+      bookingReference: bookingRef,
       // Include conversion data for client-side tracking
       conversionData: {
         bookingId: booking.id,
