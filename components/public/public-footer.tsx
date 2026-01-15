@@ -1,7 +1,23 @@
 "use client"
 
 import Link from "next/link"
-import { MapPin, Phone, Clock, Instagram, Facebook, ArrowUp } from "lucide-react"
+import { MapPin, Phone, Clock, Instagram, Facebook, ArrowUp, LucideProps } from "lucide-react"
+
+// Custom TikTok icon (not available in lucide-react)
+const TikTok = (props: LucideProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+)
 import { Button } from "@/components/ui/button"
 import { RestaurantInfo, RestaurantPhoneLink } from "@/components/locale/restaurant-info"
 
@@ -44,7 +60,8 @@ const footerLinks = [
 
 const socialLinks = [
   { icon: Instagram, href: "https://www.instagram.com/donatheresahatchend/", label: "Instagram" },
-  { icon: Facebook, href: "https://www.facebook.com/profile.php?id=100063506503168", label: "Facebook" }
+  { icon: Facebook, href: "https://www.facebook.com/profile.php?id=100063506503168", label: "Facebook" },
+  { icon: TikTok, href: "https://www.tiktok.com/@dona.theresa", label: "TikTok" }
 ]
 
 export function PublicFooter() {
