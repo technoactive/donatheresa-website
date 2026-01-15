@@ -12,7 +12,7 @@ const menuCategories = [
     title: "Valentine's Day",
     subtitle: "14th February 2026",
     description: "Celebrate love with a romantic 3-course Italian dinner in a candlelit atmosphere",
-    image: "/hero-main.png",
+    image: "/valentines-romantic.jpg",
     icon: Heart,
     highlight: "£39.95 per person",
     link: "/menu/valentines-day",
