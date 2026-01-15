@@ -76,10 +76,8 @@ export const valentinesMenuDetails = {
   price: "39.95",
   priceNote: "per person",
   includes: [
-    "Welcome glass of Prosecco",
     "3-course meal",
-    "Red rose for your loved one",
-    "Live romantic music"
+    "Romantic candlelit atmosphere"
   ],
   dates: "Friday 14th February 2026",
   times: "From 6:00 PM",

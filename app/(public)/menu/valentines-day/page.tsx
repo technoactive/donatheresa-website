@@ -1,7 +1,7 @@
 "use client"
 
 import { valentinesMenuData, valentinesMenuDetails, valentinesMenuNotes } from "@/lib/valentines-menu-data"
-import { Heart, Calendar, Clock, Sparkles, Music, Wine, Gift, Star } from "lucide-react"
+import { Heart, Calendar, Clock, Sparkles, Star, Flame } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
@@ -88,25 +88,17 @@ export default function ValentinesDayMenuPage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Your <span className="text-rose-600">Valentine's Experience</span> Includes
+            Your <span className="text-rose-600">Valentine's Experience</span>
           </h2>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            <div className="text-center p-6 bg-rose-50 rounded-2xl">
-              <Wine className="w-10 h-10 text-rose-500 mx-auto mb-3" />
-              <p className="font-semibold text-slate-800">Welcome Prosecco</p>
-            </div>
+          <div className="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
             <div className="text-center p-6 bg-rose-50 rounded-2xl">
               <Sparkles className="w-10 h-10 text-rose-500 mx-auto mb-3" />
               <p className="font-semibold text-slate-800">3-Course Dinner</p>
             </div>
             <div className="text-center p-6 bg-rose-50 rounded-2xl">
-              <Gift className="w-10 h-10 text-rose-500 mx-auto mb-3" />
-              <p className="font-semibold text-slate-800">Red Rose</p>
-            </div>
-            <div className="text-center p-6 bg-rose-50 rounded-2xl">
-              <Music className="w-10 h-10 text-rose-500 mx-auto mb-3" />
-              <p className="font-semibold text-slate-800">Live Music</p>
+              <Flame className="w-10 h-10 text-rose-500 mx-auto mb-3" />
+              <p className="font-semibold text-slate-800">Candlelit Atmosphere</p>
             </div>
           </div>
         </div>
