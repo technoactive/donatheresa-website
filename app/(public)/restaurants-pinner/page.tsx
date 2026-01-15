@@ -8,7 +8,7 @@ import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
   title: 'Restaurants in Pinner | Best Italian Restaurant Near Me | Dona Theresa',
-  description: 'Searching for restaurants in Pinner? Top-rated Italian on Uxbridge Road. Fresh pasta, pizza, steaks. Lunch £19.95. Free parking. Book online or call 020 8421 5550!',
+  description: '⭐ Top-rated Pinner restaurant! Authentic Italian • Lunch £19.95 • FREE parking • 4.8★ reviews. Book now ☎️ 020 8421 5550',
   keywords: [
     'pinner restaurants',
     'restaurants in pinner',
@@ -395,6 +395,63 @@ export default function RestaurantsPinnerPage() {
         </div>
       </section>
 
+      {/* FAQ Section for Rich Snippets */}
+      <section className="py-16 bg-slate-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Frequently Asked Questions About Pinner Restaurants
+          </h2>
+          
+          <div className="space-y-6">
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <h3 className="text-xl font-semibold mb-3">What is the best Italian restaurant in Pinner?</h3>
+              <p className="text-slate-700">
+                Dona Theresa is rated the best Italian restaurant in Pinner, with over 13 years serving 
+                authentic Italian cuisine. We have a 4.8-star rating and are known for fresh pasta made daily, 
+                premium steaks, and our popular £19.95 lunch special. Located at 451 Uxbridge Road with free parking.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <h3 className="text-xl font-semibold mb-3">Where can I find restaurants in Pinner with parking?</h3>
+              <p className="text-slate-700">
+                Dona Theresa offers FREE customer parking on-site, making it one of the most convenient 
+                restaurants in Pinner. We're located on Uxbridge Road between Pinner and Hatch End, 
+                with easy access from the A40 and M25. Most Pinner high street restaurants have limited parking.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <h3 className="text-xl font-semibold mb-3">What are the best places to eat in Pinner?</h3>
+              <p className="text-slate-700">
+                For authentic Italian dining, Dona Theresa is the top choice among places to eat in Pinner. 
+                We offer an exceptional lunch menu for £19.95, an extensive à la carte selection, and a 
+                romantic atmosphere perfect for date nights and celebrations. Other options in Pinner include 
+                various cafes and international restaurants on the high street.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <h3 className="text-xl font-semibold mb-3">Is Dona Theresa open for lunch in Pinner?</h3>
+              <p className="text-slate-700">
+                Yes! We serve lunch Tuesday to Sunday from 12:00-15:00. Our Lunchtime & Early Bird menu 
+                at £19.95 for 2 courses is the best lunch deal among Pinner restaurants. The menu features 
+                classic Italian starters and mains including fresh pasta, risotto, and grilled dishes.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <h3 className="text-xl font-semibold mb-3">Can I book a table online at Pinner restaurants?</h3>
+              <p className="text-slate-700">
+                Yes! Dona Theresa offers easy online booking at donatheresa.com/reserve. You can also call 
+                us on 020 8421 5550. We recommend booking in advance for weekend dinners. Walk-ins are 
+                welcome but subject to availability.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <section className="py-20 bg-gradient-to-b from-amber-50 to-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -418,6 +475,51 @@ export default function RestaurantsPinnerPage() {
           </div>
         </div>
       </section>
+      
+      {/* FAQ Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is the best Italian restaurant in Pinner?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Dona Theresa is rated the best Italian restaurant in Pinner, with over 13 years serving authentic Italian cuisine. We have a 4.8-star rating and are known for fresh pasta made daily, premium steaks, and our popular £19.95 lunch special."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Where can I find restaurants in Pinner with parking?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Dona Theresa offers FREE customer parking on-site, making it one of the most convenient restaurants in Pinner. We're located on Uxbridge Road between Pinner and Hatch End."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What are the best places to eat in Pinner?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "For authentic Italian dining, Dona Theresa is the top choice among places to eat in Pinner. We offer an exceptional lunch menu for £19.95, an extensive à la carte selection, and a romantic atmosphere."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is Dona Theresa open for lunch in Pinner?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes! We serve lunch Tuesday to Sunday from 12:00-15:00. Our Lunchtime & Early Bird menu at £19.95 for 2 courses is the best lunch deal among Pinner restaurants."
+                }
+              }
+            ]
+          })
+        }}
+      />
     </>
   )
 }

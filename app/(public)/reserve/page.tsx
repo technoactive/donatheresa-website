@@ -13,7 +13,7 @@ export const fetchCache = 'force-no-store'
 
 export const metadata: Metadata = {
   title: "Book Table | Dona Theresa Italian Restaurant Pinner",
-  description: "Book your table at Dona Theresa Italian restaurant. Online reservations for lunch £19.95 & dinner. Call: 020 8421 5550",
+  description: "📅 Book your table now! Lunch £19.95 • Dinner Tue-Sun • FREE parking • Instant confirmation. ☎️ 020 8421 5550",
   keywords: [
     "restaurants near me booking",
     "italian restaurant near me reserve",

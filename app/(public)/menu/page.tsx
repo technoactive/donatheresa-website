@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: "Menu | Dona Theresa Italian Restaurant | £19.95 Lunch",
-  description: "Italian menu at Dona Theresa. Lunch £19.95, steaks, pasta, wines. 451 Uxbridge Road, Pinner. Book: 020 8421 5550",
+  description: "🍝 View our Italian menu! Lunch 2 courses £19.95 • Fresh pasta • Premium steaks • 50+ wines. Book ☎️ 020 8421 5550",
   keywords: [
     "restaurants pinner menu",
     "restaurants hatch end menu",

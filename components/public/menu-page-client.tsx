@@ -3,10 +3,22 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
-import { Crown, Wine, Clock, ArrowRight, Utensils } from "lucide-react"
+import { Crown, Wine, Clock, ArrowRight, Utensils, Heart } from "lucide-react"
 import { useEffect, useState } from "react"
 
 const menuCategories = [
+  {
+    id: "valentines-day",
+    title: "Valentine's Day",
+    subtitle: "14th February 2026",
+    description: "Celebrate love with a romantic 3-course dinner. Prosecco, rose & live music included",
+    image: "/hero-main.png",
+    icon: Heart,
+    highlight: "£89.95 per person",
+    link: "/menu/valentines-day",
+    gradient: "from-rose-500 to-pink-500",
+    bgColor: "bg-rose-50",
+  },
   {
     id: "a-la-carte",
     title: "À La Carte Menu",

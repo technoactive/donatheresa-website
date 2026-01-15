@@ -8,7 +8,7 @@ import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
   title: 'Restaurants in Hatch End | Best Italian Restaurant | Dona Theresa',
-  description: 'Looking for restaurants in Hatch End? Dona Theresa is the top-rated Italian restaurant on Uxbridge Road. Fresh pasta, steaks, lunch £19.95. Book now!',
+  description: '⭐ #1 rated restaurant in Hatch End! Authentic Italian • Lunch £19.95 • FREE parking • Open Tue-Sun. Book now ☎️ 020 8421 5550',
   keywords: [
     'hatch end restaurants',
     'restaurants in hatch end',
@@ -283,6 +283,62 @@ export default function RestaurantsHatchEndPage() {
         </div>
       </section>
 
+      {/* FAQ Section for Rich Snippets */}
+      <section className="py-16 bg-white">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Frequently Asked Questions About Hatch End Restaurants
+          </h2>
+          
+          <div className="space-y-6">
+            <div className="border-b pb-6">
+              <h3 className="text-xl font-semibold mb-3">What is the best restaurant in Hatch End?</h3>
+              <p className="text-slate-700">
+                Dona Theresa is consistently rated the best restaurant in Hatch End, with a 4.8-star rating 
+                on TripAdvisor and Google. We specialise in authentic Italian cuisine with fresh pasta made 
+                daily, premium steaks, and an extensive wine list. Located at 451 Uxbridge Road with free parking.
+              </p>
+            </div>
+            
+            <div className="border-b pb-6">
+              <h3 className="text-xl font-semibold mb-3">Is there free parking at restaurants in Hatch End?</h3>
+              <p className="text-slate-700">
+                Yes! Dona Theresa offers FREE customer parking on-site, which is rare among Hatch End restaurants. 
+                We're located on Uxbridge Road with easy access from the A40 and M25, making us one of the most 
+                convenient dining options in the area.
+              </p>
+            </div>
+            
+            <div className="border-b pb-6">
+              <h3 className="text-xl font-semibold mb-3">What are the best lunch deals in Hatch End?</h3>
+              <p className="text-slate-700">
+                Our Lunchtime & Early Bird menu offers exceptional value at just £19.95 for 2 courses. 
+                Available Tuesday to Sunday, 12:00-15:00, this is widely considered the best lunch deal 
+                among all Hatch End restaurants. The menu includes Italian classics like fresh pasta, 
+                risotto, and grilled dishes.
+              </p>
+            </div>
+            
+            <div className="border-b pb-6">
+              <h3 className="text-xl font-semibold mb-3">Do I need to book a table at Hatch End restaurants?</h3>
+              <p className="text-slate-700">
+                We recommend booking in advance, especially for Friday and Saturday evenings. You can 
+                book online at donatheresa.com/reserve or call us on 020 8421 5550. Walk-ins are welcome 
+                but subject to availability.
+              </p>
+            </div>
+            
+            <div className="pb-6">
+              <h3 className="text-xl font-semibold mb-3">What time do Hatch End restaurants close?</h3>
+              <p className="text-slate-700">
+                Dona Theresa is open Tuesday to Sunday. Lunch service: 12:00-15:00, Dinner service: 18:00-23:00. 
+                We're closed on Mondays. Last orders for food are typically 30 minutes before closing.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-b from-amber-50 to-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -306,6 +362,51 @@ export default function RestaurantsHatchEndPage() {
           </div>
         </div>
       </section>
+      
+      {/* FAQ Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is the best restaurant in Hatch End?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Dona Theresa is consistently rated the best restaurant in Hatch End, with a 4.8-star rating on TripAdvisor and Google. We specialise in authentic Italian cuisine with fresh pasta made daily, premium steaks, and an extensive wine list."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is there free parking at restaurants in Hatch End?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes! Dona Theresa offers FREE customer parking on-site, which is rare among Hatch End restaurants. We're located on Uxbridge Road with easy access from the A40 and M25."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What are the best lunch deals in Hatch End?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Our Lunchtime & Early Bird menu offers exceptional value at just £19.95 for 2 courses. Available Tuesday to Sunday, 12:00-15:00."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do I need to book a table at Hatch End restaurants?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "We recommend booking in advance, especially for Friday and Saturday evenings. You can book online at donatheresa.com/reserve or call us on 020 8421 5550."
+                }
+              }
+            ]
+          })
+        }}
+      />
     </>
   )
 }
