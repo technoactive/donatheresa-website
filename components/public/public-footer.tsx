@@ -152,7 +152,7 @@ export function PublicFooter() {
           <div className="max-w-7xl mx-auto px-6 py-8">
             <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
               <div className="text-zinc-400 text-sm">
-                © 2025 <RestaurantInfo type="name" />. All rights reserved. Crafted with passion for culinary excellence.
+                © {new Date().getFullYear()} <RestaurantInfo type="name" />. All rights reserved. Crafted with passion for culinary excellence.
               </div>
               
               <div className="flex items-center gap-6">
