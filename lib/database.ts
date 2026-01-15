@@ -155,7 +155,7 @@ export async function createBooking(booking: {
   party_size: number
   special_requests?: string
   source?: 'website' | 'dashboard'
-}): Promise<Booking> {
+}): Promise<Booking & { cancellation_token?: string }> {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('bookings')
@@ -168,7 +168,7 @@ export async function createBooking(booking: {
       source: booking.source || 'website',
       status: 'confirmed'
     })
-    .select('*, booking_reference')
+    .select('*, booking_reference, cancellation_token')
     .single()
 
   if (error) throw error

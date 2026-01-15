@@ -667,6 +667,12 @@ export const EmailUtils = {
    * Send booking confirmation email
    */
   async sendBookingConfirmation(booking: any, customer: any): Promise<EmailResult> {
+    // Build cancellation link using the booking's cancellation token
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com';
+    const cancellationLink = booking.cancellation_token 
+      ? `${baseUrl}/cancel-booking?token=${booking.cancellation_token}`
+      : null;
+
     return emailService.sendEmail({
       templateKey: 'booking_confirmation',
       recipientEmail: customer.email,
@@ -679,6 +685,8 @@ export const EmailUtils = {
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
         specialRequests: booking.special_requests,
+        cancellationLink: cancellationLink,
+        hasCancellationLink: !!cancellationLink,
         calendarLink: `data:text/calendar;charset=utf8,BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
