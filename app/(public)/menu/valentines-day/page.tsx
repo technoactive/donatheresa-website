@@ -233,7 +233,7 @@ export default function ValentinesDayMenuPage() {
                 Reserve Your Table
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8">
+            <Button asChild size="lg" className="bg-white/20 border-2 border-white text-white hover:bg-white hover:text-rose-600 text-lg px-8">
               <a href="tel:02084215550">
                 Call 020 8421 5550
               </a>
