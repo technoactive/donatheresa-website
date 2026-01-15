@@ -73,7 +73,7 @@ export const valentinesMenuData = {
 }
 
 export const valentinesMenuDetails = {
-  price: "89.95",
+  price: "39.95",
   priceNote: "per person",
   includes: [
     "Welcome glass of Prosecco",

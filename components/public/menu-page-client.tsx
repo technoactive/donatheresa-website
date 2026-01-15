@@ -14,7 +14,7 @@ const menuCategories = [
     description: "Celebrate love with a romantic 3-course dinner. Prosecco, rose & live music included",
     image: "/hero-main.png",
     icon: Heart,
-    highlight: "£89.95 per person",
+    highlight: "£39.95 per person",
     link: "/menu/valentines-day",
     gradient: "from-rose-500 to-pink-500",
     bgColor: "bg-rose-50",
