@@ -178,6 +178,8 @@ export function PublicFooter() {
                     <a
                       key={social.label}
                       href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="p-3 bg-zinc-900/50 rounded-xl border border-zinc-700/50 hover:border-zinc-600 text-zinc-400 hover:text-white transition-colors duration-300"
                       aria-label={social.label}
                     >
