@@ -193,7 +193,7 @@ export function PublicFooter() {
                   onClick={scrollToTop}
                   variant="outline"
                   size="icon"
-                  className="bg-gradient-to-r from-amber-600/20 to-yellow-600/20 border-amber-400/30 hover:border-amber-400/50 text-amber-400 hover:text-white rounded-xl transition-colors duration-300"
+                  className="bg-white/10 border-white/30 hover:bg-white/20 hover:border-white/50 text-white rounded-xl transition-colors duration-300"
                 >
                   <ArrowUp className="w-5 h-5" />
                 </Button>
