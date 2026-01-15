@@ -82,18 +82,76 @@ const nextConfig = {
       },
     ]
   },
-  async     redirects() {
+  async redirects() {
     return [
+      // === WWW to non-WWW redirect ===
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.donatheresa.com' }],
+        destination: 'https://donatheresa.com/:path*',
+        permanent: true,
+      },
+      
+      // === Homepage variations ===
       {
         source: '/home',
         destination: '/',
         permanent: true,
       },
       {
+        source: '/index.html',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/index.php',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/default.html',
+        destination: '/',
+        permanent: true,
+      },
+      
+      // === Booking/Reserve variations ===
+      {
         source: '/booking',
         destination: '/reserve',
         permanent: true,
       },
+      {
+        source: '/book',
+        destination: '/reserve',
+        permanent: true,
+      },
+      {
+        source: '/book-a-table',
+        destination: '/reserve',
+        permanent: true,
+      },
+      {
+        source: '/book-table',
+        destination: '/reserve',
+        permanent: true,
+      },
+      {
+        source: '/reservations',
+        destination: '/reserve',
+        permanent: true,
+      },
+      {
+        source: '/reservation',
+        destination: '/reserve',
+        permanent: true,
+      },
+      {
+        source: '/table-booking',
+        destination: '/reserve',
+        permanent: true,
+      },
+      
+      // === Menu variations ===
       {
         source: '/our-menus.html',
         destination: '/menu',
@@ -105,7 +163,42 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/menus',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/food-menu',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/our-menu',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/menu.html',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
         source: '/lunchtime-early-bird-menu',
+        destination: '/menu/lunchtime-earlybird',
+        permanent: true,
+      },
+      {
+        source: '/lunch-menu',
+        destination: '/menu/lunchtime-earlybird',
+        permanent: true,
+      },
+      {
+        source: '/early-bird',
+        destination: '/menu/lunchtime-earlybird',
+        permanent: true,
+      },
+      {
+        source: '/earlybird',
         destination: '/menu/lunchtime-earlybird',
         permanent: true,
       },
@@ -114,7 +207,18 @@ const nextConfig = {
         destination: '/menu/a-la-carte',
         permanent: true,
       },
-      // Redirect old seasonal menus to main menu
+      {
+        source: '/a-la-carte',
+        destination: '/menu/a-la-carte',
+        permanent: true,
+      },
+      {
+        source: '/alacarte',
+        destination: '/menu/a-la-carte',
+        permanent: true,
+      },
+      
+      // === Old seasonal menus to main menu ===
       {
         source: '/menu/december-christmas-menu',
         destination: '/menu',
@@ -128,6 +232,158 @@ const nextConfig = {
       {
         source: '/menu/new-year',
         destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/christmas-menu',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/christmas',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/new-years-eve',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/new-year-menu',
+        destination: '/menu',
+        permanent: true,
+      },
+      
+      // === Contact variations ===
+      {
+        source: '/contact-us',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/get-in-touch',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/contact.html',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/enquiry',
+        destination: '/contact',
+        permanent: true,
+      },
+      {
+        source: '/enquiries',
+        destination: '/contact',
+        permanent: true,
+      },
+      
+      // === About variations ===
+      {
+        source: '/about-us',
+        destination: '/about',
+        permanent: true,
+      },
+      {
+        source: '/about.html',
+        destination: '/about',
+        permanent: true,
+      },
+      {
+        source: '/our-story',
+        destination: '/about',
+        permanent: true,
+      },
+      
+      // === Location pages variations ===
+      {
+        source: '/hatch-end',
+        destination: '/restaurants-hatch-end',
+        permanent: true,
+      },
+      {
+        source: '/pinner',
+        destination: '/restaurants-pinner',
+        permanent: true,
+      },
+      {
+        source: '/harrow',
+        destination: '/restaurants-harrow',
+        permanent: true,
+      },
+      {
+        source: '/northwood',
+        destination: '/restaurants-northwood',
+        permanent: true,
+      },
+      {
+        source: '/watford',
+        destination: '/restaurants-watford',
+        permanent: true,
+      },
+      {
+        source: '/ruislip',
+        destination: '/restaurants-ruislip',
+        permanent: true,
+      },
+      
+      // === Gallery/Images redirects ===
+      {
+        source: '/gallery',
+        destination: '/#gallery',
+        permanent: true,
+      },
+      {
+        source: '/photos',
+        destination: '/#gallery',
+        permanent: true,
+      },
+      {
+        source: '/images',
+        destination: '/#gallery',
+        permanent: true,
+      },
+      
+      // === Common typos and variations ===
+      {
+        source: '/dona-theresa',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/donatheresa',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/italian-restaurant',
+        destination: '/best-italian-restaurant-near-me',
+        permanent: true,
+      },
+      
+      // === Privacy/Legal pages ===
+      {
+        source: '/privacy',
+        destination: '/cookie-policy',
+        permanent: true,
+      },
+      {
+        source: '/privacy-policy',
+        destination: '/cookie-policy',
+        permanent: true,
+      },
+      {
+        source: '/cookies',
+        destination: '/cookie-policy',
+        permanent: true,
+      },
+      {
+        source: '/terms',
+        destination: '/cookie-policy',
         permanent: true,
       },
     ]

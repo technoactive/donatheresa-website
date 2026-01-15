@@ -9,12 +9,36 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: '*',
         allow: '/',
         disallow: [
+          // Admin and dashboard areas
           '/dashboard/',
-          '/api/',
-          '/_next/',
+          '/dashboard',
           '/admin/',
+          '/admin',
           '/login',
+          '/login/',
+          
+          // API routes
+          '/api/',
+          '/api',
+          
+          // Auth routes
           '/auth/',
+          '/auth',
+          
+          // Next.js internal routes
+          '/_next/',
+          '/_next',
+          
+          // Search functionality (internal)
+          '/search',
+          '/search/',
+          
+          // Test pages (if any)
+          '/test-',
+          '/ga-test',
+          '/verify-ga',
+          '/cookie-demo',
+          '/test-cookie',
         ],
       },
     ],

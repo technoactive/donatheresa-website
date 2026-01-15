@@ -7,6 +7,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  alternates: {
+    canonical: 'https://donatheresa.com/cookie-policy'
+  }
 }
 
 export default function CookiePolicyPage() {
