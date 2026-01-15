@@ -44,7 +44,7 @@ const footerLinks = [
 
 const socialLinks = [
   { icon: Instagram, href: "https://www.instagram.com/donatheresahatchend/", label: "Instagram" },
-  { icon: Facebook, href: "#", label: "Facebook" }
+  { icon: Facebook, href: "https://www.facebook.com/profile.php?id=100063506503168", label: "Facebook" }
 ]
 
 export function PublicFooter() {
