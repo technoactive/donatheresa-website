@@ -1,6 +1,6 @@
 "use client"
 
-import { valentinesMenuData, valentinesMenuDetails, valentinesMenuNotes } from "@/lib/valentines-menu-data"
+import { valentinesMenuDetails } from "@/lib/valentines-menu-data"
 import { Heart, Calendar, Clock, Sparkles, Star, Phone, MapPin, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
@@ -212,145 +212,26 @@ export default function ValentinesDayMenuPage() {
         </div>
       </section>
 
-      {/* Menu Section */}
+      {/* Menu Coming Soon Section */}
       <section className="py-24 bg-[#0f0505] relative">
         <div className="max-w-4xl mx-auto px-6">
-          {/* Section header */}
-          <div className="text-center mb-16">
+          <div className="text-center">
             <div className="inline-flex items-center gap-3 mb-6">
               <div className="h-px w-12 bg-rose-400/50" />
               <Star className="w-5 h-5 text-rose-400" />
               <div className="h-px w-12 bg-rose-400/50" />
             </div>
             <h2 className="text-4xl md:text-5xl font-bold mb-4">The Menu</h2>
-            <p className="text-rose-100/60">Select one dish from each course</p>
-          </div>
-
-          {/* Starters */}
-          <div className="mb-16">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-14 h-14 bg-gradient-to-br from-rose-500/30 to-pink-500/30 rounded-2xl flex items-center justify-center border border-rose-500/30">
-                <Star className="w-7 h-7 text-rose-400" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-white">Starters</h3>
-                <p className="text-rose-300/60 text-sm">Begin your romantic journey</p>
-              </div>
+            <p className="text-rose-100/60 mb-8">Our exclusive Valentine's Day menu will be revealed soon</p>
+            
+            <div className="bg-gradient-to-r from-rose-950/50 to-transparent border border-rose-500/20 rounded-2xl p-8 max-w-xl mx-auto">
+              <Sparkles className="w-12 h-12 text-rose-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-white mb-2">Coming Soon</h3>
+              <p className="text-rose-100/50 text-sm">
+                Our chefs are crafting an exquisite 3-course Italian menu specially designed for this romantic evening. 
+                Check back soon for the full menu details.
+              </p>
             </div>
-            <div className="space-y-4">
-              {valentinesMenuData.starters.map((item, idx) => (
-                <div 
-                  key={idx} 
-                  className="group bg-gradient-to-r from-rose-950/50 to-transparent border border-rose-500/10 rounded-2xl p-6 hover:border-rose-500/30 hover:bg-rose-950/30 transition-all duration-300"
-                >
-                  <div className="flex justify-between items-start gap-4">
-                    <div className="flex-1">
-                      <h4 className="text-lg font-semibold text-white group-hover:text-rose-300 transition-colors">
-                        {item.name}
-                      </h4>
-                      <p className="text-rose-100/50 mt-1 text-sm leading-relaxed">{item.description}</p>
-                    </div>
-                    <div className="flex gap-2 flex-shrink-0">
-                      {item.dietary.map((d, i) => (
-                        <span key={i} className="text-xs bg-rose-500/20 text-rose-300 px-3 py-1 rounded-full border border-rose-500/30">
-                          {d}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Main Courses */}
-          <div className="mb-16">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-14 h-14 bg-gradient-to-br from-rose-500/30 to-pink-500/30 rounded-2xl flex items-center justify-center border border-rose-500/30">
-                <Heart className="w-7 h-7 text-rose-400 fill-rose-400" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-white">Main Courses</h3>
-                <p className="text-rose-300/60 text-sm">The heart of your evening</p>
-              </div>
-            </div>
-            <div className="space-y-4">
-              {valentinesMenuData.mains.map((item, idx) => (
-                <div 
-                  key={idx} 
-                  className="group bg-gradient-to-r from-rose-950/50 to-transparent border border-rose-500/10 rounded-2xl p-6 hover:border-rose-500/30 hover:bg-rose-950/30 transition-all duration-300"
-                >
-                  <div className="flex justify-between items-start gap-4">
-                    <div className="flex-1">
-                      <h4 className="text-lg font-semibold text-white group-hover:text-rose-300 transition-colors">
-                        {item.name}
-                      </h4>
-                      <p className="text-rose-100/50 mt-1 text-sm leading-relaxed">{item.description}</p>
-                    </div>
-                    <div className="flex gap-2 flex-shrink-0">
-                      {item.dietary.map((d, i) => (
-                        <span key={i} className="text-xs bg-rose-500/20 text-rose-300 px-3 py-1 rounded-full border border-rose-500/30">
-                          {d}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Desserts */}
-          <div className="mb-16">
-            <div className="flex items-center gap-4 mb-8">
-              <div className="w-14 h-14 bg-gradient-to-br from-rose-500/30 to-pink-500/30 rounded-2xl flex items-center justify-center border border-rose-500/30">
-                <Sparkles className="w-7 h-7 text-rose-400" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-bold text-white">Desserts</h3>
-                <p className="text-rose-300/60 text-sm">A sweet ending together</p>
-              </div>
-            </div>
-            <div className="space-y-4">
-              {valentinesMenuData.desserts.map((item, idx) => (
-                <div 
-                  key={idx} 
-                  className="group bg-gradient-to-r from-rose-950/50 to-transparent border border-rose-500/10 rounded-2xl p-6 hover:border-rose-500/30 hover:bg-rose-950/30 transition-all duration-300"
-                >
-                  <div className="flex justify-between items-start gap-4">
-                    <div className="flex-1">
-                      <h4 className="text-lg font-semibold text-white group-hover:text-rose-300 transition-colors">
-                        {item.name}
-                      </h4>
-                      <p className="text-rose-100/50 mt-1 text-sm leading-relaxed">{item.description}</p>
-                    </div>
-                    <div className="flex gap-2 flex-shrink-0">
-                      {item.dietary.map((d, i) => (
-                        <span key={i} className="text-xs bg-rose-500/20 text-rose-300 px-3 py-1 rounded-full border border-rose-500/30">
-                          {d}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Notes */}
-          <div className="bg-rose-500/5 border border-rose-500/20 rounded-2xl p-6">
-            <h4 className="font-semibold text-rose-300 mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 bg-rose-400 rounded-full" />
-              Please Note
-            </h4>
-            <ul className="space-y-2 text-sm text-rose-100/50">
-              {valentinesMenuNotes.map((note, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <span className="text-rose-400/60 mt-1">•</span>
-                  {note}
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </section>
