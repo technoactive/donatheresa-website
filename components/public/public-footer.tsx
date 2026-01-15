@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { MapPin, Phone, Clock, Instagram, Facebook, Twitter, ArrowUp } from "lucide-react"
+import { MapPin, Phone, Clock, Instagram, Facebook, ArrowUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { RestaurantInfo, RestaurantPhoneLink } from "@/components/locale/restaurant-info"
 
@@ -43,9 +43,8 @@ const footerLinks = [
 ]
 
 const socialLinks = [
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Facebook, href: "#", label: "Facebook" },
-  { icon: Twitter, href: "#", label: "Twitter" }
+  { icon: Instagram, href: "https://www.instagram.com/donatheresahatchend/", label: "Instagram" },
+  { icon: Facebook, href: "#", label: "Facebook" }
 ]
 
 export function PublicFooter() {
