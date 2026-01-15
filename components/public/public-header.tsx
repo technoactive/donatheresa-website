@@ -89,10 +89,12 @@ export function PublicHeader() {
             </div>
           ))}
           
-          <div>
+          <div className="relative">
+            {/* Pulsing glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full blur-md opacity-50 animate-pulse" />
             <Button
               asChild
-              className="group relative px-6 py-2.5 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-full text-sm font-medium border-0 overflow-hidden transition-all duration-300 hover:scale-105"
+              className="group relative px-6 py-2.5 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-full text-sm font-medium border-0 overflow-hidden transition-all duration-300 hover:scale-105 shadow-lg shadow-amber-500/30"
             >
               <Link href="/reserve" className="flex items-center gap-2">
                 <span>Reserve Table</span>
@@ -156,10 +158,12 @@ export function PublicHeader() {
                   </div>
                 ))}
                 
-                <div className="mt-8">
+                <div className="mt-8 relative">
+                  {/* Pulsing glow effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-amber-500 to-yellow-400 rounded-xl blur-md opacity-50 animate-pulse" />
                   <Button
                     asChild
-                    className="w-full py-6 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-xl text-xl font-semibold transition-all duration-300 hover:scale-105"
+                    className="relative w-full py-6 bg-gradient-to-r from-amber-600 to-yellow-500 hover:from-amber-500 hover:to-yellow-400 text-white rounded-xl text-xl font-semibold transition-all duration-300 hover:scale-105 shadow-lg shadow-amber-500/30"
                   >
                     <Link href="/reserve" onClick={closeSheet} className="flex items-center justify-center gap-3">
                       <span>Reserve Table</span>
