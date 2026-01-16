@@ -248,13 +248,34 @@ export async function createBooking(prevState: any, formData: FormData) {
     // Build confirmation message with booking reference
     const bookingRef = booking.booking_reference || booking.id.substring(0, 8).toUpperCase()
     
+    // 📊 SERVER-SIDE CONVERSION TRACKING (GA4 Measurement Protocol)
+    // This ensures conversions are tracked even if user has ad blockers or closes browser
+    try {
+      const { trackBookingConversion } = await import('@/lib/ga4-server')
+      await trackBookingConversion({
+        bookingId: booking.id,
+        bookingReference: bookingRef,
+        customerName: name,
+        customerEmail: email || undefined,
+        customerPhone: phone,
+        partySize,
+        bookingDate: date,
+        bookingTime: time,
+        specialRequests: notes || undefined
+      })
+      console.log('✅ Server-side conversion tracked for booking:', bookingRef)
+    } catch (trackingError) {
+      // Don't fail the booking if tracking fails
+      console.error('⚠️ Server-side conversion tracking failed:', trackingError)
+    }
+    
     return {
       message: `Booking confirmed for ${name}!`,
       description: `Thank you, ${name}. Your reservation (Ref: ${bookingRef}) for ${partySize} ${partySize === 1 ? 'person' : 'people'} on ${formattedDate} at ${formattedTime} is confirmed. ${email && email.includes('@') && !email.includes('phone-only.local') ? "You'll receive a confirmation email shortly." : "We'll contact you if we need to discuss any special requests."}`,
       success: true,
       bookingId: booking.id,
       bookingReference: bookingRef,
-      // Include conversion data for client-side tracking
+      // Include conversion data for client-side tracking (as backup)
       conversionData: {
         bookingId: booking.id,
         partySize,

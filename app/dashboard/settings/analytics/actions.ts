@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 
 export interface GoogleAnalyticsSettings {
   measurement_id: string | null
+  api_secret: string | null
   enabled: boolean
 }
 
@@ -14,7 +15,7 @@ export async function getGoogleAnalyticsSettings(): Promise<GoogleAnalyticsSetti
 
     const { data, error } = await supabase
       .from('google_analytics_settings')
-      .select('measurement_id, enabled')
+      .select('measurement_id, api_secret, enabled')
       .eq('user_id', 'admin')
       .single()
 
@@ -25,12 +26,14 @@ export async function getGoogleAnalyticsSettings(): Promise<GoogleAnalyticsSetti
 
     return {
       measurement_id: data?.measurement_id || null,
+      api_secret: data?.api_secret || null,
       enabled: data?.enabled || false
     }
   } catch (error) {
     console.error('Failed to fetch Google Analytics settings:', error)
     return {
       measurement_id: null,
+      api_secret: null,
       enabled: false
     }
   }
@@ -58,6 +61,7 @@ export async function updateGoogleAnalyticsSettings(
       .upsert({
         user_id: 'admin',
         measurement_id: settings.measurement_id?.trim() || null,
+        api_secret: settings.api_secret?.trim() || null,
         enabled: settings.enabled,
         updated_at: new Date().toISOString()
       }, {

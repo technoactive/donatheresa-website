@@ -143,6 +143,22 @@ export async function POST(request: NextRequest) {
       console.error('Failed to create cancellation notification:', notificationError)
     }
 
+    // 📊 SERVER-SIDE CANCELLATION TRACKING (GA4 Measurement Protocol)
+    try {
+      const { trackBookingCancellation } = await import('@/lib/ga4-server')
+      await trackBookingCancellation({
+        bookingId: booking.id,
+        bookingReference: booking.booking_reference,
+        partySize: booking.party_size,
+        bookingDate: booking.booking_date,
+        bookingTime: booking.booking_time,
+        cancellationReason: 'customer_self_service'
+      })
+      console.log('✅ Server-side cancellation tracked for booking:', booking.booking_reference)
+    } catch (trackingError) {
+      console.error('⚠️ Server-side cancellation tracking failed:', trackingError)
+    }
+
     return NextResponse.json({ success: true })
 
   } catch (error) {

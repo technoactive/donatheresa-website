@@ -16,13 +16,17 @@ import {
   Globe,
   TrendingUp,
   Users,
-  Activity
+  Activity,
+  Server,
+  Key,
+  ShieldCheck
 } from 'lucide-react'
 import { SettingsLayout } from '@/components/dashboard/settings-layout'
 import { getGoogleAnalyticsSettings, updateGoogleAnalyticsSettings } from './actions'
 
 interface GoogleAnalyticsSettings {
   measurement_id: string
+  api_secret: string
   enabled: boolean
 }
 
@@ -31,6 +35,7 @@ export default function GoogleAnalyticsSettingsPage() {
   const [isSaving, setIsSaving] = useState(false)
   const [settings, setSettings] = useState<GoogleAnalyticsSettings>({
     measurement_id: '',
+    api_secret: '',
     enabled: false
   })
 
@@ -44,6 +49,7 @@ export default function GoogleAnalyticsSettingsPage() {
       const data = await getGoogleAnalyticsSettings()
       setSettings({
         measurement_id: data.measurement_id || '',
+        api_secret: data.api_secret || '',
         enabled: data.enabled || false
       })
     } catch (error) {
@@ -164,6 +170,74 @@ export default function GoogleAnalyticsSettingsPage() {
                   <li>Navigate to Admin → Data Streams</li>
                   <li>Click on your web stream</li>
                   <li>Copy the Measurement ID (starts with G-)</li>
+                </ol>
+              </AlertDescription>
+            </Alert>
+          </CardContent>
+        </Card>
+
+        {/* Server-Side Tracking Card */}
+        <Card className="bg-white border-slate-200 shadow-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-slate-900">
+              <div className="h-8 w-8 rounded-lg bg-green-100 flex items-center justify-center">
+                <Server className="h-5 w-5 text-green-600" />
+              </div>
+              Server-Side Conversion Tracking
+            </CardTitle>
+            <CardDescription className="text-slate-600">
+              Track booking conversions directly from the server for 100% accuracy (even with ad blockers)
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* API Secret Input */}
+            <div className="space-y-2">
+              <Label htmlFor="api_secret" className="text-slate-900 flex items-center gap-2">
+                <Key className="h-4 w-4" />
+                Measurement Protocol API Secret
+              </Label>
+              <Input
+                id="api_secret"
+                type="password"
+                placeholder="Enter your API secret..."
+                value={settings.api_secret}
+                onChange={(e) => 
+                  setSettings(prev => ({ ...prev, api_secret: e.target.value.trim() }))
+                }
+                className="bg-white border-slate-200 text-slate-900 placeholder:text-slate-400 font-mono"
+              />
+              <p className="text-sm text-slate-600">
+                Required for server-side tracking. Keep this secret - never share it publicly.
+              </p>
+            </div>
+
+            {/* Status Indicator */}
+            <div className={`flex items-center gap-3 p-4 rounded-lg ${settings.api_secret ? 'bg-green-50 border border-green-200' : 'bg-amber-50 border border-amber-200'}`}>
+              <ShieldCheck className={`h-5 w-5 ${settings.api_secret ? 'text-green-600' : 'text-amber-600'}`} />
+              <div>
+                <p className={`font-medium ${settings.api_secret ? 'text-green-700' : 'text-amber-700'}`}>
+                  {settings.api_secret ? 'Server-side tracking enabled' : 'Server-side tracking disabled'}
+                </p>
+                <p className="text-sm text-slate-600">
+                  {settings.api_secret 
+                    ? 'All booking conversions will be tracked server-side for maximum accuracy.'
+                    : 'Add your API secret to enable server-side conversion tracking.'}
+                </p>
+              </div>
+            </div>
+
+            {/* Info Alert */}
+            <Alert className="border-green-200 bg-green-50">
+              <Info className="h-4 w-4 text-green-600" />
+              <AlertDescription className="text-slate-700">
+                To create an API Secret:
+                <ol className="mt-2 ml-4 list-decimal text-sm space-y-1">
+                  <li>Go to Google Analytics Admin</li>
+                  <li>Select your property → Data Streams</li>
+                  <li>Click on your web stream</li>
+                  <li>Scroll to "Measurement Protocol API secrets"</li>
+                  <li>Click "Create" and give it a name (e.g., "Dona Theresa Server")</li>
+                  <li>Copy the secret value and paste it above</li>
                 </ol>
               </AlertDescription>
             </Alert>
