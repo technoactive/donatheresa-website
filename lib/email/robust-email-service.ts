@@ -151,15 +151,15 @@ class RobustEmailService {
     const subject = this.renderTemplate(template.subject, templateData);
     const htmlContent = this.renderTemplate(template.html_content, templateData);
 
-    // Create email log
+    // Create email log (use snake_case for database columns)
     const logId = await this.createEmailLog({
-      templateKey: params.templateKey,
-      recipientEmail: params.recipientEmail,
-      recipientName: params.recipientName,
+      template_key: params.templateKey,
+      recipient_email: params.recipientEmail,
+      recipient_name: params.recipientName,
       subject,
       status: 'pending',
-      bookingId: params.bookingId,
-      contactId: params.contactId,
+      booking_id: params.bookingId,
+      contact_id: params.contactId,
     });
 
     // Send email with timeout
