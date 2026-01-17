@@ -15,23 +15,22 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   background-color: #ffffff !important;
   min-height: 100vh;
-  /* Prevent overscroll bounce on mobile */
-  overscroll-behavior: none;
   /* Prevent scroll bounce on iOS */
   -webkit-overflow-scrolling: touch;
 }
 
-/* Prevent overscroll on all elements */
-* {
-  overscroll-behavior: none;
-}
-
-/* Additional mobile fixes for Safari */
+/* Additional mobile fixes for Safari - only on html/body */
 html, body {
-  -webkit-overscroll-behavior: none;
-  overscroll-behavior: none;
   /* Ensure white background always shows */
   background: #ffffff !important;
+}
+
+/* Prevent overscroll bounce ONLY on mobile devices */
+@media (hover: none) and (pointer: coarse) {
+  html, body {
+    overscroll-behavior-y: none;
+    -webkit-overscroll-behavior-y: none;
+  }
 }
 
 /* Prevent dark flash on page transitions */
@@ -56,9 +55,6 @@ main, div[data-nextjs-scroll-focus-boundary], .min-h-screen {
   body {
     /* Ensure mobile scrolling shows white */
     background: #ffffff !important;
-    /* Additional mobile-specific overscroll prevention */
-    overscroll-behavior-y: none;
-    -webkit-overscroll-behavior-y: none;
   }
 }
 
