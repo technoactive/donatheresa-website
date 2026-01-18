@@ -19,30 +19,15 @@ const TikTok = (props: LucideProps) => (
   </svg>
 )
 
-// Custom TripAdvisor icon (owl logo)
+// Custom TripAdvisor icon (official owl logo style)
 const TripAdvisor = (props: LucideProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
+    fill="currentColor"
     {...props}
   >
-    {/* Owl face/body */}
-    <circle cx="12" cy="12" r="9" />
-    {/* Left eye */}
-    <circle cx="8.5" cy="11" r="2.5" />
-    <circle cx="8.5" cy="11" r="1" fill="currentColor" />
-    {/* Right eye */}
-    <circle cx="15.5" cy="11" r="2.5" />
-    <circle cx="15.5" cy="11" r="1" fill="currentColor" />
-    {/* Beak */}
-    <path d="M12 13.5l-1.5 2.5h3L12 13.5z" fill="currentColor" />
-    {/* Ear tufts */}
-    <path d="M6 5.5C7 4 9 3.5 12 3.5s5 .5 6 2" />
+    <path d="M12.006 4.295c-2.67 0-5.338.784-7.645 2.353H0l1.963 2.135a5.997 5.997 0 0 0 4.04 10.43 5.976 5.976 0 0 0 4.075-1.6L12 19.705l1.922-2.09a5.972 5.972 0 0 0 4.072 1.598 6 6 0 0 0 4.041-10.43L24 6.649h-4.35a13.573 13.573 0 0 0-7.644-2.354zM12 6.255c1.531 0 3.063.303 4.504.903C14.944 8.02 14 9.9 14 12c0 .737.132 1.445.372 2.1l-1.063 1.156L12 16.805l-1.31-1.548-1.062-1.156A5.963 5.963 0 0 1 10 12c0-2.1-.944-3.98-2.504-4.842A11.166 11.166 0 0 1 12 6.255zM6.003 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zm11.994 0a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM6.003 10.75a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5zm11.994 0a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5z"/>
   </svg>
 )
 import { Button } from "@/components/ui/button"
