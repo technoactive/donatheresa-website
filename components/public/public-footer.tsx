@@ -18,6 +18,33 @@ const TikTok = (props: LucideProps) => (
     <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
   </svg>
 )
+
+// Custom TripAdvisor icon (owl logo)
+const TripAdvisor = (props: LucideProps) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    {/* Owl face/body */}
+    <circle cx="12" cy="12" r="9" />
+    {/* Left eye */}
+    <circle cx="8.5" cy="11" r="2.5" />
+    <circle cx="8.5" cy="11" r="1" fill="currentColor" />
+    {/* Right eye */}
+    <circle cx="15.5" cy="11" r="2.5" />
+    <circle cx="15.5" cy="11" r="1" fill="currentColor" />
+    {/* Beak */}
+    <path d="M12 13.5l-1.5 2.5h3L12 13.5z" fill="currentColor" />
+    {/* Ear tufts */}
+    <path d="M6 5.5C7 4 9 3.5 12 3.5s5 .5 6 2" />
+  </svg>
+)
 import { Button } from "@/components/ui/button"
 import { RestaurantInfo, RestaurantPhoneLink } from "@/components/locale/restaurant-info"
 
@@ -61,7 +88,8 @@ const footerLinks = [
 const socialLinks = [
   { icon: Instagram, href: "https://www.instagram.com/donatheresahatchend/", label: "Instagram" },
   { icon: Facebook, href: "https://www.facebook.com/profile.php?id=100063506503168", label: "Facebook" },
-  { icon: TikTok, href: "https://www.tiktok.com/@dona.theresa", label: "TikTok" }
+  { icon: TikTok, href: "https://www.tiktok.com/@dona.theresa", label: "TikTok" },
+  { icon: TripAdvisor, href: "https://www.tripadvisor.co.uk/Restaurant_Review-g7380842-d3226259-Reviews-Dona_Theresa-Pinner_Greater_London_England.html", label: "TripAdvisor" }
 ]
 
 export function PublicFooter() {
