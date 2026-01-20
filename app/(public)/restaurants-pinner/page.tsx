@@ -3,7 +3,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, Clock, Phone, Star, Award, Utensils, Calendar, Wine } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { RestaurantInfo } from '@/components/locale/restaurant-info'
 import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {

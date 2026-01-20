@@ -3,8 +3,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Clock, MapPin, Phone, Utensils, Calendar, TrendingUp, Users, Briefcase } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { FormattedCurrency } from '@/components/locale/formatted-currency'
-import { RestaurantInfo } from '@/components/locale/restaurant-info'
 import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
@@ -391,8 +389,10 @@ export default function LunchPinnerPage() {
             </div>
           </div>
           
-          <div className="mt-12 pt-12 border-t">
-            <RestaurantInfo />
+          <div className="mt-12 pt-12 border-t text-slate-600">
+            <p className="font-semibold">Dona Theresa Italian Restaurant</p>
+            <p>451 Uxbridge Road, Pinner HA5 4JR</p>
+            <p>Tel: 020 8421 5550</p>
           </div>
         </div>
       </section>
