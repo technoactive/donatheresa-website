@@ -54,6 +54,7 @@
     "@react-email/row": "^0.0.12",
     "@react-email/section": "^0.0.16",
     "@react-email/text": "^0.1.5",
+    "@sentry/nextjs": "^10.35.0",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
     "@tanstack/react-table": "latest",
