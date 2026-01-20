@@ -9,7 +9,7 @@ interface ErrorLog {
 }
 
 export class ErrorTracker {
-  // In production, this would send to an analytics service
+  // Log 404 errors to database and Google Analytics
   static async log404(url: string, referrer: string | null) {
     const errorLog: ErrorLog = {
       type: '404',
@@ -33,8 +33,22 @@ export class ErrorTracker {
       })
     }
 
-    // In production, you could send this to a logging service
-    // await fetch('/api/log-error', { method: 'POST', body: JSON.stringify(errorLog) })
+    // Send to database for dashboard tracking
+    try {
+      const path = typeof window !== 'undefined' ? window.location.pathname : new URL(url).pathname
+      await fetch('/api/log-error', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          errorType: '404',
+          url,
+          path,
+          referrer
+        })
+      })
+    } catch (error) {
+      console.error('[404 Tracking] Failed to log to database:', error)
+    }
   }
 
   // Common 404 patterns to watch for

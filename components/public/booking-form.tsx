@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useState, useActionState, useEffect, useMemo } from "react"
-import { Calendar, Clock, Users, Phone, Mail, MessageSquare, Plus, Minus, Loader2 } from "lucide-react"
+import { Calendar, Clock, Users, Phone, Mail, MessageSquare, Plus, Minus, Loader2, Shield, Star, Zap, Check } from "lucide-react"
 import { createBooking } from "@/app/(public)/reserve/actions"
 import { format, addDays, isBefore, startOfDay, parse } from "date-fns"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
@@ -137,8 +137,27 @@ export function BookingForm({ bookingSettings: serverBookingSettings }: BookingF
     },
   })
 
-  // Watch form values for validation
+  // Watch form values for validation and progress tracking
   const watchedValues = form.watch()
+  
+  // Calculate form progress for step indicator
+  const formProgress = useMemo(() => {
+    let completedSteps = 0
+    const totalSteps = 3
+    
+    // Step 1: Contact info (name + phone)
+    if (watchedValues.name && watchedValues.phone) completedSteps++
+    
+    // Step 2: Date & Time
+    if (watchedValues.date && watchedValues.time) completedSteps++
+    
+    // Step 3: Party size (always has a value, so check if other steps done)
+    if (watchedValues.name && watchedValues.phone && watchedValues.date && watchedValues.time) {
+      completedSteps++
+    }
+    
+    return { completedSteps, totalSteps, percentage: Math.round((completedSteps / totalSteps) * 100) }
+  }, [watchedValues])
   
   useEffect(() => {
     const isValid = watchedValues.name && watchedValues.phone && watchedValues.date && watchedValues.time
@@ -376,6 +395,50 @@ export function BookingForm({ bookingSettings: serverBookingSettings }: BookingF
         </div>
       ) : (
         <>
+          {/* Progress Steps Indicator */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-medium text-gray-700">Booking Progress</span>
+              <span className="text-sm text-amber-600 font-medium">{formProgress.percentage}% Complete</span>
+            </div>
+            <div className="relative">
+              {/* Progress Bar Background */}
+              <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-amber-400 to-amber-600 rounded-full transition-all duration-500 ease-out"
+                  style={{ width: `${formProgress.percentage}%` }}
+                />
+              </div>
+              {/* Step Indicators */}
+              <div className="flex justify-between mt-3">
+                <div className={`flex items-center gap-2 ${formProgress.completedSteps >= 1 ? 'text-amber-600' : 'text-gray-400'}`}>
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                    formProgress.completedSteps >= 1 ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-400'
+                  }`}>
+                    {formProgress.completedSteps >= 1 ? <Check className="w-3.5 h-3.5" /> : '1'}
+                  </div>
+                  <span className="text-xs font-medium hidden sm:inline">Contact Info</span>
+                </div>
+                <div className={`flex items-center gap-2 ${formProgress.completedSteps >= 2 ? 'text-amber-600' : 'text-gray-400'}`}>
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                    formProgress.completedSteps >= 2 ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-400'
+                  }`}>
+                    {formProgress.completedSteps >= 2 ? <Check className="w-3.5 h-3.5" /> : '2'}
+                  </div>
+                  <span className="text-xs font-medium hidden sm:inline">Date & Time</span>
+                </div>
+                <div className={`flex items-center gap-2 ${formProgress.completedSteps >= 3 ? 'text-amber-600' : 'text-gray-400'}`}>
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                    formProgress.completedSteps >= 3 ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-400'
+                  }`}>
+                    {formProgress.completedSteps >= 3 ? <Check className="w-3.5 h-3.5" /> : '3'}
+                  </div>
+                  <span className="text-xs font-medium hidden sm:inline">Ready!</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Error message */}
           {state?.message && !state?.success && (
             <Alert className="mb-6 border-red-200 bg-red-50">
@@ -647,8 +710,31 @@ export function BookingForm({ bookingSettings: serverBookingSettings }: BookingF
           </div>
 
           {/* Submit Button */}
-          <div className="pt-6">
+          <div className="pt-6 space-y-4">
             <SubmitButton />
+            
+            {/* Trust Badges */}
+            <div className="flex flex-wrap items-center justify-center gap-4 pt-4 border-t border-gray-100">
+              <div className="flex items-center gap-1.5 text-gray-500">
+                <Shield className="w-4 h-4 text-green-600" />
+                <span className="text-xs font-medium">Secure Booking</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-gray-500">
+                <Zap className="w-4 h-4 text-amber-500" />
+                <span className="text-xs font-medium">Instant Confirmation</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-gray-500">
+                <Star className="w-4 h-4 text-yellow-500" />
+                <span className="text-xs font-medium">4.9★ Rating</span>
+              </div>
+            </div>
+            
+            {/* What Happens Next */}
+            <div className="bg-blue-50 rounded-xl p-4 text-center">
+              <p className="text-sm text-blue-800">
+                <strong>What happens next?</strong> You'll receive an instant email confirmation with your booking details. We look forward to welcoming you!
+              </p>
+            </div>
           </div>
         </form>
       </Form>

@@ -17,6 +17,7 @@ export function Sidebar() {
     { name: "Dashboard", href: "/dashboard" },
     { name: "Bookings", href: "/dashboard/bookings" },
     { name: "Customers", href: "/dashboard/customers" },
+    { name: "Analytics", href: "/dashboard/analytics" },
     { name: "Settings", href: "/dashboard/settings" },
   ]
 
@@ -63,6 +64,7 @@ export function Sidebar() {
                       {item.name === 'Dashboard' && '🏠'}
                       {item.name === 'Bookings' && '📅'}
                       {item.name === 'Customers' && '👥'}
+                      {item.name === 'Analytics' && '📊'}
                       {item.name === 'Settings' && '⚙️'}
                     </span>
                     <span>{item.name}</span>
