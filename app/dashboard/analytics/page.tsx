@@ -22,7 +22,10 @@ import {
   ArrowRight,
   CheckCircle,
   XCircle,
-  Loader2
+  Loader2,
+  Users,
+  Calendar,
+  TrendingDown
 } from "lucide-react"
 
 interface ErrorData {
@@ -49,29 +52,53 @@ interface ErrorData {
   }>
 }
 
+interface BookingStats {
+  totalBookings: number
+  confirmedBookings: number
+  cancelledBookings: number
+  totalGuests: number
+  avgPartySize: number
+  bookingsBySize: Record<number, number>
+  bookingsByDay: Record<string, number>
+  bookingsBySource: { website: number; dashboard: number }
+  topCustomers: Array<{ name: string; email: string; bookings: number; segment: string }>
+  conversionRate: number
+  periodDays: number
+}
+
 export default function AnalyticsPage() {
   const [errorData, setErrorData] = useState<ErrorData | null>(null)
+  const [bookingStats, setBookingStats] = useState<BookingStats | null>(null)
   const [loading, setLoading] = useState(true)
   const [period, setPeriod] = useState('30')
   const [excludeBots, setExcludeBots] = useState(true)
 
-  const fetchErrors = async () => {
+  const fetchData = async () => {
     setLoading(true)
     try {
-      const response = await fetch(`/api/log-error?days=${period}&excludeBots=${excludeBots}`)
-      if (response.ok) {
-        const data = await response.json()
+      const [errorResponse, statsResponse] = await Promise.all([
+        fetch(`/api/log-error?days=${period}&excludeBots=${excludeBots}`),
+        fetch(`/api/analytics/booking-stats?days=${period}`)
+      ])
+      
+      if (errorResponse.ok) {
+        const data = await errorResponse.json()
         setErrorData(data)
       }
+      
+      if (statsResponse.ok) {
+        const data = await statsResponse.json()
+        setBookingStats(data)
+      }
     } catch (error) {
-      console.error('Failed to fetch error data:', error)
+      console.error('Failed to fetch data:', error)
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    fetchErrors()
+    fetchData()
   }, [period, excludeBots])
 
   const formatDate = (dateStr: string) => {
@@ -83,6 +110,15 @@ export default function AnalyticsPage() {
     })
   }
 
+  // Get top party sizes sorted by count
+  const getTopPartySizes = () => {
+    if (!bookingStats?.bookingsBySize) return []
+    return Object.entries(bookingStats.bookingsBySize)
+      .map(([size, count]) => ({ size: parseInt(size), count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 4)
+  }
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -91,158 +127,275 @@ export default function AnalyticsPage() {
           <div>
             <h1 className="text-3xl font-bold text-slate-900">Analytics & Insights</h1>
             <p className="text-slate-600 mt-2">
-              Track website performance, conversion funnel, and identify issues
+              Live data from your bookings database
             </p>
           </div>
-          <Button onClick={fetchErrors} variant="outline" disabled={loading}>
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
+          <div className="flex items-center gap-4">
+            <Select value={period} onValueChange={setPeriod}>
+              <SelectTrigger className="w-40">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="7">Last 7 days</SelectItem>
+                <SelectItem value="14">Last 14 days</SelectItem>
+                <SelectItem value="30">Last 30 days</SelectItem>
+                <SelectItem value="90">Last 90 days</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button onClick={fetchData} variant="outline" disabled={loading}>
+              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+              Refresh
+            </Button>
+          </div>
         </div>
       </div>
 
-      <Tabs defaultValue="funnel" className="space-y-6">
-        <TabsList className="grid w-full max-w-md grid-cols-3">
-          <TabsTrigger value="funnel">Conversion Funnel</TabsTrigger>
+      <Tabs defaultValue="bookings" className="space-y-6">
+        <TabsList className="grid w-full max-w-lg grid-cols-4">
+          <TabsTrigger value="bookings">Bookings</TabsTrigger>
+          <TabsTrigger value="customers">Customers</TabsTrigger>
           <TabsTrigger value="errors">404 Errors</TabsTrigger>
           <TabsTrigger value="insights">Insights</TabsTrigger>
         </TabsList>
 
-        {/* Conversion Funnel Tab */}
-        <TabsContent value="funnel" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-blue-600" />
-                Booking Conversion Funnel
-              </CardTitle>
-              <CardDescription>
-                Based on your GA4 data from the last 28 days
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {/* Funnel Visualization */}
-                <div className="flex items-center gap-4">
-                  <div className="flex-1 bg-blue-100 rounded-lg p-4 text-center">
-                    <Eye className="w-8 h-8 text-blue-600 mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-blue-900">804</div>
-                    <div className="text-sm text-blue-700">New Visitors</div>
-                  </div>
-                  <ArrowRight className="w-6 h-6 text-slate-400 flex-shrink-0" />
-                  <div className="flex-1 bg-amber-100 rounded-lg p-4 text-center">
-                    <ShoppingCart className="w-8 h-8 text-amber-600 mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-amber-900">55</div>
-                    <div className="text-sm text-amber-700">Started Checkout</div>
-                    <div className="text-xs text-amber-600 mt-1">6.8% of visitors</div>
-                  </div>
-                  <ArrowRight className="w-6 h-6 text-slate-400 flex-shrink-0" />
-                  <div className="flex-1 bg-green-100 rounded-lg p-4 text-center">
-                    <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
-                    <div className="text-2xl font-bold text-green-900">36</div>
-                    <div className="text-sm text-green-700">Bookings</div>
-                    <div className="text-xs text-green-600 mt-1">65% completion</div>
-                  </div>
-                </div>
-
-                {/* Funnel Stats */}
-                <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-slate-900">4.5%</div>
-                    <div className="text-sm text-slate-600">Overall Conversion</div>
-                    <div className="text-xs text-green-600 mt-1">↑ Good for restaurants</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-slate-900">65%</div>
-                    <div className="text-sm text-slate-600">Checkout Completion</div>
-                    <div className="text-xs text-amber-600 mt-1">19 abandoned</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-slate-900">£900</div>
-                    <div className="text-sm text-slate-600">Est. Revenue/Week</div>
-                    <div className="text-xs text-slate-500 mt-1">At £25 avg.</div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Traffic Sources */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Traffic Sources</CardTitle>
-              <CardDescription>Where your visitors come from</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span className="font-medium">Organic Search (Google)</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-2xl font-bold">60%</span>
-                    <div className="w-32 bg-slate-100 rounded-full h-2">
-                      <div className="bg-green-500 h-2 rounded-full" style={{ width: '60%' }}></div>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                    <span className="font-medium">Direct</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-2xl font-bold">39%</span>
-                    <div className="w-32 bg-slate-100 rounded-full h-2">
-                      <div className="bg-blue-500 h-2 rounded-full" style={{ width: '39%' }}></div>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full bg-purple-500"></div>
-                    <span className="font-medium">Social Media</span>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-2xl font-bold">1%</span>
-                    <div className="w-32 bg-slate-100 rounded-full h-2">
-                      <div className="bg-purple-500 h-2 rounded-full" style={{ width: '1%' }}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Popular Table Sizes */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Most Popular Booking Sizes</CardTitle>
-              <CardDescription>Table sizes that customers book most</CardDescription>
-            </CardHeader>
-            <CardContent>
+        {/* Bookings Analytics Tab */}
+        <TabsContent value="bookings" className="space-y-6">
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
+            </div>
+          ) : bookingStats ? (
+            <>
+              {/* Summary Cards */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-amber-50 rounded-xl p-4 text-center border border-amber-200">
-                  <div className="text-3xl font-bold text-amber-900">44</div>
-                  <div className="text-sm text-amber-700">Table for 4</div>
-                  <Badge className="mt-2 bg-amber-200 text-amber-800">Most Popular</Badge>
-                </div>
-                <div className="bg-slate-50 rounded-xl p-4 text-center border border-slate-200">
-                  <div className="text-3xl font-bold text-slate-900">24</div>
-                  <div className="text-sm text-slate-600">Table for 6</div>
-                </div>
-                <div className="bg-slate-50 rounded-xl p-4 text-center border border-slate-200">
-                  <div className="text-3xl font-bold text-slate-900">22</div>
-                  <div className="text-sm text-slate-600">Table for 2</div>
-                </div>
-                <div className="bg-slate-50 rounded-xl p-4 text-center border border-slate-200">
-                  <div className="text-3xl font-bold text-slate-900">21</div>
-                  <div className="text-sm text-slate-600">Table for 3</div>
-                </div>
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-blue-100 rounded-lg">
+                        <Calendar className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold">{bookingStats.totalBookings}</div>
+                        <div className="text-sm text-slate-600">Total Bookings</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-green-100 rounded-lg">
+                        <CheckCircle className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold">{bookingStats.confirmedBookings}</div>
+                        <div className="text-sm text-slate-600">Confirmed</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-purple-100 rounded-lg">
+                        <Users className="w-5 h-5 text-purple-600" />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold">{bookingStats.totalGuests}</div>
+                        <div className="text-sm text-slate-600">Total Guests</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-amber-100 rounded-lg">
+                        <TrendingUp className="w-5 h-5 text-amber-600" />
+                      </div>
+                      <div>
+                        <div className="text-2xl font-bold">{bookingStats.avgPartySize.toFixed(1)}</div>
+                        <div className="text-sm text-slate-600">Avg Party Size</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
-            </CardContent>
-          </Card>
+
+              {/* Booking Sources */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Booking Sources</CardTitle>
+                  <CardDescription>Where bookings come from</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 gap-6">
+                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-blue-100 rounded-lg">
+                          <ExternalLink className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <span className="font-semibold text-blue-900">Website</span>
+                      </div>
+                      <div className="text-4xl font-bold text-blue-900">{bookingStats.bookingsBySource.website}</div>
+                      <div className="text-sm text-blue-700 mt-1">
+                        {bookingStats.totalBookings > 0 
+                          ? `${Math.round((bookingStats.bookingsBySource.website / bookingStats.totalBookings) * 100)}%`
+                          : '0%'
+                        } of bookings
+                      </div>
+                    </div>
+                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="p-2 bg-green-100 rounded-lg">
+                          <User className="w-5 h-5 text-green-600" />
+                        </div>
+                        <span className="font-semibold text-green-900">Dashboard (Manual)</span>
+                      </div>
+                      <div className="text-4xl font-bold text-green-900">{bookingStats.bookingsBySource.dashboard}</div>
+                      <div className="text-sm text-green-700 mt-1">
+                        {bookingStats.totalBookings > 0 
+                          ? `${Math.round((bookingStats.bookingsBySource.dashboard / bookingStats.totalBookings) * 100)}%`
+                          : '0%'
+                        } of bookings
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Popular Table Sizes - LIVE DATA */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Most Popular Table Sizes</CardTitle>
+                  <CardDescription>Live data from your bookings</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {getTopPartySizes().map((item, index) => (
+                      <div 
+                        key={item.size}
+                        className={`rounded-xl p-4 text-center border ${
+                          index === 0 
+                            ? 'bg-amber-50 border-amber-200' 
+                            : 'bg-slate-50 border-slate-200'
+                        }`}
+                      >
+                        <div className={`text-3xl font-bold ${index === 0 ? 'text-amber-900' : 'text-slate-900'}`}>
+                          {item.count}
+                        </div>
+                        <div className={`text-sm ${index === 0 ? 'text-amber-700' : 'text-slate-600'}`}>
+                          Table for {item.size}
+                        </div>
+                        {index === 0 && (
+                          <Badge className="mt-2 bg-amber-200 text-amber-800">Most Popular</Badge>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Cancellation Rate */}
+              {bookingStats.cancelledBookings > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <TrendingDown className="w-5 h-5 text-red-500" />
+                      Cancellations
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center gap-6">
+                      <div>
+                        <div className="text-3xl font-bold text-red-600">{bookingStats.cancelledBookings}</div>
+                        <div className="text-sm text-slate-600">Cancelled bookings</div>
+                      </div>
+                      <div>
+                        <div className="text-3xl font-bold text-slate-900">
+                          {bookingStats.totalBookings > 0 
+                            ? `${Math.round((bookingStats.cancelledBookings / bookingStats.totalBookings) * 100)}%`
+                            : '0%'
+                          }
+                        </div>
+                        <div className="text-sm text-slate-600">Cancellation rate</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+            </>
+          ) : (
+            <Card>
+              <CardContent className="py-12 text-center text-slate-500">
+                <XCircle className="w-12 h-12 mx-auto mb-4 text-red-400" />
+                <p>Failed to load booking data. Please try again.</p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        {/* Customers Tab */}
+        <TabsContent value="customers" className="space-y-6">
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
+            </div>
+          ) : bookingStats?.topCustomers ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>Top Customers</CardTitle>
+                <CardDescription>Your most loyal guests in the last {period} days</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {bookingStats.topCustomers.length > 0 ? (
+                  <div className="space-y-3">
+                    {bookingStats.topCustomers.map((customer, index) => (
+                      <div 
+                        key={customer.email}
+                        className={`flex items-center justify-between p-4 rounded-lg ${
+                          index % 2 === 0 ? 'bg-slate-50' : 'bg-white'
+                        } border`}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold ${
+                            index === 0 ? 'bg-amber-500' : 
+                            index === 1 ? 'bg-slate-400' : 
+                            index === 2 ? 'bg-amber-700' : 'bg-slate-300'
+                          }`}>
+                            {index + 1}
+                          </div>
+                          <div>
+                            <div className="font-semibold text-slate-900">{customer.name}</div>
+                            <div className="text-sm text-slate-500">{customer.email}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4">
+                          <Badge variant={
+                            customer.segment === 'vip' ? 'default' :
+                            customer.segment === 'regular' ? 'secondary' : 'outline'
+                          } className={
+                            customer.segment === 'vip' ? 'bg-purple-100 text-purple-800' :
+                            customer.segment === 'regular' ? 'bg-blue-100 text-blue-800' : ''
+                          }>
+                            {customer.segment}
+                          </Badge>
+                          <div className="text-right">
+                            <div className="text-xl font-bold text-slate-900">{customer.bookings}</div>
+                            <div className="text-xs text-slate-500">bookings</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-slate-500">
+                    No customer data available for this period
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          ) : null}
         </TabsContent>
 
         {/* 404 Errors Tab */}
@@ -440,103 +593,149 @@ export default function AnalyticsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-green-600" />
-                Performance Insights
+                Live Performance Insights
               </CardTitle>
+              <CardDescription>Based on your actual booking data</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {/* Good Insights */}
-              <div className="p-4 bg-green-50 rounded-xl border border-green-200">
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
-                  <div>
-                    <div className="font-semibold text-green-900">Strong Organic Traffic</div>
-                    <p className="text-sm text-green-700 mt-1">
-                      60% of your traffic comes from Google searches. Your SEO strategy is working well!
-                    </p>
-                  </div>
-                </div>
-              </div>
+              {bookingStats && (
+                <>
+                  {/* Website vs Dashboard bookings insight */}
+                  {bookingStats.bookingsBySource.website > bookingStats.bookingsBySource.dashboard && (
+                    <div className="p-4 bg-green-50 rounded-xl border border-green-200">
+                      <div className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
+                        <div>
+                          <div className="font-semibold text-green-900">Website Bookings Dominant</div>
+                          <p className="text-sm text-green-700 mt-1">
+                            {Math.round((bookingStats.bookingsBySource.website / bookingStats.totalBookings) * 100)}% of bookings come from your website.
+                            Your online presence is working well!
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
-              <div className="p-4 bg-green-50 rounded-xl border border-green-200">
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
-                  <div>
-                    <div className="font-semibold text-green-900">Good Checkout Completion</div>
-                    <p className="text-sm text-green-700 mt-1">
-                      65% of people who start booking complete it. Industry average is around 50-60%.
-                    </p>
-                  </div>
-                </div>
-              </div>
+                  {/* Low cancellation rate */}
+                  {bookingStats.totalBookings > 0 && (bookingStats.cancelledBookings / bookingStats.totalBookings) < 0.1 && (
+                    <div className="p-4 bg-green-50 rounded-xl border border-green-200">
+                      <div className="flex items-start gap-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
+                        <div>
+                          <div className="font-semibold text-green-900">Low Cancellation Rate</div>
+                          <p className="text-sm text-green-700 mt-1">
+                            Only {Math.round((bookingStats.cancelledBookings / bookingStats.totalBookings) * 100)}% cancellation rate.
+                            Customers are committed to their reservations!
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
-              {/* Improvement Areas */}
-              <div className="p-4 bg-amber-50 rounded-xl border border-amber-200">
-                <div className="flex items-start gap-3">
-                  <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
-                  <div>
-                    <div className="font-semibold text-amber-900">Abandoned Checkouts</div>
-                    <p className="text-sm text-amber-700 mt-1">
-                      19 people started booking but didn't complete. Consider adding:
-                    </p>
-                    <ul className="text-sm text-amber-700 mt-2 list-disc list-inside">
-                      <li>Progress indicator showing steps</li>
-                      <li>Trust badges near the submit button</li>
-                      <li>Clearer confirmation of what happens after booking</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+                  {/* High cancellation warning */}
+                  {bookingStats.totalBookings > 0 && (bookingStats.cancelledBookings / bookingStats.totalBookings) >= 0.1 && (
+                    <div className="p-4 bg-amber-50 rounded-xl border border-amber-200">
+                      <div className="flex items-start gap-3">
+                        <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
+                        <div>
+                          <div className="font-semibold text-amber-900">Higher Cancellation Rate</div>
+                          <p className="text-sm text-amber-700 mt-1">
+                            {Math.round((bookingStats.cancelledBookings / bookingStats.totalBookings) * 100)}% cancellation rate.
+                            Consider:
+                          </p>
+                          <ul className="text-sm text-amber-700 mt-2 list-disc list-inside">
+                            <li>Sending reminder emails closer to booking date</li>
+                            <li>Implementing a deposit system</li>
+                            <li>Making cancellation policy clearer</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
-              <div className="p-4 bg-blue-50 rounded-xl border border-blue-200">
-                <div className="flex items-start gap-3">
-                  <TrendingUp className="w-5 h-5 text-blue-600 mt-0.5" />
-                  <div>
-                    <div className="font-semibold text-blue-900">Social Media Opportunity</div>
-                    <p className="text-sm text-blue-700 mt-1">
-                      Only 1% of traffic comes from social media. Posting more frequently on Instagram 
-                      and TikTok could bring more customers, especially for special menus like Valentine's Day.
-                    </p>
+                  {/* Average party size insight */}
+                  {bookingStats.avgPartySize >= 3 && (
+                    <div className="p-4 bg-blue-50 rounded-xl border border-blue-200">
+                      <div className="flex items-start gap-3">
+                        <Users className="w-5 h-5 text-blue-600 mt-0.5" />
+                        <div>
+                          <div className="font-semibold text-blue-900">Good Average Party Size</div>
+                          <p className="text-sm text-blue-700 mt-1">
+                            Average of {bookingStats.avgPartySize.toFixed(1)} guests per booking.
+                            You're attracting group diners which typically spend more.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* 404 Errors insight */}
+              {errorData && errorData.summary.realErrors > 5 && (
+                <div className="p-4 bg-red-50 rounded-xl border border-red-200">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="w-5 h-5 text-red-600 mt-0.5" />
+                    <div>
+                      <div className="font-semibold text-red-900">404 Errors Detected</div>
+                      <p className="text-sm text-red-700 mt-1">
+                        {errorData.summary.realErrors} broken links found. Check the 404 Errors tab to fix them.
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
+
+              {errorData && errorData.summary.realErrors === 0 && (
+                <div className="p-4 bg-green-50 rounded-xl border border-green-200">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
+                    <div>
+                      <div className="font-semibold text-green-900">No Broken Links</div>
+                      <p className="text-sm text-green-700 mt-1">
+                        Your website has no 404 errors from real visitors. Great job!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 
-          {/* Recommendations */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Recommended Actions</CardTitle>
-              <CardDescription>Quick wins to improve your bookings</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
-                  <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold">1</div>
-                  <div className="flex-1">
-                    <div className="font-medium">Add Progress Steps to Booking Form</div>
-                    <div className="text-sm text-slate-600">Show customers they're almost done</div>
+          {/* Quick Stats Summary */}
+          {bookingStats && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Period Summary</CardTitle>
+                <CardDescription>Last {period} days at a glance</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="text-center p-4 bg-slate-50 rounded-lg">
+                    <div className="text-3xl font-bold text-slate-900">{bookingStats.totalBookings}</div>
+                    <div className="text-sm text-slate-600">Total Bookings</div>
                   </div>
-                  <Badge className="bg-green-100 text-green-700">High Impact</Badge>
-                </div>
-                <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
-                  <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-bold">2</div>
-                  <div className="flex-1">
-                    <div className="font-medium">Post Valentine's Menu on Social</div>
-                    <div className="text-sm text-slate-600">71 views already, amplify with posts</div>
+                  <div className="text-center p-4 bg-slate-50 rounded-lg">
+                    <div className="text-3xl font-bold text-slate-900">{bookingStats.totalGuests}</div>
+                    <div className="text-sm text-slate-600">Total Guests</div>
                   </div>
-                  <Badge className="bg-amber-100 text-amber-700">Medium</Badge>
-                </div>
-                <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-lg">
-                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold">3</div>
-                  <div className="flex-1">
-                    <div className="font-medium">Fix Any 404 Errors</div>
-                    <div className="text-sm text-slate-600">Check the errors tab for broken links</div>
+                  <div className="text-center p-4 bg-slate-50 rounded-lg">
+                    <div className="text-3xl font-bold text-slate-900">
+                      £{(bookingStats.totalGuests * 25).toLocaleString()}
+                    </div>
+                    <div className="text-sm text-slate-600">Est. Revenue</div>
+                    <div className="text-xs text-slate-400">at £25/guest</div>
                   </div>
-                  <Badge className="bg-blue-100 text-blue-700">Maintenance</Badge>
+                  <div className="text-center p-4 bg-slate-50 rounded-lg">
+                    <div className="text-3xl font-bold text-slate-900">
+                      {bookingStats.topCustomers.filter(c => c.segment === 'vip' || c.segment === 'regular').length}
+                    </div>
+                    <div className="text-sm text-slate-600">Returning Customers</div>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
       </Tabs>
     </div>
