@@ -82,8 +82,8 @@ export async function GET(request: NextRequest) {
 
     console.log(`Found ${bookings.length} bookings needing reconfirmation`)
 
-    // Send reconfirmation emails
-    const { emailService } = await import('@/lib/email/email-service')
+    // Send reconfirmation emails using the robust email service
+    const { RobustEmailUtils } = await import('@/lib/email/robust-email-service')
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com'
     
     const results = {
@@ -97,30 +97,19 @@ export async function GET(request: NextRequest) {
         // Generate reconfirmation link
         const reconfirmationLink = `${baseUrl}/reconfirm-booking?token=${booking.reconfirmation_token}`
 
-        // Send reconfirmation email
-        const emailResult = await emailService.sendEmail({
-          templateKey: 'booking_reconfirmation_request',
-          recipientEmail: booking.customer_email,
-          recipientName: booking.customer_name,
-          bookingId: booking.id,
-          data: {
-            customerName: booking.customer_name,
-            bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB', {
-              weekday: 'long',
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric'
-            }),
-            bookingTime: booking.booking_time,
-            partySize: booking.party_size,
-            bookingReference: booking.booking_reference || booking.id,
-            reconfirmationLink: reconfirmationLink,
-            confirmLink: `${reconfirmationLink}&action=confirm`,
-            cancelLink: `${baseUrl}/cancel-booking?token=${booking.reconfirmation_token}`,
-            deadlineHours: deadlineHours,
-            specialRequests: booking.special_requests
-          }
-        })
+        // Prepare customer object for the email utility
+        const customer = {
+          email: booking.customer_email,
+          name: booking.customer_name
+        }
+
+        // Send reconfirmation email using RobustEmailUtils
+        const emailResult = await RobustEmailUtils.sendReconfirmationRequest(
+          booking,
+          customer,
+          reconfirmationLink,
+          deadlineHours
+        )
 
         if (emailResult.success) {
           // Mark reconfirmation as sent

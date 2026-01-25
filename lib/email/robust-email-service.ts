@@ -622,6 +622,64 @@ export const RobustEmailUtils = {
     });
   },
 
+  /**
+   * Send booking reconfirmation request email
+   */
+  async sendReconfirmationRequest(booking: any, customer: any, reconfirmationLink: string, deadlineHours: number): Promise<EmailResult> {
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com';
+    
+    return robustEmailService.sendEmailRobust({
+      templateKey: 'booking_reconfirmation_request',
+      recipientEmail: customer.email,
+      recipientName: customer.name,
+      bookingId: booking.id,
+      data: {
+        customerName: customer.name,
+        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        }),
+        bookingTime: booking.booking_time,
+        partySize: booking.party_size,
+        bookingReference: booking.booking_reference || booking.id,
+        reconfirmationLink: reconfirmationLink,
+        confirmLink: `${reconfirmationLink}&action=confirm`,
+        cancelLink: `${baseUrl}/cancel-booking?token=${booking.reconfirmation_token}`,
+        deadlineHours: deadlineHours,
+        specialRequests: booking.special_requests || '',
+        guestText: (Number(booking.party_size) === 1) ? 'guest' : 'guests',
+      }
+    });
+  },
+
+  /**
+   * Send urgent reconfirmation reminder email
+   */
+  async sendReconfirmationReminder(booking: any, customer: any, reconfirmationLink: string, deadlineHours: number): Promise<EmailResult> {
+    return robustEmailService.sendEmailRobust({
+      templateKey: 'booking_reconfirmation_reminder',
+      recipientEmail: customer.email,
+      recipientName: customer.name,
+      bookingId: booking.id,
+      data: {
+        customerName: customer.name,
+        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        }),
+        bookingTime: booking.booking_time,
+        partySize: booking.party_size,
+        confirmLink: `${reconfirmationLink}&action=confirm`,
+        deadlineHours: deadlineHours,
+        guestText: (Number(booking.party_size) === 1) ? 'guest' : 'guests',
+      }
+    });
+  },
+
   // Process stuck emails
   async processStuckEmails(): Promise<{ processed: number; success: number; failed: number }> {
     const pendingResult = await robustEmailService.processPendingEmails();
