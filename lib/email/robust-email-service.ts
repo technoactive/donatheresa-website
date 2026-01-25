@@ -626,8 +626,6 @@ export const RobustEmailUtils = {
    * Send booking reconfirmation request email
    */
   async sendReconfirmationRequest(booking: any, customer: any, reconfirmationLink: string, deadlineHours: number): Promise<EmailResult> {
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com';
-    
     return robustEmailService.sendEmailRobust({
       templateKey: 'booking_reconfirmation_request',
       recipientEmail: customer.email,
@@ -646,7 +644,7 @@ export const RobustEmailUtils = {
         bookingReference: booking.booking_reference || booking.id,
         reconfirmationLink: reconfirmationLink,
         confirmLink: `${reconfirmationLink}&action=confirm`,
-        cancelLink: `${baseUrl}/cancel-booking?token=${booking.reconfirmation_token}`,
+        cancelLink: reconfirmationLink, // Points to same page where they can click "Cancel My Booking"
         deadlineHours: deadlineHours,
         specialRequests: booking.special_requests || '',
         guestText: (Number(booking.party_size) === 1) ? 'guest' : 'guests',
