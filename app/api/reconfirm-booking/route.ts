@@ -114,11 +114,16 @@ export async function POST(request: NextRequest) {
             console.error("Failed to create notification:", notifError)
           }
 
+          // Send confirmation email to customer
+          const { RobustEmailUtils } = await import('@/lib/email/robust-email-service')
+          console.log("Sending customer reconfirmation confirmation email...")
+          const customerEmailResult = await RobustEmailUtils.sendReconfirmationConfirmation(booking, customer)
+          console.log("Customer email result:", customerEmailResult)
+
           // Send email notification to restaurant staff
           console.log("Sending staff email notification...")
-          const { RobustEmailUtils } = await import('@/lib/email/robust-email-service')
-          const emailResult = await RobustEmailUtils.sendStaffBookingStatusNotification(booking, customer, 'confirmed')
-          console.log("Staff email result:", emailResult)
+          const staffEmailResult = await RobustEmailUtils.sendStaffBookingStatusNotification(booking, customer, 'confirmed')
+          console.log("Staff email result:", staffEmailResult)
         }
       } catch (emailError) {
         console.error("Failed to send confirmation notification:", emailError)

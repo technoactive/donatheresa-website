@@ -678,6 +678,133 @@ export const RobustEmailUtils = {
     });
   },
 
+  /**
+   * Send confirmation email to customer after they reconfirm their booking
+   */
+  async sendReconfirmationConfirmation(booking: any, customer: any): Promise<EmailResult> {
+    // Get email settings from database
+    const supabase = await createClient();
+    const { data: settings } = await supabase
+      .from('email_settings')
+      .select('sender_name, sender_email, api_key_encrypted')
+      .eq('user_id', 'admin')
+      .single();
+
+    const senderName = settings?.sender_name || 'Dona Theresa Restaurant';
+    const senderEmail = settings?.sender_email || 'reservations@donatheresa.com';
+    const apiKey = settings?.api_key_encrypted;
+
+    if (!apiKey) {
+      console.error('No Resend API key configured');
+      return { success: false, error: 'No API key configured' };
+    }
+
+    const bookingDate = new Date(booking.booking_date).toLocaleDateString('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
+    const subject = `✅ Booking Confirmed - ${bookingDate} at ${booking.booking_time}`;
+
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Confirmed</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa;">
+  <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+      <h1 style="color: white; margin: 0; font-size: 28px;">✅ Booking Confirmed!</h1>
+      <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Thank you for confirming your reservation</p>
+    </div>
+    
+    <div style="background: white; padding: 30px; border-radius: 0 0 12px 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+      <p style="font-size: 16px; color: #374151; margin-bottom: 20px;">
+        Dear <strong>${customer.name}</strong>,
+      </p>
+      
+      <p style="font-size: 16px; color: #374151; margin-bottom: 25px;">
+        Thank you for confirming your reservation at <strong>Dona Theresa</strong>. We look forward to welcoming you!
+      </p>
+      
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+        <h3 style="color: #166534; margin: 0 0 15px 0; font-size: 16px;">📋 Your Reservation Details</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 8px 0; color: #6b7280; width: 40%;">Date:</td>
+            <td style="padding: 8px 0; color: #111827; font-weight: 600;">${bookingDate}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #6b7280;">Time:</td>
+            <td style="padding: 8px 0; color: #111827; font-weight: 600;">${booking.booking_time}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #6b7280;">Party Size:</td>
+            <td style="padding: 8px 0; color: #111827; font-weight: 600;">${booking.party_size} guests</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #6b7280;">Reference:</td>
+            <td style="padding: 8px 0; color: #111827; font-weight: 600;">${booking.booking_reference || booking.id}</td>
+          </tr>
+          ${booking.special_requests ? `
+          <tr>
+            <td style="padding: 8px 0; color: #6b7280; vertical-align: top;">Special Requests:</td>
+            <td style="padding: 8px 0; color: #111827;">${booking.special_requests}</td>
+          </tr>
+          ` : ''}
+        </table>
+      </div>
+      
+      <div style="background: #fefce8; border: 1px solid #fef08a; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+        <p style="margin: 0; color: #854d0e; font-size: 14px;">
+          <strong>📍 Important:</strong> Please arrive a few minutes early. If your plans change, please let us know as soon as possible.
+        </p>
+      </div>
+      
+      <div style="text-align: center; padding: 20px 0; border-top: 1px solid #e5e7eb;">
+        <p style="color: #6b7280; font-size: 14px; margin: 0 0 10px 0;">We look forward to seeing you!</p>
+        <p style="color: #374151; font-weight: 600; margin: 0;">The Dona Theresa Team</p>
+      </div>
+      
+      <div style="text-align: center; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+        <p style="color: #9ca3af; font-size: 12px; margin: 0;">
+          📞 +44 20 8421 5550 | 📍 451 Uxbridge Road, Pinner HA5 4JR
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+
+    try {
+      const Resend = (await import('resend')).Resend;
+      const resend = new Resend(apiKey);
+      
+      const result = await resend.emails.send({
+        from: `${senderName} <${senderEmail}>`,
+        to: [customer.email],
+        subject: subject,
+        html: htmlContent,
+      });
+
+      if (result.error) {
+        console.error('Failed to send reconfirmation confirmation:', result.error);
+        return { success: false, error: result.error.message };
+      }
+
+      console.log(`✅ Reconfirmation confirmation sent to ${customer.email}`);
+      return { success: true, messageId: result.data?.id };
+    } catch (error) {
+      console.error('Error sending reconfirmation confirmation:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  },
+
   // Process stuck emails
   async processStuckEmails(): Promise<{ processed: number; success: number; failed: number }> {
     const pendingResult = await robustEmailService.processPendingEmails();
