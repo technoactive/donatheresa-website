@@ -1,14 +1,24 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 
+// Disable caching for this route
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 // GET - Fetch booking details by reconfirmation token
 export async function GET(request: NextRequest) {
+  const headers = {
+    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0'
+  }
+  
   try {
     const { searchParams } = new URL(request.url)
     const token = searchParams.get("token")
 
     if (!token) {
-      return NextResponse.json({ error: "Token is required" }, { status: 400 })
+      return NextResponse.json({ error: "Token is required" }, { status: 400, headers })
     }
 
     const supabase = await createClient()
@@ -20,17 +30,17 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error("Error fetching booking:", error)
-      return NextResponse.json({ error: "Failed to fetch booking" }, { status: 500 })
+      return NextResponse.json({ error: "Failed to fetch booking" }, { status: 500, headers })
     }
 
     if (!booking) {
-      return NextResponse.json({ error: "Booking not found or invalid token" }, { status: 404 })
+      return NextResponse.json({ error: "Booking not found or invalid token" }, { status: 404, headers })
     }
 
-    return NextResponse.json({ booking })
+    return NextResponse.json({ booking }, { headers })
   } catch (error) {
     console.error("Error in reconfirm-booking GET:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return NextResponse.json({ error: "Internal server error" }, { status: 500, headers })
   }
 }
 
