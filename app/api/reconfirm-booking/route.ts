@@ -106,6 +106,7 @@ export async function POST(request: NextRequest) {
               title: 'Booking Reconfirmed',
               message: `${customer.name} has confirmed their booking for ${booking.party_size} guests on ${new Date(booking.booking_date).toLocaleDateString('en-GB')} at ${booking.booking_time}`,
               booking_id: booking.id,
+              user_id: 'admin',
               priority: 'high'
             })
           
@@ -184,6 +185,7 @@ export async function POST(request: NextRequest) {
               title: 'Booking Cancelled (Reconfirmation)',
               message: `${customer.name} cancelled their booking for ${fullBooking.party_size} guests on ${new Date(fullBooking.booking_date).toLocaleDateString('en-GB')} at ${fullBooking.booking_time} via reconfirmation link`,
               booking_id: bookingId,
+              user_id: 'admin',
               priority: 'high'
             })
           
