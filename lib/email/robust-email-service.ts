@@ -168,7 +168,7 @@ class RobustEmailService {
       to: [params.recipientEmail],
       subject,
       html: htmlContent,
-      ...(settings.reply_to_email && { reply_to: settings.reply_to_email }),
+      ...(settings.reply_to_email && { replyTo: settings.reply_to_email }),
     };
 
     // Send with timeout

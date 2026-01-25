@@ -370,7 +370,7 @@ class EmailService {
         html: htmlContent,
         ...(textContent && { text: textContent }),
         ...(template.preview_text && { text: template.preview_text }),
-        ...(settings.reply_to_email && { reply_to: settings.reply_to_email }),
+        ...(settings.reply_to_email && { replyTo: settings.reply_to_email }),
       };
 
       // Add tracking if enabled
