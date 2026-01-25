@@ -75,34 +75,48 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: result.message }, { status: 400 })
       }
 
-      // Send confirmation email to customer
+      // Send confirmation notifications
       try {
-        // Get booking details for email
-        const { data: booking } = await supabase
-          .from('bookings')
-          .select(`
-            *,
-            customers (*)
-          `)
-          .eq('id', result.booking_id)
+        // Get booking details using RPC to bypass RLS
+        const { data: bookingData } = await supabase
+          .rpc('get_booking_by_reconfirmation_token', { p_token: token })
           .single()
 
-        if (booking?.customers) {
-          // Create notification for staff
+        if (bookingData) {
+          const booking = {
+            id: result.booking_id,
+            booking_date: bookingData.booking_date,
+            booking_time: bookingData.booking_time,
+            party_size: bookingData.party_size,
+            booking_reference: bookingData.booking_reference,
+            special_requests: bookingData.special_requests
+          }
+          
+          const customer = {
+            name: bookingData.customer_name,
+            email: bookingData.customer_email,
+            phone: bookingData.customer_phone
+          }
+
+          // Create notification for dashboard
           await supabase
             .from('notifications')
             .insert({
               type: 'booking_confirmed',
               title: 'Booking Reconfirmed',
-              message: `${booking.customers.name} has confirmed their booking for ${booking.party_size} guests on ${new Date(booking.booking_date).toLocaleDateString('en-GB')} at ${booking.booking_time}`,
+              message: `${customer.name} has confirmed their booking for ${booking.party_size} guests on ${new Date(booking.booking_date).toLocaleDateString('en-GB')} at ${booking.booking_time}`,
               data: {
                 booking_id: booking.id,
-                customer_name: booking.customers.name,
+                customer_name: customer.name,
                 party_size: booking.party_size,
                 booking_date: booking.booking_date,
                 booking_time: booking.booking_time
               }
             })
+
+          // Send email notification to restaurant staff
+          const { RobustEmailUtils } = await import('@/lib/email/robust-email-service')
+          await RobustEmailUtils.sendStaffBookingStatusNotification(booking, customer, 'confirmed')
         }
       } catch (emailError) {
         console.error("Failed to send confirmation notification:", emailError)
@@ -156,11 +170,12 @@ export async function POST(request: NextRequest) {
             phone: bookingData.customer_phone
           }
 
-          // Send cancellation email
           const { RobustEmailUtils } = await import('@/lib/email/robust-email-service')
+          
+          // Send cancellation email to customer
           await RobustEmailUtils.sendBookingCancellation(fullBooking, customer)
 
-          // Create notification for staff
+          // Create notification for dashboard
           await supabase
             .from('notifications')
             .insert({
@@ -176,6 +191,9 @@ export async function POST(request: NextRequest) {
                 reason: 'customer_cancelled_via_reconfirmation'
               }
             })
+
+          // Send email notification to restaurant staff
+          await RobustEmailUtils.sendStaffBookingStatusNotification(fullBooking, customer, 'cancelled')
         }
       } catch (emailError) {
         console.error("Failed to send cancellation email:", emailError)

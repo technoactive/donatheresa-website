@@ -880,5 +880,175 @@ export const RobustEmailUtils = {
       console.error('Error sending staff reconfirmation alert:', error);
       return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
     }
+  },
+
+  /**
+   * Send staff notification when customer confirms or cancels via reconfirmation page
+   */
+  async sendStaffBookingStatusNotification(
+    booking: any, 
+    customer: any, 
+    action: 'confirmed' | 'cancelled'
+  ): Promise<EmailResult> {
+    // Get restaurant email from database settings
+    const supabase = await createClient();
+    const { data: settings } = await supabase
+      .from('email_settings')
+      .select('restaurant_email')
+      .eq('user_id', 'admin')
+      .single();
+
+    const staffEmail = settings?.restaurant_email;
+    
+    if (!staffEmail) {
+      console.error('No restaurant email configured in settings');
+      return { success: false, error: 'No restaurant email configured' };
+    }
+
+    const isConfirmed = action === 'confirmed';
+    const bookingDate = new Date(booking.booking_date).toLocaleDateString('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
+    const subject = isConfirmed
+      ? `✅ BOOKING CONFIRMED - ${customer.name} (${booking.party_size} guests) - ${bookingDate}`
+      : `❌ BOOKING CANCELLED - ${customer.name} (${booking.party_size} guests) - ${bookingDate}`;
+
+    const headerColor = isConfirmed ? '#16a34a' : '#dc2626';
+    const statusText = isConfirmed ? 'CONFIRMED' : 'CANCELLED';
+    const emoji = isConfirmed ? '✅' : '❌';
+    const message = isConfirmed
+      ? `Great news! <strong>${customer.name}</strong> has confirmed their booking via the reconfirmation link.`
+      : `<strong>${customer.name}</strong> has cancelled their booking via the reconfirmation link.`;
+
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking ${statusText}</title>
+</head>
+<body style="font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
+  <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <!-- Header -->
+    <div style="background: ${headerColor}; color: white; padding: 25px; text-align: center;">
+      <div style="font-size: 48px; margin-bottom: 10px;">${emoji}</div>
+      <h1 style="margin: 0; font-size: 24px; font-weight: 600;">Booking ${statusText}</h1>
+      <p style="margin: 10px 0 0 0; opacity: 0.9; font-size: 14px;">Via Reconfirmation System</p>
+    </div>
+    
+    <!-- Content -->
+    <div style="padding: 25px;">
+      <p style="font-size: 16px; margin: 0 0 20px 0; color: #444;">
+        ${message}
+      </p>
+      
+      <!-- Booking Details Card -->
+      <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid ${headerColor};">
+        <h2 style="margin: 0 0 15px 0; color: #333; font-size: 18px;">📋 Booking Details</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 10px 0; font-weight: 600; color: #555; width: 40%; border-bottom: 1px solid #e5e7eb;">Customer</td>
+            <td style="padding: 10px 0; color: #333; border-bottom: 1px solid #e5e7eb;">${customer.name}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; font-weight: 600; color: #555; border-bottom: 1px solid #e5e7eb;">📞 Phone</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
+              <a href="tel:${customer.phone}" style="color: #2563eb; text-decoration: none; font-weight: 500;">${customer.phone || 'Not provided'}</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; font-weight: 600; color: #555; border-bottom: 1px solid #e5e7eb;">📧 Email</td>
+            <td style="padding: 10px 0; border-bottom: 1px solid #e5e7eb;">
+              <a href="mailto:${customer.email}" style="color: #2563eb; text-decoration: none;">${customer.email}</a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; font-weight: 600; color: #555; border-bottom: 1px solid #e5e7eb;">📅 Date</td>
+            <td style="padding: 10px 0; color: #333; font-weight: 500; border-bottom: 1px solid #e5e7eb;">${bookingDate}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; font-weight: 600; color: #555; border-bottom: 1px solid #e5e7eb;">🕐 Time</td>
+            <td style="padding: 10px 0; color: #333; font-weight: 500; border-bottom: 1px solid #e5e7eb;">${booking.booking_time}</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; font-weight: 600; color: #555; border-bottom: 1px solid #e5e7eb;">👥 Party Size</td>
+            <td style="padding: 10px 0; color: #333; font-weight: 500; border-bottom: 1px solid #e5e7eb;">${booking.party_size} guests</td>
+          </tr>
+          <tr>
+            <td style="padding: 10px 0; font-weight: 600; color: #555; border-bottom: 1px solid #e5e7eb;">🔖 Reference</td>
+            <td style="padding: 10px 0; color: #333; font-family: monospace; border-bottom: 1px solid #e5e7eb;">${booking.booking_reference || booking.id}</td>
+          </tr>
+          ${booking.special_requests ? `
+          <tr>
+            <td style="padding: 10px 0; font-weight: 600; color: #555;">📝 Notes</td>
+            <td style="padding: 10px 0; color: #666; font-style: italic;">${booking.special_requests}</td>
+          </tr>
+          ` : ''}
+        </table>
+      </div>
+      
+      <!-- Status Badge -->
+      <div style="text-align: center; margin-top: 20px;">
+        <span style="display: inline-block; background: ${headerColor}; color: white; padding: 8px 24px; border-radius: 20px; font-size: 14px; font-weight: 600; letter-spacing: 0.5px;">
+          ${statusText}
+        </span>
+      </div>
+      
+      ${!isConfirmed ? `
+      <!-- Cancellation Notice -->
+      <div style="background: #fef2f2; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #fecaca;">
+        <p style="margin: 0; color: #991b1b; font-size: 14px;">
+          <strong>Note:</strong> This table is now available for other guests. The customer has been sent a cancellation confirmation email.
+        </p>
+      </div>
+      ` : `
+      <!-- Confirmation Notice -->
+      <div style="background: #f0fdf4; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #bbf7d0;">
+        <p style="margin: 0; color: #166534; font-size: 14px;">
+          <strong>Great!</strong> This booking is now confirmed. The table is secured for ${customer.name}.
+        </p>
+      </div>
+      `}
+    </div>
+    
+    <!-- Footer -->
+    <div style="background: #f8f9fa; padding: 15px 25px; border-top: 1px solid #e5e7eb;">
+      <p style="margin: 0; font-size: 12px; color: #666; text-align: center;">
+        This is an automated notification from your Dona Theresa booking system.<br>
+        <a href="https://donatheresa.com/dashboard/bookings" style="color: #2563eb;">View all bookings in dashboard</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+    // Send email via Resend
+    try {
+      const Resend = (await import('resend')).Resend;
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      
+      const result = await resend.emails.send({
+        from: 'Dona Theresa Bookings <onboarding@resend.dev>',
+        to: [staffEmail],
+        subject: subject,
+        html: htmlContent,
+      });
+
+      if (result.error) {
+        console.error('Failed to send staff booking notification:', result.error);
+        return { success: false, error: result.error.message };
+      }
+
+      console.log(`✅ Staff ${action} notification sent to ${staffEmail} for booking ${booking.booking_reference}`);
+      return { success: true, messageId: result.data?.id };
+    } catch (error) {
+      console.error('Error sending staff booking notification:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
   }
 }; 
