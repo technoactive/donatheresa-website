@@ -151,6 +151,15 @@ export async function GET(request: NextRequest) {
               }
             })
 
+          // SEND EMAIL ALERT TO RESTAURANT STAFF ABOUT AUTO-CANCELLATION
+          try {
+            const { RobustEmailUtils } = await import('@/lib/email/robust-email-service')
+            await RobustEmailUtils.sendStaffReconfirmationAlert(booking, 'auto_cancelled')
+            console.log(`📧 Sent staff auto-cancellation alert for booking ${booking.id}`)
+          } catch (emailError) {
+            console.error("Failed to send staff auto-cancellation alert:", emailError)
+          }
+
           console.log(`🚫 Auto-cancelled booking ${booking.id} for ${booking.customer_name}`)
 
         } else if (actionTaken === 'second_reminder_sent') {
@@ -209,6 +218,15 @@ export async function GET(request: NextRequest) {
                 action_required: 'manual_follow_up'
               }
             })
+
+          // SEND EMAIL ALERT TO RESTAURANT STAFF
+          try {
+            const { RobustEmailUtils } = await import('@/lib/email/robust-email-service')
+            await RobustEmailUtils.sendStaffReconfirmationAlert(booking, 'no_response')
+            console.log(`📧 Sent staff alert email for booking ${booking.id}`)
+          } catch (emailError) {
+            console.error("Failed to send staff alert email:", emailError)
+          }
 
           console.log(`⚠️ Flagged booking ${booking.id} for manual follow-up`)
         }

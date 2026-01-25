@@ -748,5 +748,125 @@ export const RobustEmailUtils = {
         sentAt: new Date(contact.created_at).toLocaleString('en-GB'),
       }
     });
+  },
+
+  /**
+   * Send staff alert when customer doesn't respond to reconfirmation
+   */
+  async sendStaffReconfirmationAlert(booking: any, alertType: 'no_response' | 'auto_cancelled'): Promise<EmailResult> {
+    // Restaurant email to send alerts to
+    const staffEmail = 'donatheresahatchend@gmail.com';
+    
+    const isAutoCancelled = alertType === 'auto_cancelled';
+    const subject = isAutoCancelled 
+      ? `🚨 BOOKING AUTO-CANCELLED - ${booking.customer_name} (${booking.party_size} guests)`
+      : `⚠️ ACTION REQUIRED - No Reconfirmation from ${booking.customer_name}`;
+
+    const bookingDate = new Date(booking.booking_date).toLocaleDateString('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>${isAutoCancelled ? 'Booking Auto-Cancelled' : 'Reconfirmation Alert'}</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <div style="background: ${isAutoCancelled ? '#dc2626' : '#f59e0b'}; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+    <h1 style="margin: 0; font-size: 24px;">${isAutoCancelled ? '🚨 Booking Auto-Cancelled' : '⚠️ Reconfirmation Alert'}</h1>
+  </div>
+  
+  <div style="background: #f8f9fa; padding: 20px; border: 1px solid #ddd; border-top: none; border-radius: 0 0 8px 8px;">
+    <p style="font-size: 16px; margin-bottom: 20px;">
+      ${isAutoCancelled 
+        ? `A booking has been <strong style="color: #dc2626;">automatically cancelled</strong> because the customer did not respond to the reconfirmation request.`
+        : `A customer has <strong style="color: #f59e0b;">not responded</strong> to the reconfirmation email. Please call them to confirm.`
+      }
+    </p>
+    
+    <div style="background: white; padding: 15px; border-radius: 8px; border: 2px solid ${isAutoCancelled ? '#dc2626' : '#f59e0b'};">
+      <h2 style="margin: 0 0 15px 0; color: #333;">Booking Details</h2>
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 8px 0; font-weight: bold; width: 40%;">Customer Name:</td>
+          <td style="padding: 8px 0;">${booking.customer_name}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; font-weight: bold;">Phone:</td>
+          <td style="padding: 8px 0;"><a href="tel:${booking.customer_phone}" style="color: #2563eb;">${booking.customer_phone || 'Not provided'}</a></td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; font-weight: bold;">Email:</td>
+          <td style="padding: 8px 0;"><a href="mailto:${booking.customer_email}" style="color: #2563eb;">${booking.customer_email}</a></td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; font-weight: bold;">Date:</td>
+          <td style="padding: 8px 0;">${bookingDate}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; font-weight: bold;">Time:</td>
+          <td style="padding: 8px 0;">${booking.booking_time}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; font-weight: bold;">Party Size:</td>
+          <td style="padding: 8px 0;">${booking.party_size} guests</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; font-weight: bold;">Reference:</td>
+          <td style="padding: 8px 0;">${booking.booking_reference || booking.id}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 0; font-weight: bold;">Status:</td>
+          <td style="padding: 8px 0;">
+            <span style="background: ${isAutoCancelled ? '#dc2626' : '#f59e0b'}; color: white; padding: 4px 12px; border-radius: 4px; font-size: 12px;">
+              ${isAutoCancelled ? 'CANCELLED' : 'NEEDS FOLLOW-UP'}
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
+    
+    ${!isAutoCancelled ? `
+    <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px solid #f59e0b;">
+      <h3 style="margin: 0 0 10px 0; color: #92400e;">📞 Action Required</h3>
+      <p style="margin: 0; color: #92400e;">Please call <strong>${booking.customer_name}</strong> at <a href="tel:${booking.customer_phone}" style="color: #92400e; font-weight: bold;">${booking.customer_phone}</a> to confirm their booking.</p>
+    </div>
+    ` : ''}
+    
+    <p style="margin-top: 20px; font-size: 14px; color: #666;">
+      This is an automated alert from your Dona Theresa booking system.
+    </p>
+  </div>
+</body>
+</html>`;
+
+    // Send email directly via Resend (bypass template system for this simple alert)
+    try {
+      const Resend = (await import('resend')).Resend;
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      
+      const result = await resend.emails.send({
+        from: 'Dona Theresa Bookings <onboarding@resend.dev>',
+        to: [staffEmail],
+        subject: subject,
+        html: htmlContent,
+      });
+
+      if (result.error) {
+        console.error('Failed to send staff reconfirmation alert:', result.error);
+        return { success: false, error: result.error.message };
+      }
+
+      console.log(`✅ Staff alert email sent to ${staffEmail} for booking ${booking.booking_reference}`);
+      return { success: true, messageId: result.data?.id };
+    } catch (error) {
+      console.error('Error sending staff reconfirmation alert:', error);
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
   }
 }; 
