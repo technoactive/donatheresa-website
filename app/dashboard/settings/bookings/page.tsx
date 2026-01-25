@@ -25,7 +25,12 @@ import {
   Trash2,
   CalendarDays,
   UtensilsCrossed,
-  Coffee
+  Coffee,
+  Bell,
+  Mail,
+  CheckCircle,
+  XCircle,
+  Info
 } from "lucide-react"
 import { 
   getBookingSettingsAction,
@@ -61,6 +66,15 @@ export default function BookingSettingsPage() {
     closed_days_of_week: [],
     suspension_message: "We're currently not accepting new bookings. Please check back later.",
     service_periods: []
+  })
+
+  // Reconfirmation settings state
+  const [reconfirmationSettings, setReconfirmationSettings] = useState({
+    enabled: false,
+    min_party_size: 6,
+    days_before: 2,
+    deadline_hours: 24,
+    no_response_action: 'flag_only' as 'auto_cancel' | 'flag_only' | 'second_reminder'
   })
   
   const [servicePeriods, setServicePeriods] = useState<ServicePeriodFrontend[]>([
@@ -126,6 +140,17 @@ export default function BookingSettingsPage() {
           type: period.period_type as "lunch" | "dinner" | "break"
         }))
         setServicePeriods(periods)
+      }
+
+      // Load reconfirmation settings
+      if (settings.reconfirmation_enabled !== undefined) {
+        setReconfirmationSettings({
+          enabled: settings.reconfirmation_enabled || false,
+          min_party_size: settings.reconfirmation_min_party_size || 6,
+          days_before: settings.reconfirmation_days_before || 2,
+          deadline_hours: settings.reconfirmation_deadline_hours || 24,
+          no_response_action: settings.reconfirmation_no_response_action || 'flag_only'
+        })
       }
       
       toast.success('Settings loaded successfully')
@@ -270,6 +295,13 @@ export default function BookingSettingsPage() {
       formData.append('totalSeats', (bookingSettings.total_seats || 50).toString())
       formData.append('closedDates', JSON.stringify(bookingSettings.closed_dates))
       formData.append('closedDaysOfWeek', JSON.stringify(bookingSettings.closed_days_of_week || []))
+
+      // Reconfirmation settings
+      formData.append('reconfirmationEnabled', reconfirmationSettings.enabled ? 'on' : 'off')
+      formData.append('reconfirmationMinPartySize', reconfirmationSettings.min_party_size.toString())
+      formData.append('reconfirmationDaysBefore', reconfirmationSettings.days_before.toString())
+      formData.append('reconfirmationDeadlineHours', reconfirmationSettings.deadline_hours.toString())
+      formData.append('reconfirmationNoResponseAction', reconfirmationSettings.no_response_action)
       
       console.log('[CLIENT] About to call updateBookingSettingsAction')
       const result = await updateBookingSettingsAction(formData)
@@ -460,6 +492,197 @@ export default function BookingSettingsPage() {
               rows={3}
               className="resize-none bg-white border-slate-200 text-slate-900 placeholder:text-slate-400"
             />
+          </CardContent>
+        </Card>
+
+        {/* Reconfirmation System */}
+        <Card className="bg-white border-slate-200 shadow-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-slate-900">
+              <div className="h-8 w-8 rounded-lg bg-orange-100 flex items-center justify-center">
+                <Bell className="w-5 h-5 text-orange-600" />
+              </div>
+              Reconfirmation System
+              {reconfirmationSettings.enabled && (
+                <Badge className="bg-green-100 text-green-700 border-green-200 ml-2">Active</Badge>
+              )}
+            </CardTitle>
+            <CardDescription className="text-slate-600">
+              Automatically request confirmation from large parties before their booking
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Enable/Disable Toggle */}
+            <div className="flex items-center justify-between p-4 bg-slate-50 rounded-lg">
+              <div className="space-y-0.5">
+                <Label className="text-slate-900 font-medium">Enable Reconfirmation</Label>
+                <p className="text-sm text-slate-600">
+                  Send automated reconfirmation emails to large party bookings
+                </p>
+              </div>
+              <Switch
+                checked={reconfirmationSettings.enabled}
+                onCheckedChange={(checked) => setReconfirmationSettings(prev => ({
+                  ...prev,
+                  enabled: checked
+                }))}
+              />
+            </div>
+
+            {reconfirmationSettings.enabled && (
+              <>
+                {/* Info Banner */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex gap-3">
+                  <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                  <div className="text-sm text-blue-800">
+                    <p className="font-medium mb-1">How it works:</p>
+                    <ol className="list-decimal list-inside space-y-1 text-blue-700">
+                      <li>Customers with {reconfirmationSettings.min_party_size}+ guests get an email {reconfirmationSettings.days_before} days before</li>
+                      <li>They have {reconfirmationSettings.deadline_hours} hours to confirm or cancel</li>
+                      <li>No response? {reconfirmationSettings.no_response_action === 'auto_cancel' ? 'Booking is auto-cancelled' : reconfirmationSettings.no_response_action === 'second_reminder' ? 'A second reminder is sent' : 'Staff is notified for follow-up'}</li>
+                    </ol>
+                  </div>
+                </div>
+
+                {/* Settings Grid */}
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="minPartySize" className="text-slate-900">Minimum Party Size</Label>
+                    <Select
+                      value={reconfirmationSettings.min_party_size.toString()}
+                      onValueChange={(value) => setReconfirmationSettings(prev => ({
+                        ...prev,
+                        min_party_size: parseInt(value)
+                      }))}
+                    >
+                      <SelectTrigger className="bg-white border-slate-200 text-slate-900">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border-slate-200">
+                        {[4, 5, 6, 7, 8, 9, 10, 12, 15].map(size => (
+                          <SelectItem key={size} value={size.toString()} className="text-slate-900">
+                            {size}+ guests
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-slate-500">
+                      Parties with this many guests or more will receive reconfirmation requests
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="daysBefore" className="text-slate-900">Days Before Booking</Label>
+                    <Select
+                      value={reconfirmationSettings.days_before.toString()}
+                      onValueChange={(value) => setReconfirmationSettings(prev => ({
+                        ...prev,
+                        days_before: parseInt(value)
+                      }))}
+                    >
+                      <SelectTrigger className="bg-white border-slate-200 text-slate-900">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border-slate-200">
+                        <SelectItem value="1" className="text-slate-900">1 day before</SelectItem>
+                        <SelectItem value="2" className="text-slate-900">2 days before</SelectItem>
+                        <SelectItem value="3" className="text-slate-900">3 days before</SelectItem>
+                        <SelectItem value="5" className="text-slate-900">5 days before</SelectItem>
+                        <SelectItem value="7" className="text-slate-900">7 days before</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-slate-500">
+                      When to send the reconfirmation email
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="deadlineHours" className="text-slate-900">Response Deadline</Label>
+                    <Select
+                      value={reconfirmationSettings.deadline_hours.toString()}
+                      onValueChange={(value) => setReconfirmationSettings(prev => ({
+                        ...prev,
+                        deadline_hours: parseInt(value)
+                      }))}
+                    >
+                      <SelectTrigger className="bg-white border-slate-200 text-slate-900">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border-slate-200">
+                        <SelectItem value="12" className="text-slate-900">12 hours</SelectItem>
+                        <SelectItem value="24" className="text-slate-900">24 hours</SelectItem>
+                        <SelectItem value="36" className="text-slate-900">36 hours</SelectItem>
+                        <SelectItem value="48" className="text-slate-900">48 hours</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-slate-500">
+                      How long customers have to respond
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="noResponseAction" className="text-slate-900">No Response Action</Label>
+                    <Select
+                      value={reconfirmationSettings.no_response_action}
+                      onValueChange={(value: 'auto_cancel' | 'flag_only' | 'second_reminder') => setReconfirmationSettings(prev => ({
+                        ...prev,
+                        no_response_action: value
+                      }))}
+                    >
+                      <SelectTrigger className="bg-white border-slate-200 text-slate-900">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border-slate-200">
+                        <SelectItem value="flag_only" className="text-slate-900">
+                          <div className="flex items-center gap-2">
+                            <AlertCircle className="w-4 h-4 text-amber-500" />
+                            Flag for manual follow-up
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="second_reminder" className="text-slate-900">
+                          <div className="flex items-center gap-2">
+                            <Mail className="w-4 h-4 text-blue-500" />
+                            Send second reminder
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="auto_cancel" className="text-slate-900">
+                          <div className="flex items-center gap-2">
+                            <XCircle className="w-4 h-4 text-red-500" />
+                            Auto-cancel booking
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-slate-500">
+                      What happens if customer doesn&apos;t respond
+                    </p>
+                  </div>
+                </div>
+
+                {/* Action Preview */}
+                <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
+                  <p className="text-sm font-medium text-slate-700 mb-2">Preview:</p>
+                  <p className="text-sm text-slate-600">
+                    {reconfirmationSettings.no_response_action === 'auto_cancel' ? (
+                      <span className="flex items-center gap-2">
+                        <XCircle className="w-4 h-4 text-red-500" />
+                        Bookings will be <span className="font-medium text-red-600">automatically cancelled</span> if not confirmed within {reconfirmationSettings.deadline_hours} hours
+                      </span>
+                    ) : reconfirmationSettings.no_response_action === 'second_reminder' ? (
+                      <span className="flex items-center gap-2">
+                        <Mail className="w-4 h-4 text-blue-500" />
+                        A <span className="font-medium text-blue-600">second reminder</span> will be sent, then flagged if still no response
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        <AlertCircle className="w-4 h-4 text-amber-500" />
+                        You&apos;ll get a <span className="font-medium text-amber-600">notification</span> to manually call the customer
+                      </span>
+                    )}
+                  </p>
+                </div>
+              </>
+            )}
           </CardContent>
         </Card>
 

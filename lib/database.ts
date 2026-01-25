@@ -44,6 +44,12 @@ export interface BookingSettings {
   suspension_message: string
   maintenance_mode: boolean
   service_periods?: ServicePeriod[]
+  // Reconfirmation settings
+  reconfirmation_enabled?: boolean
+  reconfirmation_min_party_size?: number
+  reconfirmation_days_before?: number
+  reconfirmation_deadline_hours?: number
+  reconfirmation_no_response_action?: 'auto_cancel' | 'flag_only' | 'second_reminder'
 }
 
 export interface ServicePeriod {
@@ -516,7 +522,13 @@ export async function getBookingSettings(): Promise<BookingSettings> {
       closed_days_of_week: configData.closed_days_of_week ?? defaultSettings.closed_days_of_week,
       suspension_message: configData.suspension_message ?? defaultSettings.suspension_message,
       maintenance_mode: configData.maintenance_mode ?? defaultSettings.maintenance_mode,
-      service_periods: servicePeriods
+      service_periods: servicePeriods,
+      // Reconfirmation settings
+      reconfirmation_enabled: configData.reconfirmation_enabled ?? false,
+      reconfirmation_min_party_size: configData.reconfirmation_min_party_size ?? 6,
+      reconfirmation_days_before: configData.reconfirmation_days_before ?? 2,
+      reconfirmation_deadline_hours: configData.reconfirmation_deadline_hours ?? 24,
+      reconfirmation_no_response_action: configData.reconfirmation_no_response_action ?? 'flag_only'
     }
   } catch (error) {
     console.error('Database error in getBookingSettings:', error)
@@ -550,6 +562,13 @@ export async function updateBookingSettings(settings: Partial<BookingSettings>):
     if (settings.available_times !== undefined) updateData.available_times = settings.available_times
     if (settings.closed_dates !== undefined) updateData.closed_dates = settings.closed_dates
     if (settings.closed_days_of_week !== undefined) updateData.closed_days_of_week = settings.closed_days_of_week
+
+    // Handle reconfirmation settings
+    if (settings.reconfirmation_enabled !== undefined) updateData.reconfirmation_enabled = settings.reconfirmation_enabled
+    if (settings.reconfirmation_min_party_size !== undefined) updateData.reconfirmation_min_party_size = settings.reconfirmation_min_party_size
+    if (settings.reconfirmation_days_before !== undefined) updateData.reconfirmation_days_before = settings.reconfirmation_days_before
+    if (settings.reconfirmation_deadline_hours !== undefined) updateData.reconfirmation_deadline_hours = settings.reconfirmation_deadline_hours
+    if (settings.reconfirmation_no_response_action !== undefined) updateData.reconfirmation_no_response_action = settings.reconfirmation_no_response_action
     
     console.log('[DATABASE] Final updateData object:', updateData)
     

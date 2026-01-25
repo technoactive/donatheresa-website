@@ -8,5 +8,15 @@
       "maxDuration": 60
     }
   },
+  "crons": [
+    {
+      "path": "/api/cron/send-reconfirmations",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/process-reconfirmations",
+      "schedule": "0 * * * *"
+    }
+  ],
   "$schema": "https://openapi.vercel.sh/vercel.json"
 }

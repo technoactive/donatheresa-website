@@ -71,6 +71,12 @@ export interface BookingSettings {
   suspension_message: string
   service_periods?: ServicePeriod[]
   maintenance_mode?: boolean
+  // Reconfirmation settings
+  reconfirmation_enabled?: boolean
+  reconfirmation_min_party_size?: number
+  reconfirmation_days_before?: number
+  reconfirmation_deadline_hours?: number
+  reconfirmation_no_response_action?: 'auto_cancel' | 'flag_only' | 'second_reminder'
 }
 
 export interface ContactMessage {

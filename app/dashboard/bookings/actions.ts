@@ -242,6 +242,13 @@ export async function updateBookingSettingsAction(formData: FormData): Promise<A
       }
     }
 
+    // Reconfirmation settings
+    const reconfirmationEnabled = formData.get("reconfirmationEnabled") === "on"
+    const reconfirmationMinPartySize = parseInt(formData.get("reconfirmationMinPartySize") as string) || 6
+    const reconfirmationDaysBefore = parseInt(formData.get("reconfirmationDaysBefore") as string) || 2
+    const reconfirmationDeadlineHours = parseInt(formData.get("reconfirmationDeadlineHours") as string) || 24
+    const reconfirmationNoResponseAction = (formData.get("reconfirmationNoResponseAction") as string) || 'flag_only'
+
     const updates = {
       booking_enabled: isBookingEnabled,
       suspension_message: suspensionMessage,
@@ -249,7 +256,13 @@ export async function updateBookingSettingsAction(formData: FormData): Promise<A
       max_advance_days: maxAdvanceDays,
       total_seats: totalSeats,
       closed_dates: closedDates,
-      closed_days_of_week: closedDaysOfWeek
+      closed_days_of_week: closedDaysOfWeek,
+      // Reconfirmation settings
+      reconfirmation_enabled: reconfirmationEnabled,
+      reconfirmation_min_party_size: reconfirmationMinPartySize,
+      reconfirmation_days_before: reconfirmationDaysBefore,
+      reconfirmation_deadline_hours: reconfirmationDeadlineHours,
+      reconfirmation_no_response_action: reconfirmationNoResponseAction
       // Note: available_times are now managed by saveServicePeriodsAction
     }
 
