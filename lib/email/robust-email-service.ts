@@ -754,21 +754,27 @@ export const RobustEmailUtils = {
    * Send staff alert when customer doesn't respond to reconfirmation
    */
   async sendStaffReconfirmationAlert(booking: any, alertType: 'no_response' | 'auto_cancelled'): Promise<EmailResult> {
-    // Get email settings from database
+    // Get email settings from database (including API key)
     const supabase = await createClient();
     const { data: settings } = await supabase
       .from('email_settings')
-      .select('restaurant_email, sender_name, sender_email')
+      .select('restaurant_email, sender_name, sender_email, api_key_encrypted')
       .eq('user_id', 'admin')
       .single();
 
     const staffEmail = settings?.restaurant_email;
     const senderName = settings?.sender_name || 'Dona Theresa Restaurant';
     const senderEmail = settings?.sender_email || 'reservations@donatheresa.com';
+    const apiKey = settings?.api_key_encrypted;
     
     if (!staffEmail) {
       console.error('No restaurant email configured in settings');
       return { success: false, error: 'No restaurant email configured' };
+    }
+    
+    if (!apiKey) {
+      console.error('No Resend API key configured in settings');
+      return { success: false, error: 'No API key configured' };
     }
     
     const isAutoCancelled = alertType === 'auto_cancelled';
@@ -862,7 +868,7 @@ export const RobustEmailUtils = {
     // Send email via Resend
     try {
       const Resend = (await import('resend')).Resend;
-      const resend = new Resend(process.env.RESEND_API_KEY);
+      const resend = new Resend(apiKey);
       
       const result = await resend.emails.send({
         from: `${senderName} <${senderEmail}>`,
@@ -892,21 +898,27 @@ export const RobustEmailUtils = {
     customer: any, 
     action: 'confirmed' | 'cancelled'
   ): Promise<EmailResult> {
-    // Get email settings from database
+    // Get email settings from database (including API key)
     const supabase = await createClient();
     const { data: settings } = await supabase
       .from('email_settings')
-      .select('restaurant_email, sender_name, sender_email')
+      .select('restaurant_email, sender_name, sender_email, api_key_encrypted')
       .eq('user_id', 'admin')
       .single();
 
     const staffEmail = settings?.restaurant_email;
     const senderName = settings?.sender_name || 'Dona Theresa Restaurant';
     const senderEmail = settings?.sender_email || 'reservations@donatheresa.com';
+    const apiKey = settings?.api_key_encrypted;
     
     if (!staffEmail) {
       console.error('No restaurant email configured in settings');
       return { success: false, error: 'No restaurant email configured' };
+    }
+    
+    if (!apiKey) {
+      console.error('No Resend API key configured in settings');
+      return { success: false, error: 'No API key configured' };
     }
 
     const isConfirmed = action === 'confirmed';
@@ -1034,7 +1046,7 @@ export const RobustEmailUtils = {
     // Send email via Resend
     try {
       const Resend = (await import('resend')).Resend;
-      const resend = new Resend(process.env.RESEND_API_KEY);
+      const resend = new Resend(apiKey);
       
       const result = await resend.emails.send({
         from: `${senderName} <${senderEmail}>`,
