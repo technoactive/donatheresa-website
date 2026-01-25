@@ -130,24 +130,35 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: cancelResult.message }, { status: 400 })
       }
 
-      const booking = { id: cancelResult.booking_id }
+      const bookingId = cancelResult.booking_id
 
       // Send cancellation email and notification
       try {
-        // Get full booking details
-        const { data: fullBooking } = await supabase
-          .from('bookings')
-          .select(`
-            *,
-            customers (*)
-          `)
-          .eq('id', booking.id)
+        // Get full booking details using RPC to bypass RLS
+        const { data: bookingData } = await supabase
+          .rpc('get_booking_by_reconfirmation_token', { p_token: token })
           .single()
 
-        if (fullBooking?.customers) {
+        if (bookingData) {
+          // Create booking and customer objects for the email service
+          const fullBooking = {
+            id: bookingId,
+            booking_date: bookingData.booking_date,
+            booking_time: bookingData.booking_time,
+            party_size: bookingData.party_size,
+            booking_reference: bookingData.booking_reference,
+            special_requests: bookingData.special_requests
+          }
+          
+          const customer = {
+            name: bookingData.customer_name,
+            email: bookingData.customer_email,
+            phone: bookingData.customer_phone
+          }
+
           // Send cancellation email
           const { RobustEmailUtils } = await import('@/lib/email/robust-email-service')
-          await RobustEmailUtils.sendBookingCancellation(fullBooking, fullBooking.customers)
+          await RobustEmailUtils.sendBookingCancellation(fullBooking, customer)
 
           // Create notification for staff
           await supabase
@@ -155,10 +166,10 @@ export async function POST(request: NextRequest) {
             .insert({
               type: 'booking_cancelled',
               title: 'Booking Cancelled (Reconfirmation)',
-              message: `${fullBooking.customers.name} cancelled their booking for ${fullBooking.party_size} guests on ${new Date(fullBooking.booking_date).toLocaleDateString('en-GB')} at ${fullBooking.booking_time} via reconfirmation link`,
+              message: `${customer.name} cancelled their booking for ${fullBooking.party_size} guests on ${new Date(fullBooking.booking_date).toLocaleDateString('en-GB')} at ${fullBooking.booking_time} via reconfirmation link`,
               data: {
-                booking_id: fullBooking.id,
-                customer_name: fullBooking.customers.name,
+                booking_id: bookingId,
+                customer_name: customer.name,
                 party_size: fullBooking.party_size,
                 booking_date: fullBooking.booking_date,
                 booking_time: fullBooking.booking_time,
