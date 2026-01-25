@@ -116,34 +116,21 @@ export async function POST(request: NextRequest) {
     }
 
     if (action === "cancel") {
-      // Get booking first to check status
-      const { data: booking } = await supabase
-        .rpc('get_booking_by_reconfirmation_token', { p_token: token })
+      // Cancel the booking using the RPC function (bypasses RLS)
+      const { data: cancelResult, error: cancelError } = await supabase
+        .rpc('cancel_booking_by_reconfirmation_token', { p_token: token })
         .single()
-
-      if (!booking) {
-        return NextResponse.json({ error: "Booking not found" }, { status: 404 })
-      }
-
-      if (booking.status === "cancelled") {
-        return NextResponse.json({ error: "Booking is already cancelled" }, { status: 400 })
-      }
-
-      // Cancel the booking
-      const { error: cancelError } = await supabase
-        .from('bookings')
-        .update({ 
-          status: 'cancelled',
-          reconfirmation_status: 'no_response',
-          reconfirmation_responded_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', booking.id)
 
       if (cancelError) {
         console.error("Error cancelling booking:", cancelError)
         return NextResponse.json({ error: "Failed to cancel booking" }, { status: 500 })
       }
+
+      if (!cancelResult.success) {
+        return NextResponse.json({ error: cancelResult.message }, { status: 400 })
+      }
+
+      const booking = { id: cancelResult.booking_id }
 
       // Send cancellation email and notification
       try {
