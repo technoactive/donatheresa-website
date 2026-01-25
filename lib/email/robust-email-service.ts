@@ -754,15 +754,17 @@ export const RobustEmailUtils = {
    * Send staff alert when customer doesn't respond to reconfirmation
    */
   async sendStaffReconfirmationAlert(booking: any, alertType: 'no_response' | 'auto_cancelled'): Promise<EmailResult> {
-    // Get restaurant email from database settings
+    // Get email settings from database
     const supabase = await createClient();
     const { data: settings } = await supabase
       .from('email_settings')
-      .select('restaurant_email')
+      .select('restaurant_email, sender_name, sender_email')
       .eq('user_id', 'admin')
       .single();
 
     const staffEmail = settings?.restaurant_email;
+    const senderName = settings?.sender_name || 'Dona Theresa Restaurant';
+    const senderEmail = settings?.sender_email || 'reservations@donatheresa.com';
     
     if (!staffEmail) {
       console.error('No restaurant email configured in settings');
@@ -857,13 +859,13 @@ export const RobustEmailUtils = {
 </body>
 </html>`;
 
-    // Send email directly via Resend (bypass template system for this simple alert)
+    // Send email via Resend
     try {
       const Resend = (await import('resend')).Resend;
       const resend = new Resend(process.env.RESEND_API_KEY);
       
       const result = await resend.emails.send({
-        from: 'Dona Theresa Bookings <onboarding@resend.dev>',
+        from: `${senderName} <${senderEmail}>`,
         to: [staffEmail],
         subject: subject,
         html: htmlContent,
@@ -890,15 +892,17 @@ export const RobustEmailUtils = {
     customer: any, 
     action: 'confirmed' | 'cancelled'
   ): Promise<EmailResult> {
-    // Get restaurant email from database settings
+    // Get email settings from database
     const supabase = await createClient();
     const { data: settings } = await supabase
       .from('email_settings')
-      .select('restaurant_email')
+      .select('restaurant_email, sender_name, sender_email')
       .eq('user_id', 'admin')
       .single();
 
     const staffEmail = settings?.restaurant_email;
+    const senderName = settings?.sender_name || 'Dona Theresa Restaurant';
+    const senderEmail = settings?.sender_email || 'reservations@donatheresa.com';
     
     if (!staffEmail) {
       console.error('No restaurant email configured in settings');
@@ -1033,7 +1037,7 @@ export const RobustEmailUtils = {
       const resend = new Resend(process.env.RESEND_API_KEY);
       
       const result = await resend.emails.send({
-        from: 'Dona Theresa Bookings <onboarding@resend.dev>',
+        from: `${senderName} <${senderEmail}>`,
         to: [staffEmail],
         subject: subject,
         html: htmlContent,
