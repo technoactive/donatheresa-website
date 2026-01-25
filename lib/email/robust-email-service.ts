@@ -754,8 +754,20 @@ export const RobustEmailUtils = {
    * Send staff alert when customer doesn't respond to reconfirmation
    */
   async sendStaffReconfirmationAlert(booking: any, alertType: 'no_response' | 'auto_cancelled'): Promise<EmailResult> {
-    // Restaurant email to send alerts to
-    const staffEmail = 'donatheresahatchend@gmail.com';
+    // Get restaurant email from database settings
+    const supabase = await createClient();
+    const { data: settings } = await supabase
+      .from('email_settings')
+      .select('restaurant_email')
+      .eq('user_id', 'admin')
+      .single();
+
+    const staffEmail = settings?.restaurant_email;
+    
+    if (!staffEmail) {
+      console.error('No restaurant email configured in settings');
+      return { success: false, error: 'No restaurant email configured' };
+    }
     
     const isAutoCancelled = alertType === 'auto_cancelled';
     const subject = isAutoCancelled 
