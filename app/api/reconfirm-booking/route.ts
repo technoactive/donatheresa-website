@@ -99,24 +99,25 @@ export async function POST(request: NextRequest) {
           }
 
           // Create notification for dashboard
-          await supabase
+          const { error: notifError } = await supabase
             .from('notifications')
             .insert({
               type: 'booking_confirmed',
               title: 'Booking Reconfirmed',
               message: `${customer.name} has confirmed their booking for ${booking.party_size} guests on ${new Date(booking.booking_date).toLocaleDateString('en-GB')} at ${booking.booking_time}`,
-              data: {
-                booking_id: booking.id,
-                customer_name: customer.name,
-                party_size: booking.party_size,
-                booking_date: booking.booking_date,
-                booking_time: booking.booking_time
-              }
+              booking_id: booking.id,
+              priority: 'high'
             })
+          
+          if (notifError) {
+            console.error("Failed to create notification:", notifError)
+          }
 
           // Send email notification to restaurant staff
+          console.log("Sending staff email notification...")
           const { RobustEmailUtils } = await import('@/lib/email/robust-email-service')
-          await RobustEmailUtils.sendStaffBookingStatusNotification(booking, customer, 'confirmed')
+          const emailResult = await RobustEmailUtils.sendStaffBookingStatusNotification(booking, customer, 'confirmed')
+          console.log("Staff email result:", emailResult)
         }
       } catch (emailError) {
         console.error("Failed to send confirmation notification:", emailError)
@@ -176,24 +177,24 @@ export async function POST(request: NextRequest) {
           await RobustEmailUtils.sendBookingCancellation(fullBooking, customer)
 
           // Create notification for dashboard
-          await supabase
+          const { error: notifError } = await supabase
             .from('notifications')
             .insert({
               type: 'booking_cancelled',
               title: 'Booking Cancelled (Reconfirmation)',
               message: `${customer.name} cancelled their booking for ${fullBooking.party_size} guests on ${new Date(fullBooking.booking_date).toLocaleDateString('en-GB')} at ${fullBooking.booking_time} via reconfirmation link`,
-              data: {
-                booking_id: bookingId,
-                customer_name: customer.name,
-                party_size: fullBooking.party_size,
-                booking_date: fullBooking.booking_date,
-                booking_time: fullBooking.booking_time,
-                reason: 'customer_cancelled_via_reconfirmation'
-              }
+              booking_id: bookingId,
+              priority: 'high'
             })
+          
+          if (notifError) {
+            console.error("Failed to create cancellation notification:", notifError)
+          }
 
           // Send email notification to restaurant staff
-          await RobustEmailUtils.sendStaffBookingStatusNotification(fullBooking, customer, 'cancelled')
+          console.log("Sending staff cancellation email notification...")
+          const staffEmailResult = await RobustEmailUtils.sendStaffBookingStatusNotification(fullBooking, customer, 'cancelled')
+          console.log("Staff cancellation email result:", staffEmailResult)
         }
       } catch (emailError) {
         console.error("Failed to send cancellation email:", emailError)
