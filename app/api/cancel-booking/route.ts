@@ -42,19 +42,23 @@ export async function GET(request: NextRequest) {
       .eq('id', booking.id)
       .single()
 
-    // Get cancellation policy settings
+    // Get deposit and cancellation policy settings
     const { data: configData } = await supabase
       .from('booking_config')
-      .select('deposit_cancellation_hours, deposit_late_cancel_charge_percent')
+      .select('deposit_enabled, deposit_cancellation_hours, deposit_late_cancel_charge_percent')
       .single()
 
+    const depositEnabled = configData?.deposit_enabled || false
     const cancellationHours = configData?.deposit_cancellation_hours || 48
     const lateCancelPercent = configData?.deposit_late_cancel_charge_percent || 100
 
-    // Calculate if this is a late cancellation
+    // Calculate if this is a late cancellation (only relevant if deposits are enabled)
     const bookingDateTime = new Date(`${booking.booking_date}T${booking.booking_time}`)
     const hoursUntilBooking = (bookingDateTime.getTime() - Date.now()) / (1000 * 60 * 60)
     const isLateCancellation = hoursUntilBooking < cancellationHours
+
+    // Only show deposit info if deposits are enabled system-wide
+    const showDepositInfo = depositEnabled && bookingDetails?.deposit_required && bookingDetails?.deposit_status === 'authorized'
 
     return NextResponse.json({
       booking: {
@@ -68,10 +72,10 @@ export async function GET(request: NextRequest) {
         customer_name: booking.customer_name,
         customer_email: booking.customer_email,
         customer_phone: booking.customer_phone,
-        // Deposit info
-        deposit_required: bookingDetails?.deposit_required || false,
-        deposit_amount: bookingDetails?.deposit_amount || null,
-        deposit_status: bookingDetails?.deposit_status || 'none',
+        // Deposit info - only if deposits are enabled
+        deposit_required: showDepositInfo ? bookingDetails?.deposit_required : false,
+        deposit_amount: showDepositInfo ? bookingDetails?.deposit_amount : null,
+        deposit_status: showDepositInfo ? bookingDetails?.deposit_status : 'none',
         // Cancellation policy info
         is_late_cancellation: isLateCancellation,
         hours_until_booking: Math.round(hoursUntilBooking),
@@ -127,12 +131,13 @@ export async function POST(request: NextRequest) {
       .eq('id', booking.id)
       .single()
 
-    // Get cancellation policy settings
+    // Get deposit settings and cancellation policy
     const { data: configData } = await supabase
       .from('booking_config')
-      .select('deposit_cancellation_hours, deposit_late_cancel_charge_percent')
+      .select('deposit_enabled, deposit_cancellation_hours, deposit_late_cancel_charge_percent')
       .single()
 
+    const depositEnabled = configData?.deposit_enabled || false
     const cancellationHours = configData?.deposit_cancellation_hours || 48
     const lateCancelPercent = configData?.deposit_late_cancel_charge_percent || 100
 
@@ -143,11 +148,14 @@ export async function POST(request: NextRequest) {
 
     // ========================================
     // HANDLE DEPOSIT BASED ON CANCELLATION POLICY
+    // Only process if deposits are ENABLED in settings
     // ========================================
     let depositAction = 'none'
     let depositMessage = ''
     
-    if (fullBooking?.deposit_required && 
+    // Only handle deposit if: 1) Deposits are enabled, 2) This booking has a deposit, 3) Deposit is authorized
+    if (depositEnabled && 
+        fullBooking?.deposit_required && 
         fullBooking?.stripe_payment_intent_id && 
         fullBooking?.deposit_status === 'authorized') {
       
