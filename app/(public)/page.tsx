@@ -421,379 +421,390 @@ export default function HomePage() {
         <HorizontalGallery />
       </section>
 
-      {/* Google Reviews Section - Editorial Magazine Design */}
-      <section className="py-24 md:py-32 relative overflow-hidden" aria-labelledby="reviews-heading">
-        {/* Clean Modern Background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-stone-50/50 to-white" />
-        
-        {/* Subtle Decorative Elements */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-300/50 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-300/50 to-transparent" />
+      {/* Google Reviews Section - Premium Dark Design */}
+      <section className="py-20 md:py-32 relative overflow-hidden bg-slate-900" aria-labelledby="reviews-heading">
+        {/* Background Effects */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.15),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(251,191,36,0.08),transparent_50%)]" />
 
+        {/* Header */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          {/* Elegant Editorial Header */}
-          <div className="text-center mb-12 md:mb-16">
-            <div className="inline-flex items-center gap-4 mb-6">
-              <div className="h-[1px] w-12 md:w-20 bg-gradient-to-r from-transparent to-amber-600" />
-              <span className="text-[10px] md:text-xs tracking-[0.4em] text-amber-700 font-medium uppercase">
-                Guest Testimonials
+          <div className="text-center mb-12 md:mb-20">
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <Star className="w-5 h-5 text-amber-400" />
+              <span className="text-sm tracking-[0.3em] text-amber-400/80 font-light uppercase">
+                Guest Reviews
               </span>
-              <div className="h-[1px] w-12 md:w-20 bg-gradient-to-l from-transparent to-amber-600" />
+              <Star className="w-5 h-5 text-amber-400" />
             </div>
             
-            <h2 id="reviews-heading" className="text-4xl md:text-6xl lg:text-7xl font-serif mb-6 tracking-tight text-stone-900">
-              What Our{' '}
-              <span className="italic text-amber-700">
-                Guests Say
+            <h2 id="reviews-heading" className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              <span className="text-white">Loved by </span>
+              <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">
+                Our Guests
               </span>
             </h2>
             
-            {/* Google Rating Badge - Refined */}
-            <div className="inline-flex items-center gap-3 mt-6 px-5 py-2.5 bg-white/80 backdrop-blur-sm rounded-full border border-amber-200/50 shadow-sm">
-              <div className="flex items-center gap-0.5">
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-8">
+              Don&apos;t just take our word for it — hear from the guests who&apos;ve experienced our authentic Italian hospitality
+            </p>
+            
+            {/* Rating Summary */}
+            <div className="inline-flex items-center gap-6 px-8 py-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-white">4.9</div>
+                <div className="flex items-center gap-0.5 mt-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+              </div>
+              <div className="w-px h-12 bg-white/20" />
+              <div className="text-left">
+                <div className="text-white font-medium">500+ Reviews</div>
+                <div className="text-slate-400 text-sm">on Google</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Infinite Scrolling Marquee - Row 1 */}
+        <div className="relative mb-6 overflow-hidden">
+          <div className="flex gap-6 animate-marquee">
+            {/* Review Cards - First Set */}
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <div className="w-px h-4 bg-amber-300" />
-              <span className="text-stone-600 text-sm font-medium">4.9 rating on Google</span>
-            </div>
-          </div>
-
-          {/* Featured Review - Hero Style */}
-          <div className="mb-12 md:mb-16">
-            <div className="relative bg-white rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 lg:p-16 shadow-[0_20px_80px_-20px_rgba(180,140,80,0.3)] border border-amber-100/50 overflow-hidden group">
-              {/* Decorative Quote Mark */}
-              <div className="absolute -top-4 -left-4 md:top-0 md:left-0">
-                <Quote className="w-24 h-24 md:w-40 md:h-40 text-amber-100 transform -rotate-12" />
-              </div>
-              
-              {/* Decorative Corner Accent */}
-              <div className="absolute top-0 right-0 w-32 h-32 md:w-48 md:h-48">
-                <div className="absolute top-4 right-4 w-full h-full border-t-2 border-r-2 border-amber-200/50 rounded-tr-3xl" />
-              </div>
-              
-              <div className="relative z-10 max-w-4xl mx-auto text-center">
-                <div className="flex items-center justify-center gap-1 mb-6 md:mb-8">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 md:w-6 md:h-6 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                
-                <blockquote className="text-xl md:text-2xl lg:text-3xl xl:text-4xl text-stone-800 leading-relaxed mb-8 md:mb-10 font-serif italic">
-                  "From the moment we stepped into Dona Theresa, we knew we had chosen the perfect place to celebrate our anniversary. This isn't just a restaurant; it's a slice of Italy right here in Pinner, where every detail, from the relaxed ambiance to the exceptional food, creates an unforgettable experience."
-                </blockquote>
-                
-                <div className="flex items-center justify-center gap-4">
-                  <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-lg md:text-xl shadow-lg shadow-amber-500/30 ring-4 ring-white">
-                    TG
-                  </div>
-                  <div className="text-left">
-                    <div className="font-semibold text-stone-900 text-lg">theguruyt</div>
-                    <div className="text-amber-600 text-sm flex items-center gap-1.5">
-                      <Star className="w-3.5 h-3.5 fill-amber-500" />
-                      Local Guide
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Reviews Carousel */}
-          <div className="relative">
-            {/* Scroll hint text */}
-            <div className="text-center mb-6">
-              <span className="text-stone-400 text-sm">Swipe to see more reviews →</span>
-            </div>
-            
-            {/* Horizontal Scrolling Carousel */}
-            <div className="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              {/* Review 1 */}
-              <div className="flex-shrink-0 w-[320px] md:w-[380px] snap-center group bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg shadow-amber-900/5 border border-amber-100/50 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500">
-                <div className="flex items-center gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <blockquote className="text-stone-700 leading-relaxed mb-6 text-base font-light line-clamp-4">
-                  "The hostess was attentive and joyful giving suggestions on dishes and cocktails. The seafood pasta was delicious and cooked to perfection along with the ravioli, and they made the night even more special with a happy birthday singalong!"
-                </blockquote>
-                <div className="flex items-center gap-3 pt-4 border-t border-amber-100">
-                  <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                    JS
-                  </div>
-                  <div>
-                    <div className="font-medium text-stone-900">Jasmine Singh</div>
-                    <div className="text-amber-600/80 text-xs font-medium">Google Review</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 2 */}
-              <div className="flex-shrink-0 w-[320px] md:w-[380px] snap-center group bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg shadow-amber-900/5 border border-amber-100/50 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500">
-                <div className="flex items-center gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <blockquote className="text-stone-700 leading-relaxed mb-6 text-base font-light line-clamp-4">
-                  "The best place ever for Italian food. We love this place so much that we like to celebrate our special occasion with them. All pastas are good and dessert too, specially Tarte cinco sensi cake!"
-                </blockquote>
-                <div className="flex items-center gap-3 pt-4 border-t border-amber-100">
-                  <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                    SK
-                  </div>
-                  <div>
-                    <div className="font-medium text-stone-900">Sonali Kosrabe</div>
-                    <div className="text-amber-600/80 text-xs font-medium flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-amber-500" />
-                      Local Guide
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 3 */}
-              <div className="flex-shrink-0 w-[320px] md:w-[380px] snap-center group bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg shadow-amber-900/5 border border-amber-100/50 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500">
-                <div className="flex items-center gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <blockquote className="text-stone-700 leading-relaxed mb-6 text-base font-light line-clamp-4">
-                  "Loved our experience at Dona Theresa! A group of 5 of us celebrated a birthday here and it was delightful. The staff were so friendly, helpful, and attentive. The early bird menu was a great deal (£20pp for 2 courses) and the food was delicious."
-                </blockquote>
-                <div className="flex items-center gap-3 pt-4 border-t border-amber-100">
-                  <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                    DP
-                  </div>
-                  <div>
-                    <div className="font-medium text-stone-900">Daisy Perschky</div>
-                    <div className="text-amber-600/80 text-xs font-medium">Google Review</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 4 */}
-              <div className="flex-shrink-0 w-[320px] md:w-[380px] snap-center group bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg shadow-amber-900/5 border border-amber-100/50 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500">
-                <div className="flex items-center gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <blockquote className="text-stone-700 leading-relaxed mb-6 text-base font-light line-clamp-4">
-                  "The food in this restaurant is cooked to perfection. Any special requests are not a problem even to the point of serving a fruit salad for my friends, which is not on the menu. Outstanding service!"
-                </blockquote>
-                <div className="flex items-center gap-3 pt-4 border-t border-amber-100">
-                  <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                    DK
-                  </div>
-                  <div>
-                    <div className="font-medium text-stone-900">Daren Kenward</div>
-                    <div className="text-amber-600/80 text-xs font-medium flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-amber-500" />
-                      Local Guide
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 5 */}
-              <div className="flex-shrink-0 w-[320px] md:w-[380px] snap-center group bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg shadow-amber-900/5 border border-amber-100/50 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500">
-                <div className="flex items-center gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <blockquote className="text-stone-700 leading-relaxed mb-6 text-base font-light line-clamp-4">
-                  "We randomly stumbled across this restaurant one night and we fell in love! Authentic romantic cosy place, fantastic food fresh and cooked as you like, service was really good and welcoming. Highly recommend this place."
-                </blockquote>
-                <div className="flex items-center gap-3 pt-4 border-t border-amber-100">
-                  <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                    DM
-                  </div>
-                  <div>
-                    <div className="font-medium text-stone-900">Dilyana Milenkova</div>
-                    <div className="text-amber-600/80 text-xs font-medium flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-amber-500" />
-                      Local Guide
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 6 */}
-              <div className="flex-shrink-0 w-[320px] md:w-[380px] snap-center group bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg shadow-amber-900/5 border border-amber-100/50 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500">
-                <div className="flex items-center gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <blockquote className="text-stone-700 leading-relaxed mb-6 text-base font-light line-clamp-4">
-                  "Great Xmas Lunch, delicious & very reasonably priced. Table was beautifully decorated on our arrival with crackers at each place setting. Olives, bread & butter included. Prompt drinks service & set menus with abundant choices."
-                </blockquote>
-                <div className="flex items-center gap-3 pt-4 border-t border-amber-100">
-                  <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                    AF
-                  </div>
-                  <div>
-                    <div className="font-medium text-stone-900">Alison Friend</div>
-                    <div className="text-amber-600/80 text-xs font-medium flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-amber-500" />
-                      Local Guide
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 7 */}
-              <div className="flex-shrink-0 w-[320px] md:w-[380px] snap-center group bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg shadow-amber-900/5 border border-amber-100/50 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500">
-                <div className="flex items-center gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <blockquote className="text-stone-700 leading-relaxed mb-6 text-base font-light line-clamp-4">
-                  "What wonderful tasty food!! Really enjoyed all the dishes I had. Staff are so friendly and chatting which made the experience even more wonderful!! I love the homemade tiramisu!! Would definitely go again."
-                </blockquote>
-                <div className="flex items-center gap-3 pt-4 border-t border-amber-100">
-                  <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                    RI
-                  </div>
-                  <div>
-                    <div className="font-medium text-stone-900">Ria</div>
-                    <div className="text-amber-600/80 text-xs font-medium flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-amber-500" />
-                      Local Guide
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 8 */}
-              <div className="flex-shrink-0 w-[320px] md:w-[380px] snap-center group bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg shadow-amber-900/5 border border-amber-100/50 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500">
-                <div className="flex items-center gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <blockquote className="text-stone-700 leading-relaxed mb-6 text-base font-light line-clamp-4">
-                  "Fine Italian food indeed. My family have been frequenting this fine establishment for several years, and it never disappoints. The prawn cocktail, white bait, and parma ham with melon to start were excellent."
-                </blockquote>
-                <div className="flex items-center gap-3 pt-4 border-t border-amber-100">
-                  <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                    JA
-                  </div>
-                  <div>
-                    <div className="font-medium text-stone-900">Jason</div>
-                    <div className="text-amber-600/80 text-xs font-medium flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-amber-500" />
-                      Local Guide
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 9 */}
-              <div className="flex-shrink-0 w-[320px] md:w-[380px] snap-center group bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg shadow-amber-900/5 border border-amber-100/50 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500">
-                <div className="flex items-center gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <blockquote className="text-stone-700 leading-relaxed mb-6 text-base font-light line-clamp-4">
-                  "Second visit this evening, delicious food and the staff are so lovely. They were really busy so food was a little slower, totally fine with us but they gave us free dessert to make up for it, so kind of them!"
-                </blockquote>
-                <div className="flex items-center gap-3 pt-4 border-t border-amber-100">
-                  <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                    EW
-                  </div>
-                  <div>
-                    <div className="font-medium text-stone-900">Elle Ward</div>
-                    <div className="text-amber-600/80 text-xs font-medium flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-amber-500" />
-                      Local Guide
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 10 */}
-              <div className="flex-shrink-0 w-[320px] md:w-[380px] snap-center group bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg shadow-amber-900/5 border border-amber-100/50 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500">
-                <div className="flex items-center gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <blockquote className="text-stone-700 leading-relaxed mb-6 text-base font-light line-clamp-4">
-                  "A beautiful evening with lovely food and an even better atmosphere. They made my grandfather feel very special on his 89th birthday. Highly recommended for special occasions!"
-                </blockquote>
-                <div className="flex items-center gap-3 pt-4 border-t border-amber-100">
-                  <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                    MS
-                  </div>
-                  <div>
-                    <div className="font-medium text-stone-900">Moses Seitler</div>
-                    <div className="text-amber-600/80 text-xs font-medium flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-amber-500" />
-                      Local Guide
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 11 */}
-              <div className="flex-shrink-0 w-[320px] md:w-[380px] snap-center group bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg shadow-amber-900/5 border border-amber-100/50 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500">
-                <div className="flex items-center gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <blockquote className="text-stone-700 leading-relaxed mb-6 text-base font-light line-clamp-4">
-                  "Cannot thank you enough! We recently had our Christening party at Dona Theresa! One very important event in our lives. Everything was perfect - the food, service, and atmosphere were exceptional."
-                </blockquote>
-                <div className="flex items-center gap-3 pt-4 border-t border-amber-100">
-                  <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                    GD
-                  </div>
-                  <div>
-                    <div className="font-medium text-stone-900">Georgiana Daviduca</div>
-                    <div className="text-amber-600/80 text-xs font-medium">Google Review</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Review 12 */}
-              <div className="flex-shrink-0 w-[320px] md:w-[380px] snap-center group bg-white rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-lg shadow-amber-900/5 border border-amber-100/50 hover:shadow-xl hover:shadow-amber-900/10 transition-all duration-500">
-                <div className="flex items-center gap-0.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
-                  ))}
-                </div>
-                <blockquote className="text-stone-700 leading-relaxed mb-6 text-base font-light line-clamp-4">
-                  "I had an amazing experience when I came, the environment of the entire restaurant was breath-taking, the decor and atmosphere made me feel like I was on holiday. The food was much higher quality than expected!"
-                </blockquote>
-                <div className="flex items-center gap-3 pt-4 border-t border-amber-100">
-                  <div className="w-11 h-11 bg-gradient-to-br from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-                    BV
-                  </div>
-                  <div>
-                    <div className="font-medium text-stone-900">Barbod Vakilpour</div>
-                    <div className="text-amber-600/80 text-xs font-medium">Google Review</div>
-                  </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "From the moment we stepped into Dona Theresa, we knew we had chosen the perfect place to celebrate our anniversary. A slice of Italy right here in Pinner!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">TG</div>
+                <div>
+                  <div className="font-medium text-white text-sm">theguruyt</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
                 </div>
               </div>
             </div>
 
-            {/* Scroll Indicator Dots */}
-            <div className="flex justify-center gap-2 mt-6">
-              <div className="w-8 h-1.5 bg-amber-500 rounded-full" />
-              <div className="w-1.5 h-1.5 bg-amber-200 rounded-full" />
-              <div className="w-1.5 h-1.5 bg-amber-200 rounded-full" />
-              <div className="w-1.5 h-1.5 bg-amber-200 rounded-full" />
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "The hostess was attentive and joyful giving suggestions on dishes and cocktails. They made the night even more special with a happy birthday singalong!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">JS</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Jasmine Singh</div>
+                  <div className="text-white/40 text-xs">Google Review</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "The best place ever for Italian food. We love this place so much that we celebrate our special occasions with them. All pastas are good and dessert too!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">SK</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Sonali Kosrabe</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "A group of 5 of us celebrated a birthday here and it was delightful. The early bird menu was a great deal (£20pp for 2 courses) and the food was delicious."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">DP</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Daisy Perschky</div>
+                  <div className="text-white/40 text-xs">Google Review</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "The food in this restaurant is cooked to perfection. Any special requests are not a problem. Outstanding service that goes above and beyond!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">DK</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Daren Kenward</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "We randomly stumbled across this restaurant and we fell in love! Authentic romantic cosy place, fantastic food fresh and cooked as you like."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">DM</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Dilyana Milenkova</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Duplicate set for seamless loop */}
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "From the moment we stepped into Dona Theresa, we knew we had chosen the perfect place to celebrate our anniversary. A slice of Italy right here in Pinner!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">TG</div>
+                <div>
+                  <div className="font-medium text-white text-sm">theguruyt</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "The hostess was attentive and joyful giving suggestions on dishes and cocktails. They made the night even more special with a happy birthday singalong!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">JS</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Jasmine Singh</div>
+                  <div className="text-white/40 text-xs">Google Review</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "The best place ever for Italian food. We love this place so much that we celebrate our special occasions with them. All pastas are good and dessert too!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">SK</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Sonali Kosrabe</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Infinite Scrolling Marquee - Row 2 (Reverse) */}
+        <div className="relative overflow-hidden">
+          <div className="flex gap-6 animate-marquee-reverse">
+            {/* Review Cards - Second Set */}
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "Great Xmas Lunch, delicious & very reasonably priced. Table was beautifully decorated. Prompt drinks service & set menus with abundant choices."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">AF</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Alison Friend</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "What wonderful tasty food!! Staff are so friendly which made the experience even more wonderful!! I love the homemade tiramisu!!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">RI</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Ria</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "Fine Italian food indeed. My family have been frequenting this fine establishment for several years, and it never disappoints."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">JA</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Jason</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "Second visit this evening, delicious food and the staff are so lovely. They gave us free dessert to make up for the wait, so kind!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">EW</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Elle Ward</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "A beautiful evening with lovely food and an even better atmosphere. They made my grandfather feel very special on his 89th birthday."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">MS</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Moses Seitler</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "Cannot thank you enough! We had our Christening party here. Everything was perfect - the food, service, and atmosphere were exceptional."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">GD</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Georgiana Daviduca</div>
+                  <div className="text-white/40 text-xs">Google Review</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Duplicate set for seamless loop */}
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "Great Xmas Lunch, delicious & very reasonably priced. Table was beautifully decorated. Prompt drinks service & set menus with abundant choices."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">AF</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Alison Friend</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "What wonderful tasty food!! Staff are so friendly which made the experience even more wonderful!! I love the homemade tiramisu!!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">RI</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Ria</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+              <div className="flex items-center gap-0.5 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+                "Fine Italian food indeed. My family have been frequenting this fine establishment for several years, and it never disappoints."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">JA</div>
+                <div>
+                  <div className="font-medium text-white text-sm">Jason</div>
+                  <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
           {/* Featured On Platforms - Elegant Redesign */}
           <div className="mt-20 md:mt-28">
