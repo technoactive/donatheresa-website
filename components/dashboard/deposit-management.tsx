@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -89,6 +91,8 @@ export function DepositManagement({
 }: DepositManagementProps) {
   const [isLoading, setIsLoading] = React.useState(false)
   const [actionType, setActionType] = React.useState<string | null>(null)
+  const [refundAmount, setRefundAmount] = React.useState<string>('')
+  const [showPartialRefund, setShowPartialRefund] = React.useState(false)
 
   const formatAmount = (pence: number | null) => {
     if (!pence) return '£0.00'
@@ -153,7 +157,7 @@ export function DepositManagement({
     }
   }
 
-  const handleRefundDeposit = async () => {
+  const handleRefundDeposit = async (partialAmount?: number) => {
     setIsLoading(true)
     setActionType('refund')
     try {
@@ -162,7 +166,8 @@ export function DepositManagement({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           bookingId, 
-          reason: 'Refund requested via dashboard' 
+          amount: partialAmount, // undefined = full refund
+          reason: partialAmount ? `Partial refund of £${(partialAmount / 100).toFixed(2)} via dashboard` : 'Full refund via dashboard' 
         })
       })
 
@@ -173,6 +178,8 @@ export function DepositManagement({
       }
 
       toast.success(`Refund of ${formatAmount(data.refundedAmount)} processed successfully`)
+      setShowPartialRefund(false)
+      setRefundAmount('')
       onStatusChange?.()
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to refund deposit')
@@ -180,6 +187,19 @@ export function DepositManagement({
       setIsLoading(false)
       setActionType(null)
     }
+  }
+
+  const handlePartialRefund = () => {
+    const amountInPence = Math.round(parseFloat(refundAmount) * 100)
+    if (isNaN(amountInPence) || amountInPence <= 0) {
+      toast.error('Please enter a valid refund amount')
+      return
+    }
+    if (amountInPence > (depositAmount || 0)) {
+      toast.error(`Cannot refund more than ${formatAmount(depositAmount)}`)
+      return
+    }
+    handleRefundDeposit(amountInPence)
   }
 
   // If no deposit required, show minimal info
@@ -339,39 +359,150 @@ export function DepositManagement({
             </AlertDialog>
           )}
 
-          {/* Refund - For captured deposits */}
+          {/* Refund Options - For captured deposits */}
           {depositStatus === 'captured' && (
-            <AlertDialog>
+            <>
+              {/* Full Refund */}
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className="border-blue-200 text-blue-700 hover:bg-blue-50"
+                    disabled={isLoading}
+                  >
+                    {isLoading && actionType === 'refund' ? (
+                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    ) : (
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                    )}
+                    Full Refund
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-white">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Full Refund?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will refund the full {formatAmount(depositAmount)} to {customerName}&apos;s card.
+                      Refunds typically take 5-10 business days to appear.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction 
+                      onClick={() => handleRefundDeposit()}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      Confirm - Full Refund
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              {/* Partial Refund */}
+              <AlertDialog open={showPartialRefund} onOpenChange={setShowPartialRefund}>
+                <AlertDialogTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className="border-amber-200 text-amber-700 hover:bg-amber-50"
+                    disabled={isLoading}
+                  >
+                    <DollarSign className="w-4 h-4 mr-2" />
+                    Partial Refund
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-white">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Partial Refund</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Enter the amount to refund to {customerName}. Maximum: {formatAmount(depositAmount)}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <div className="py-4">
+                    <Label htmlFor="refundAmount" className="text-sm font-medium">Refund Amount (£)</Label>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="text-lg font-bold text-slate-400">£</span>
+                      <Input
+                        id="refundAmount"
+                        type="number"
+                        step="0.01"
+                        min="0.01"
+                        max={(depositAmount || 0) / 100}
+                        placeholder={`Max: ${((depositAmount || 0) / 100).toFixed(2)}`}
+                        value={refundAmount}
+                        onChange={(e) => setRefundAmount(e.target.value)}
+                        className="w-32"
+                      />
+                    </div>
+                    <p className="text-xs text-slate-500 mt-2">
+                      Refunds typically take 5-10 business days to appear on the customer&apos;s card.
+                    </p>
+                  </div>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel onClick={() => setRefundAmount('')}>Cancel</AlertDialogCancel>
+                    <Button 
+                      onClick={handlePartialRefund}
+                      disabled={isLoading || !refundAmount}
+                      className="bg-amber-600 hover:bg-amber-700"
+                    >
+                      {isLoading ? (
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      ) : null}
+                      Refund £{refundAmount || '0.00'}
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </>
+          )}
+
+          {/* Refund for partially refunded deposits */}
+          {depositStatus === 'partially_refunded' && (
+            <AlertDialog open={showPartialRefund} onOpenChange={setShowPartialRefund}>
               <AlertDialogTrigger asChild>
                 <Button 
                   variant="outline" 
                   className="border-blue-200 text-blue-700 hover:bg-blue-50"
                   disabled={isLoading}
                 >
-                  {isLoading && actionType === 'refund' ? (
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                  ) : (
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                  )}
-                  Refund Deposit
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Refund Remaining
                 </Button>
               </AlertDialogTrigger>
               <AlertDialogContent className="bg-white">
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Refund Deposit?</AlertDialogTitle>
+                  <AlertDialogTitle>Refund Remaining Balance</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This will refund {formatAmount(depositAmount)} to {customerName}&apos;s card.
-                    Refunds typically take 5-10 business days to appear.
+                    Some of this deposit has already been refunded. You can refund additional amounts.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
+                <div className="py-4">
+                  <Label htmlFor="refundAmount" className="text-sm font-medium">Refund Amount (£)</Label>
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="text-lg font-bold text-slate-400">£</span>
+                    <Input
+                      id="refundAmount"
+                      type="number"
+                      step="0.01"
+                      min="0.01"
+                      placeholder="Enter amount"
+                      value={refundAmount}
+                      onChange={(e) => setRefundAmount(e.target.value)}
+                      className="w-32"
+                    />
+                  </div>
+                </div>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction 
-                    onClick={handleRefundDeposit}
+                  <AlertDialogCancel onClick={() => setRefundAmount('')}>Cancel</AlertDialogCancel>
+                  <Button 
+                    onClick={handlePartialRefund}
+                    disabled={isLoading || !refundAmount}
                     className="bg-blue-600 hover:bg-blue-700"
                   >
-                    Confirm - Issue Refund
-                  </AlertDialogAction>
+                    {isLoading ? (
+                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    ) : null}
+                    Refund £{refundAmount || '0.00'}
+                  </Button>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
