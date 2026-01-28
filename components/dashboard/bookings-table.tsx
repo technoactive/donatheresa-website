@@ -22,6 +22,7 @@ import { EditBookingDialog } from "./edit-booking-dialog"
 import { DatePickerWithClear } from "./date-picker-with-clear"
 import { toast } from "sonner"
 import { updateBookingStatusAction } from "@/app/dashboard/bookings/actions"
+import { DepositStatusBadge } from "./deposit-management"
 
 interface BookingsTableProps {
   bookings: Booking[]
@@ -113,6 +114,12 @@ const MobileBookingCard = React.memo(({
             })}
           </span>
           <StatusBadge status={booking.status} />
+          {/* Deposit badge */}
+          <DepositStatusBadge 
+            depositRequired={booking.deposit_required || false}
+            depositStatus={booking.deposit_status || 'none'}
+            depositAmount={booking.deposit_amount || null}
+          />
           {/* Source icon */}
           <div className="flex items-center" title={booking.source === 'website' ? 'Website booking' : 'Dashboard booking'}>
             {booking.source === 'website' ? (
@@ -469,7 +476,14 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                       </div>
                     </TableCell>
                     <TableCell>
-                      <StatusBadge status={booking.status} />
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <StatusBadge status={booking.status} />
+                        <DepositStatusBadge 
+                          depositRequired={booking.deposit_required || false}
+                          depositStatus={booking.deposit_status || 'none'}
+                          depositAmount={booking.deposit_amount || null}
+                        />
+                      </div>
                     </TableCell>
                     <TableCell>
                       <SourceBadge source={booking.source} />

@@ -45,6 +45,11 @@ export type Booking = {
   source: "website" | "dashboard"
   notes?: string
   bookingReference?: string
+  // Deposit fields
+  deposit_required?: boolean
+  deposit_amount?: number | null // Amount in pence
+  deposit_status?: 'none' | 'pending' | 'authorized' | 'captured' | 'cancelled' | 'refunded' | 'partially_refunded'
+  stripe_payment_intent_id?: string | null
 }
 
 export interface ServicePeriod {

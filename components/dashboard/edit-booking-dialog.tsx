@@ -13,10 +13,12 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
 import type { Booking } from "@/lib/types"
 import { toast } from "sonner"
 import { updateBookingAction } from "@/app/dashboard/bookings/actions"
 import { useRouter } from "next/navigation"
+import { DepositManagement } from "./deposit-management"
 
 interface EditBookingDialogProps {
   booking: Booking
@@ -160,6 +162,22 @@ export function EditBookingDialog({ booking, isOpen, onSave, onOpenChange }: Edi
                 </Select>
               </div>
             </div>
+
+            {/* Deposit Management Section */}
+            {booking.deposit_required && (
+              <>
+                <Separator className="my-4" />
+                <DepositManagement
+                  bookingId={booking.id}
+                  depositRequired={booking.deposit_required || false}
+                  depositAmount={booking.deposit_amount || null}
+                  depositStatus={booking.deposit_status || 'none'}
+                  partySize={booking.partySize}
+                  customerName={booking.customerName}
+                  onStatusChange={() => router.refresh()}
+                />
+              </>
+            )}
           </div>
           <DialogFooter className="dialog-footer touch-spacing">
             <Button

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useState, useActionState, useEffect, useMemo } from "react"
-import { Calendar, Clock, Users, Phone, Mail, MessageSquare, Plus, Minus, Loader2, Shield, Star, Zap, Check } from "lucide-react"
+import { Calendar, Clock, Users, Phone, Mail, MessageSquare, Plus, Minus, Loader2, Shield, Star, Zap, Check, CreditCard } from "lucide-react"
 import { createBooking } from "@/app/(public)/reserve/actions"
 import { format, addDays, isBefore, startOfDay, parse } from "date-fns"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
@@ -683,6 +683,32 @@ export function BookingForm({ bookingSettings: serverBookingSettings }: BookingF
                 </FormItem>
               )}
             />
+
+            {/* Deposit Notice - Shows when party size meets threshold */}
+            {bookingSettings?.deposit_enabled && 
+             bookingSettings?.deposit_min_party_size && 
+             partySize >= bookingSettings.deposit_min_party_size && (
+              <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-amber-100 rounded-lg flex-shrink-0">
+                    <CreditCard className="w-5 h-5 text-amber-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-amber-900 mb-1">Deposit Required</h4>
+                    <p className="text-sm text-amber-700">
+                      For parties of {bookingSettings.deposit_min_party_size}+ guests, a refundable deposit of{' '}
+                      <strong>£{((bookingSettings.deposit_amount_per_person || 1000) / 100).toFixed(2)}</strong> per person 
+                      (total: <strong>£{((bookingSettings.deposit_amount_per_person || 1000) * partySize / 100).toFixed(2)}</strong>) 
+                      is required to secure your booking.
+                    </p>
+                    <p className="text-xs text-amber-600 mt-2">
+                      ✓ Your card will be authorized but not charged until you don&apos;t show up<br />
+                      ✓ Free cancellation up to {bookingSettings.deposit_cancellation_hours || 48} hours before your booking
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Special Requests with fixed min-height */}
