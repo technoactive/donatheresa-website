@@ -35,18 +35,30 @@ export async function GET(request: NextRequest) {
 
     const booking = data[0]
 
-    // Get deposit info for this booking
-    const { data: bookingDetails } = await supabase
-      .from('bookings')
-      .select('deposit_required, deposit_amount, deposit_status')
-      .eq('id', booking.id)
-      .single()
+    // Try to get deposit info (columns may not exist yet)
+    let bookingDetails: any = null
+    let configData: any = null
+    
+    try {
+      const depositResult = await supabase
+        .from('bookings')
+        .select('deposit_required, deposit_amount, deposit_status')
+        .eq('id', booking.id)
+        .single()
+      bookingDetails = depositResult.data
+    } catch {
+      // Deposit columns don't exist yet - that's fine
+    }
 
-    // Get deposit and cancellation policy settings
-    const { data: configData } = await supabase
-      .from('booking_config')
-      .select('deposit_cancellation_hours, deposit_late_cancel_charge_percent')
-      .single()
+    try {
+      const configResult = await supabase
+        .from('booking_config')
+        .select('deposit_cancellation_hours, deposit_late_cancel_charge_percent')
+        .single()
+      configData = configResult.data
+    } catch {
+      // Deposit config columns don't exist yet - that's fine
+    }
 
     const cancellationHours = configData?.deposit_cancellation_hours || 48
     const lateCancelPercent = configData?.deposit_late_cancel_charge_percent || 100
@@ -57,7 +69,6 @@ export async function GET(request: NextRequest) {
     const isLateCancellation = hoursUntilBooking < cancellationHours
 
     // Show deposit info if THIS BOOKING has an authorized deposit
-    // (regardless of whether deposits are currently enabled - the customer already paid!)
     const showDepositInfo = bookingDetails?.deposit_required && bookingDetails?.deposit_status === 'authorized'
 
     return NextResponse.json({
@@ -72,7 +83,7 @@ export async function GET(request: NextRequest) {
         customer_name: booking.customer_name,
         customer_email: booking.customer_email,
         customer_phone: booking.customer_phone,
-        // Deposit info - only if deposits are enabled
+        // Deposit info - only if deposit columns exist and booking has deposit
         deposit_required: showDepositInfo ? bookingDetails?.deposit_required : false,
         deposit_amount: showDepositInfo ? bookingDetails?.deposit_amount : null,
         deposit_status: showDepositInfo ? bookingDetails?.deposit_status : 'none',
@@ -124,18 +135,30 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'This booking has already been cancelled' }, { status: 400 })
     }
 
-    // Get full booking details including deposit info
-    const { data: fullBooking } = await supabase
-      .from('bookings')
-      .select('deposit_required, deposit_amount, deposit_status, stripe_payment_intent_id')
-      .eq('id', booking.id)
-      .single()
+    // Try to get deposit info (columns may not exist yet)
+    let fullBooking: any = null
+    let configData: any = null
+    
+    try {
+      const depositResult = await supabase
+        .from('bookings')
+        .select('deposit_required, deposit_amount, deposit_status, stripe_payment_intent_id')
+        .eq('id', booking.id)
+        .single()
+      fullBooking = depositResult.data
+    } catch {
+      // Deposit columns don't exist yet - that's fine
+    }
 
-    // Get deposit settings and cancellation policy
-    const { data: configData } = await supabase
-      .from('booking_config')
-      .select('deposit_cancellation_hours, deposit_late_cancel_charge_percent')
-      .single()
+    try {
+      const configResult = await supabase
+        .from('booking_config')
+        .select('deposit_cancellation_hours, deposit_late_cancel_charge_percent')
+        .single()
+      configData = configResult.data
+    } catch {
+      // Deposit config columns don't exist yet - that's fine
+    }
 
     const cancellationHours = configData?.deposit_cancellation_hours || 48
     const lateCancelPercent = configData?.deposit_late_cancel_charge_percent || 100
