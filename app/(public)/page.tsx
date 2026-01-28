@@ -878,16 +878,6 @@ export default function HomePage() {
               <span className="text-white/50 text-xs">Recommended</span>
             </Link>
 
-            <Link href="https://www.yelp.co.uk/biz/dona-theresa-pinner?osq=Italian" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-2 px-4 py-3 rounded-xl hover:bg-white/5 transition-all">
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="#FF1A1A"><path d="M20.16 12.594l-4.995 1.433c-.96.276-1.74-.8-1.176-1.63l2.905-4.308a1.072 1.072 0 0 1 1.596-.206l2.042 1.65c.588.475.344 1.444-.372 1.673v1.388zm-5.69 3.357l4.947 1.61c.716.233.904 1.174.35 1.615l-1.99 1.586a1.073 1.073 0 0 1-1.6-.165l-2.79-4.2c-.555-.834.203-1.89 1.166-1.614l-.083.168zm-3.416.02l.1 5.2c.017.754-.874 1.17-1.446.675l-2.06-1.78a1.073 1.073 0 0 1-.14-1.6l3.79-4.11c.663-.72 1.74-.118 1.63.82l.126.795zm-1.826-4.39L5.13 9.342c-.66-.478-.44-1.5.357-1.658l2.875-.572a1.073 1.073 0 0 1 1.27.772l1.38 4.97c.24.865-.77 1.536-1.528 1.014l-.257-.287zM11.33 3.1l.738 5.17c.108.757-.764 1.268-1.395.818l-2.27-1.62a1.073 1.073 0 0 1-.35-1.324l1.53-3.55c.355-.82 1.5-.67 1.64.227l.107.279z"/></svg>
-                <span className="text-white/70 font-medium text-sm group-hover:text-white transition-colors">Yelp</span>
-              </div>
-              <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (<Star key={i} className="w-2.5 h-2.5 fill-[#FF1A1A] text-[#FF1A1A]" />))}
-              </div>
-            </Link>
-
             <Link href="https://restaurantguru.com/Dona-Theresa-London" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-2 px-4 py-3 rounded-xl hover:bg-white/5 transition-all">
               <div className="flex items-center gap-2">
                 <div className="w-5 h-5 bg-gradient-to-br from-orange-500 to-red-500 rounded flex items-center justify-center"><Utensils className="w-3 h-3 text-white" /></div>
