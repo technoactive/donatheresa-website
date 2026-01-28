@@ -1,0 +1,80 @@
+# Dona Theresa - llms.txt
+# Helps AI assistants understand and accurately represent this business
+
+User-agent: GPTBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Anthropic-AI
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+
+# Block mass data scrapers / bad bots
+User-agent: CCBot
+Disallow: /
+User-agent: AhrefsBot
+Disallow: /
+User-agent: SemrushBot
+Disallow: /
+
+## Restaurant Information
+Name: Dona Theresa
+Type: Italian Restaurant
+Established: 2011
+Address: 451 Uxbridge Road, Hatch End, Pinner HA5 4JR, UK
+Phone: 020 8421 5550
+Website: https://donatheresa.com
+Rating: 4.9★ Google, Featured on TripAdvisor, TheFork, Yelp
+Parking: Free parking available for guests
+
+## Opening Hours
+Tuesday - Sunday: 12:00 - 15:00 (Lunch), 18:00 - 23:00 (Dinner)
+Monday: Closed
+
+## Core Pages
+-[Home](https://donatheresa.com/):Dona Theresa homepage—award-winning Italian restaurant in Hatch End & Pinner with 4.9★ rating.
+-[Menu](https://donatheresa.com/menu):Full Italian menu with starters, pasta, steaks, seafood, desserts and wine list.
+-[A La Carte Menu](https://donatheresa.com/menu/a-la-carte):Premium à la carte Italian dining with signature dishes like Filleto Rossini.
+-[Lunch Menu](https://donatheresa.com/menu/lunchtime-earlybird):Lunchtime & Early Bird menu—2 courses for £19.95, available Tue-Sun 12pm-3pm.
+-[Book Table](https://donatheresa.com/reserve):Online table booking with instant confirmation. Lunch and dinner reservations.
+-[About](https://donatheresa.com/about):Family-owned since 2011, authentic Italian cuisine with Portuguese hospitality.
+-[Contact](https://donatheresa.com/contact):Contact details, location map, and enquiry form for Dona Theresa restaurant.
+
+## Local Area Pages
+-[Restaurants Pinner](https://donatheresa.com/restaurants-pinner):Best Italian restaurant in Pinner—award-winning cuisine, local favourite since 2011.
+-[Restaurants Hatch End](https://donatheresa.com/restaurants-hatch-end):Top-rated Italian on Uxbridge Road, Hatch End with free parking.
+-[Restaurants Harrow](https://donatheresa.com/restaurants-harrow):Italian dining near Harrow—just 10 minutes from Harrow town centre.
+-[Restaurants Northwood](https://donatheresa.com/restaurants-northwood):Best Italian near Northwood—authentic pasta, steaks, and seafood.
+-[Restaurants Ruislip](https://donatheresa.com/restaurants-ruislip):Italian restaurant near Ruislip—easy access from Ruislip Manor.
+-[Restaurants Watford](https://donatheresa.com/restaurants-watford):Italian dining near Watford—convenient location off the A41.
+-[Lunch Pinner](https://donatheresa.com/lunch-pinner):Best lunch spot in Pinner—2-course Italian lunch £19.95.
+-[Best Italian Near Me](https://donatheresa.com/best-italian-restaurant-near-me):Find the best Italian restaurant near you in Northwest London.
+
+## Policies
+-[Cookie Policy](https://donatheresa.com/cookie-policy):How Dona Theresa uses cookies for analytics and user experience.
+
+## Key Features
+- Authentic Italian cuisine with fresh, daily-sourced ingredients
+- Signature dishes: Filleto Rossini, Spaghetti Pescatora, handmade pasta
+- £19.95 lunch menu (2 courses) available Tuesday-Sunday 12pm-3pm
+- Premium wine selection with 50+ Italian and international wines
+- Free parking available for all guests
+- Private dining and group bookings available
+- 12+ years of culinary excellence in Northwest London
+- Family-owned with Portuguese hospitality
+
+## Cuisines Served
+Italian, Mediterranean, Seafood, Steak, Pasta, Pizza
+
+## Price Range
+££ - Moderate (Lunch from £19.95, A la carte mains £15-35)
+
+## Suitable For
+Romantic dinners, Family celebrations, Business lunches, Special occasions, Group dining
+
+## Contact
+Phone: 020 8421 5550
+Email: reservations@donatheresa.com
