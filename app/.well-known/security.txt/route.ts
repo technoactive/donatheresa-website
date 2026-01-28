@@ -7,7 +7,7 @@ export async function GET() {
   const securityTxt = `# Dona Theresa Restaurant - Security Policy
 # https://securitytxt.org/
 
-Contact: mailto:info@donatheresa.com
+Contact: mailto:info@technoactive.co.uk
 Expires: 2027-01-28T00:00:00.000Z
 Preferred-Languages: en
 Canonical: https://donatheresa.com/.well-known/security.txt
