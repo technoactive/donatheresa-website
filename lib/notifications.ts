@@ -728,10 +728,29 @@ export class NotificationManager {
         console.log('📡 Notification subscription status:', status);
         if (status === 'SUBSCRIBED') {
           console.log('✅ Real-time notifications are active');
-        } else if (status === 'CHANNEL_ERROR') {
-          console.error('❌ Real-time notification subscription failed');
+          // Clear any fallback polling if realtime is working
+          if (this.pollingInterval) {
+            clearInterval(this.pollingInterval);
+            this.pollingInterval = null;
+          }
+        } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+          console.warn('⚠️ Real-time notifications unavailable, falling back to polling');
+          // Set up polling fallback (every 30 seconds)
+          this.setupPollingFallback();
         }
       });
+  }
+
+  private pollingInterval: NodeJS.Timeout | null = null;
+
+  private setupPollingFallback(): void {
+    // Only set up polling if not already running
+    if (this.pollingInterval) return;
+    
+    console.log('🔄 Setting up notification polling fallback (every 30s)');
+    this.pollingInterval = setInterval(() => {
+      this.loadNotificationsFromDatabase();
+    }, 30000); // Poll every 30 seconds
   }
 
   public async refreshNotifications(): Promise<void> {

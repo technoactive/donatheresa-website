@@ -1,7 +1,53 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+// Blocked paths - common vulnerability scanning targets
+const BLOCKED_PATHS = [
+  '/wp-admin',
+  '/wp-login',
+  '/wp-includes',
+  '/wp-content',
+  '/administrator',
+  '/admin.php',
+  '/xmlrpc.php',
+  '/misc/ajax.js',
+  '/.env',
+  '/.git',
+  '/config.php',
+  '/phpinfo.php',
+  '/phpmyadmin',
+  '/view-source:',
+  '/eval-stdin.php',
+  '/.well-known/security.txt',
+]
+
+// Suspicious user agents (vulnerability scanners)
+const BLOCKED_USER_AGENTS = [
+  'sqlmap',
+  'nikto',
+  'nessus',
+  'openvas',
+  'nmap',
+  'masscan',
+  'zgrab',
+  'censys',
+  'shodan',
+]
+
 export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname.toLowerCase()
+  const userAgent = request.headers.get('user-agent')?.toLowerCase() || ''
+
+  // Block suspicious paths (vulnerability scanning)
+  if (BLOCKED_PATHS.some(path => pathname.startsWith(path.toLowerCase()))) {
+    return new NextResponse(null, { status: 404 })
+  }
+
+  // Block known vulnerability scanners
+  if (BLOCKED_USER_AGENTS.some(agent => userAgent.includes(agent))) {
+    return new NextResponse(null, { status: 403 })
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -52,18 +98,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
-  // creating a new response object with NextResponse.next() make sure to:
-  // 1. Pass the request in it, like so:
-  //    const myNewResponse = NextResponse.next({ request })
-  // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Change the myNewResponse object to fit your needs, but avoid changing
-  //    the cookies!
-  // 4. Finally:
-  //    return myNewResponse
-  // If this is not done, you may be causing the browser and server to go out
-  // of sync and terminate the user's session prematurely!
+  // Add security headers
+  supabaseResponse.headers.set('X-Content-Type-Options', 'nosniff')
+  supabaseResponse.headers.set('X-Frame-Options', 'DENY')
+  supabaseResponse.headers.set('X-XSS-Protection', '1; mode=block')
+  supabaseResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  supabaseResponse.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
 
   return supabaseResponse
 }
