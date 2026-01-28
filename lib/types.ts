@@ -34,6 +34,9 @@ export type DatabaseCustomer = {
   customer_segment?: 'new' | 'regular' | 'vip' | 'inactive'
 }
 
+// All possible deposit statuses
+export type DepositStatus = 'none' | 'pending' | 'authorized' | 'captured' | 'cancelled' | 'refunded' | 'partially_refunded' | 'expired' | 'failed'
+
 export type Booking = {
   id: string
   customerName: string
@@ -48,7 +51,10 @@ export type Booking = {
   // Deposit fields
   deposit_required?: boolean
   deposit_amount?: number | null // Amount in pence
-  deposit_status?: 'none' | 'pending' | 'authorized' | 'captured' | 'cancelled' | 'refunded' | 'partially_refunded'
+  deposit_status?: DepositStatus
+  deposit_refund_amount?: number | null // Amount already refunded in pence
+  deposit_captured_at?: string | null
+  deposit_refunded_at?: string | null
   stripe_payment_intent_id?: string | null
 }
 

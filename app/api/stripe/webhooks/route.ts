@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 
 // Stripe webhook handler
 // Receives events from Stripe about payment status changes
+// IMPORTANT: This endpoint uses raw body parsing - do not use JSON middleware
 
 export async function POST(request: NextRequest) {
   try {
@@ -10,15 +11,17 @@ export async function POST(request: NextRequest) {
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
     if (!stripeSecretKey) {
-      console.error('Stripe secret key not configured')
-      return NextResponse.json({ error: 'Stripe not configured' }, { status: 503 })
+      console.error('❌ Stripe secret key not configured')
+      return NextResponse.json({ error: 'Payment system not configured' }, { status: 503 })
     }
 
+    // Get raw body for signature verification
     const body = await request.text()
     const signature = request.headers.get('stripe-signature')
 
     if (!signature) {
-      return NextResponse.json({ error: 'No signature provided' }, { status: 400 })
+      console.error('❌ No Stripe signature in webhook request')
+      return NextResponse.json({ error: 'Missing signature' }, { status: 400 })
     }
 
     // Dynamically import Stripe
@@ -29,44 +32,72 @@ export async function POST(request: NextRequest) {
 
     let event: any
 
-    // Verify webhook signature if secret is configured
+    // Verify webhook signature - CRITICAL for security
     if (webhookSecret) {
       try {
         event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
-      } catch (err) {
-        console.error('Webhook signature verification failed:', err)
-        return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
+      } catch (err: any) {
+        console.error('❌ Webhook signature verification failed:', err.message)
+        return NextResponse.json(
+          { error: 'Invalid signature - webhook rejected' },
+          { status: 400 }
+        )
       }
     } else {
-      // If no webhook secret, parse the body directly (not recommended for production)
-      event = JSON.parse(body)
-      console.warn('⚠️ Webhook secret not configured - signature not verified')
+      // DEVELOPMENT ONLY - should never happen in production
+      console.warn('⚠️ SECURITY WARNING: Webhook secret not configured - signature not verified')
+      console.warn('⚠️ Set STRIPE_WEBHOOK_SECRET in production!')
+      try {
+        event = JSON.parse(body)
+      } catch (parseError) {
+        return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+      }
     }
 
     const supabase = await createClient()
+
+    // Log all incoming events for debugging
+    console.log(`📥 Webhook received: ${event.type}`, {
+      eventId: event.id,
+      timestamp: new Date().toISOString()
+    })
 
     // Handle different event types
     switch (event.type) {
       case 'payment_intent.succeeded': {
         const paymentIntent = event.data.object
-        console.log('💰 Payment intent succeeded:', paymentIntent.id)
+        console.log('💳 Payment intent succeeded:', paymentIntent.id)
 
-        // Update booking deposit status to authorized
-        await supabase
+        // For manual capture, 'succeeded' means authorized (not captured)
+        const newStatus = paymentIntent.capture_method === 'manual' ? 'authorized' : 'captured'
+
+        // Update booking deposit status
+        const { error: updateError } = await supabase
           .from('bookings')
-          .update({ deposit_status: 'authorized' })
+          .update({ 
+            deposit_status: newStatus,
+            ...(newStatus === 'captured' && { deposit_captured_at: new Date().toISOString() })
+          })
           .eq('stripe_payment_intent_id', paymentIntent.id)
+
+        if (updateError) {
+          console.error('Failed to update booking from webhook:', updateError)
+        }
 
         // Log transaction
         await supabase
           .from('deposit_transactions')
           .insert({
-            booking_id: paymentIntent.metadata?.booking_id,
+            booking_id: paymentIntent.metadata?.booking_id || null,
             stripe_payment_intent_id: paymentIntent.id,
             amount: paymentIntent.amount,
-            action: 'authorized',
-            reason: 'Card authorized successfully',
-            performed_by: 'system'
+            action: newStatus,
+            reason: `Card ${newStatus === 'authorized' ? 'authorized' : 'charged'} successfully via Stripe`,
+            performed_by: 'stripe_webhook',
+            metadata: {
+              event_id: event.id,
+              capture_method: paymentIntent.capture_method
+            }
           })
         break
       }
@@ -76,21 +107,33 @@ export async function POST(request: NextRequest) {
         console.log('❌ Payment intent failed:', paymentIntent.id)
 
         // Update booking deposit status
-        await supabase
+        const { error: updateError } = await supabase
           .from('bookings')
-          .update({ deposit_status: 'none', deposit_required: false })
+          .update({ 
+            deposit_status: 'none',
+            deposit_required: false 
+          })
           .eq('stripe_payment_intent_id', paymentIntent.id)
+
+        if (updateError) {
+          console.error('Failed to update booking from webhook:', updateError)
+        }
 
         // Log transaction
         await supabase
           .from('deposit_transactions')
           .insert({
-            booking_id: paymentIntent.metadata?.booking_id,
+            booking_id: paymentIntent.metadata?.booking_id || null,
             stripe_payment_intent_id: paymentIntent.id,
             amount: paymentIntent.amount,
             action: 'failed',
             reason: paymentIntent.last_payment_error?.message || 'Payment failed',
-            performed_by: 'system'
+            performed_by: 'stripe_webhook',
+            metadata: {
+              event_id: event.id,
+              error_code: paymentIntent.last_payment_error?.code,
+              decline_code: paymentIntent.last_payment_error?.decline_code
+            }
           })
         break
       }
@@ -103,6 +146,61 @@ export async function POST(request: NextRequest) {
           .from('bookings')
           .update({ deposit_status: 'cancelled' })
           .eq('stripe_payment_intent_id', paymentIntent.id)
+
+        await supabase
+          .from('deposit_transactions')
+          .insert({
+            booking_id: paymentIntent.metadata?.booking_id || null,
+            stripe_payment_intent_id: paymentIntent.id,
+            amount: paymentIntent.amount,
+            action: 'cancelled',
+            reason: 'Authorization cancelled via Stripe',
+            performed_by: 'stripe_webhook',
+            metadata: { event_id: event.id }
+          })
+        break
+      }
+
+      case 'payment_intent.amount_capturable_updated': {
+        // This fires when the authorization amount changes or when authorization is confirmed
+        const paymentIntent = event.data.object
+        console.log('💰 Amount capturable updated:', paymentIntent.id, paymentIntent.amount_capturable)
+        
+        if (paymentIntent.amount_capturable > 0) {
+          // Authorization confirmed
+          await supabase
+            .from('bookings')
+            .update({ deposit_status: 'authorized' })
+            .eq('stripe_payment_intent_id', paymentIntent.id)
+        }
+        break
+      }
+
+      case 'charge.captured': {
+        const charge = event.data.object
+        console.log('💵 Charge captured:', charge.id)
+
+        if (charge.payment_intent) {
+          await supabase
+            .from('bookings')
+            .update({ 
+              deposit_status: 'captured',
+              deposit_captured_at: new Date().toISOString()
+            })
+            .eq('stripe_payment_intent_id', charge.payment_intent)
+
+          await supabase
+            .from('deposit_transactions')
+            .insert({
+              stripe_payment_intent_id: charge.payment_intent as string,
+              stripe_charge_id: charge.id,
+              amount: charge.amount,
+              action: 'captured',
+              reason: 'Deposit captured via Stripe',
+              performed_by: 'stripe_webhook',
+              metadata: { event_id: event.id }
+            })
+        }
         break
       }
 
@@ -110,9 +208,9 @@ export async function POST(request: NextRequest) {
         const charge = event.data.object
         console.log('💸 Charge refunded:', charge.id)
 
-        // Update booking if we can find it
         if (charge.payment_intent) {
           const isFullRefund = charge.amount_refunded >= charge.amount
+          
           await supabase
             .from('bookings')
             .update({ 
@@ -121,28 +219,55 @@ export async function POST(request: NextRequest) {
               deposit_refunded_at: new Date().toISOString()
             })
             .eq('stripe_payment_intent_id', charge.payment_intent)
+
+          await supabase
+            .from('deposit_transactions')
+            .insert({
+              stripe_payment_intent_id: charge.payment_intent as string,
+              stripe_charge_id: charge.id,
+              amount: charge.amount_refunded,
+              action: isFullRefund ? 'refunded' : 'partial_refund',
+              reason: 'Refund processed via Stripe',
+              performed_by: 'stripe_webhook',
+              metadata: { 
+                event_id: event.id,
+                original_amount: charge.amount,
+                refunded_amount: charge.amount_refunded
+              }
+            })
         }
         break
       }
 
+      case 'charge.dispute.created': {
+        // Handle disputes - important for fraud prevention
+        const dispute = event.data.object
+        console.log('⚠️ Dispute created:', dispute.id)
+
+        // TODO: Send notification to admin about dispute
+        // TODO: Update booking status to reflect dispute
+        break
+      }
+
       default:
-        console.log(`Unhandled event type: ${event.type}`)
+        // Log unhandled events but don't fail
+        console.log(`ℹ️ Unhandled webhook event type: ${event.type}`)
     }
 
-    return NextResponse.json({ received: true })
+    // Always return 200 to acknowledge receipt
+    // Stripe will retry on non-2xx responses
+    return NextResponse.json({ 
+      received: true,
+      eventType: event.type,
+      eventId: event.id
+    })
 
   } catch (error) {
-    console.error('Webhook error:', error)
+    console.error('❌ Webhook handler error:', error)
+    // Return 500 so Stripe will retry
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Webhook handler failed' },
+      { error: 'Webhook handler failed' },
       { status: 500 }
     )
   }
-}
-
-// Disable body parsing for webhooks (Stripe requires raw body)
-export const config = {
-  api: {
-    bodyParser: false,
-  },
 }

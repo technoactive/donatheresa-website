@@ -27,22 +27,26 @@ import {
   Ban,
   DollarSign,
   Clock,
-  User
+  AlertTriangle
 } from "lucide-react"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
+
+// All possible deposit statuses
+type DepositStatus = 'none' | 'pending' | 'authorized' | 'captured' | 'cancelled' | 'refunded' | 'partially_refunded' | 'expired' | 'failed'
 
 interface DepositManagementProps {
   bookingId: string
   depositRequired: boolean
   depositAmount: number | null // in pence
-  depositStatus: 'none' | 'pending' | 'authorized' | 'captured' | 'cancelled' | 'refunded' | 'partially_refunded'
+  depositRefundAmount?: number | null // in pence - amount already refunded
+  depositStatus: DepositStatus
   partySize: number
   customerName: string
   onStatusChange?: () => void
 }
 
-const statusConfig = {
+const statusConfig: Record<DepositStatus, { label: string; color: string; icon: typeof CreditCard }> = {
   none: {
     label: 'No Deposit',
     color: 'bg-slate-100 text-slate-700 border-slate-200',
@@ -77,6 +81,16 @@ const statusConfig = {
     label: 'Partially Refunded',
     color: 'bg-orange-100 text-orange-800 border-orange-200',
     icon: RefreshCw
+  },
+  expired: {
+    label: 'Authorization Expired',
+    color: 'bg-gray-100 text-gray-700 border-gray-200',
+    icon: Clock
+  },
+  failed: {
+    label: 'Payment Failed',
+    color: 'bg-red-100 text-red-800 border-red-200',
+    icon: XCircle
   }
 }
 
@@ -84,6 +98,7 @@ export function DepositManagement({
   bookingId,
   depositRequired,
   depositAmount,
+  depositRefundAmount = 0,
   depositStatus,
   partySize,
   customerName,
@@ -94,10 +109,14 @@ export function DepositManagement({
   const [refundAmount, setRefundAmount] = React.useState<string>('')
   const [showPartialRefund, setShowPartialRefund] = React.useState(false)
 
-  const formatAmount = (pence: number | null) => {
+  const formatAmount = (pence: number | null | undefined) => {
     if (!pence) return '£0.00'
     return `£${(pence / 100).toFixed(2)}`
   }
+
+  // Calculate remaining refundable amount
+  const alreadyRefunded = depositRefundAmount || 0
+  const remainingRefundable = (depositAmount || 0) - alreadyRefunded
 
   const handleCaptureDeposit = async () => {
     setIsLoading(true)
@@ -166,7 +185,7 @@ export function DepositManagement({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           bookingId, 
-          amount: partialAmount, // undefined = full refund
+          amount: partialAmount, // undefined = full refund of remaining
           reason: partialAmount ? `Partial refund of £${(partialAmount / 100).toFixed(2)} via dashboard` : 'Full refund via dashboard' 
         })
       })
@@ -195,8 +214,12 @@ export function DepositManagement({
       toast.error('Please enter a valid refund amount')
       return
     }
-    if (amountInPence > (depositAmount || 0)) {
-      toast.error(`Cannot refund more than ${formatAmount(depositAmount)}`)
+    if (amountInPence < 50) {
+      toast.error('Minimum refund amount is £0.50')
+      return
+    }
+    if (amountInPence > remainingRefundable) {
+      toast.error(`Cannot refund more than ${formatAmount(remainingRefundable)}`)
       return
     }
     handleRefundDeposit(amountInPence)
@@ -245,6 +268,18 @@ export function DepositManagement({
             <p className="text-xs text-slate-500 uppercase tracking-wide">Party Size</p>
             <p className="text-lg font-semibold text-slate-900">{partySize} guests</p>
           </div>
+          {alreadyRefunded > 0 && (
+            <>
+              <div>
+                <p className="text-xs text-slate-500 uppercase tracking-wide">Refunded</p>
+                <p className="text-lg font-semibold text-green-600">{formatAmount(alreadyRefunded)}</p>
+              </div>
+              <div>
+                <p className="text-xs text-slate-500 uppercase tracking-wide">Remaining</p>
+                <p className="text-lg font-semibold text-slate-900">{formatAmount(remainingRefundable)}</p>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Status-specific info */}
@@ -266,7 +301,7 @@ export function DepositManagement({
             <DollarSign className="h-4 w-4 text-red-600" />
             <AlertDescription className="text-red-800">
               Deposit has been charged to the customer&apos;s card.
-              You can issue a refund if needed.
+              You can issue a full or partial refund if needed.
             </AlertDescription>
           </Alert>
         )}
@@ -277,6 +312,38 @@ export function DepositManagement({
             <AlertDescription className="text-yellow-800">
               Waiting for customer to complete payment.
               The booking will be confirmed once payment is authorized.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {depositStatus === 'expired' && (
+          <Alert className="border-gray-200 bg-gray-50">
+            <AlertTriangle className="h-4 w-4 text-gray-600" />
+            <AlertDescription className="text-gray-800">
+              The authorization has expired (7 days). The customer was not charged.
+              If needed, request a new deposit from the customer.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {depositStatus === 'failed' && (
+          <Alert className="border-red-200 bg-red-50">
+            <XCircle className="h-4 w-4 text-red-600" />
+            <AlertDescription className="text-red-800">
+              Payment failed. The customer&apos;s card was declined or there was an error.
+              Contact the customer to arrange alternative payment.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {depositStatus === 'partially_refunded' && (
+          <Alert className="border-orange-200 bg-orange-50">
+            <RefreshCw className="h-4 w-4 text-orange-600" />
+            <AlertDescription className="text-orange-800">
+              {formatAmount(alreadyRefunded)} has been refunded. 
+              {remainingRefundable > 0 
+                ? ` You can refund up to ${formatAmount(remainingRefundable)} more.`
+                : ' No remaining amount to refund.'}
             </AlertDescription>
           </Alert>
         )}
@@ -425,7 +492,7 @@ export function DepositManagement({
                         id="refundAmount"
                         type="number"
                         step="0.01"
-                        min="0.01"
+                        min="0.50"
                         max={(depositAmount || 0) / 100}
                         placeholder={`Max: ${((depositAmount || 0) / 100).toFixed(2)}`}
                         value={refundAmount}
@@ -434,7 +501,7 @@ export function DepositManagement({
                       />
                     </div>
                     <p className="text-xs text-slate-500 mt-2">
-                      Refunds typically take 5-10 business days to appear on the customer&apos;s card.
+                      Minimum refund: £0.50. Refunds typically take 5-10 business days.
                     </p>
                   </div>
                   <AlertDialogFooter>
@@ -456,56 +523,98 @@ export function DepositManagement({
           )}
 
           {/* Refund for partially refunded deposits */}
-          {depositStatus === 'partially_refunded' && (
-            <AlertDialog open={showPartialRefund} onOpenChange={setShowPartialRefund}>
-              <AlertDialogTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  className="border-blue-200 text-blue-700 hover:bg-blue-50"
-                  disabled={isLoading}
-                >
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Refund Remaining
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent className="bg-white">
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Refund Remaining Balance</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Some of this deposit has already been refunded. You can refund additional amounts.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <div className="py-4">
-                  <Label htmlFor="refundAmount" className="text-sm font-medium">Refund Amount (£)</Label>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className="text-lg font-bold text-slate-400">£</span>
-                    <Input
-                      id="refundAmount"
-                      type="number"
-                      step="0.01"
-                      min="0.01"
-                      placeholder="Enter amount"
-                      value={refundAmount}
-                      onChange={(e) => setRefundAmount(e.target.value)}
-                      className="w-32"
-                    />
-                  </div>
-                </div>
-                <AlertDialogFooter>
-                  <AlertDialogCancel onClick={() => setRefundAmount('')}>Cancel</AlertDialogCancel>
+          {depositStatus === 'partially_refunded' && remainingRefundable > 0 && (
+            <>
+              {/* Full Remaining Refund */}
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
                   <Button 
-                    onClick={handlePartialRefund}
-                    disabled={isLoading || !refundAmount}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    variant="outline" 
+                    className="border-blue-200 text-blue-700 hover:bg-blue-50"
+                    disabled={isLoading}
                   >
-                    {isLoading ? (
-                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                    ) : null}
-                    Refund £{refundAmount || '0.00'}
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Refund Remaining ({formatAmount(remainingRefundable)})
                   </Button>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-white">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Refund Remaining Balance?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This will refund the remaining {formatAmount(remainingRefundable)} to {customerName}&apos;s card.
+                      <br /><br />
+                      Already refunded: {formatAmount(alreadyRefunded)}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction 
+                      onClick={() => handleRefundDeposit(remainingRefundable)}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      Confirm - Refund {formatAmount(remainingRefundable)}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              {/* Partial Refund */}
+              <AlertDialog open={showPartialRefund} onOpenChange={setShowPartialRefund}>
+                <AlertDialogTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    className="border-amber-200 text-amber-700 hover:bg-amber-50"
+                    disabled={isLoading}
+                  >
+                    <DollarSign className="w-4 h-4 mr-2" />
+                    Custom Amount
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent className="bg-white">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Partial Refund</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Enter the amount to refund. Maximum remaining: {formatAmount(remainingRefundable)}
+                      <br />
+                      Already refunded: {formatAmount(alreadyRefunded)}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <div className="py-4">
+                    <Label htmlFor="refundAmount" className="text-sm font-medium">Refund Amount (£)</Label>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="text-lg font-bold text-slate-400">£</span>
+                      <Input
+                        id="refundAmount"
+                        type="number"
+                        step="0.01"
+                        min="0.50"
+                        max={remainingRefundable / 100}
+                        placeholder={`Max: ${(remainingRefundable / 100).toFixed(2)}`}
+                        value={refundAmount}
+                        onChange={(e) => setRefundAmount(e.target.value)}
+                        className="w-32"
+                      />
+                    </div>
+                    <p className="text-xs text-slate-500 mt-2">
+                      Minimum refund: £0.50. Refunds typically take 5-10 business days.
+                    </p>
+                  </div>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel onClick={() => setRefundAmount('')}>Cancel</AlertDialogCancel>
+                    <Button 
+                      onClick={handlePartialRefund}
+                      disabled={isLoading || !refundAmount}
+                      className="bg-amber-600 hover:bg-amber-700"
+                    >
+                      {isLoading ? (
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      ) : null}
+                      Refund £{refundAmount || '0.00'}
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </>
           )}
         </div>
       </CardContent>
@@ -527,7 +636,7 @@ export function DepositStatusBadge({
     return null
   }
 
-  const config = statusConfig[depositStatus as keyof typeof statusConfig] || statusConfig.none
+  const config = statusConfig[depositStatus as DepositStatus] || statusConfig.none
   const StatusIcon = config.icon
   const amount = depositAmount ? `£${(depositAmount / 100).toFixed(0)}` : ''
 
