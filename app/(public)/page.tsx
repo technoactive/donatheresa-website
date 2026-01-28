@@ -759,7 +759,7 @@ export default function HomePage() {
 
               {/* ViaMichelin */}
               <Link 
-                href="https://www.viamichelin.com/web/Restaurant/Pinner-HA5_4JR-Dona_Theresa-447118-41102"
+                href="https://www.viamichelin.co.uk/?bounds=-0.3894174551391604%7E51.601195855623146%7E-0.3594625448608396%7E51.61360414437685&center=-0.37444%7E51.6074&poiCategories=7&selectedAddress=%7B%22address%22%3A%22Dona+Theresa+Restaurant%2C+451+Uxbridge+Road%2C+Pinner%2C+HA5+4JR%22%7D"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex flex-col items-center gap-2 px-6 py-4 rounded-xl hover:bg-white/5 transition-all"
@@ -771,7 +771,7 @@ export default function HomePage() {
                   <span className="text-white/70 font-medium group-hover:text-white transition-colors">ViaMichelin</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span className="text-[#005BBB] font-bold text-sm">9.4</span>
+                  <span className="text-[#005BBB] font-bold text-sm">9.5</span>
                   <span className="text-white/50 text-xs">/10</span>
                 </div>
               </Link>
