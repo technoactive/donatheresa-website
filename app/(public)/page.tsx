@@ -724,6 +724,82 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Local Areas Section - SEO Internal Links */}
+      <section className="py-20 bg-white" aria-labelledby="areas-heading">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-12">
+            <h2 id="areas-heading" className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+              Serving Hatch End, Pinner & Northwest London
+            </h2>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
+              Proudly serving guests from across Northwest London. Find out why we're the top-rated restaurant in your area.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Link 
+              href="/restaurants-hatch-end" 
+              className="group bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
+            >
+              <h3 className="text-xl font-semibold text-slate-900 mb-2 group-hover:text-amber-600">
+                Restaurants in Hatch End
+              </h3>
+              <p className="text-slate-600 text-sm mb-3">
+                Best Italian dining on Uxbridge Road with free parking
+              </p>
+              <span className="text-amber-600 text-sm font-medium flex items-center gap-1">
+                Explore <ArrowRight className="w-4 h-4" />
+              </span>
+            </Link>
+            
+            <Link 
+              href="/restaurants-pinner" 
+              className="group bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
+            >
+              <h3 className="text-xl font-semibold text-slate-900 mb-2 group-hover:text-amber-600">
+                Restaurants in Pinner
+              </h3>
+              <p className="text-slate-600 text-sm mb-3">
+                5 mins from Pinner station, award-winning Italian
+              </p>
+              <span className="text-amber-600 text-sm font-medium flex items-center gap-1">
+                Explore <ArrowRight className="w-4 h-4" />
+              </span>
+            </Link>
+            
+            <Link 
+              href="/lunch-pinner" 
+              className="group bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
+            >
+              <h3 className="text-xl font-semibold text-slate-900 mb-2 group-hover:text-amber-600">
+                Lunch in Pinner
+              </h3>
+              <p className="text-slate-600 text-sm mb-3">
+                2-course lunch special from just £19.95
+              </p>
+              <span className="text-amber-600 text-sm font-medium flex items-center gap-1">
+                View Menu <ArrowRight className="w-4 h-4" />
+              </span>
+            </Link>
+            
+            <Link 
+              href="/menu/lunchtime-earlybird" 
+              className="group bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
+            >
+              <h3 className="text-xl font-semibold text-slate-900 mb-2 group-hover:text-amber-600">
+                Early Bird Menu
+              </h3>
+              <p className="text-slate-600 text-sm mb-3">
+                Best value Italian dining Tue-Sun 12-3pm
+              </p>
+              <span className="text-amber-600 text-sm font-medium flex items-center gap-1">
+                View Menu <ArrowRight className="w-4 h-4" />
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
       <section className="py-32 relative overflow-hidden bg-slate-50" aria-labelledby="contact-heading">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
