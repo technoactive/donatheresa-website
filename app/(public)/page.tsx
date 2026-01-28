@@ -775,6 +775,22 @@ export default function HomePage() {
                   <span className="text-white/50 text-xs">/10</span>
                 </div>
               </Link>
+
+              {/* Table Agent */}
+              <Link 
+                href="https://tableagent.com/london/dona-theresa/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col items-center gap-2 px-6 py-4 rounded-xl hover:bg-white/5 transition-all"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">TA</span>
+                  </div>
+                  <span className="text-white/70 font-medium group-hover:text-white transition-colors">Table Agent</span>
+                </div>
+                <span className="text-white/50 text-xs">Book Online</span>
+              </Link>
             </div>
           </div>
         </div>
