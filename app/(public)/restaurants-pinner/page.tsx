@@ -81,7 +81,7 @@ export default function RestaurantsPinnerPage() {
             </h1>
             <p className="text-lg md:text-xl text-slate-700 max-w-3xl mx-auto">
               Experience why Dona Theresa is the most beloved Italian restaurant among all 
-              restaurants in Pinner. Just 5 minutes from Pinner station with free parking.
+              restaurants in Pinner. Located in nearby Hatch End with free parking.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button asChild size="lg" className="text-lg bg-amber-600 hover:bg-amber-700">

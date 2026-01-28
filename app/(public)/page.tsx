@@ -754,7 +754,7 @@ export default function HomePage() {
                   </div>
                   <div className="flex items-center gap-4 text-slate-700">
                     <div className="w-2 h-2 bg-amber-500 rounded-full" />
-                    <span>5 minutes from Pinner Station • Free parking available</span>
+                    <span>Easy access from Pinner & Hatch End • Free parking available</span>
                   </div>
                   <div className="flex items-center gap-4 text-slate-700">
                     <div className="w-2 h-2 bg-amber-500 rounded-full" />
