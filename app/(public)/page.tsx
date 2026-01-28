@@ -269,7 +269,7 @@ export default function HomePage() {
                   <div className="text-xs sm:text-sm text-slate-600">Satisfaction</div>
                 </div>
                 <div className="bg-white rounded-xl p-4 sm:p-6 border border-slate-200 shadow-sm text-center">
-                  <div className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">4.9★</div>
+                  <div className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">4.5★</div>
                   <div className="text-xs sm:text-sm text-slate-600">Rating</div>
                 </div>
               </div>
@@ -453,7 +453,7 @@ export default function HomePage() {
             {/* Rating Summary - Enhanced */}
             <div className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-8 px-6 sm:px-10 py-5 bg-gradient-to-r from-white/[0.08] to-white/[0.03] backdrop-blur-sm rounded-2xl border border-white/10">
               <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-white">4.9</div>
+                <div className="text-4xl md:text-5xl font-bold text-white">4.5</div>
                 <div className="flex items-center gap-0.5 mt-2 justify-center">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
@@ -856,7 +856,7 @@ export default function HomePage() {
               </div>
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (<Star key={i} className="w-3 h-3 fill-amber-400 text-amber-400" />))}
-                <span className="text-white/50 text-xs ml-1">4.9</span>
+                <span className="text-white/50 text-xs ml-1">4.5</span>
               </div>
             </Link>
 
@@ -1037,7 +1037,7 @@ export default function HomePage() {
                   <div className="flex items-center gap-4 text-sm">
                     <div className="flex items-center gap-2 text-amber-400">
                       <Star className="w-3.5 h-3.5 fill-amber-400" />
-                      <span>4.9 Rating</span>
+                      <span>4.5 Rating</span>
                     </div>
                     <div className="flex items-center gap-2 text-white/50">
                       <span>Since 2011</span>
