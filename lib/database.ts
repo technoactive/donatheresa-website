@@ -50,6 +50,12 @@ export interface BookingSettings {
   reconfirmation_days_before?: number
   reconfirmation_deadline_hours?: number
   reconfirmation_no_response_action?: 'auto_cancel' | 'flag_only' | 'second_reminder'
+  // Deposit settings
+  deposit_enabled?: boolean
+  deposit_min_party_size?: number
+  deposit_amount_per_person?: number // Amount in pence
+  deposit_cancellation_hours?: number
+  deposit_late_cancel_charge_percent?: number
 }
 
 export interface ServicePeriod {
@@ -528,7 +534,13 @@ export async function getBookingSettings(): Promise<BookingSettings> {
       reconfirmation_min_party_size: configData.reconfirmation_min_party_size ?? 6,
       reconfirmation_days_before: configData.reconfirmation_days_before ?? 2,
       reconfirmation_deadline_hours: configData.reconfirmation_deadline_hours ?? 24,
-      reconfirmation_no_response_action: configData.reconfirmation_no_response_action ?? 'flag_only'
+      reconfirmation_no_response_action: configData.reconfirmation_no_response_action ?? 'flag_only',
+      // Deposit settings
+      deposit_enabled: configData.deposit_enabled ?? false,
+      deposit_min_party_size: configData.deposit_min_party_size ?? 6,
+      deposit_amount_per_person: configData.deposit_amount_per_person ?? 1000, // £10.00 default
+      deposit_cancellation_hours: configData.deposit_cancellation_hours ?? 48,
+      deposit_late_cancel_charge_percent: configData.deposit_late_cancel_charge_percent ?? 100
     }
   } catch (error) {
     console.error('Database error in getBookingSettings:', error)
@@ -569,6 +581,13 @@ export async function updateBookingSettings(settings: Partial<BookingSettings>):
     if (settings.reconfirmation_days_before !== undefined) updateData.reconfirmation_days_before = settings.reconfirmation_days_before
     if (settings.reconfirmation_deadline_hours !== undefined) updateData.reconfirmation_deadline_hours = settings.reconfirmation_deadline_hours
     if (settings.reconfirmation_no_response_action !== undefined) updateData.reconfirmation_no_response_action = settings.reconfirmation_no_response_action
+    
+    // Handle deposit settings
+    if (settings.deposit_enabled !== undefined) updateData.deposit_enabled = settings.deposit_enabled
+    if (settings.deposit_min_party_size !== undefined) updateData.deposit_min_party_size = settings.deposit_min_party_size
+    if (settings.deposit_amount_per_person !== undefined) updateData.deposit_amount_per_person = settings.deposit_amount_per_person
+    if (settings.deposit_cancellation_hours !== undefined) updateData.deposit_cancellation_hours = settings.deposit_cancellation_hours
+    if (settings.deposit_late_cancel_charge_percent !== undefined) updateData.deposit_late_cancel_charge_percent = settings.deposit_late_cancel_charge_percent
     
     console.log('[DATABASE] Final updateData object:', updateData)
     

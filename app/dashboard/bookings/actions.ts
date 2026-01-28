@@ -249,7 +249,15 @@ export async function updateBookingSettingsAction(formData: FormData): Promise<A
     const reconfirmationDeadlineHours = parseInt(formData.get("reconfirmationDeadlineHours") as string) || 24
     const reconfirmationNoResponseAction = (formData.get("reconfirmationNoResponseAction") as string) || 'flag_only'
 
-    const updates = {
+    // Deposit settings
+    const depositEnabledValue = formData.get("deposit_enabled")
+    const depositEnabled = depositEnabledValue === "true" || depositEnabledValue === "on"
+    const depositMinPartySize = parseInt(formData.get("deposit_min_party_size") as string)
+    const depositAmountPerPerson = parseInt(formData.get("deposit_amount_per_person") as string)
+    const depositCancellationHours = parseInt(formData.get("deposit_cancellation_hours") as string)
+    const depositLateCancelChargePercent = parseInt(formData.get("deposit_late_cancel_charge_percent") as string)
+
+    const updates: Record<string, any> = {
       booking_enabled: isBookingEnabled,
       suspension_message: suspensionMessage,
       max_party_size: maxPartySize,
@@ -264,6 +272,23 @@ export async function updateBookingSettingsAction(formData: FormData): Promise<A
       reconfirmation_deadline_hours: reconfirmationDeadlineHours,
       reconfirmation_no_response_action: reconfirmationNoResponseAction
       // Note: available_times are now managed by saveServicePeriodsAction
+    }
+
+    // Add deposit settings if they were provided
+    if (depositEnabledValue !== null) {
+      updates.deposit_enabled = depositEnabled
+    }
+    if (!isNaN(depositMinPartySize)) {
+      updates.deposit_min_party_size = depositMinPartySize
+    }
+    if (!isNaN(depositAmountPerPerson)) {
+      updates.deposit_amount_per_person = depositAmountPerPerson
+    }
+    if (!isNaN(depositCancellationHours)) {
+      updates.deposit_cancellation_hours = depositCancellationHours
+    }
+    if (!isNaN(depositLateCancelChargePercent)) {
+      updates.deposit_late_cancel_charge_percent = depositLateCancelChargePercent
     }
 
     console.log('[UPDATE BOOKING SETTINGS] Updates object being sent to database:', updates)

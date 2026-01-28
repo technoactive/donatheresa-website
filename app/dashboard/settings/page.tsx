@@ -11,7 +11,8 @@ import {
   Globe,
   Bell,
   Mail,
-  BarChart3
+  BarChart3,
+  CreditCard
 } from "lucide-react"
 import { SettingsLayout } from "@/components/dashboard/settings-layout"
 
@@ -180,6 +181,33 @@ export default function SettingsPage() {
             >
               <Link href="/dashboard/settings/analytics" className="flex items-center justify-center gap-2">
                 Manage Analytics
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="group hover:shadow-lg transition-all duration-200 cursor-pointer bg-white border-slate-200 shadow-sm flex flex-col h-full">
+          <CardHeader className="pb-4 flex-grow">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-green-50 rounded-lg">
+                <CreditCard className="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
+              </div>
+              <div>
+                <CardTitle className="text-slate-900 text-base sm:text-lg">Deposit Settings</CardTitle>
+                <CardDescription className="text-slate-600 text-sm">
+                  Configure booking deposits and payment collection
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0 mt-auto">
+            <Button 
+              asChild 
+              className="w-full bg-green-600 hover:bg-green-700 text-white group-hover:bg-green-500 h-10"
+            >
+              <Link href="/dashboard/settings/deposits" className="flex items-center justify-center gap-2">
+                Manage Deposits
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </Button>

@@ -77,6 +77,12 @@ export interface BookingSettings {
   reconfirmation_days_before?: number
   reconfirmation_deadline_hours?: number
   reconfirmation_no_response_action?: 'auto_cancel' | 'flag_only' | 'second_reminder'
+  // Deposit settings
+  deposit_enabled?: boolean
+  deposit_min_party_size?: number
+  deposit_amount_per_person?: number // Amount in pence
+  deposit_cancellation_hours?: number
+  deposit_late_cancel_charge_percent?: number
 }
 
 export interface ContactMessage {
