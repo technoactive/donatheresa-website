@@ -688,7 +688,7 @@ export default function HomePage() {
 
               {/* Yelp */}
               <Link 
-                href="https://www.yelp.co.uk/biz/dona-theresa-pinner"
+                href="https://www.yelp.co.uk/biz/dona-theresa-pinner?osq=Italian"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex flex-col items-center gap-2 px-6 py-4 rounded-xl hover:bg-white/5 transition-all"
@@ -708,7 +708,7 @@ export default function HomePage() {
 
               {/* Restaurant Guru */}
               <Link 
-                href="https://restaurantguru.com/Dona-Theresa-Pinner"
+                href="https://restaurantguru.com/Dona-Theresa-London"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex flex-col items-center gap-2 px-6 py-4 rounded-xl hover:bg-white/5 transition-all"
@@ -724,7 +724,7 @@ export default function HomePage() {
 
               {/* TheFork */}
               <Link 
-                href="https://www.thefork.co.uk/restaurant/dona-theresa-r672799"
+                href="https://www.thefork.co.uk/restaurant/dona-theresa-r756380"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex flex-col items-center gap-2 px-6 py-4 rounded-xl hover:bg-white/5 transition-all"
@@ -737,6 +737,41 @@ export default function HomePage() {
                 </div>
                 <div className="flex items-center gap-1">
                   <span className="text-[#00A86B] font-bold text-sm">9.2</span>
+                  <span className="text-white/50 text-xs">/10</span>
+                </div>
+              </Link>
+
+              {/* Yell */}
+              <Link 
+                href="https://www.yell.com/biz/dona-theresa-pinner-9488177/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col items-center gap-2 px-6 py-4 rounded-xl hover:bg-white/5 transition-all"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-[#FFD200] rounded flex items-center justify-center">
+                    <span className="text-black font-black text-xs">Y</span>
+                  </div>
+                  <span className="text-white/70 font-medium group-hover:text-white transition-colors">Yell</span>
+                </div>
+                <span className="text-white/50 text-xs">Business Directory</span>
+              </Link>
+
+              {/* ViaMichelin */}
+              <Link 
+                href="https://www.viamichelin.com/web/Restaurant/Pinner-HA5_4JR-Dona_Theresa-447118-41102"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col items-center gap-2 px-6 py-4 rounded-xl hover:bg-white/5 transition-all"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-[#005BBB] rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">M</span>
+                  </div>
+                  <span className="text-white/70 font-medium group-hover:text-white transition-colors">ViaMichelin</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-[#005BBB] font-bold text-sm">9.4</span>
                   <span className="text-white/50 text-xs">/10</span>
                 </div>
               </Link>
