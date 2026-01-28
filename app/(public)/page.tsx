@@ -424,65 +424,93 @@ export default function HomePage() {
       {/* Google Reviews Section - Premium Dark Design */}
       <section className="py-20 md:py-32 relative overflow-hidden bg-slate-900" aria-labelledby="reviews-heading">
         {/* Background Effects */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.15),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.12),transparent_50%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(251,191,36,0.08),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(251,191,36,0.05),transparent_30%)]" />
 
         {/* Header */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="text-center mb-12 md:mb-20">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <Star className="w-5 h-5 text-amber-400" />
-              <span className="text-sm tracking-[0.3em] text-amber-400/80 font-light uppercase">
+          <div className="text-center mb-16 md:mb-24">
+            <div className="inline-flex items-center gap-3 mb-6 px-4 py-2 bg-amber-500/10 rounded-full border border-amber-500/20">
+              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+              <span className="text-sm tracking-[0.2em] text-amber-400 font-medium uppercase">
                 Guest Reviews
               </span>
-              <Star className="w-5 h-5 text-amber-400" />
+              <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
             </div>
             
-            <h2 id="reviews-heading" className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+            <h2 id="reviews-heading" className="text-4xl md:text-5xl lg:text-7xl font-bold leading-tight mb-6">
               <span className="text-white">Loved by </span>
               <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">
                 Our Guests
               </span>
             </h2>
             
-            <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-8">
+            <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10">
               Don&apos;t just take our word for it — hear from the guests who&apos;ve experienced our authentic Italian hospitality
             </p>
             
-            {/* Rating Summary */}
-            <div className="inline-flex items-center gap-6 px-8 py-4 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10">
+            {/* Rating Summary - Enhanced */}
+            <div className="inline-flex flex-col sm:flex-row items-center gap-4 sm:gap-8 px-6 sm:px-10 py-5 bg-gradient-to-r from-white/[0.08] to-white/[0.03] backdrop-blur-sm rounded-2xl border border-white/10">
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">4.9</div>
-                <div className="flex items-center gap-0.5 mt-1">
+                <div className="text-4xl md:text-5xl font-bold text-white">4.9</div>
+                <div className="flex items-center gap-0.5 mt-2 justify-center">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                    <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
               </div>
-              <div className="w-px h-12 bg-white/20" />
-              <div className="text-left">
-                <div className="text-white font-medium">500+ Reviews</div>
-                <div className="text-slate-400 text-sm">on Google</div>
+              <div className="hidden sm:block w-px h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+              <div className="text-center sm:text-left">
+                <div className="text-white font-semibold text-lg">500+ Reviews</div>
+                <div className="text-slate-400 text-sm">Verified on Google</div>
+              </div>
+              <div className="hidden sm:block w-px h-16 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+              <div className="text-center sm:text-left">
+                <div className="text-white font-semibold text-lg">Since 2011</div>
+                <div className="text-slate-400 text-sm">Serving Excellence</div>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Featured Quote */}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 mb-16 md:mb-20 relative z-10">
+          <div className="relative">
+            <Quote className="absolute -top-6 -left-2 md:-top-8 md:-left-6 w-16 h-16 md:w-24 md:h-24 text-amber-500/20" />
+            <blockquote className="text-center">
+              <p className="text-xl md:text-2xl lg:text-3xl text-white/90 font-light leading-relaxed italic">
+                &ldquo;From the moment we stepped into Dona Theresa, we knew we had chosen the perfect place. This isn&apos;t just a restaurant; it&apos;s a slice of Italy right here in Pinner.&rdquo;
+              </p>
+              <footer className="mt-6 flex items-center justify-center gap-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold shadow-lg shadow-amber-500/30">TG</div>
+                <div className="text-left">
+                  <cite className="not-italic font-medium text-white">theguruyt</cite>
+                  <div className="text-amber-400/70 text-sm flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
+                </div>
+              </footer>
+            </blockquote>
+          </div>
+        </div>
+
         {/* Infinite Scrolling Marquee - Row 1 */}
         <div className="relative mb-6 overflow-hidden">
+          {/* Gradient Fade Edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-r from-slate-900 to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-l from-slate-900 to-transparent z-10 pointer-events-none" />
           <div className="flex gap-6 animate-marquee">
             {/* Review Cards - First Set */}
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "From the moment we stepped into Dona Theresa, we knew we had chosen the perfect place to celebrate our anniversary. A slice of Italy right here in Pinner!"
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">TG</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">TG</div>
                 <div>
                   <div className="font-medium text-white text-sm">theguruyt</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -490,17 +518,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "The hostess was attentive and joyful giving suggestions on dishes and cocktails. They made the night even more special with a happy birthday singalong!"
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">JS</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">JS</div>
                 <div>
                   <div className="font-medium text-white text-sm">Jasmine Singh</div>
                   <div className="text-white/40 text-xs">Google Review</div>
@@ -508,17 +536,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "The best place ever for Italian food. We love this place so much that we celebrate our special occasions with them. All pastas are good and dessert too!"
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">SK</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">SK</div>
                 <div>
                   <div className="font-medium text-white text-sm">Sonali Kosrabe</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -526,17 +554,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "A group of 5 of us celebrated a birthday here and it was delightful. The early bird menu was a great deal (£20pp for 2 courses) and the food was delicious."
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">DP</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">DP</div>
                 <div>
                   <div className="font-medium text-white text-sm">Daisy Perschky</div>
                   <div className="text-white/40 text-xs">Google Review</div>
@@ -544,17 +572,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "The food in this restaurant is cooked to perfection. Any special requests are not a problem. Outstanding service that goes above and beyond!"
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">DK</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">DK</div>
                 <div>
                   <div className="font-medium text-white text-sm">Daren Kenward</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -562,17 +590,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "We randomly stumbled across this restaurant and we fell in love! Authentic romantic cosy place, fantastic food fresh and cooked as you like."
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">DM</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">DM</div>
                 <div>
                   <div className="font-medium text-white text-sm">Dilyana Milenkova</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -581,17 +609,17 @@ export default function HomePage() {
             </div>
 
             {/* Duplicate set for seamless loop */}
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "From the moment we stepped into Dona Theresa, we knew we had chosen the perfect place to celebrate our anniversary. A slice of Italy right here in Pinner!"
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">TG</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">TG</div>
                 <div>
                   <div className="font-medium text-white text-sm">theguruyt</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -599,17 +627,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "The hostess was attentive and joyful giving suggestions on dishes and cocktails. They made the night even more special with a happy birthday singalong!"
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">JS</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">JS</div>
                 <div>
                   <div className="font-medium text-white text-sm">Jasmine Singh</div>
                   <div className="text-white/40 text-xs">Google Review</div>
@@ -617,17 +645,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "The best place ever for Italian food. We love this place so much that we celebrate our special occasions with them. All pastas are good and dessert too!"
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">SK</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">SK</div>
                 <div>
                   <div className="font-medium text-white text-sm">Sonali Kosrabe</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -639,19 +667,22 @@ export default function HomePage() {
 
         {/* Infinite Scrolling Marquee - Row 2 (Reverse) */}
         <div className="relative overflow-hidden">
+          {/* Gradient Fade Edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-r from-slate-900 to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-20 md:w-40 bg-gradient-to-l from-slate-900 to-transparent z-10 pointer-events-none" />
           <div className="flex gap-6 animate-marquee-reverse">
             {/* Review Cards - Second Set */}
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "Great Xmas Lunch, delicious & very reasonably priced. Table was beautifully decorated. Prompt drinks service & set menus with abundant choices."
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">AF</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">AF</div>
                 <div>
                   <div className="font-medium text-white text-sm">Alison Friend</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -659,17 +690,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "What wonderful tasty food!! Staff are so friendly which made the experience even more wonderful!! I love the homemade tiramisu!!"
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">RI</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">RI</div>
                 <div>
                   <div className="font-medium text-white text-sm">Ria</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -677,17 +708,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "Fine Italian food indeed. My family have been frequenting this fine establishment for several years, and it never disappoints."
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">JA</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">JA</div>
                 <div>
                   <div className="font-medium text-white text-sm">Jason</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -695,17 +726,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "Second visit this evening, delicious food and the staff are so lovely. They gave us free dessert to make up for the wait, so kind!"
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">EW</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">EW</div>
                 <div>
                   <div className="font-medium text-white text-sm">Elle Ward</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -713,17 +744,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "A beautiful evening with lovely food and an even better atmosphere. They made my grandfather feel very special on his 89th birthday."
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">MS</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">MS</div>
                 <div>
                   <div className="font-medium text-white text-sm">Moses Seitler</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -731,17 +762,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "Cannot thank you enough! We had our Christening party here. Everything was perfect - the food, service, and atmosphere were exceptional."
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">GD</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">GD</div>
                 <div>
                   <div className="font-medium text-white text-sm">Georgiana Daviduca</div>
                   <div className="text-white/40 text-xs">Google Review</div>
@@ -750,17 +781,17 @@ export default function HomePage() {
             </div>
 
             {/* Duplicate set for seamless loop */}
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "Great Xmas Lunch, delicious & very reasonably priced. Table was beautifully decorated. Prompt drinks service & set menus with abundant choices."
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">AF</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">AF</div>
                 <div>
                   <div className="font-medium text-white text-sm">Alison Friend</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -768,17 +799,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "What wonderful tasty food!! Staff are so friendly which made the experience even more wonderful!! I love the homemade tiramisu!!"
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">RI</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">RI</div>
                 <div>
                   <div className="font-medium text-white text-sm">Ria</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
@@ -786,17 +817,17 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-white/[0.03] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:bg-white/[0.06] hover:border-amber-500/30 transition-all duration-300">
+            <div className="flex-shrink-0 w-[350px] md:w-[400px] bg-gradient-to-br from-white/[0.07] to-white/[0.02] backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-amber-500/40 hover:shadow-lg hover:shadow-amber-500/10 transition-all duration-500 group">
               <div className="flex items-center gap-0.5 mb-4">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
               </div>
-              <p className="text-white/80 leading-relaxed mb-5 text-[15px]">
+              <p className="text-white/80 leading-relaxed mb-5 text-[15px] group-hover:text-white/90 transition-colors">
                 "Fine Italian food indeed. My family have been frequenting this fine establishment for several years, and it never disappoints."
               </p>
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm">JA</div>
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-amber-500/20">JA</div>
                 <div>
                   <div className="font-medium text-white text-sm">Jason</div>
                   <div className="text-amber-400/70 text-xs flex items-center gap-1"><Star className="w-3 h-3 fill-amber-400" /> Local Guide</div>
