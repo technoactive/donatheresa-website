@@ -422,7 +422,7 @@ export default function HomePage() {
       </section>
 
       {/* Google Reviews Section - Luxury Design */}
-      <section className="py-32 relative overflow-hidden bg-[#0a0a0a]" aria-labelledby="reviews-heading">
+      <section className="py-32 relative overflow-x-clip bg-[#0a0a0a]" aria-labelledby="reviews-heading">
         {/* Sophisticated Background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(180,140,80,0.15),transparent_50%)]" />
@@ -797,7 +797,7 @@ export default function HomePage() {
       </section>
 
       {/* Discover More - Premium Local Areas Section */}
-      <section className="py-32 relative overflow-hidden bg-white" aria-labelledby="areas-heading">
+      <section className="py-32 relative overflow-x-clip bg-white" aria-labelledby="areas-heading">
         {/* Subtle Background Elements */}
         <div className="absolute inset-0">
           <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-amber-200 to-transparent" />
