@@ -43,32 +43,50 @@ const modernStats = [
 
 const customerReviews = [
   {
-    name: "Sarah Mitchell",
+    name: "theguruyt",
     rating: 5,
-    review: "Absolutely exceptional dining experience! The Filleto Rossini was perfectly executed, and the service was impeccable. This is fine dining at its finest.",
-    date: "2 weeks ago",
+    review: "From the moment we stepped into Dona Theresa, we knew we had chosen the perfect place to celebrate our anniversary. This isn't just a restaurant; it's a slice of Italy right here in Pinner, where every detail, from the relaxed ambiance to the exceptional food, creates an unforgettable experience.",
+    date: "5 months ago",
+    verified: true,
+    badge: "Local Guide"
+  },
+  {
+    name: "Jasmine Singh",
+    rating: 5,
+    review: "The hostess was attentive and joyful giving suggestions on dishes and cocktails. The seafood pasta was delicious and cooked to perfection along with the ravioli, and they made the night even more special with a happy birthday singalong!",
+    date: "2 months ago",
     verified: true
   },
   {
-    name: "James Thompson",
+    name: "Dilyana Milenkova",
     rating: 5,
-    review: "Dona Theresa exceeded all expectations. The atmosphere is intimate and sophisticated, and every dish was a work of art. Highly recommend for special occasions.",
-    date: "1 month ago",
-    verified: true
+    review: "We randomly stumbled across this restaurant one night and we fell in love! Authentic romantic cosy place, fantastic food fresh and cooked as you like, service was really good and welcoming. Highly recommend this place.",
+    date: "9 months ago",
+    verified: true,
+    badge: "Local Guide"
   },
   {
-    name: "Maria Rodriguez",
+    name: "Sonali Kosrabe",
     rating: 5,
-    review: "The best Italian restaurant in London! Chef Marco's attention to detail is remarkable. The wine pairing was perfect, and the staff made us feel like royalty.",
+    review: "The best place ever for Italian food. We love this place so much that we like to celebrate our special occasion with them. All pastas are good and dessert too, specially Tarte cinco sensi cake!",
     date: "3 weeks ago",
+    verified: true,
+    badge: "Local Guide"
+  },
+  {
+    name: "Daisy Perschky",
+    rating: 5,
+    review: "Loved our experience at Dona Theresa! A group of 5 of us celebrated a birthday here and it was delightful. The staff were so friendly, helpful, and attentive. The early bird menu was a great deal (£20pp for 2 courses) and the food was delicious.",
+    date: "2 months ago",
     verified: true
   },
   {
-    name: "David Chen",
+    name: "Daren Kenward",
     rating: 5,
-    review: "An unforgettable culinary journey. The modern take on Italian classics is brilliant. The ambiance is perfect for romantic dinners. Will definitely return!",
-    date: "1 week ago",
-    verified: true
+    review: "The food in this restaurant is cooked to perfection. Any special requests are not a problem even to the point of serving a fruit salad for my friends, which is not on the menu. Outstanding service!",
+    date: "2 years ago",
+    verified: true,
+    badge: "Local Guide"
   }
 ]
 

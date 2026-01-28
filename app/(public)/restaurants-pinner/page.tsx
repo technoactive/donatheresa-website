@@ -204,11 +204,11 @@ export default function RestaurantsPinnerPage() {
                 ))}
               </div>
               <p className="text-slate-700 mb-4">
-                "Best Italian restaurant in Pinner! The lunch special is incredible value 
-                and the quality rivals restaurants twice the price."
+                "From the moment we stepped into Dona Theresa, we knew we had chosen the perfect place 
+                to celebrate our anniversary. This isn't just a restaurant; it's a slice of Italy right here in Pinner."
               </p>
-              <p className="font-semibold">Sarah M.</p>
-              <p className="text-sm text-slate-600">Pinner Resident</p>
+              <p className="font-semibold">theguruyt</p>
+              <p className="text-sm text-slate-600">Local Guide · Google Review</p>
             </div>
             
             <div className="bg-white rounded-xl p-8 shadow-lg">
@@ -218,11 +218,11 @@ export default function RestaurantsPinnerPage() {
                 ))}
               </div>
               <p className="text-slate-700 mb-4">
-                "We've tried many restaurants in Pinner but always come back to Dona Theresa. 
-                Authentic Italian food and wonderful service."
+                "The best place ever for Italian food. We love this place so much that we like to 
+                celebrate our special occasions with them. All pastas are good and dessert too!"
               </p>
-              <p className="font-semibold">David L.</p>
-              <p className="text-sm text-slate-600">Regular Customer</p>
+              <p className="font-semibold">Sonali Kosrabe</p>
+              <p className="text-sm text-slate-600">Local Guide · Google Review</p>
             </div>
             
             <div className="bg-white rounded-xl p-8 shadow-lg">
@@ -232,11 +232,11 @@ export default function RestaurantsPinnerPage() {
                 ))}
               </div>
               <p className="text-slate-700 mb-4">
-                "Perfect for special occasions. Among all Pinner restaurants, this is our 
-                go-to for anniversaries and celebrations."
+                "Authentic romantic cosy place, fantastic food fresh and cooked as you like, 
+                service was really good and welcoming. Highly recommend this place."
               </p>
-              <p className="font-semibold">Emma W.</p>
-              <p className="text-sm text-slate-600">Local Food Blogger</p>
+              <p className="font-semibold">Dilyana Milenkova</p>
+              <p className="text-sm text-slate-600">Local Guide · Google Review</p>
             </div>
           </div>
         </div>
