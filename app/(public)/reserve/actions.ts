@@ -5,6 +5,8 @@ import { format } from "date-fns"
 import { enGB } from "date-fns/locale"
 import { createBookingWithCustomer, getBookingSettings, getLocaleSettings } from "@/lib/database"
 import { isDateInRestaurantPast, isDateWithinAdvanceLimit, formatDateWithLocale } from "@/lib/locale-utils"
+import { headers } from "next/headers"
+import { checkRateLimit, RateLimitPresets } from "@/lib/rate-limit"
 
 const bookingSchema = z.object({
   name: z.string().min(1, { message: "Name is required." }),
@@ -20,6 +22,23 @@ const bookingSchema = z.object({
 })
 
 export async function createBooking(prevState: any, formData: FormData) {
+  // Get IP address for rate limiting
+  const headersList = await headers()
+  const ipAddress = headersList.get('x-forwarded-for')?.split(',')[0] || 
+                   headersList.get('x-real-ip') || 
+                   'unknown'
+
+  // Rate limiting: 10 bookings per hour per IP
+  const rateLimit = checkRateLimit(ipAddress, RateLimitPresets.booking)
+  if (!rateLimit.success) {
+    console.warn(`Rate limit exceeded for booking: ${ipAddress}`)
+    return {
+      message: "Too many booking attempts.",
+      description: "Please wait a while before trying again, or call us directly.",
+      success: false,
+    }
+  }
+
   // Simulate network delay
   await new Promise(resolve => setTimeout(resolve, 1000))
   

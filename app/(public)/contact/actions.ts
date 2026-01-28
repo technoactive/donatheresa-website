@@ -4,6 +4,7 @@ import { createContactMessage } from '@/lib/database'
 import { revalidatePath } from 'next/cache'
 import { SpamDetector } from '@/lib/spam-detection'
 import { headers } from 'next/headers'
+import { checkRateLimit, RateLimitPresets } from '@/lib/rate-limit'
 
 export async function submitContactMessage(formData: FormData) {
   const name = formData.get('name') as string
@@ -35,6 +36,16 @@ export async function submitContactMessage(formData: FormData) {
   const ipAddress = headersList.get('x-forwarded-for')?.split(',')[0] || 
                    headersList.get('x-real-ip') || 
                    'unknown'
+
+  // Rate limiting: 5 submissions per hour per IP
+  const rateLimit = checkRateLimit(ipAddress, RateLimitPresets.contact)
+  if (!rateLimit.success) {
+    console.warn(`Rate limit exceeded for contact form: ${ipAddress}`)
+    return {
+      success: false,
+      error: 'Too many submissions. Please try again later.'
+    }
+  }
 
   // Perform spam detection
   const spamCheck = await SpamDetector.detectSpam({
