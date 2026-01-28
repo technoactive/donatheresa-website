@@ -446,7 +446,7 @@ export default function HomePage() {
               <div className="h-px w-16 bg-gradient-to-r from-amber-500 via-amber-500/50 to-transparent" />
             </div>
             
-            <h2 id="reviews-heading" className="text-5xl lg:text-7xl font-light mb-6 tracking-tight">
+            <h2 id="reviews-heading" className="text-4xl md:text-5xl lg:text-6xl font-light mb-6 tracking-tight">
               <span className="text-white/90">What Our </span>
               <span className="italic font-normal bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-400 bg-clip-text text-transparent">
                 Guests Say
@@ -818,7 +818,7 @@ export default function HomePage() {
               <div className="h-px w-16 bg-gradient-to-r from-amber-500 via-amber-300 to-transparent" />
             </div>
             
-            <h2 id="areas-heading" className="text-5xl lg:text-7xl font-light mb-6 tracking-tight text-slate-900">
+            <h2 id="areas-heading" className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light mb-6 tracking-tight text-slate-900">
               Proudly Serving{' '}
               <span className="italic font-normal bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-500 bg-clip-text text-transparent">
                 Northwest London
