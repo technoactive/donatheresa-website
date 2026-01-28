@@ -613,136 +613,104 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Discover More - Premium Local Areas Section */}
-      <section className="py-32 relative overflow-hidden bg-white" aria-labelledby="areas-heading">
+      {/* Discover More - Local Areas Section */}
+      <section className="py-24 relative overflow-hidden bg-slate-50" aria-labelledby="areas-heading">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           {/* Section Header */}
-          <div className="text-center mb-20">
-            <div className="flex items-center justify-center gap-3 mb-8">
+          <div className="text-center mb-16">
+            <div className="flex items-center justify-center gap-3 mb-6">
               <Sparkles className="w-5 h-5 text-amber-500" />
               <span className="text-sm tracking-[0.3em] text-slate-600 font-light uppercase">
                 Discover More
               </span>
             </div>
             
-            <h2 id="areas-heading" className="text-5xl lg:text-6xl font-bold mb-6">
+            <h2 id="areas-heading" className="text-4xl lg:text-5xl font-bold mb-6">
               <span className="text-slate-900">Proudly Serving </span>
-              <span className="bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">
                 Northwest London
               </span>
             </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Voted the best Italian restaurant in Pinner & Hatch End. Discover why locals choose us for their most special occasions.
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              Voted the best Italian restaurant in Pinner & Hatch End
             </p>
           </div>
           
-          {/* Premium Area Cards */}
-          <div className="grid lg:grid-cols-2 gap-8">
-            {/* Hatch End - Large Featured Card */}
+          {/* Area Cards - Clean Design */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Hatch End */}
             <Link 
               href="/restaurants-hatch-end" 
-              className="group relative bg-slate-900 rounded-3xl overflow-hidden h-80"
+              className="group bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-xl hover:border-amber-300 transition-all duration-300"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-600/20 via-transparent to-slate-900/80" />
-              <Image
-                src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=400&fit=crop"
-                alt="Hatch End Restaurant Interior"
-                fill
-                className="object-cover opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700"
-              />
-              <div className="absolute inset-0 p-10 flex flex-col justify-end">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/90 rounded-full text-white text-xs font-medium mb-4 w-fit">
-                  <Star className="w-3 h-3 fill-white" />
-                  #1 Rated
-                </div>
-                <h3 className="text-3xl font-bold text-white mb-3 group-hover:text-amber-300 transition-colors">
-                  Hatch End Restaurants
-                </h3>
-                <p className="text-white/80 text-lg mb-6">
-                  Best Italian on Uxbridge Road with free parking
-                </p>
-                <span className="inline-flex items-center gap-2 text-amber-400 font-medium group-hover:gap-4 transition-all">
-                  Explore <ArrowRight className="w-5 h-5" />
-                </span>
+              <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-500/20">
+                <Star className="w-7 h-7 text-white" />
               </div>
-            </Link>
-
-            {/* Pinner - Large Featured Card */}
-            <Link 
-              href="/restaurants-pinner" 
-              className="group relative bg-slate-900 rounded-3xl overflow-hidden h-80"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-600/20 via-transparent to-slate-900/80" />
-              <Image
-                src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=400&fit=crop"
-                alt="Pinner Restaurant Ambiance"
-                fill
-                className="object-cover opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700"
-              />
-              <div className="absolute inset-0 p-10 flex flex-col justify-end">
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/90 rounded-full text-white text-xs font-medium mb-4 w-fit">
-                  <Star className="w-3 h-3 fill-white" />
-                  Award Winning
-                </div>
-                <h3 className="text-3xl font-bold text-white mb-3 group-hover:text-amber-300 transition-colors">
-                  Pinner Restaurants
-                </h3>
-                <p className="text-white/80 text-lg mb-6">
-                  5 mins from Pinner station, authentic Italian cuisine
-                </p>
-                <span className="inline-flex items-center gap-2 text-amber-400 font-medium group-hover:gap-4 transition-all">
-                  Explore <ArrowRight className="w-5 h-5" />
-                </span>
-              </div>
-            </Link>
-          </div>
-
-          {/* Bottom Cards - Lunch Specials */}
-          <div className="grid md:grid-cols-2 gap-8 mt-8">
-            <Link 
-              href="/lunch-pinner" 
-              className="group relative bg-gradient-to-br from-slate-50 to-white rounded-3xl p-10 border border-slate-200 hover:border-amber-300 hover:shadow-2xl transition-all duration-500"
-            >
-              <div className="flex items-start justify-between mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20">
-                  <Utensils className="w-8 h-8 text-white" />
-                </div>
-                <div className="text-right">
-                  <div className="text-3xl font-bold text-slate-900">£19.95</div>
-                  <div className="text-slate-500 text-sm">per person</div>
-                </div>
-              </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors">
-                Lunch Special
+              <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
+                Hatch End
               </h3>
-              <p className="text-slate-600 text-lg mb-6 leading-relaxed">
-                Enjoy our signature 2-course lunch menu, available Tuesday to Sunday
+              <p className="text-slate-600 mb-4">
+                Best Italian on Uxbridge Road with free parking
               </p>
-              <span className="inline-flex items-center gap-2 text-amber-600 font-medium group-hover:gap-4 transition-all">
-                View Menu <ArrowRight className="w-5 h-5" />
+              <span className="inline-flex items-center gap-2 text-amber-600 font-medium text-sm group-hover:gap-3 transition-all">
+                Explore <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
 
+            {/* Pinner */}
+            <Link 
+              href="/restaurants-pinner" 
+              className="group bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-xl hover:border-amber-300 transition-all duration-300"
+            >
+              <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-500/20">
+                <Crown className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
+                Pinner
+              </h3>
+              <p className="text-slate-600 mb-4">
+                Award-winning authentic Italian cuisine
+              </p>
+              <span className="inline-flex items-center gap-2 text-amber-600 font-medium text-sm group-hover:gap-3 transition-all">
+                Explore <ArrowRight className="w-4 h-4" />
+              </span>
+            </Link>
+
+            {/* Lunch Special */}
+            <Link 
+              href="/lunch-pinner" 
+              className="group bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-xl hover:border-amber-300 transition-all duration-300"
+            >
+              <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-500/20">
+                <Utensils className="w-7 h-7 text-white" />
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
+                Lunch Special
+              </h3>
+              <p className="text-slate-600 mb-4">
+                2-course menu from £19.95 Tue-Sun
+              </p>
+              <span className="inline-flex items-center gap-2 text-amber-600 font-medium text-sm group-hover:gap-3 transition-all">
+                View Menu <ArrowRight className="w-4 h-4" />
+              </span>
+            </Link>
+
+            {/* Early Bird */}
             <Link 
               href="/menu/lunchtime-earlybird" 
-              className="group relative bg-gradient-to-br from-slate-50 to-white rounded-3xl p-10 border border-slate-200 hover:border-amber-300 hover:shadow-2xl transition-all duration-500"
+              className="group bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-xl hover:border-amber-300 transition-all duration-300"
             >
-              <div className="flex items-start justify-between mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20">
-                  <Zap className="w-8 h-8 text-white" />
-                </div>
-                <div className="text-right">
-                  <div className="text-sm font-medium text-amber-600 bg-amber-50 px-3 py-1 rounded-full">12pm - 3pm</div>
-                </div>
+              <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-amber-500/20">
+                <Zap className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors">
-                Early Bird Menu
+              <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
+                Early Bird
               </h3>
-              <p className="text-slate-600 text-lg mb-6 leading-relaxed">
-                Best value Italian dining experience, perfect for a leisurely lunch
+              <p className="text-slate-600 mb-4">
+                Best value dining 12pm-3pm daily
               </p>
-              <span className="inline-flex items-center gap-2 text-amber-600 font-medium group-hover:gap-4 transition-all">
-                View Menu <ArrowRight className="w-5 h-5" />
+              <span className="inline-flex items-center gap-2 text-amber-600 font-medium text-sm group-hover:gap-3 transition-all">
+                View Menu <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
           </div>
