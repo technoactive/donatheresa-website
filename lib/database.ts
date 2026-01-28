@@ -15,6 +15,14 @@ export interface Booking {
   special_requests?: string
   created_at: string
   updated_at: string
+  // Deposit fields
+  deposit_required?: boolean
+  deposit_amount?: number | null
+  deposit_status?: string
+  deposit_refund_amount?: number | null
+  stripe_payment_intent_id?: string | null
+  deposit_captured_at?: string | null
+  deposit_refunded_at?: string | null
 }
 
 export interface BookingWithCustomer extends Booking {
@@ -198,12 +206,20 @@ export async function getBookings(): Promise<BookingWithCustomer[]> {
         customer_id,
         booking_date,
         booking_time,
+        booking_reference,
         party_size,
         status,
         source,
         special_requests,
         created_at,
         updated_at,
+        deposit_required,
+        deposit_amount,
+        deposit_status,
+        deposit_refund_amount,
+        stripe_payment_intent_id,
+        deposit_captured_at,
+        deposit_refunded_at,
         customers (
           id,
           name,
@@ -230,12 +246,21 @@ export async function getBookings(): Promise<BookingWithCustomer[]> {
         customer_id: booking.customer_id,
         booking_date: booking.booking_date,
         booking_time: booking.booking_time,
+        booking_reference: booking.booking_reference,
         party_size: booking.party_size,
         status: booking.status,
         source: booking.source,
         special_requests: booking.special_requests,
         created_at: booking.created_at,
         updated_at: booking.updated_at,
+        // Deposit fields
+        deposit_required: booking.deposit_required || false,
+        deposit_amount: booking.deposit_amount || null,
+        deposit_status: booking.deposit_status || 'none',
+        deposit_refund_amount: booking.deposit_refund_amount || null,
+        stripe_payment_intent_id: booking.stripe_payment_intent_id || null,
+        deposit_captured_at: booking.deposit_captured_at || null,
+        deposit_refunded_at: booking.deposit_refunded_at || null,
         customer: {
           id: customer.id,
           name: customer.name,
@@ -269,6 +294,13 @@ export async function getBookingById(id: string): Promise<BookingWithCustomer | 
       special_requests,
       created_at,
       updated_at,
+      deposit_required,
+      deposit_amount,
+      deposit_status,
+      deposit_refund_amount,
+      stripe_payment_intent_id,
+      deposit_captured_at,
+      deposit_refunded_at,
       customers (
         id,
         name,
@@ -298,6 +330,14 @@ export async function getBookingById(id: string): Promise<BookingWithCustomer | 
     special_requests: data.special_requests,
     created_at: data.created_at,
     updated_at: data.updated_at,
+    // Deposit fields
+    deposit_required: data.deposit_required || false,
+    deposit_amount: data.deposit_amount || null,
+    deposit_status: data.deposit_status || 'none',
+    deposit_refund_amount: data.deposit_refund_amount || null,
+    stripe_payment_intent_id: data.stripe_payment_intent_id || null,
+    deposit_captured_at: data.deposit_captured_at || null,
+    deposit_refunded_at: data.deposit_refunded_at || null,
     customer: {
       id: customer.id,
       name: customer.name,

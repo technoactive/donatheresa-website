@@ -40,7 +40,13 @@ export default async function BookingsPage() {
       status: booking.status as "pending" | "confirmed" | "cancelled" | "completed",
       source: booking.source as "website" | "dashboard",
       notes: booking.special_requests || "",
-      bookingReference: booking.booking_reference
+      bookingReference: booking.booking_reference,
+      // Deposit fields
+      deposit_required: booking.deposit_required || false,
+      deposit_amount: booking.deposit_amount || null,
+      deposit_status: booking.deposit_status || 'none',
+      deposit_refund_amount: booking.deposit_refund_amount || null,
+      stripe_payment_intent_id: booking.stripe_payment_intent_id || null
     }))
 
     return (

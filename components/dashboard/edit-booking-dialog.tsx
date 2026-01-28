@@ -171,6 +171,7 @@ export function EditBookingDialog({ booking, isOpen, onSave, onOpenChange }: Edi
                   bookingId={booking.id}
                   depositRequired={booking.deposit_required || false}
                   depositAmount={booking.deposit_amount || null}
+                  depositRefundAmount={booking.deposit_refund_amount || null}
                   depositStatus={booking.deposit_status || 'none'}
                   partySize={booking.partySize}
                   customerName={booking.customerName}
