@@ -838,7 +838,7 @@ export default function HomePage() {
         </div>
 
         {/* Featured On Platforms */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-16 md:mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-16 md:mt-20 relative z-20">
           <div className="text-center mb-8">
             <span className="text-xs tracking-[0.3em] text-white/40 uppercase">Featured On</span>
           </div>
