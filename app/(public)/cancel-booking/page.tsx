@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState, Suspense } from "react"
 import { Button } from "@/components/ui/button"
-import { Calendar, Clock, Users, AlertTriangle, CheckCircle, XCircle, Loader2 } from "lucide-react"
+import { Calendar, Clock, Users, AlertTriangle, CheckCircle, XCircle, Loader2, CreditCard, Info } from "lucide-react"
 import Link from "next/link"
 
 interface BookingDetails {
@@ -17,6 +17,20 @@ interface BookingDetails {
   customer_name: string
   customer_email: string
   customer_phone: string
+  // Deposit info
+  deposit_required?: boolean
+  deposit_amount?: number | null
+  deposit_status?: string
+  // Cancellation policy
+  is_late_cancellation?: boolean
+  hours_until_booking?: number
+  free_cancellation_hours?: number
+  late_cancel_charge_percent?: number
+}
+
+interface DepositResult {
+  action: string
+  message: string
 }
 
 function CancelBookingContent() {
@@ -28,6 +42,7 @@ function CancelBookingContent() {
   const [cancelling, setCancelling] = useState(false)
   const [cancelled, setCancelled] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [depositResult, setDepositResult] = useState<DepositResult | null>(null)
 
   useEffect(() => {
     if (!token) {
@@ -72,6 +87,9 @@ function CancelBookingContent() {
       
       if (data.success) {
         setCancelled(true)
+        if (data.deposit) {
+          setDepositResult(data.deposit)
+        }
       } else {
         setError(data.error || "Failed to cancel booking")
       }
@@ -91,6 +109,11 @@ function CancelBookingContent() {
       month: 'long', 
       year: 'numeric' 
     })
+  }
+
+  // Format currency
+  const formatAmount = (pence: number) => {
+    return `£${(pence / 100).toFixed(2)}`
   }
 
   if (loading) {
@@ -143,6 +166,32 @@ function CancelBookingContent() {
             <p className="text-slate-600 mb-6">
               Your reservation has been successfully cancelled. We hope to see you again soon!
             </p>
+            
+            {/* Deposit Result Message */}
+            {depositResult && depositResult.message && (
+              <div className={`rounded-xl p-4 mb-6 text-left ${
+                depositResult.action === 'released' 
+                  ? 'bg-green-50 border border-green-200' 
+                  : depositResult.action === 'charged' || depositResult.action === 'partial_charged'
+                    ? 'bg-amber-50 border border-amber-200'
+                    : 'bg-slate-50 border border-slate-200'
+              }`}>
+                <div className="flex items-start gap-3">
+                  <CreditCard className={`w-5 h-5 mt-0.5 ${
+                    depositResult.action === 'released' ? 'text-green-600' : 'text-amber-600'
+                  }`} />
+                  <div>
+                    <p className="font-medium text-slate-800 mb-1">Deposit Information</p>
+                    <p className={`text-sm ${
+                      depositResult.action === 'released' ? 'text-green-700' : 'text-amber-700'
+                    }`}>
+                      {depositResult.message}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {booking && (
               <div className="bg-slate-50 rounded-xl p-4 mb-6 text-left">
                 <p className="text-sm text-slate-500 mb-2">Cancelled Booking Details:</p>
@@ -219,6 +268,55 @@ function CancelBookingContent() {
                   )}
                 </div>
               </div>
+
+              {/* Deposit Warning Box - Show if deposit exists */}
+              {booking.deposit_required && booking.deposit_amount && booking.deposit_status === 'authorized' && (
+                <div className={`rounded-xl p-4 mb-6 ${
+                  booking.is_late_cancellation 
+                    ? 'bg-red-50 border border-red-200' 
+                    : 'bg-green-50 border border-green-200'
+                }`}>
+                  <div className="flex items-start gap-3">
+                    <CreditCard className={`w-5 h-5 mt-0.5 ${
+                      booking.is_late_cancellation ? 'text-red-600' : 'text-green-600'
+                    }`} />
+                    <div>
+                      <p className={`font-semibold mb-1 ${
+                        booking.is_late_cancellation ? 'text-red-800' : 'text-green-800'
+                      }`}>
+                        {booking.is_late_cancellation ? '⚠️ Late Cancellation Warning' : '✓ Free Cancellation'}
+                      </p>
+                      
+                      {booking.is_late_cancellation ? (
+                        <div className="text-sm text-red-700 space-y-2">
+                          <p>
+                            You are cancelling with only <strong>{booking.hours_until_booking} hours</strong> notice.
+                            Our policy requires <strong>{booking.free_cancellation_hours} hours</strong> notice for free cancellation.
+                          </p>
+                          {booking.late_cancel_charge_percent === 100 ? (
+                            <p className="font-medium">
+                              Your deposit of <strong>{formatAmount(booking.deposit_amount)}</strong> will be charged.
+                            </p>
+                          ) : booking.late_cancel_charge_percent === 0 ? (
+                            <p className="font-medium">
+                              Your deposit will be released - no charge will apply.
+                            </p>
+                          ) : (
+                            <p className="font-medium">
+                              {booking.late_cancel_charge_percent}% of your deposit ({formatAmount(Math.round(booking.deposit_amount * booking.late_cancel_charge_percent / 100))}) will be charged.
+                            </p>
+                          )}
+                        </div>
+                      ) : (
+                        <p className="text-sm text-green-700">
+                          You are cancelling with <strong>{booking.hours_until_booking} hours</strong> notice.
+                          Your deposit of <strong>{formatAmount(booking.deposit_amount)}</strong> will be released and no charge will apply.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <p className="text-sm text-slate-600 text-center mb-6">
                 Are you sure you want to cancel this reservation? 

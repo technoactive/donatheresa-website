@@ -35,6 +35,27 @@ export async function GET(request: NextRequest) {
 
     const booking = data[0]
 
+    // Get deposit info for this booking
+    const { data: bookingDetails } = await supabase
+      .from('bookings')
+      .select('deposit_required, deposit_amount, deposit_status')
+      .eq('id', booking.id)
+      .single()
+
+    // Get cancellation policy settings
+    const { data: configData } = await supabase
+      .from('booking_config')
+      .select('deposit_cancellation_hours, deposit_late_cancel_charge_percent')
+      .single()
+
+    const cancellationHours = configData?.deposit_cancellation_hours || 48
+    const lateCancelPercent = configData?.deposit_late_cancel_charge_percent || 100
+
+    // Calculate if this is a late cancellation
+    const bookingDateTime = new Date(`${booking.booking_date}T${booking.booking_time}`)
+    const hoursUntilBooking = (bookingDateTime.getTime() - Date.now()) / (1000 * 60 * 60)
+    const isLateCancellation = hoursUntilBooking < cancellationHours
+
     return NextResponse.json({
       booking: {
         id: booking.id,
@@ -46,7 +67,16 @@ export async function GET(request: NextRequest) {
         booking_reference: booking.booking_reference,
         customer_name: booking.customer_name,
         customer_email: booking.customer_email,
-        customer_phone: booking.customer_phone
+        customer_phone: booking.customer_phone,
+        // Deposit info
+        deposit_required: bookingDetails?.deposit_required || false,
+        deposit_amount: bookingDetails?.deposit_amount || null,
+        deposit_status: bookingDetails?.deposit_status || 'none',
+        // Cancellation policy info
+        is_late_cancellation: isLateCancellation,
+        hours_until_booking: Math.round(hoursUntilBooking),
+        free_cancellation_hours: cancellationHours,
+        late_cancel_charge_percent: lateCancelPercent
       }
     })
 
@@ -90,6 +120,138 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'This booking has already been cancelled' }, { status: 400 })
     }
 
+    // Get full booking details including deposit info
+    const { data: fullBooking } = await supabase
+      .from('bookings')
+      .select('deposit_required, deposit_amount, deposit_status, stripe_payment_intent_id')
+      .eq('id', booking.id)
+      .single()
+
+    // Get cancellation policy settings
+    const { data: configData } = await supabase
+      .from('booking_config')
+      .select('deposit_cancellation_hours, deposit_late_cancel_charge_percent')
+      .single()
+
+    const cancellationHours = configData?.deposit_cancellation_hours || 48
+    const lateCancelPercent = configData?.deposit_late_cancel_charge_percent || 100
+
+    // Calculate if this is a late cancellation
+    const bookingDateTime = new Date(`${booking.booking_date}T${booking.booking_time}`)
+    const hoursUntilBooking = (bookingDateTime.getTime() - Date.now()) / (1000 * 60 * 60)
+    const isLateCancellation = hoursUntilBooking < cancellationHours
+
+    // ========================================
+    // HANDLE DEPOSIT BASED ON CANCELLATION POLICY
+    // ========================================
+    let depositAction = 'none'
+    let depositMessage = ''
+    
+    if (fullBooking?.deposit_required && 
+        fullBooking?.stripe_payment_intent_id && 
+        fullBooking?.deposit_status === 'authorized') {
+      
+      const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+      
+      if (stripeSecretKey) {
+        const Stripe = (await import('stripe')).default
+        const stripe = new Stripe(stripeSecretKey, { apiVersion: '2024-12-18.acacia' })
+        
+        try {
+          if (!isLateCancellation || lateCancelPercent === 0) {
+            // FREE CANCELLATION - Release the authorization
+            await stripe.paymentIntents.cancel(fullBooking.stripe_payment_intent_id)
+            
+            await supabase
+              .from('bookings')
+              .update({ deposit_status: 'cancelled' })
+              .eq('id', booking.id)
+            
+            // Log the transaction
+            await supabase.from('deposit_transactions').insert({
+              booking_id: booking.id,
+              stripe_payment_intent_id: fullBooking.stripe_payment_intent_id,
+              amount: fullBooking.deposit_amount,
+              action: 'cancelled',
+              reason: `Free cancellation - ${Math.round(hoursUntilBooking)} hours notice (policy: ${cancellationHours}h)`,
+              performed_by: 'customer_cancellation'
+            })
+            
+            depositAction = 'released'
+            depositMessage = 'Your deposit hold has been released. No charge will appear on your card.'
+            console.log(`✅ Deposit released for booking ${booking.id} - free cancellation`)
+            
+          } else if (lateCancelPercent === 100) {
+            // LATE CANCELLATION - FULL CHARGE - Capture the full deposit
+            await stripe.paymentIntents.capture(fullBooking.stripe_payment_intent_id)
+            
+            await supabase
+              .from('bookings')
+              .update({ 
+                deposit_status: 'captured',
+                deposit_captured_at: new Date().toISOString()
+              })
+              .eq('id', booking.id)
+            
+            // Log the transaction
+            await supabase.from('deposit_transactions').insert({
+              booking_id: booking.id,
+              stripe_payment_intent_id: fullBooking.stripe_payment_intent_id,
+              amount: fullBooking.deposit_amount,
+              action: 'captured',
+              reason: `Late cancellation - only ${Math.round(hoursUntilBooking)} hours notice (policy: ${cancellationHours}h required)`,
+              performed_by: 'customer_cancellation'
+            })
+            
+            depositAction = 'charged'
+            depositMessage = `Due to late cancellation (less than ${cancellationHours} hours notice), your deposit of £${(fullBooking.deposit_amount / 100).toFixed(2)} has been charged.`
+            console.log(`💰 Deposit captured for booking ${booking.id} - late cancellation`)
+            
+          } else {
+            // LATE CANCELLATION - PARTIAL CHARGE
+            const chargeAmount = Math.round(fullBooking.deposit_amount * (lateCancelPercent / 100))
+            
+            // Capture partial amount
+            await stripe.paymentIntents.capture(fullBooking.stripe_payment_intent_id, {
+              amount_to_capture: chargeAmount
+            })
+            
+            await supabase
+              .from('bookings')
+              .update({ 
+                deposit_status: 'captured',
+                deposit_amount: chargeAmount, // Update to actual charged amount
+                deposit_captured_at: new Date().toISOString()
+              })
+              .eq('id', booking.id)
+            
+            // Log the transaction
+            await supabase.from('deposit_transactions').insert({
+              booking_id: booking.id,
+              stripe_payment_intent_id: fullBooking.stripe_payment_intent_id,
+              amount: chargeAmount,
+              action: 'captured',
+              reason: `Late cancellation - ${lateCancelPercent}% charge (${Math.round(hoursUntilBooking)}h notice, policy: ${cancellationHours}h)`,
+              performed_by: 'customer_cancellation',
+              metadata: {
+                original_amount: fullBooking.deposit_amount,
+                charge_percent: lateCancelPercent
+              }
+            })
+            
+            depositAction = 'partial_charged'
+            depositMessage = `Due to late cancellation, ${lateCancelPercent}% of your deposit (£${(chargeAmount / 100).toFixed(2)}) has been charged.`
+            console.log(`💰 Partial deposit captured for booking ${booking.id} - ${lateCancelPercent}%`)
+          }
+        } catch (stripeError: any) {
+          console.error('Error processing deposit during cancellation:', stripeError)
+          // Don't fail the cancellation, just log the error
+          depositAction = 'error'
+          depositMessage = 'There was an issue processing your deposit. Our team will contact you.'
+        }
+      }
+    }
+
     // Cancel the booking using the secure function
     const { data: success, error } = await supabase.rpc('cancel_booking_by_token', {
       p_token: token
@@ -118,7 +280,13 @@ export async function POST(request: NextRequest) {
         {
           name: booking.customer_name,
           email: booking.customer_email
-        }
+        },
+        // Include deposit info in email
+        depositAction !== 'none' ? {
+          action: depositAction,
+          message: depositMessage,
+          amount: fullBooking?.deposit_amount
+        } : undefined
       )
     } catch (emailError) {
       // Log but don't fail the cancellation
@@ -127,11 +295,20 @@ export async function POST(request: NextRequest) {
 
     // Create a notification for staff about the cancellation
     try {
+      let depositNote = ''
+      if (depositAction === 'released') {
+        depositNote = ' Deposit authorization released.'
+      } else if (depositAction === 'charged') {
+        depositNote = ` Deposit of £${(fullBooking?.deposit_amount / 100).toFixed(2)} charged (late cancellation).`
+      } else if (depositAction === 'partial_charged') {
+        depositNote = ` Partial deposit charged (${lateCancelPercent}%).`
+      }
+
       await supabase.from('notifications').insert({
         user_id: 'admin',
         type: 'booking_cancelled',
         title: `❌ Booking Cancelled: ${booking.customer_name}`,
-        message: `${booking.customer_name} has cancelled their booking for ${new Date(booking.booking_date).toLocaleDateString('en-GB')} at ${booking.booking_time} (${booking.party_size} guests). Cancelled by customer via email link.`,
+        message: `${booking.customer_name} has cancelled their booking for ${new Date(booking.booking_date).toLocaleDateString('en-GB')} at ${booking.booking_time} (${booking.party_size} guests). Cancelled by customer via email link.${depositNote}`,
         priority: 'medium',
         booking_id: booking.id,
         action_url: '/dashboard/bookings',
@@ -152,14 +329,20 @@ export async function POST(request: NextRequest) {
         partySize: booking.party_size,
         bookingDate: booking.booking_date,
         bookingTime: booking.booking_time,
-        cancellationReason: 'customer_self_service'
+        cancellationReason: isLateCancellation ? 'customer_late_cancellation' : 'customer_self_service'
       })
       console.log('✅ Server-side cancellation tracked for booking:', booking.booking_reference)
     } catch (trackingError) {
       console.error('⚠️ Server-side cancellation tracking failed:', trackingError)
     }
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ 
+      success: true,
+      deposit: {
+        action: depositAction,
+        message: depositMessage
+      }
+    })
 
   } catch (error) {
     console.error('Cancel booking POST error:', error)
