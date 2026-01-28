@@ -79,24 +79,57 @@ export async function cancelBookingAction(bookingId: string) {
       .eq('id', bookingId)
       .single()
 
+    // Handle deposit if exists (release authorization when staff cancels)
+    let depositInfo: { action: string; message: string; amount?: number } | undefined = undefined
+    
+    if (bookingWithCustomer?.deposit_required && 
+        bookingWithCustomer?.stripe_payment_intent_id && 
+        bookingWithCustomer?.deposit_status === 'authorized') {
+      try {
+        // Release the deposit (staff cancellation = release to customer)
+        const cancelResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/stripe/cancel-deposit`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            bookingId,
+            reason: 'Cancelled by staff from dashboard'
+          })
+        })
+        
+        if (cancelResponse.ok) {
+          depositInfo = {
+            action: 'released',
+            message: 'Your deposit authorization has been released. Your card will not be charged.',
+            amount: bookingWithCustomer.deposit_amount
+          }
+          console.log('✅ Deposit released for cancelled booking:', bookingId)
+        } else {
+          console.error('Failed to release deposit:', await cancelResponse.text())
+        }
+      } catch (depositError) {
+        console.error('Error releasing deposit:', depositError)
+      }
+    }
+
     const cancelledBooking = await updateBooking(bookingId, { status: "cancelled" })
     
     if (!cancelledBooking) {
       return { error: "Booking not found." }
     }
 
-    // Send cancellation email (fire and forget)
+    // Send cancellation email with deposit info (fire and forget)
     try {
       if (bookingWithCustomer?.customers) {
         const { RobustEmailUtils } = await import('@/lib/email/robust-email-service');
-        await RobustEmailUtils.sendBookingCancellation(cancelledBooking, bookingWithCustomer.customers);
+        await RobustEmailUtils.sendBookingCancellation(cancelledBooking, bookingWithCustomer.customers, depositInfo);
       }
     } catch (emailError) {
       console.error('Email notification failed:', emailError);
     }
 
     revalidatePath("/dashboard/bookings")
-    return { data: "Booking cancelled successfully." }
+    const depositNote = depositInfo ? ' Deposit released to customer.' : ''
+    return { data: `Booking cancelled successfully.${depositNote}` }
   } catch (error) {
     console.error("Cancel booking error:", error)
     return { error: "Failed to cancel booking." }
@@ -124,6 +157,62 @@ export async function updateBookingStatusAction(bookingId: string, status: "pend
       .eq('id', bookingId)
       .single()
 
+    // Handle deposit based on status change
+    let depositInfo: { action: string; message: string; amount?: number } | undefined = undefined
+    
+    if (bookingWithCustomer?.deposit_required && 
+        bookingWithCustomer?.stripe_payment_intent_id && 
+        bookingWithCustomer?.deposit_status === 'authorized') {
+      
+      if (status === 'cancelled') {
+        // Release deposit when staff cancels
+        try {
+          const cancelResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/stripe/cancel-deposit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              bookingId,
+              reason: 'Cancelled by staff - status changed to cancelled'
+            })
+          })
+          
+          if (cancelResponse.ok) {
+            depositInfo = {
+              action: 'released',
+              message: 'Your deposit authorization has been released. Your card will not be charged.',
+              amount: bookingWithCustomer.deposit_amount
+            }
+            console.log('✅ Deposit released for cancelled booking:', bookingId)
+          }
+        } catch (depositError) {
+          console.error('Error releasing deposit:', depositError)
+        }
+      } else if (status === 'completed') {
+        // Release deposit when booking is marked as completed (customer showed up)
+        try {
+          const cancelResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/stripe/cancel-deposit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              bookingId,
+              reason: 'Customer attended - booking completed'
+            })
+          })
+          
+          if (cancelResponse.ok) {
+            depositInfo = {
+              action: 'released',
+              message: 'Deposit released - customer attended.',
+              amount: bookingWithCustomer.deposit_amount
+            }
+            console.log('✅ Deposit released for completed booking:', bookingId)
+          }
+        } catch (depositError) {
+          console.error('Error releasing deposit for completed booking:', depositError)
+        }
+      }
+    }
+
     const updatedBooking = await updateBooking(bookingId, { status })
     
     if (!updatedBooking) {
@@ -137,7 +226,7 @@ export async function updateBookingStatusAction(bookingId: string, status: "pend
         
         if (status === 'cancelled') {
           console.log('📧 Sending cancellation email for booking:', bookingId);
-          await RobustEmailUtils.sendBookingCancellation(updatedBooking, bookingWithCustomer.customers);
+          await RobustEmailUtils.sendBookingCancellation(updatedBooking, bookingWithCustomer.customers, depositInfo);
         } else if (status === 'confirmed') {
           console.log('📧 Sending confirmation email for booking:', bookingId);
           await RobustEmailUtils.sendBookingConfirmation(updatedBooking, bookingWithCustomer.customers);
@@ -153,8 +242,8 @@ export async function updateBookingStatusAction(bookingId: string, status: "pend
     const statusMessages: Record<string, string> = {
       confirmed: "Booking confirmed successfully.",
       pending: "Booking moved to pending.",
-      cancelled: "Booking cancelled.",
-      completed: "Booking marked as completed."
+      cancelled: depositInfo ? "Booking cancelled. Deposit released." : "Booking cancelled.",
+      completed: depositInfo ? "Booking completed. Deposit released." : "Booking marked as completed."
     }
     
     return { data: statusMessages[status] }

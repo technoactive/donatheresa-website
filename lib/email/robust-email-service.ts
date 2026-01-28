@@ -604,8 +604,15 @@ export const RobustEmailUtils = {
 
   /**
    * Send booking cancellation email
+   * @param booking - Booking details
+   * @param customer - Customer details
+   * @param depositInfo - Optional deposit info (action, message, amount)
    */
-  async sendBookingCancellation(booking: any, customer: any): Promise<EmailResult> {
+  async sendBookingCancellation(
+    booking: any, 
+    customer: any,
+    depositInfo?: { action: string; message: string; amount?: number }
+  ): Promise<EmailResult> {
     return robustEmailService.sendEmailRobust({
       templateKey: 'booking_cancellation',
       recipientEmail: customer.email,
@@ -618,6 +625,11 @@ export const RobustEmailUtils = {
         partySize: booking.party_size,
         bookingId: booking.booking_reference || booking.id,
         guestText: (Number(booking.party_size) === 1) ? 'guest' : 'guests',
+        // Deposit information
+        hasDeposit: !!depositInfo,
+        depositAction: depositInfo?.action || 'none',
+        depositMessage: depositInfo?.message || '',
+        depositAmount: depositInfo?.amount ? `£${(depositInfo.amount / 100).toFixed(2)}` : '',
       }
     });
   },

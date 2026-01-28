@@ -725,8 +725,15 @@ END:VCALENDAR`
 
   /**
    * Send booking cancellation email
+   * @param booking - Booking details
+   * @param customer - Customer details
+   * @param depositInfo - Optional deposit info (action, message, amount)
    */
-  async sendBookingCancellation(booking: any, customer: any): Promise<EmailResult> {
+  async sendBookingCancellation(
+    booking: any, 
+    customer: any,
+    depositInfo?: { action: string; message: string; amount?: number }
+  ): Promise<EmailResult> {
     return emailService.sendEmail({
       templateKey: 'booking_cancellation',
       recipientEmail: customer.email,
@@ -738,6 +745,11 @@ END:VCALENDAR`
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
         bookingId: booking.booking_reference || booking.id,
+        // Deposit information
+        hasDeposit: !!depositInfo,
+        depositAction: depositInfo?.action || 'none',
+        depositMessage: depositInfo?.message || '',
+        depositAmount: depositInfo?.amount ? `£${(depositInfo.amount / 100).toFixed(2)}` : '',
       }
     });
   },
