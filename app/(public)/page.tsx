@@ -421,270 +421,328 @@ export default function HomePage() {
         <HorizontalGallery />
       </section>
 
-      {/* Google Reviews Section */}
-      <section className="py-20 bg-slate-50" aria-labelledby="reviews-heading">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Section Header - Matching Site Design */}
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="w-8 h-px bg-gradient-to-r from-amber-500 to-yellow-400" />
-              <span className="text-sm tracking-[0.3em] text-slate-600 font-light uppercase">
-                Google Reviews
-              </span>
-              <div className="w-8 h-px bg-gradient-to-r from-yellow-400 to-amber-500" />
+      {/* Google Reviews Section - Premium Design */}
+      <section className="py-32 relative overflow-hidden bg-slate-900" aria-labelledby="reviews-heading">
+        {/* Floating Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-amber-500/20 to-yellow-500/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-br from-amber-600/10 to-transparent rounded-full blur-3xl" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          {/* Section Header */}
+          <div className="text-center mb-20">
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <div className="w-12 h-px bg-gradient-to-r from-transparent to-amber-500" />
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
+                <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                <span className="text-sm tracking-[0.2em] text-amber-300/90 font-light uppercase">
+                  Google Reviews
+                </span>
+              </div>
+              <div className="w-12 h-px bg-gradient-to-r from-amber-500 to-transparent" />
             </div>
             
-            <h2 id="reviews-heading" className="text-4xl lg:text-5xl font-bold mb-6">
-              <span className="text-slate-900">What Our </span>
-              <span className="bg-gradient-to-r from-amber-500 to-yellow-400 bg-clip-text text-transparent">
-                Guests Say
+            <h2 id="reviews-heading" className="text-5xl lg:text-6xl font-bold mb-6">
+              <span className="text-white">Guest </span>
+              <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 bg-clip-text text-transparent">
+                Experiences
               </span>
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Real reviews from our valued customers on Google
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              Authentic stories from our valued guests
             </p>
           </div>
 
-          {/* Reviews Grid - Clean, Consistent Design */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Review 1 - Shefalei Raval */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <p className="text-slate-700 mb-6 leading-relaxed">
-                "We have been here a few times now. Food is always amazing, authentic Italian. Staff are lovely. Great atmosphere. One of the best Italian restaurant I have been to in a long time. A must go to if you love Italian!"
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
-                <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-                  <span className="text-amber-700 font-semibold text-sm">SR</span>
+          {/* Featured Reviews - Elegant Grid */}
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Featured Review 1 - Large Card */}
+            <div className="lg:col-span-2 group">
+              <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-10 border border-white/10 hover:border-amber-500/30 transition-all duration-500 h-full">
+                {/* Quote Mark */}
+                <Quote className="absolute top-8 right-8 w-16 h-16 text-amber-500/20" />
+                
+                {/* Rating */}
+                <div className="flex items-center gap-1 mb-6">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
+                  ))}
+                  <span className="ml-2 text-amber-400 font-medium">5.0</span>
                 </div>
-                <div>
-                  <div className="font-semibold text-slate-900">Shefalei Raval</div>
-                  <div className="text-sm text-slate-500">Local Guide</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Review 2 - Sami Syed */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <p className="text-slate-700 mb-6 leading-relaxed">
-                "Have been coming here for nearly 10 years now. The food here is honestly amazing. Once you're a regular you get treated like family and the staff are honestly lovely. You feel special when you dine here!"
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
-                <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-                  <span className="text-amber-700 font-semibold text-sm">SS</span>
-                </div>
-                <div>
-                  <div className="font-semibold text-slate-900">Sami Syed</div>
-                  <div className="text-sm text-slate-500">Regular Guest</div>
+                
+                <blockquote className="text-2xl text-white/90 leading-relaxed mb-8 font-light">
+                  "We have been here a few times now. Food is always amazing, authentic Italian. Staff are lovely. Great atmosphere. One of the best Italian restaurant I have been to in a long time. A must go to if you love Italian!"
+                </blockquote>
+                
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-amber-500/20">
+                    SR
+                  </div>
+                  <div>
+                    <div className="font-semibold text-white text-lg">Shefalei Raval</div>
+                    <div className="text-amber-400/80 text-sm">Local Guide</div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* Review 3 - Marija Milovancevic */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <p className="text-slate-700 mb-6 leading-relaxed">
-                "Absolutely beautiful place, if you don't book a table better luck next time, really amazing food. The atmosphere is wonderful and the service is excellent."
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
-                <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-                  <span className="text-amber-700 font-semibold text-sm">MM</span>
+            {/* Stacked Reviews */}
+            <div className="space-y-8">
+              {/* Review 2 */}
+              <div className="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-amber-500/30 transition-all duration-500">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
                 </div>
-                <div>
-                  <div className="font-semibold text-slate-900">Marija Milovancevic</div>
-                  <div className="text-sm text-slate-500">Local Guide</div>
+                <p className="text-white/80 leading-relaxed mb-6">
+                  "Have been coming here for nearly 10 years now. The food here is honestly amazing. Once you're a regular you get treated like family!"
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-semibold text-sm">
+                    SS
+                  </div>
+                  <div>
+                    <div className="font-medium text-white">Sami Syed</div>
+                    <div className="text-slate-400 text-xs">10+ Year Guest</div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Review 4 - Megan Sherring */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(4)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
-                ))}
-                <Star className="w-5 h-5 text-slate-300" />
-              </div>
-              <p className="text-slate-700 mb-6 leading-relaxed">
-                "Really lovely restaurant! We went on a Wednesday evening and it was very busy and had a lovely atmosphere. Staff were very friendly and we had a great meal - absolutely loved the bruschetta!"
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
-                <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-                  <span className="text-amber-700 font-semibold text-sm">MS</span>
+              {/* Review 3 */}
+              <div className="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-amber-500/30 transition-all duration-500">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
                 </div>
-                <div>
-                  <div className="font-semibold text-slate-900">Megan Sherring</div>
-                  <div className="text-sm text-slate-500">Google Review</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Review 5 - William Sheringham */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <p className="text-slate-700 mb-6 leading-relaxed">
-                "Lovely food and friendly staff. Recommended. The quality of the ingredients is evident in every dish. A great find in Hatch End."
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
-                <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-                  <span className="text-amber-700 font-semibold text-sm">WS</span>
-                </div>
-                <div>
-                  <div className="font-semibold text-slate-900">William Sheringham</div>
-                  <div className="text-sm text-slate-500">Google Review</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Review 6 - Pauline Sheringhame */}
-            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <p className="text-slate-700 mb-6 leading-relaxed">
-                "Lovely food and good atmosphere. Great service. Will definitely be back! The whole experience was wonderful from start to finish."
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
-                <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center">
-                  <span className="text-amber-700 font-semibold text-sm">PS</span>
-                </div>
-                <div>
-                  <div className="font-semibold text-slate-900">Pauline Sheringhame</div>
-                  <div className="text-sm text-slate-500">Google Review</div>
+                <p className="text-white/80 leading-relaxed mb-6">
+                  "Absolutely beautiful place, if you don't book a table better luck next time, really amazing food!"
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-semibold text-sm">
+                    MM
+                  </div>
+                  <div>
+                    <div className="font-medium text-white">Marija Milovancevic</div>
+                    <div className="text-slate-400 text-xs">Local Guide</div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* CTA - Simple, Clean */}
-          <div className="text-center mt-12">
+          {/* Bottom Row - Three Equal Cards */}
+          <div className="grid md:grid-cols-3 gap-8 mt-8">
+            {/* Review 4 */}
+            <div className="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-amber-500/30 transition-all duration-500">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-6">
+                "Really lovely restaurant! We went on a Wednesday evening and it was very busy and had a lovely atmosphere. Absolutely loved the bruschetta!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-semibold text-sm">
+                  MS
+                </div>
+                <div>
+                  <div className="font-medium text-white">Megan Sherring</div>
+                  <div className="text-slate-400 text-xs">Google Review</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Review 5 */}
+            <div className="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-amber-500/30 transition-all duration-500">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-6">
+                "Lovely food and friendly staff. Recommended. The quality of the ingredients is evident in every dish. A great find!"
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-semibold text-sm">
+                  WS
+                </div>
+                <div>
+                  <div className="font-medium text-white">William Sheringham</div>
+                  <div className="text-slate-400 text-xs">Google Review</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Review 6 */}
+            <div className="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl p-8 border border-white/10 hover:border-amber-500/30 transition-all duration-500">
+              <div className="flex items-center gap-1 mb-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <p className="text-white/80 leading-relaxed mb-6">
+                "Lovely food and good atmosphere. Great service. Will definitely be back! The whole experience was wonderful."
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-xl flex items-center justify-center text-white font-semibold text-sm">
+                  PS
+                </div>
+                <div>
+                  <div className="font-medium text-white">Pauline Sheringhame</div>
+                  <div className="text-slate-400 text-xs">Google Review</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="text-center mt-16">
             <Link 
               href="https://www.google.com/maps/place/Dona+Theresa/@51.5947,-0.3697,17z/data=!4m8!3m7!1s0x487617a3ac7c7b9b:0x8e98bc8e5b9df4f!8m2!3d51.5947!4d-0.3697!9m1!1b1!16s%2Fg%2F11c3z_kmkx"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-amber-600 font-medium hover:text-amber-700 transition-colors"
+              className="group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white rounded-full font-medium transition-all duration-300 shadow-lg shadow-amber-500/25 hover:shadow-amber-500/40"
             >
-              View all reviews on Google
-              <ArrowRight className="w-4 h-4" />
+              View All Reviews on Google
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Serving Local Areas - SEO Internal Links */}
-      <section className="py-20 bg-slate-50" aria-labelledby="areas-heading">
-        <div className="max-w-7xl mx-auto px-6">
+      {/* Discover More - Premium Local Areas Section */}
+      <section className="py-32 relative overflow-hidden bg-white" aria-labelledby="areas-heading">
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="w-8 h-px bg-gradient-to-r from-amber-500 to-yellow-400" />
+          <div className="text-center mb-20">
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <Sparkles className="w-5 h-5 text-amber-500" />
               <span className="text-sm tracking-[0.3em] text-slate-600 font-light uppercase">
-                Local Favourites
+                Discover More
               </span>
-              <div className="w-8 h-px bg-gradient-to-r from-yellow-400 to-amber-500" />
             </div>
             
-            <h2 id="areas-heading" className="text-4xl lg:text-5xl font-bold mb-6">
+            <h2 id="areas-heading" className="text-5xl lg:text-6xl font-bold mb-6">
               <span className="text-slate-900">Proudly Serving </span>
-              <span className="bg-gradient-to-r from-amber-500 to-yellow-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-500 bg-clip-text text-transparent">
                 Northwest London
               </span>
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Voted best Italian restaurant in Pinner & Hatch End. Discover why locals choose us for special occasions.
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              Voted the best Italian restaurant in Pinner & Hatch End. Discover why locals choose us for their most special occasions.
             </p>
           </div>
           
-          {/* Area Cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Premium Area Cards */}
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Hatch End - Large Featured Card */}
             <Link 
               href="/restaurants-hatch-end" 
-              className="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300"
+              className="group relative bg-slate-900 rounded-3xl overflow-hidden h-80"
             >
-              <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-amber-200 transition-colors">
-                <Star className="w-6 h-6 text-amber-600" />
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-600/20 via-transparent to-slate-900/80" />
+              <Image
+                src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=400&fit=crop"
+                alt="Hatch End Restaurant Interior"
+                fill
+                className="object-cover opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700"
+              />
+              <div className="absolute inset-0 p-10 flex flex-col justify-end">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/90 rounded-full text-white text-xs font-medium mb-4 w-fit">
+                  <Star className="w-3 h-3 fill-white" />
+                  #1 Rated
+                </div>
+                <h3 className="text-3xl font-bold text-white mb-3 group-hover:text-amber-300 transition-colors">
+                  Hatch End Restaurants
+                </h3>
+                <p className="text-white/80 text-lg mb-6">
+                  Best Italian on Uxbridge Road with free parking
+                </p>
+                <span className="inline-flex items-center gap-2 text-amber-400 font-medium group-hover:gap-4 transition-all">
+                  Explore <ArrowRight className="w-5 h-5" />
+                </span>
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
-                Hatch End Restaurants
-              </h3>
-              <p className="text-slate-600 text-sm mb-4">
-                #1 rated Italian on Uxbridge Road with free parking
-              </p>
-              <span className="text-amber-600 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                Explore <ArrowRight className="w-4 h-4" />
-              </span>
             </Link>
-            
+
+            {/* Pinner - Large Featured Card */}
             <Link 
               href="/restaurants-pinner" 
-              className="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300"
+              className="group relative bg-slate-900 rounded-3xl overflow-hidden h-80"
             >
-              <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-amber-200 transition-colors">
-                <Star className="w-6 h-6 text-amber-600" />
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-600/20 via-transparent to-slate-900/80" />
+              <Image
+                src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=400&fit=crop"
+                alt="Pinner Restaurant Ambiance"
+                fill
+                className="object-cover opacity-40 group-hover:opacity-50 group-hover:scale-105 transition-all duration-700"
+              />
+              <div className="absolute inset-0 p-10 flex flex-col justify-end">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/90 rounded-full text-white text-xs font-medium mb-4 w-fit">
+                  <Star className="w-3 h-3 fill-white" />
+                  Award Winning
+                </div>
+                <h3 className="text-3xl font-bold text-white mb-3 group-hover:text-amber-300 transition-colors">
+                  Pinner Restaurants
+                </h3>
+                <p className="text-white/80 text-lg mb-6">
+                  5 mins from Pinner station, authentic Italian cuisine
+                </p>
+                <span className="inline-flex items-center gap-2 text-amber-400 font-medium group-hover:gap-4 transition-all">
+                  Explore <ArrowRight className="w-5 h-5" />
+                </span>
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
-                Pinner Restaurants
-              </h3>
-              <p className="text-slate-600 text-sm mb-4">
-                5 mins from Pinner station, award-winning cuisine
-              </p>
-              <span className="text-amber-600 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                Explore <ArrowRight className="w-4 h-4" />
-              </span>
             </Link>
-            
+          </div>
+
+          {/* Bottom Cards - Lunch Specials */}
+          <div className="grid md:grid-cols-2 gap-8 mt-8">
             <Link 
               href="/lunch-pinner" 
-              className="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300"
+              className="group relative bg-gradient-to-br from-slate-50 to-white rounded-3xl p-10 border border-slate-200 hover:border-amber-300 hover:shadow-2xl transition-all duration-500"
             >
-              <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-amber-200 transition-colors">
-                <Utensils className="w-6 h-6 text-amber-600" />
+              <div className="flex items-start justify-between mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20">
+                  <Utensils className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-right">
+                  <div className="text-3xl font-bold text-slate-900">£19.95</div>
+                  <div className="text-slate-500 text-sm">per person</div>
+                </div>
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
+              <h3 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors">
                 Lunch Special
               </h3>
-              <p className="text-slate-600 text-sm mb-4">
-                2-course lunch from just £19.95 Tue-Sun
+              <p className="text-slate-600 text-lg mb-6 leading-relaxed">
+                Enjoy our signature 2-course lunch menu, available Tuesday to Sunday
               </p>
-              <span className="text-amber-600 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                View Menu <ArrowRight className="w-4 h-4" />
+              <span className="inline-flex items-center gap-2 text-amber-600 font-medium group-hover:gap-4 transition-all">
+                View Menu <ArrowRight className="w-5 h-5" />
               </span>
             </Link>
-            
+
             <Link 
               href="/menu/lunchtime-earlybird" 
-              className="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300"
+              className="group relative bg-gradient-to-br from-slate-50 to-white rounded-3xl p-10 border border-slate-200 hover:border-amber-300 hover:shadow-2xl transition-all duration-500"
             >
-              <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-amber-200 transition-colors">
-                <Zap className="w-6 h-6 text-amber-600" />
+              <div className="flex items-start justify-between mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-amber-500 to-yellow-500 rounded-2xl flex items-center justify-center shadow-lg shadow-amber-500/20">
+                  <Zap className="w-8 h-8 text-white" />
+                </div>
+                <div className="text-right">
+                  <div className="text-sm font-medium text-amber-600 bg-amber-50 px-3 py-1 rounded-full">12pm - 3pm</div>
+                </div>
               </div>
-              <h3 className="text-lg font-semibold text-slate-900 mb-2 group-hover:text-amber-600 transition-colors">
+              <h3 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors">
                 Early Bird Menu
               </h3>
-              <p className="text-slate-600 text-sm mb-4">
-                Best value Italian dining 12pm-3pm daily
+              <p className="text-slate-600 text-lg mb-6 leading-relaxed">
+                Best value Italian dining experience, perfect for a leisurely lunch
               </p>
-              <span className="text-amber-600 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all">
-                View Menu <ArrowRight className="w-4 h-4" />
+              <span className="inline-flex items-center gap-2 text-amber-600 font-medium group-hover:gap-4 transition-all">
+                View Menu <ArrowRight className="w-5 h-5" />
               </span>
             </Link>
           </div>
