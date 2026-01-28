@@ -199,7 +199,8 @@ export async function getBookings(): Promise<BookingWithCustomer[]> {
   const supabase = await createClient()
   
   try {
-    const { data, error } = await supabase
+    // First try with deposit fields (if they exist)
+    let { data, error } = await supabase
       .from('bookings')
       .select(`
         id,
@@ -232,13 +233,44 @@ export async function getBookings(): Promise<BookingWithCustomer[]> {
       .order('booking_date', { ascending: false })
       .order('booking_time', { ascending: false })
 
+    // If error (likely missing columns), try without deposit fields
     if (error) {
-      console.error('Error fetching bookings:', error)
-      throw error
+      console.warn('Deposit columns may not exist, trying without them:', error.message)
+      const result = await supabase
+        .from('bookings')
+        .select(`
+          id,
+          customer_id,
+          booking_date,
+          booking_time,
+          booking_reference,
+          party_size,
+          status,
+          source,
+          special_requests,
+          created_at,
+          updated_at,
+          customers (
+            id,
+            name,
+            email,
+            phone,
+            created_at,
+            updated_at
+          )
+        `)
+        .order('booking_date', { ascending: false })
+        .order('booking_time', { ascending: false })
+      
+      if (result.error) {
+        console.error('Error fetching bookings:', result.error)
+        throw result.error
+      }
+      data = result.data
     }
     
     // Transform the data to match our interface
-    return (data || []).map(booking => {
+    return (data || []).map((booking: any) => {
       const customer = Array.isArray(booking.customers) ? booking.customers[0] : booking.customers
       
       return {
@@ -253,21 +285,21 @@ export async function getBookings(): Promise<BookingWithCustomer[]> {
         special_requests: booking.special_requests,
         created_at: booking.created_at,
         updated_at: booking.updated_at,
-        // Deposit fields
-        deposit_required: booking.deposit_required || false,
-        deposit_amount: booking.deposit_amount || null,
-        deposit_status: booking.deposit_status || 'none',
-        deposit_refund_amount: booking.deposit_refund_amount || null,
-        stripe_payment_intent_id: booking.stripe_payment_intent_id || null,
-        deposit_captured_at: booking.deposit_captured_at || null,
-        deposit_refunded_at: booking.deposit_refunded_at || null,
+        // Deposit fields (with safe fallbacks)
+        deposit_required: booking.deposit_required ?? false,
+        deposit_amount: booking.deposit_amount ?? null,
+        deposit_status: booking.deposit_status ?? 'none',
+        deposit_refund_amount: booking.deposit_refund_amount ?? null,
+        stripe_payment_intent_id: booking.stripe_payment_intent_id ?? null,
+        deposit_captured_at: booking.deposit_captured_at ?? null,
+        deposit_refunded_at: booking.deposit_refunded_at ?? null,
         customer: {
-          id: customer.id,
-          name: customer.name,
-          email: customer.email,
-          phone: customer.phone,
-          created_at: customer.created_at,
-          updated_at: customer.updated_at
+          id: customer?.id,
+          name: customer?.name || 'Unknown',
+          email: customer?.email || '',
+          phone: customer?.phone || '',
+          created_at: customer?.created_at,
+          updated_at: customer?.updated_at
         }
       }
     })
@@ -280,7 +312,9 @@ export async function getBookings(): Promise<BookingWithCustomer[]> {
 
 export async function getBookingById(id: string): Promise<BookingWithCustomer | null> {
   const supabase = await createClient()
-  const { data, error } = await supabase
+  
+  // First try with deposit fields
+  let { data, error } = await supabase
     .from('bookings')
     .select(`
       id,
@@ -313,7 +347,39 @@ export async function getBookingById(id: string): Promise<BookingWithCustomer | 
     .eq('id', id)
     .single()
 
-  if (error && error.code !== 'PGRST116') throw error
+  // If error (likely missing columns), try without deposit fields
+  if (error && error.code !== 'PGRST116') {
+    console.warn('Deposit columns may not exist, trying without them')
+    const result = await supabase
+      .from('bookings')
+      .select(`
+        id,
+        customer_id,
+        booking_date,
+        booking_time,
+        booking_reference,
+        party_size,
+        status,
+        source,
+        special_requests,
+        created_at,
+        updated_at,
+        customers (
+          id,
+          name,
+          email,
+          phone,
+          created_at,
+          updated_at
+        )
+      `)
+      .eq('id', id)
+      .single()
+    
+    if (result.error && result.error.code !== 'PGRST116') throw result.error
+    data = result.data
+  }
+  
   if (!data) return null
 
   const customer = Array.isArray(data.customers) ? data.customers[0] : data.customers
@@ -330,14 +396,14 @@ export async function getBookingById(id: string): Promise<BookingWithCustomer | 
     special_requests: data.special_requests,
     created_at: data.created_at,
     updated_at: data.updated_at,
-    // Deposit fields
-    deposit_required: data.deposit_required || false,
-    deposit_amount: data.deposit_amount || null,
-    deposit_status: data.deposit_status || 'none',
-    deposit_refund_amount: data.deposit_refund_amount || null,
-    stripe_payment_intent_id: data.stripe_payment_intent_id || null,
-    deposit_captured_at: data.deposit_captured_at || null,
-    deposit_refunded_at: data.deposit_refunded_at || null,
+    // Deposit fields (with safe fallbacks)
+    deposit_required: (data as any).deposit_required ?? false,
+    deposit_amount: (data as any).deposit_amount ?? null,
+    deposit_status: (data as any).deposit_status ?? 'none',
+    deposit_refund_amount: (data as any).deposit_refund_amount ?? null,
+    stripe_payment_intent_id: (data as any).stripe_payment_intent_id ?? null,
+    deposit_captured_at: (data as any).deposit_captured_at ?? null,
+    deposit_refunded_at: (data as any).deposit_refunded_at ?? null,
     customer: {
       id: customer.id,
       name: customer.name,
