@@ -897,14 +897,6 @@ export default function HomePage() {
               </div>
             </Link>
 
-            <Link href="https://www.yell.com/biz/dona-theresa-pinner-9488177/" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-2 px-4 py-3 rounded-xl hover:bg-white/5 transition-all">
-              <div className="flex items-center gap-2">
-                <div className="w-5 h-5 bg-[#FFD200] rounded flex items-center justify-center"><span className="text-black font-black text-[10px]">Y</span></div>
-                <span className="text-white/70 font-medium text-sm group-hover:text-white transition-colors">Yell</span>
-              </div>
-              <span className="text-white/50 text-xs">Business Directory</span>
-            </Link>
-
             <Link href="https://www.viamichelin.co.uk/" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-2 px-4 py-3 rounded-xl hover:bg-white/5 transition-all">
               <div className="flex items-center gap-2">
                 <div className="w-5 h-5 bg-[#005BBB] rounded-full flex items-center justify-center"><span className="text-white font-bold text-[10px]">M</span></div>
