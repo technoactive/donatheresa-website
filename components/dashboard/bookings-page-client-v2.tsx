@@ -96,18 +96,22 @@ function DateStatsCard({
 
 // New bookings alert component
 function NewBookingsAlert({ bookings }: { bookings: Booking[] }) {
-  const recentCutoff = new Date()
-  recentCutoff.setHours(recentCutoff.getHours() - 24) // Last 24 hours
+  const [recentBookings, setRecentBookings] = React.useState<Booking[]>([])
   
-  const recentBookings = bookings.filter(booking => {
-    // Assuming bookings have a createdAt field, otherwise we check if it's for today/tomorrow
-    const bookingDate = new Date(booking.bookingTime)
-    const tomorrow = new Date()
+  React.useEffect(() => {
+    // Calculate on client only to avoid hydration mismatch
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const tomorrow = new Date(today)
     tomorrow.setDate(tomorrow.getDate() + 1)
     
-    return booking.status === "pending" && 
-           (isSameDay(bookingDate, new Date()) || isSameDay(bookingDate, tomorrow))
-  })
+    const filtered = bookings.filter(booking => {
+      const bookingDate = new Date(booking.bookingTime)
+      return booking.status === "pending" && 
+             (isSameDay(bookingDate, today) || isSameDay(bookingDate, tomorrow))
+    })
+    setRecentBookings(filtered)
+  }, [bookings])
   
   if (recentBookings.length === 0) return null
   
@@ -127,6 +131,19 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
   const [expandedDate, setExpandedDate] = React.useState<string | null>(null)
   const [editingBooking, setEditingBooking] = React.useState<Booking | null>(null)
   const [isPending, startTransition] = React.useTransition()
+  const [todayStr, setTodayStr] = React.useState<string>("")
+  const [tomorrowStr, setTomorrowStr] = React.useState<string>("")
+  
+  // Set today/tomorrow strings on client only
+  React.useEffect(() => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    setTodayStr(today.toDateString())
+    
+    const tomorrow = new Date(today)
+    tomorrow.setDate(tomorrow.getDate() + 1)
+    setTomorrowStr(tomorrow.toDateString())
+  }, [])
   
   // Action handlers
   const handleEdit = React.useCallback((booking: Booking) => {
@@ -178,12 +195,8 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
         
         if (dayBookings.length === 0) return null
         
-        const isToday = isSameDay(date, new Date())
-        const isTomorrow = isSameDay(date, (() => {
-          const tomorrow = new Date()
-          tomorrow.setDate(tomorrow.getDate() + 1)
-          return tomorrow
-        })())
+        const isToday = todayStr ? date.toDateString() === todayStr : false
+        const isTomorrow = tomorrowStr ? date.toDateString() === tomorrowStr : false
         
         const pendingCount = dayBookings.filter(b => b.status === "pending").length
         const isExpanded = expandedDate === dateKey || isToday || isTomorrow
@@ -411,15 +424,43 @@ export function BookingsPageClientV2({ bookings }: { bookings: Booking[] }) {
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(undefined)
   const [globalSearchTerm, setGlobalSearchTerm] = React.useState("")
   const [activeTab, setActiveTab] = React.useState("all-upcoming")
+  const [mounted, setMounted] = React.useState(false)
   
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  // Use state for dates to avoid hydration mismatch
+  const [today, setToday] = React.useState<Date>(() => {
+    const d = new Date()
+    d.setHours(0, 0, 0, 0)
+    return d
+  })
+  const [tomorrow, setTomorrow] = React.useState<Date>(() => {
+    const d = new Date()
+    d.setHours(0, 0, 0, 0)
+    d.setDate(d.getDate() + 1)
+    return d
+  })
+  const [nextWeek, setNextWeek] = React.useState<Date>(() => {
+    const d = new Date()
+    d.setHours(0, 0, 0, 0)
+    d.setDate(d.getDate() + 7)
+    return d
+  })
   
-  const tomorrow = new Date(today)
-  tomorrow.setDate(tomorrow.getDate() + 1)
-  
-  const nextWeek = new Date(today)
-  nextWeek.setDate(nextWeek.getDate() + 7)
+  // Set mounted flag after hydration
+  React.useEffect(() => {
+    setMounted(true)
+    // Update dates on client after mount to ensure consistency
+    const now = new Date()
+    now.setHours(0, 0, 0, 0)
+    setToday(now)
+    
+    const tmrw = new Date(now)
+    tmrw.setDate(tmrw.getDate() + 1)
+    setTomorrow(tmrw)
+    
+    const week = new Date(now)
+    week.setDate(week.getDate() + 7)
+    setNextWeek(week)
+  }, [])
   
   // Filter bookings based on search term
   const searchFilteredBookings = globalSearchTerm
