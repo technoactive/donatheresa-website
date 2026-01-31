@@ -422,6 +422,23 @@ const nextConfig = {
         permanent: true,
       },
       
+      // === Old WordPress URLs (server errors) ===
+      {
+        source: '/wp-json/:path*',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/christmas-2',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/Content-Length',
+        destination: '/',
+        permanent: true,
+      },
+      
       // === Privacy/Legal pages ===
       {
         source: '/privacy',
