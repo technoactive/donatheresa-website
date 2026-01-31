@@ -101,6 +101,16 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/homepage',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/1300-2',
+        destination: '/',
+        permanent: true,
+      },
+      {
         source: '/index.html',
         destination: '/',
         permanent: true,
@@ -152,6 +162,11 @@ const nextConfig = {
         destination: '/reserve',
         permanent: true,
       },
+      {
+        source: '/bookings',
+        destination: '/reserve',
+        permanent: true,
+      },
       
       // === Menu variations ===
       {
@@ -182,6 +197,46 @@ const nextConfig = {
       {
         source: '/menu.html',
         destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/menu/wine-menu',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/menu/early-bird',
+        destination: '/menu/lunchtime-earlybird',
+        permanent: true,
+      },
+      {
+        source: '/a-la-carte-menu',
+        destination: '/menu/a-la-carte',
+        permanent: true,
+      },
+      {
+        source: '/december-menu',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/christmas-day-menu',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/new-years-eve-menu',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/mothers-day',
+        destination: '/menu',
+        permanent: true,
+      },
+      {
+        source: '/valentines-day',
+        destination: '/menu/valentines-day',
         permanent: true,
       },
       {
