@@ -1,5 +1,13 @@
 {
   "regions": ["lhr1"],
+  "redirects": [
+    {
+      "source": "/:path(.*)",
+      "has": [{ "type": "host", "value": "www.donatheresa.com" }],
+      "destination": "https://donatheresa.com/:path",
+      "permanent": true
+    }
+  ],
   "functions": {
     "app/api/**/route.ts": {
       "maxDuration": 60
