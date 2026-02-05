@@ -170,7 +170,7 @@ export const mothersDayMenuDetails = {
     "3-course meal",
     "Choice of starters, mains & desserts"
   ],
-  dates: "Sunday 22nd March 2026",
+  dates: "Sunday 15th March 2026",
   times: "12:00 PM - 9:00 PM",
   note: "Booking essential - Limited availability"
 }

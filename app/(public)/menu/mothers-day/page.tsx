@@ -99,7 +99,7 @@ export default function MothersDayMenuPage() {
           <div className="inline-flex items-center gap-3 bg-white/80 border border-pink-200 backdrop-blur-sm px-6 py-3 rounded-full mb-8 shadow-sm">
             <Calendar className="w-4 h-4 text-pink-500" />
             <span className="text-pink-600 font-medium tracking-wider text-sm uppercase">
-              Sunday, 22nd March 2026
+              Sunday, 15th March 2026
             </span>
           </div>
 

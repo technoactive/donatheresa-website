@@ -33,7 +33,7 @@ const allMenus = [
   {
     id: "mothers-day",
     title: "Mother's Day",
-    subtitle: "22nd March 2026",
+    subtitle: "15th March 2026",
     description: "Celebrate Mum with a delicious 3-course Italian feast the whole family will enjoy",
     price: "£32.95",
     priceNote: "per person",

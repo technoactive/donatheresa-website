@@ -25,7 +25,7 @@ export function PromoBanner() {
     const checkPromoType = () => {
       const now = new Date()
       const valentinesEnd = new Date("2026-02-14T23:59:59")
-      const mothersDayEnd = new Date("2026-03-22T23:59:59")
+      const mothersDayEnd = new Date("2026-03-15T23:59:59")
 
       if (now <= valentinesEnd) {
         setPromoType("valentines")
