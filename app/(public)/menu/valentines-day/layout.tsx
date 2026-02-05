@@ -2,7 +2,7 @@ import { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Valentine's Day Menu 2026 | Romantic Italian Dinner | Dona Theresa",
-  description: "💕 Valentine's Day at Dona Theresa! £39.95pp • Romantic 3-course dinner • Candlelit atmosphere. Book now ☎️ 020 8421 5550",
+  description: "💕 Valentine's Day at Dona Theresa! £39.95pp + 10% service • Romantic 3-course dinner • Candlelit atmosphere. Book now ☎️ 020 8421 5550",
   keywords: [
     "valentines day dinner pinner",
     "valentines day restaurant hatch end",
