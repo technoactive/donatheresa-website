@@ -6,6 +6,7 @@ import { Crown, Clock, ArrowRight, Utensils, Heart, Flower2, Sparkles, Star, Pho
 import { useEffect, useState } from "react"
 
 // All menus with beautiful gradient designs
+// showUntil: date-based visibility for seasonal menus (card hidden after this date, page stays accessible)
 const allMenus = [
   {
     id: "valentines-day",
@@ -27,6 +28,7 @@ const allMenus = [
     features: ["3 Courses", "11 Starters", "11 Mains", "8 Desserts"],
     badge: "Special Event",
     badgeColor: "bg-rose-500",
+    showUntil: new Date("2026-02-14T23:59:59"),
   },
   {
     id: "mothers-day",
@@ -48,6 +50,7 @@ const allMenus = [
     features: ["3 Courses", "12 Starters", "11 Mains", "8 Desserts"],
     badge: "Special Event",
     badgeColor: "bg-pink-500",
+    showUntil: new Date("2026-03-15T23:59:59"),
   },
   {
     id: "a-la-carte",
@@ -116,9 +119,19 @@ const allMenus = [
 
 export default function MenuPageClient() {
   const [mounted, setMounted] = useState(false)
+  const [visibleMenus, setVisibleMenus] = useState(allMenus)
 
   useEffect(() => {
     setMounted(true)
+    // Filter menus based on current date
+    const now = new Date()
+    const filtered = allMenus.filter((menu) => {
+      if ('showUntil' in menu && menu.showUntil) {
+        return now <= menu.showUntil
+      }
+      return true // Always show menus without a showUntil date
+    })
+    setVisibleMenus(filtered)
   }, [])
 
   return (
@@ -165,7 +178,7 @@ export default function MenuPageClient() {
               <div className="text-white/60 text-xs sm:text-sm mt-1">Dishes</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">5</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">{visibleMenus.length}</div>
               <div className="text-white/60 text-xs sm:text-sm mt-1">Menus</div>
             </div>
             <div className="text-center">
@@ -202,7 +215,7 @@ export default function MenuPageClient() {
 
           {/* Menu Cards Grid */}
           <div className="grid md:grid-cols-2 gap-4 sm:gap-8">
-            {allMenus.map((menu) => (
+            {visibleMenus.map((menu) => (
               <Link key={menu.id} href={menu.link} className="group block">
                 <div className={`relative h-full bg-gradient-to-br ${menu.bgGradient} rounded-3xl overflow-hidden border ${menu.borderColor} shadow-lg hover:shadow-2xl ${menu.hoverShadow} transition-all duration-500 hover:-translate-y-2`}>
                   {/* Decorative background elements */}
