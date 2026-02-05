@@ -22,7 +22,6 @@ const navLinks = [
 export function PublicHeader() {
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [bannerHeight, setBannerHeight] = useState(0)
   const { scrollY } = useScroll()
   const pathname = usePathname()
   
@@ -35,37 +34,6 @@ export function PublicHeader() {
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  // Monitor banner height for header positioning
-  useEffect(() => {
-    const updateBannerHeight = () => {
-      const banner = document.getElementById('promo-banner-container')
-      setBannerHeight(banner?.offsetHeight || 0)
-    }
-    
-    // Initial check and resize listener
-    updateBannerHeight()
-    window.addEventListener('resize', updateBannerHeight)
-    
-    // Listen for banner dismissal event
-    const handleDismiss = () => {
-      setTimeout(updateBannerHeight, 50) // Small delay to ensure DOM updated
-    }
-    window.addEventListener('promo-banner-dismissed', handleDismiss)
-    
-    // Use MutationObserver to detect when banner is dismissed
-    const observer = new MutationObserver(updateBannerHeight)
-    const bannerContainer = document.getElementById('promo-banner-container')
-    if (bannerContainer) {
-      observer.observe(bannerContainer, { childList: true, subtree: true })
-    }
-    
-    return () => {
-      window.removeEventListener('resize', updateBannerHeight)
-      window.removeEventListener('promo-banner-dismissed', handleDismiss)
-      observer.disconnect()
-    }
   }, [])
 
   const closeSheet = () => setIsSheetOpen(false)
@@ -81,19 +49,21 @@ export function PublicHeader() {
 
   return (
     <>
-      {/* Promo Banner */}
-      <div id="promo-banner-container" className="fixed top-0 left-0 right-0 z-[60]">
-        <PromoBanner />
-      </div>
+      {/* Combined Banner + Header wrapper for consistent positioning */}
+      <div className="fixed top-0 left-0 right-0 z-50">
+        {/* Promo Banner */}
+        <div id="promo-banner-container">
+          <PromoBanner />
+        </div>
 
-      <motion.header 
-        className="fixed left-0 right-0 z-50 px-6 lg:px-8 h-20 flex items-center transition-[top] duration-300"
-        style={{ 
-          top: bannerHeight,
-          backgroundColor: `rgba(0, 0, 0, ${scrolled ? 0.9 : 0.7})`,
-          backdropFilter: `blur(${scrolled ? 16 : 8}px)`,
-        }}
-      >
+        {/* Header */}
+        <motion.header 
+          className="px-6 lg:px-8 h-20 flex items-center"
+          style={{ 
+            backgroundColor: `rgba(0, 0, 0, ${scrolled ? 0.9 : 0.7})`,
+            backdropFilter: `blur(${scrolled ? 16 : 8}px)`,
+          }}
+        >
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-zinc-900/80 to-black/80 backdrop-blur-xl" />
         <div className="absolute inset-0 border-b border-zinc-700/50" />
       
@@ -219,6 +189,7 @@ export function PublicHeader() {
         </div>
       </div>
     </motion.header>
+      </div>
     </>
   )
 }
