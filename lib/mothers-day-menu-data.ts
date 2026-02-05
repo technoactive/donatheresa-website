@@ -6,38 +6,13 @@ export const mothersDayMenuData = {
       dietary: ["V"]
     },
     {
-      name: "Insalata Amore",
-      description: "Tomato, avocado & mozzarella",
+      name: "Zuppa del Giorno",
+      description: "Soup of the day",
       dietary: ["V"]
     },
     {
-      name: "Insalata Di Granchio",
-      description: "Avocado and crab salad",
-      dietary: []
-    },
-    {
-      name: "Funghi Trifoliate",
-      description: "Mushrooms in a wine garlic sauce",
-      dietary: ["V"]
-    },
-    {
-      name: "Melanzane alla Parmigiana",
-      description: "Sliced aubergines layered in tomato sauce topped with parmesan cheese",
-      dietary: ["V"]
-    },
-    {
-      name: "Fritura di Bianchetti",
-      description: "Deep fried whitebait",
-      dietary: []
-    },
-    {
-      name: "Gamberoni Frascati",
-      description: "King prawns in white wine and garlic sauce",
-      dietary: []
-    },
-    {
-      name: "Calamari Fritti Piccanti",
-      description: "Spicy fried calamari rings",
+      name: "Frittura di Calamari",
+      description: "Fried squid rings",
       dietary: []
     },
     {
@@ -46,40 +21,65 @@ export const mothersDayMenuData = {
       dietary: []
     },
     {
-      name: "Prosciutto e Melone",
-      description: "Parma ham with melon",
+      name: "Insalata Di Granchio",
+      description: "Avocado and crab salad",
       dietary: []
     },
     {
-      name: "Cozze Alla Marinara",
-      description: "Fresh mussels cooked with wine, garlic, tomato sauce",
+      name: "Spiedini di Gamberi",
+      description: "Shrimp skewers in white wine garlic sauce",
+      dietary: []
+    },
+    {
+      name: "Frittura di Bianchetti",
+      description: "Deep fried whitebait",
+      dietary: []
+    },
+    {
+      name: "Avocado e Salmone Affumicato",
+      description: "Avocado and smoked salmon salad",
+      dietary: []
+    },
+    {
+      name: "Insalata Tricolore",
+      description: "Tomato, avocado & mozzarella",
+      dietary: ["V"]
+    },
+    {
+      name: "Melanzane alla Parmigiana",
+      description: "Aubergine, tomato, oregano and parmesan",
+      dietary: ["V"]
+    },
+    {
+      name: "Funghi alla Milanese",
+      description: "Mushrooms in breadcrumbs",
+      dietary: ["V"]
+    },
+    {
+      name: "Prosciutto e Melone",
+      description: "Parma ham with melon",
       dietary: []
     }
   ],
   mains: [
     {
       name: "Filetti di Branzino",
-      description: "Grilled fillet of sea bass on a bed of spinach",
+      description: "Grilled fillet of sea bass on bed of spinach",
       dietary: ["GF"]
     },
     {
-      name: "Salmone Monte Cassino",
-      description: "Fresh scotch salmon in a creamy prosecco wine sauce",
+      name: "Salmone Dona Theresa",
+      description: "Fresh scotch salmon in a cream prosecco sauce",
       dietary: ["GF"]
     },
     {
-      name: "Spaghetti Aglio Olio Peperoncino con Gamberi",
-      description: "Spaghetti with prawns, chilli oil and garlic sauce",
-      dietary: []
-    },
-    {
-      name: "Bistecca alla Griglia",
-      description: "Grilled sirloin steak",
+      name: "Eglefino Alla Fiorentina",
+      description: "Haddock on bed of spinach with cream cheese sauce gratinated",
       dietary: ["GF"]
     },
     {
       name: "Tibia D'Agnello",
-      description: "Lamb shank braised in red wine, garlic and rosemary, on bed of mashed potato",
+      description: "Lamb shank braised in red wine, garlic and rosemary, served on bed of mashed potato",
       dietary: ["GF"]
     },
     {
@@ -88,45 +88,45 @@ export const mothersDayMenuData = {
       dietary: ["GF"]
     },
     {
-      name: "Vitello Alla Milanese",
+      name: "Vitello alla Milanese",
       description: "Veal escalope in breadcrumbs",
       dietary: []
     },
     {
-      name: "Pollo Alla Valdostana",
-      description: "Chicken breast with ham, tomato, cheese, cream gratinated",
+      name: "Pollo Al Pepper",
+      description: "Chicken breast in pepper sauce",
       dietary: ["GF"]
     },
     {
-      name: "Risotto Monte Cassino",
-      description: "Risotto with mixed vegetables, garlic, tomato, cream chilli sauce",
-      dietary: ["V", "GF"]
+      name: "Spaghetti Aglio Peperoncino con Gamberi",
+      description: "Spaghetti with prawns, chilli oil & garlic sauce",
+      dietary: []
     },
     {
-      name: "Ravioli Ricotta & Spinach",
-      description: "Ravioli filled with ricotta cheese, spinach in butter sage sauce",
+      name: "Penne Arrabiata",
+      description: "Penne with tomato chilli sauce",
+      dietary: ["V"]
+    },
+    {
+      name: "Ravioli di Fungi Porcini",
+      description: "Ravioli filled with mushrooms in a cream tomato sauce",
       dietary: ["V"]
     },
     {
       name: "Lasagna",
-      description: "Meat or vegetables lasagna",
+      description: "Vegetarian or Meat Lasagna",
       dietary: ["V option"]
     }
   ],
   desserts: [
     {
+      name: "Pecan Pie",
+      description: "Sweet pecan nut pie",
+      dietary: ["V", "Contains Nuts"]
+    },
+    {
       name: "Tiramisu",
       description: "Classic Italian dessert with mascarpone and espresso",
-      dietary: ["V"]
-    },
-    {
-      name: "Profiteroles",
-      description: "Choux pastry filled with cream and chocolate sauce",
-      dietary: ["V"]
-    },
-    {
-      name: "Cheesecake",
-      description: "Creamy New York style cheesecake",
       dietary: ["V"]
     },
     {
@@ -135,9 +135,9 @@ export const mothersDayMenuData = {
       dietary: ["V"]
     },
     {
-      name: "Pecan Pie",
-      description: "Sweet pecan nut pie",
-      dietary: ["V", "Contains Nuts"]
+      name: "Cheesecake",
+      description: "Creamy New York style cheesecake",
+      dietary: ["V"]
     },
     {
       name: "Chocolate Fudge Cake",
@@ -148,6 +148,11 @@ export const mothersDayMenuData = {
       name: "Creme Caramel",
       description: "Classic French caramel custard",
       dietary: ["V", "GF"]
+    },
+    {
+      name: "Profiteroles",
+      description: "Choux pastry filled with cream and chocolate sauce",
+      dietary: ["V"]
     },
     {
       name: "Mixed Ice Cream",
@@ -174,6 +179,7 @@ export const mothersDayMenuNotes = [
   "GF = Gluten Free available",
   "V = Vegetarian",
   "Gluten Free Pasta also available",
+  "* These dishes Contain Nuts",
   "Please inform us of any allergies when booking",
   "A 10% discretionary service charge will be added to your bill"
 ]
