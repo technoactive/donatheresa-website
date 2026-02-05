@@ -9,14 +9,14 @@ import { useEffect, useState } from "react"
 // Floating flowers animation component
 function FloatingFlowers() {
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ top: '120px' }}>
       {[...Array(15)].map((_, i) => (
         <div
           key={i}
           className="absolute animate-float opacity-30"
           style={{
             left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
+            top: `${Math.random() * 85}%`,
             animationDelay: `${Math.random() * 5}s`,
             animationDuration: `${4 + Math.random() * 4}s`,
           }}
@@ -66,7 +66,7 @@ export default function MothersDayMenuPage() {
       `}</style>
 
       {/* Elegant Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-32 md:pt-28">
         {/* Light gradient background with pink tints */}
         <div className="absolute inset-0 bg-gradient-to-br from-pink-100 via-white to-fuchsia-50" />
         
