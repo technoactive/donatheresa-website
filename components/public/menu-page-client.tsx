@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Crown, Clock, ArrowRight, Utensils, Heart, Flower2, Sparkles, Star, Phone, Calendar, Wine, ChefHat } from "lucide-react"
+import { Crown, Clock, ArrowRight, Utensils, Heart, Flower2, Sparkles, Star, Phone, Calendar, Wine, ChefHat, Grape } from "lucide-react"
 import { useEffect, useState } from "react"
 
 // All menus with beautiful gradient designs
@@ -91,6 +91,27 @@ const allMenus = [
     badge: "Best Value",
     badgeColor: "bg-emerald-500",
   },
+  {
+    id: "wine-drinks",
+    title: "Wine & Drinks",
+    subtitle: "50+ Fine Selections",
+    description: "Explore our extensive wine list featuring Italian classics, French champagnes, craft cocktails and more",
+    price: null,
+    priceNote: null,
+    serviceCharge: null,
+    icon: Grape,
+    link: "/menu/wine-drinks",
+    gradient: "from-purple-500 to-indigo-500",
+    bgGradient: "from-purple-50 via-indigo-50/80 to-purple-50",
+    iconBg: "bg-gradient-to-br from-purple-500 to-indigo-500",
+    accentColor: "purple",
+    textColor: "text-purple-600",
+    borderColor: "border-purple-200",
+    hoverShadow: "hover:shadow-purple-200/50",
+    features: ["White Wine", "Red Wine", "Cocktails", "Spirits"],
+    badge: "Wine List",
+    badgeColor: "bg-purple-500",
+  },
 ]
 
 export default function MenuPageClient() {
@@ -144,7 +165,7 @@ export default function MenuPageClient() {
               <div className="text-white/60 text-xs sm:text-sm mt-1">Dishes</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">4</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">5</div>
               <div className="text-white/60 text-xs sm:text-sm mt-1">Menus</div>
             </div>
             <div className="text-center">
