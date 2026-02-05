@@ -103,7 +103,7 @@ export default function MenuPageClient() {
   return (
     <div className="bg-white text-slate-900 min-h-screen">
       {/* Elegant Hero Section */}
-      <section className="relative overflow-hidden pt-28 md:pt-32 lg:pt-40 pb-16 md:pb-24">
+      <section className="relative overflow-hidden pt-36 sm:pt-32 md:pt-36 lg:pt-40 pb-16 md:pb-24">
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900" />
         
@@ -120,36 +120,36 @@ export default function MenuPageClient() {
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-2 rounded-full mb-8">
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-3 sm:px-5 py-2 rounded-full mb-6 sm:mb-8">
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <span className="text-white/90 text-sm font-medium">Authentic Italian Cuisine Since 2011</span>
+            <span className="text-white/90 text-xs sm:text-sm font-medium">Authentic Italian Since 2011</span>
           </div>
 
           {/* Main heading */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6">
             <span className="text-white">Our</span>
-            <span className="block mt-2 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 bg-clip-text text-transparent">
+            <span className="block mt-1 sm:mt-2 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 bg-clip-text text-transparent">
               Menus
             </span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-white/70 max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-base sm:text-xl md:text-2xl text-white/70 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2">
             From special celebrations to everyday dining, discover the perfect menu for your occasion
           </p>
 
           {/* Quick stats */}
-          <div className="flex flex-wrap justify-center gap-8 md:gap-16">
+          <div className="flex justify-center gap-6 sm:gap-8 md:gap-16">
             <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-white">100+</div>
-              <div className="text-white/60 text-sm mt-1">Dishes</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">100+</div>
+              <div className="text-white/60 text-xs sm:text-sm mt-1">Dishes</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-white">4</div>
-              <div className="text-white/60 text-sm mt-1">Unique Menus</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">4</div>
+              <div className="text-white/60 text-xs sm:text-sm mt-1">Menus</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-white">50+</div>
-              <div className="text-white/60 text-sm mt-1">Italian Wines</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">50+</div>
+              <div className="text-white/60 text-xs sm:text-sm mt-1">Wines</div>
             </div>
           </div>
         </div>
@@ -163,24 +163,24 @@ export default function MenuPageClient() {
       </section>
 
       {/* All Menus Section */}
-      <section className="py-20 bg-gradient-to-b from-white via-slate-50/50 to-white">
+      <section className="py-12 sm:py-20 bg-gradient-to-b from-white via-slate-50/50 to-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 text-amber-600 mb-4">
-              <ChefHat className="w-5 h-5" />
-              <span className="text-sm font-semibold uppercase tracking-wider">Choose Your Experience</span>
+          <div className="text-center mb-8 sm:mb-16">
+            <div className="inline-flex items-center gap-2 text-amber-600 mb-3 sm:mb-4">
+              <ChefHat className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider">Choose Your Experience</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-3 sm:mb-4">
               Explore Our Menus
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto px-2">
               Each menu is thoughtfully designed to offer a unique culinary journey through authentic Italian cuisine
             </p>
           </div>
 
           {/* Menu Cards Grid */}
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-8">
             {allMenus.map((menu) => (
               <Link key={menu.id} href={menu.link} className="group block">
                 <div className={`relative h-full bg-gradient-to-br ${menu.bgGradient} rounded-3xl overflow-hidden border ${menu.borderColor} shadow-lg hover:shadow-2xl ${menu.hoverShadow} transition-all duration-500 hover:-translate-y-2`}>
@@ -191,42 +191,42 @@ export default function MenuPageClient() {
                     <div className="absolute top-1/2 right-1/4 w-32 h-32 bg-white/20 rounded-full blur-2xl" />
                   </div>
 
-                  <div className="relative p-8 md:p-10">
+                  <div className="relative p-5 sm:p-8 md:p-10">
                     {/* Top Row - Badge and Icon */}
-                    <div className="flex items-start justify-between mb-6">
+                    <div className="flex items-start justify-between mb-4 sm:mb-6">
                       {/* Badge */}
-                      <div className={`${menu.badgeColor} text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-lg`}>
+                      <div className={`${menu.badgeColor} text-white text-xs font-semibold px-3 sm:px-4 py-1 sm:py-1.5 rounded-full shadow-lg`}>
                         {menu.badge}
                       </div>
                       
                       {/* Icon */}
-                      <div className={`w-16 h-16 ${menu.iconBg} rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                        <menu.icon className="w-8 h-8 text-white" fill={menu.id === 'valentines-day' || menu.id === 'mothers-day' ? 'currentColor' : 'none'} />
+                      <div className={`w-12 h-12 sm:w-16 sm:h-16 ${menu.iconBg} rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                        <menu.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill={menu.id === 'valentines-day' || menu.id === 'mothers-day' ? 'currentColor' : 'none'} />
                       </div>
                     </div>
 
                     {/* Subtitle */}
-                    <div className={`${menu.textColor} font-medium text-sm mb-2 flex items-center gap-2`}>
+                    <div className={`${menu.textColor} font-medium text-xs sm:text-sm mb-1 sm:mb-2 flex items-center gap-1 sm:gap-2`}>
                       {(menu.id === 'mothers-day' || menu.id === 'valentines-day') && (
-                        <Calendar className="w-4 h-4" />
+                        <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
                       )}
                       {menu.subtitle}
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-3xl font-bold text-slate-800 mb-3 group-hover:text-slate-900 transition-colors">
+                    <h3 className="text-2xl sm:text-3xl font-bold text-slate-800 mb-2 sm:mb-3 group-hover:text-slate-900 transition-colors">
                       {menu.title}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-slate-600 mb-6 leading-relaxed">
+                    <p className="text-slate-600 text-sm sm:text-base mb-4 sm:mb-6 leading-relaxed">
                       {menu.description}
                     </p>
 
                     {/* Features */}
-                    <div className="flex flex-wrap gap-2 mb-8">
+                    <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-6 sm:mb-8">
                       {menu.features.map((feature, idx) => (
-                        <span key={idx} className="text-xs font-medium px-3 py-1.5 bg-white/70 backdrop-blur-sm text-slate-700 rounded-full shadow-sm">
+                        <span key={idx} className="text-xs font-medium px-2 sm:px-3 py-1 sm:py-1.5 bg-white/70 backdrop-blur-sm text-slate-700 rounded-full shadow-sm">
                           {feature}
                         </span>
                       ))}
@@ -237,22 +237,22 @@ export default function MenuPageClient() {
                       <div>
                         {menu.price ? (
                           <>
-                            <span className="text-4xl font-bold text-slate-800">{menu.price}</span>
-                            <span className="text-slate-500 text-sm ml-2">{menu.priceNote}</span>
+                            <span className="text-2xl sm:text-4xl font-bold text-slate-800">{menu.price}</span>
+                            <span className="text-slate-500 text-xs sm:text-sm ml-1 sm:ml-2">{menu.priceNote}</span>
                             {menu.serviceCharge && (
                               <div className={`${menu.textColor} text-xs mt-1`}>{menu.serviceCharge}</div>
                             )}
                           </>
                         ) : (
-                          <div className="flex items-center gap-2">
-                            <Wine className={`w-5 h-5 ${menu.textColor}`} />
-                            <span className={`${menu.textColor} font-semibold`}>Full Selection</span>
+                          <div className="flex items-center gap-1 sm:gap-2">
+                            <Wine className={`w-4 h-4 sm:w-5 sm:h-5 ${menu.textColor}`} />
+                            <span className={`${menu.textColor} font-semibold text-sm sm:text-base`}>Full Selection</span>
                           </div>
                         )}
                       </div>
-                      <div className={`flex items-center gap-2 ${menu.textColor} font-semibold group-hover:gap-4 transition-all duration-300`}>
-                        <span>View Menu</span>
-                        <ArrowRight className="w-5 h-5" />
+                      <div className={`flex items-center gap-1 sm:gap-2 ${menu.textColor} font-semibold text-sm sm:text-base group-hover:gap-3 sm:group-hover:gap-4 transition-all duration-300`}>
+                        <span>View</span>
+                        <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
                     </div>
                   </div>
@@ -264,18 +264,18 @@ export default function MenuPageClient() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <section className="py-12 sm:py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-3 sm:mb-4">
               Why Dine With Us
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto">
               Every dish tells a story of tradition, passion, and the finest ingredients
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
             {[
               { icon: "🍅", title: "Fresh Daily", description: "Ingredients sourced every morning" },
               { icon: "👨‍🍳", title: "Expert Chefs", description: "Authentic Italian recipes" },
@@ -283,9 +283,9 @@ export default function MenuPageClient() {
               { icon: "⭐", title: "Since 2011", description: "Award-winning cuisine" }
             ].map((feature, index) => (
               <div key={feature.title} className="text-center group">
-                <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">{feature.icon}</div>
-                <h3 className="text-lg font-semibold text-slate-800 mb-2">{feature.title}</h3>
-                <p className="text-slate-500 text-sm">{feature.description}</p>
+                <div className="text-3xl sm:text-4xl mb-2 sm:mb-4 group-hover:scale-125 transition-transform duration-300">{feature.icon}</div>
+                <h3 className="text-sm sm:text-lg font-semibold text-slate-800 mb-1 sm:mb-2">{feature.title}</h3>
+                <p className="text-slate-500 text-xs sm:text-sm">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -293,7 +293,7 @@ export default function MenuPageClient() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
+      <section className="py-12 sm:py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
         {/* Decorative */}
         <div className="absolute inset-0">
           <div className="absolute top-1/2 left-1/4 w-64 h-64 bg-amber-500/10 rounded-full blur-[100px]" />
@@ -301,31 +301,31 @@ export default function MenuPageClient() {
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-6">
             Ready to Experience<br />Authentic Italian Cuisine?
           </h2>
-          <p className="text-xl text-white/70 mb-10 max-w-2xl mx-auto">
+          <p className="text-base sm:text-xl text-white/70 mb-8 sm:mb-10 max-w-2xl mx-auto">
             Book your table now and let us create an unforgettable dining experience for you
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
             <Button 
               asChild
               size="lg" 
-              className="bg-amber-500 hover:bg-amber-600 text-white text-lg px-10 py-7 rounded-full shadow-xl shadow-amber-500/30"
+              className="bg-amber-500 hover:bg-amber-600 text-white text-base sm:text-lg px-8 sm:px-10 py-5 sm:py-7 rounded-full shadow-xl shadow-amber-500/30"
             >
               <Link href="/reserve">
-                <Calendar className="w-5 h-5 mr-2" />
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 Reserve a Table
               </Link>
             </Button>
             <Button 
               asChild
               size="lg" 
-              className="bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white hover:text-slate-900 text-lg px-10 py-7 rounded-full"
+              className="bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white hover:text-slate-900 text-base sm:text-lg px-8 sm:px-10 py-5 sm:py-7 rounded-full"
             >
               <a href="tel:02084215550">
-                <Phone className="w-5 h-5 mr-2" />
+                <Phone className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                 020 8421 5550
               </a>
             </Button>
