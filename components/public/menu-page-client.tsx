@@ -2,65 +2,94 @@
 
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import Image from "next/image"
-import { Crown, Clock, ArrowRight, Utensils, Heart, Flower2, Sparkles, Star, Phone, Calendar } from "lucide-react"
+import { Crown, Clock, ArrowRight, Utensils, Heart, Flower2, Sparkles, Star, Phone, Calendar, Wine, ChefHat } from "lucide-react"
 import { useEffect, useState } from "react"
 
-// Special event menus (seasonal/promotional)
-const specialMenus = [
+// All menus with beautiful gradient designs
+const allMenus = [
   {
     id: "mothers-day",
     title: "Mother's Day",
-    date: "22nd March 2026",
-    description: "Celebrate Mum with a delicious 3-course Italian feast",
+    subtitle: "22nd March 2026",
+    description: "Celebrate Mum with a delicious 3-course Italian feast the whole family will enjoy",
     price: "£32.95",
     priceNote: "per person",
+    serviceCharge: "+ 10% service",
     icon: Flower2,
     link: "/menu/mothers-day",
     gradient: "from-pink-500 to-fuchsia-500",
-    bgGradient: "from-pink-50 via-fuchsia-50 to-pink-50",
+    bgGradient: "from-pink-50 via-fuchsia-50/80 to-pink-50",
+    iconBg: "bg-gradient-to-br from-pink-500 to-fuchsia-500",
     accentColor: "pink",
+    textColor: "text-pink-600",
+    borderColor: "border-pink-200",
+    hoverShadow: "hover:shadow-pink-200/50",
     features: ["3 Courses", "12 Starters", "11 Mains", "8 Desserts"],
+    badge: "Special Event",
+    badgeColor: "bg-pink-500",
   },
   {
     id: "valentines-day",
     title: "Valentine's Day",
-    date: "14th February 2026",
-    description: "Romantic 3-course dinner in a candlelit atmosphere",
+    subtitle: "14th February 2026",
+    description: "Romantic 3-course dinner in a candlelit atmosphere for you and your special someone",
     price: "£39.95",
     priceNote: "per person",
+    serviceCharge: "+ 10% service",
     icon: Heart,
     link: "/menu/valentines-day",
     gradient: "from-rose-500 to-pink-500",
-    bgGradient: "from-rose-50 via-pink-50 to-rose-50",
+    bgGradient: "from-rose-50 via-pink-50/80 to-rose-50",
+    iconBg: "bg-gradient-to-br from-rose-500 to-pink-500",
     accentColor: "rose",
+    textColor: "text-rose-600",
+    borderColor: "border-rose-200",
+    hoverShadow: "hover:shadow-rose-200/50",
     features: ["3 Courses", "11 Starters", "11 Mains", "8 Desserts"],
+    badge: "Special Event",
+    badgeColor: "bg-rose-500",
   },
-]
-
-// Regular menus
-const regularMenus = [
   {
     id: "a-la-carte",
     title: "À La Carte",
     subtitle: "Our Signature Collection",
-    description: "Experience our full range of carefully crafted authentic Italian dishes",
-    image: "/dish-filleto-rossini.png",
+    description: "Experience our full range of carefully crafted authentic Italian dishes, from classic starters to premium mains",
+    price: null,
+    priceNote: null,
+    serviceCharge: null,
     icon: Crown,
-    highlight: "Premium Selection",
     link: "/menu/a-la-carte",
-    features: ["Starters", "Pasta", "Meat & Fish", "Desserts"],
+    gradient: "from-amber-500 to-orange-500",
+    bgGradient: "from-amber-50 via-orange-50/80 to-amber-50",
+    iconBg: "bg-gradient-to-br from-amber-500 to-orange-500",
+    accentColor: "amber",
+    textColor: "text-amber-600",
+    borderColor: "border-amber-200",
+    hoverShadow: "hover:shadow-amber-200/50",
+    features: ["Antipasti", "Pasta & Risotto", "Meat & Fish", "Dolci"],
+    badge: "Premium",
+    badgeColor: "bg-amber-500",
   },
   {
     id: "lunchtime-earlybird",
     title: "Lunch & Early Bird",
     subtitle: "Exceptional Value",
-    description: "2 courses at £19.95, available Tuesday-Sunday",
-    image: "/pasta-carbonara.jpg",
+    description: "Enjoy our popular 2-course menu at an incredible price, available Tuesday to Sunday",
+    price: "£19.95",
+    priceNote: "2 courses",
+    serviceCharge: null,
     icon: Clock,
-    highlight: "£19.95 for 2 Courses",
     link: "/menu/lunchtime-earlybird",
-    features: ["Tue-Sun", "12-3pm & 5-7pm", "Great Value"],
+    gradient: "from-emerald-500 to-teal-500",
+    bgGradient: "from-emerald-50 via-teal-50/80 to-emerald-50",
+    iconBg: "bg-gradient-to-br from-emerald-500 to-teal-500",
+    accentColor: "emerald",
+    textColor: "text-emerald-600",
+    borderColor: "border-emerald-200",
+    hoverShadow: "hover:shadow-emerald-200/50",
+    features: ["Tue-Sun", "12pm-3pm", "5pm-7pm", "Great Value"],
+    badge: "Best Value",
+    badgeColor: "bg-emerald-500",
   },
 ]
 
@@ -133,49 +162,59 @@ export default function MenuPageClient() {
         </div>
       </section>
 
-      {/* Special Event Menus */}
-      <section className="py-20 bg-gradient-to-b from-white to-slate-50">
+      {/* All Menus Section */}
+      <section className="py-20 bg-gradient-to-b from-white via-slate-50/50 to-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 text-amber-600 mb-4">
-              <Star className="w-5 h-5 fill-amber-600" />
-              <span className="text-sm font-semibold uppercase tracking-wider">Special Occasions</span>
-              <Star className="w-5 h-5 fill-amber-600" />
+              <ChefHat className="w-5 h-5" />
+              <span className="text-sm font-semibold uppercase tracking-wider">Choose Your Experience</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              Celebration Menus
+              Explore Our Menus
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Make your special moments unforgettable with our curated celebration menus
+              Each menu is thoughtfully designed to offer a unique culinary journey through authentic Italian cuisine
             </p>
           </div>
 
-          {/* Special Menu Cards */}
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {specialMenus.map((menu) => (
+          {/* Menu Cards Grid */}
+          <div className="grid md:grid-cols-2 gap-8">
+            {allMenus.map((menu) => (
               <Link key={menu.id} href={menu.link} className="group block">
-                <div className={`relative h-full bg-gradient-to-br ${menu.bgGradient} rounded-3xl overflow-hidden border border-${menu.accentColor}-100 shadow-lg hover:shadow-2xl hover:shadow-${menu.accentColor}-100/50 transition-all duration-500 hover:-translate-y-2`}>
-                  {/* Decorative background pattern */}
-                  <div className="absolute inset-0 opacity-30">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-white to-transparent rounded-full -translate-y-1/2 translate-x-1/2" />
-                    <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-white to-transparent rounded-full translate-y-1/2 -translate-x-1/2" />
+                <div className={`relative h-full bg-gradient-to-br ${menu.bgGradient} rounded-3xl overflow-hidden border ${menu.borderColor} shadow-lg hover:shadow-2xl ${menu.hoverShadow} transition-all duration-500 hover:-translate-y-2`}>
+                  {/* Decorative background elements */}
+                  <div className="absolute inset-0 overflow-hidden">
+                    <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-br from-white/60 to-transparent rounded-full -translate-y-1/2 translate-x-1/3" />
+                    <div className="absolute bottom-0 left-0 w-56 h-56 bg-gradient-to-tr from-white/40 to-transparent rounded-full translate-y-1/3 -translate-x-1/4" />
+                    <div className="absolute top-1/2 right-1/4 w-32 h-32 bg-white/20 rounded-full blur-2xl" />
                   </div>
 
                   <div className="relative p-8 md:p-10">
-                    {/* Date Badge */}
-                    <div className={`inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full mb-6 shadow-sm`}>
-                      <Calendar className={`w-4 h-4 text-${menu.accentColor}-500`} />
-                      <span className={`text-${menu.accentColor}-600 text-sm font-semibold`}>{menu.date}</span>
+                    {/* Top Row - Badge and Icon */}
+                    <div className="flex items-start justify-between mb-6">
+                      {/* Badge */}
+                      <div className={`${menu.badgeColor} text-white text-xs font-semibold px-4 py-1.5 rounded-full shadow-lg`}>
+                        {menu.badge}
+                      </div>
+                      
+                      {/* Icon */}
+                      <div className={`w-16 h-16 ${menu.iconBg} rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                        <menu.icon className="w-8 h-8 text-white" fill={menu.id === 'valentines-day' || menu.id === 'mothers-day' ? 'currentColor' : 'none'} />
+                      </div>
                     </div>
 
-                    {/* Icon */}
-                    <div className={`w-16 h-16 bg-gradient-to-br ${menu.gradient} rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                      <menu.icon className="w-8 h-8 text-white" fill="currentColor" />
+                    {/* Subtitle */}
+                    <div className={`${menu.textColor} font-medium text-sm mb-2 flex items-center gap-2`}>
+                      {(menu.id === 'mothers-day' || menu.id === 'valentines-day') && (
+                        <Calendar className="w-4 h-4" />
+                      )}
+                      {menu.subtitle}
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-3xl font-bold text-slate-800 mb-3">
+                    <h3 className="text-3xl font-bold text-slate-800 mb-3 group-hover:text-slate-900 transition-colors">
                       {menu.title}
                     </h3>
 
@@ -187,20 +226,31 @@ export default function MenuPageClient() {
                     {/* Features */}
                     <div className="flex flex-wrap gap-2 mb-8">
                       {menu.features.map((feature, idx) => (
-                        <span key={idx} className={`text-xs font-medium px-3 py-1 bg-white/60 text-slate-700 rounded-full`}>
+                        <span key={idx} className="text-xs font-medium px-3 py-1.5 bg-white/70 backdrop-blur-sm text-slate-700 rounded-full shadow-sm">
                           {feature}
                         </span>
                       ))}
                     </div>
 
                     {/* Price and CTA */}
-                    <div className="flex items-end justify-between">
+                    <div className="flex items-end justify-between pt-4 border-t border-white/50">
                       <div>
-                        <span className="text-4xl font-bold text-slate-800">{menu.price}</span>
-                        <span className="text-slate-500 text-sm ml-2">{menu.priceNote}</span>
-                        <div className={`text-${menu.accentColor}-500 text-xs mt-1`}>+ 10% service</div>
+                        {menu.price ? (
+                          <>
+                            <span className="text-4xl font-bold text-slate-800">{menu.price}</span>
+                            <span className="text-slate-500 text-sm ml-2">{menu.priceNote}</span>
+                            {menu.serviceCharge && (
+                              <div className={`${menu.textColor} text-xs mt-1`}>{menu.serviceCharge}</div>
+                            )}
+                          </>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <Wine className={`w-5 h-5 ${menu.textColor}`} />
+                            <span className={`${menu.textColor} font-semibold`}>Full Selection</span>
+                          </div>
+                        )}
                       </div>
-                      <div className={`flex items-center gap-2 text-${menu.accentColor}-600 font-semibold group-hover:gap-4 transition-all duration-300`}>
+                      <div className={`flex items-center gap-2 ${menu.textColor} font-semibold group-hover:gap-4 transition-all duration-300`}>
                         <span>View Menu</span>
                         <ArrowRight className="w-5 h-5" />
                       </div>
@@ -213,83 +263,30 @@ export default function MenuPageClient() {
         </div>
       </section>
 
-      {/* Regular Menus */}
-      <section className="py-20 bg-slate-50">
+      {/* Features Section */}
+      <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Header */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 text-slate-500 mb-4">
-              <Utensils className="w-5 h-5" />
-              <span className="text-sm font-semibold uppercase tracking-wider">Everyday Dining</span>
-            </div>
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              Our Regular Menus
+              Why Dine With Us
             </h2>
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Authentic Italian flavors for every occasion
+              Every dish tells a story of tradition, passion, and the finest ingredients
             </p>
           </div>
 
-          {/* Regular Menu Cards */}
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {regularMenus.map((menu, index) => (
-              <Link key={menu.id} href={menu.link} className="group block">
-                <div className="relative h-full bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-100">
-                  {/* Image */}
-                  <div className="relative h-56 overflow-hidden">
-                    <Image
-                      src={menu.image}
-                      alt={menu.title}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      loading={index === 0 ? "eager" : "lazy"}
-                      priority={index === 0}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent" />
-                    
-                    {/* Highlight Badge */}
-                    <div className="absolute top-4 right-4">
-                      <div className="px-4 py-2 bg-amber-500 text-white rounded-full text-sm font-semibold shadow-lg">
-                        {menu.highlight}
-                      </div>
-                    </div>
-
-                    {/* Icon */}
-                    <div className="absolute bottom-4 left-4">
-                      <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        <menu.icon className="w-7 h-7 text-amber-600" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-8">
-                    <div className="text-amber-600 font-medium text-sm mb-2">{menu.subtitle}</div>
-                    <h3 className="text-2xl font-bold text-slate-800 mb-3 group-hover:text-amber-700 transition-colors">
-                      {menu.title}
-                    </h3>
-                    <p className="text-slate-600 mb-6 leading-relaxed">
-                      {menu.description}
-                    </p>
-
-                    {/* Features */}
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {menu.features.map((feature, idx) => (
-                        <span key={idx} className="text-xs font-medium px-3 py-1 bg-slate-100 text-slate-600 rounded-full">
-                          {feature}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* CTA */}
-                    <div className="flex items-center text-amber-600 font-semibold group-hover:text-amber-700 transition-colors">
-                      <span>View Full Menu</span>
-                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { icon: "🍅", title: "Fresh Daily", description: "Ingredients sourced every morning" },
+              { icon: "👨‍🍳", title: "Expert Chefs", description: "Authentic Italian recipes" },
+              { icon: "🍷", title: "Fine Wines", description: "50+ Italian selections" },
+              { icon: "⭐", title: "Since 2011", description: "Award-winning cuisine" }
+            ].map((feature, index) => (
+              <div key={feature.title} className="text-center group">
+                <div className="text-4xl mb-4 group-hover:scale-125 transition-transform duration-300">{feature.icon}</div>
+                <h3 className="text-lg font-semibold text-slate-800 mb-2">{feature.title}</h3>
+                <p className="text-slate-500 text-sm">{feature.description}</p>
+              </div>
             ))}
           </div>
         </div>
