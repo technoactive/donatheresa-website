@@ -231,7 +231,7 @@ const nextConfig = {
       },
       {
         source: '/mothers-day',
-        destination: '/menu',
+        destination: '/menu/mothers-day',
         permanent: true,
       },
       {
