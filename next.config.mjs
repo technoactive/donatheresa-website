@@ -201,7 +201,27 @@ const nextConfig = {
       },
       {
         source: '/menu/wine-menu',
-        destination: '/menu',
+        destination: '/menu/wine-drinks',
+        permanent: true,
+      },
+      {
+        source: '/wine-menu',
+        destination: '/menu/wine-drinks',
+        permanent: true,
+      },
+      {
+        source: '/wine-list',
+        destination: '/menu/wine-drinks',
+        permanent: true,
+      },
+      {
+        source: '/drinks',
+        destination: '/menu/wine-drinks',
+        permanent: true,
+      },
+      {
+        source: '/drinks-menu',
+        destination: '/menu/wine-drinks',
         permanent: true,
       },
       {
