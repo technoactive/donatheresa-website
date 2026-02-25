@@ -182,6 +182,16 @@ export function PublicFooter() {
             <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
               <div className="text-zinc-400 text-sm">
                 © {new Date().getFullYear()} <RestaurantInfo type="name" />. All rights reserved. Crafted with passion for culinary excellence.
+                <span className="mx-1.5">·</span>
+                Website by{' '}
+                <a
+                  href="https://technoactive.co.uk"
+                  target="_blank"
+                  rel="noopener"
+                  className="text-zinc-300 hover:text-white transition-colors duration-300"
+                >
+                  TechnoActive
+                </a>
               </div>
               
               <div className="flex items-center gap-6">
