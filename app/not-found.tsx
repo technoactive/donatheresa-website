@@ -156,11 +156,11 @@ export default function NotFound() {
               </a>
               <div className="hidden sm:block w-px h-6 bg-gray-300" />
               <a 
-                href="mailto:reservations@donatheresa.com" 
+                href="mailto:reservations@donatheresa.co.uk" 
                 className="flex items-center gap-2 text-amber-600 hover:text-amber-700 transition-colors"
               >
                 <Mail className="w-5 h-5" />
-                <span className="font-medium">reservations@donatheresa.com</span>
+                <span className="font-medium">reservations@donatheresa.co.uk</span>
               </a>
             </div>
             <div className="mt-4 flex items-center justify-center gap-2 text-gray-600">

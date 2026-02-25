@@ -592,7 +592,7 @@ export async function createManualBookingAction(formData: FormData): Promise<Act
         }
         
         // Try to send staff alert with a fallback email [[memory:2465475]]
-        const fallbackStaffEmail = process.env.RESTAURANT_EMAIL || 'reservations@donatheresa.com';
+        const fallbackStaffEmail = process.env.RESTAURANT_EMAIL || 'reservations@donatheresa.co.uk';
         await RobustEmailUtils.sendStaffBookingAlert(result.booking, result.customer, fallbackStaffEmail);
         
         console.log('📥 Manual booking emails queued for later delivery due to system error');

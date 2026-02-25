@@ -154,9 +154,9 @@ class EmailService {
       logoUrl: settings.custom_logo_url || '/placeholder-logo.png',
       brandColor: settings.brand_color || '#D97706',
       customFooter: customFooter, // Now dynamically generated from locale settings
-      websiteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com',
-      bookingUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com'}/reserve`,
-      dashboardUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com'}/dashboard`,
+      websiteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.co.uk',
+      bookingUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.co.uk'}/reserve`,
+      dashboardUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.co.uk'}/dashboard`,
       
       // Helper text - ensure guestText is calculated from the data
       guestText: (Number(data.partySize) === 1) ? 'guest' : 'guests',
@@ -194,7 +194,7 @@ class EmailService {
           template_key: params.templateKey,
           recipient_email: params.recipientEmail,
           recipient_name: params.recipientName,
-          sender_email: emailSettings?.sender_email || 'reservations@donatheresa.com',
+          sender_email: emailSettings?.sender_email || 'reservations@donatheresa.co.uk',
           subject: params.subject,
           status: params.status,
           provider_message_id: params.providerMessageId,
@@ -668,7 +668,7 @@ export const EmailUtils = {
    */
   async sendBookingConfirmation(booking: any, customer: any): Promise<EmailResult> {
     // Build cancellation link using the booking's cancellation token
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.co.uk';
     const cancellationLink = booking.cancellation_token 
       ? `${baseUrl}/cancel-booking?token=${booking.cancellation_token}`
       : null;

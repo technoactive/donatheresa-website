@@ -23,11 +23,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Italian Restaurant Harrow | Dona Theresa - Best Italian Food Near You',
     description: 'Award-winning Italian restaurant near Harrow. Authentic cuisine, romantic atmosphere, convenient location with free parking. Just 10 minutes from Harrow.',
-    url: 'https://donatheresa.com/restaurants-harrow',
+    url: 'https://donatheresa.co.uk/restaurants-harrow',
     siteName: 'Dona Theresa Restaurant',
     images: [
       {
-        url: 'https://donatheresa.com/og-harrow.jpg',
+        url: 'https://donatheresa.co.uk/og-harrow.jpg',
         width: 1200,
         height: 630,
         alt: 'Dona Theresa - Best Italian Restaurant Near Harrow'
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     type: 'website'
   },
   alternates: {
-    canonical: 'https://donatheresa.com/restaurants-harrow'
+    canonical: 'https://donatheresa.co.uk/restaurants-harrow'
   }
 }
 

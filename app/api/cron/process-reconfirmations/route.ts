@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
     console.log(`Found ${expiredBookings.length} expired reconfirmations to process`)
 
     const { emailService } = await import('@/lib/email/email-service')
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com'
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.co.uk'
     
     const results = {
       autoCancelled: 0,

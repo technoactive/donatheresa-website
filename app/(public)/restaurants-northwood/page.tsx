@@ -23,11 +23,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Italian Restaurant Northwood | Dona Theresa - Best Italian Food Near You',
     description: 'Award-winning Italian restaurant near Northwood. Authentic cuisine, romantic atmosphere, convenient location with free parking. Just 15 minutes from Northwood.',
-    url: 'https://donatheresa.com/restaurants-northwood',
+    url: 'https://donatheresa.co.uk/restaurants-northwood',
     siteName: 'Dona Theresa Restaurant',
     images: [
       {
-        url: 'https://donatheresa.com/og-northwood.jpg',
+        url: 'https://donatheresa.co.uk/og-northwood.jpg',
         width: 1200,
         height: 630,
         alt: 'Dona Theresa - Best Italian Restaurant Near Northwood'
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     type: 'website'
   },
   alternates: {
-    canonical: 'https://donatheresa.com/restaurants-northwood'
+    canonical: 'https://donatheresa.co.uk/restaurants-northwood'
   }
 }
 

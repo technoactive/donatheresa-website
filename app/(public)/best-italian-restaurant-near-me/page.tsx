@@ -25,11 +25,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Best Italian Restaurant Near Me | Dona Theresa Pinner & Hatch End',
     description: 'Award-winning Italian restaurant in Northwest London. Authentic cuisine, romantic atmosphere, convenient location with free parking.',
-    url: 'https://donatheresa.com/best-italian-restaurant-near-me',
+    url: 'https://donatheresa.co.uk/best-italian-restaurant-near-me',
     siteName: 'Dona Theresa Restaurant',
     images: [
       {
-        url: 'https://donatheresa.com/og-best-italian.jpg',
+        url: 'https://donatheresa.co.uk/og-best-italian.jpg',
         width: 1200,
         height: 630,
         alt: 'Dona Theresa - Best Italian Restaurant Near You'
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     type: 'website'
   },
   alternates: {
-    canonical: 'https://donatheresa.com/best-italian-restaurant-near-me'
+    canonical: 'https://donatheresa.co.uk/best-italian-restaurant-near-me'
   }
 }
 

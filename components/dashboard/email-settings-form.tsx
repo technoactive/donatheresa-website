@@ -377,7 +377,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
               <Input
                 id="sender_email"
                 type="email"
-                placeholder="reservations@donatheresa.com"
+                placeholder="reservations@donatheresa.co.uk"
                 {...form.register('sender_email')}
               />
               {form.formState.errors.sender_email && (
@@ -403,7 +403,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
             <Input
               id="reply_to_email"
               type="email"
-              placeholder="info@donatheresa.com"
+              placeholder="info@donatheresa.co.uk"
               {...form.register('reply_to_email')}
             />
             {form.formState.errors.reply_to_email && (
@@ -811,7 +811,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
               <Input
                 id="restaurant_email"
                 type="email"
-                placeholder="info@donatheresa.com"
+                placeholder="info@donatheresa.co.uk"
                 {...form.register('restaurant_email')}
               />
               {form.formState.errors.restaurant_email && (
@@ -825,7 +825,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
                 <Input
                   id="manager_email"
                   type="email"
-                  placeholder="manager@donatheresa.com"
+                  placeholder="manager@donatheresa.co.uk"
                   {...form.register('manager_email')}
                 />
                 {form.formState.errors.manager_email && (
@@ -838,7 +838,7 @@ export function EmailSettingsForm({ initialSettings }: EmailSettingsFormProps) {
                 <Input
                   id="backup_email"
                   type="email"
-                  placeholder="backup@donatheresa.com"
+                  placeholder="backup@donatheresa.co.uk"
                   {...form.register('backup_email')}
                 />
                 {form.formState.errors.backup_email && (

@@ -25,11 +25,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Pinner Restaurants | Dona Theresa Italian Restaurant',
     description: 'Discover the best Italian restaurant in Pinner. Award-winning cuisine, convenient location, free parking. Your perfect dining destination.',
-    url: 'https://donatheresa.com/restaurants-pinner',
+    url: 'https://donatheresa.co.uk/restaurants-pinner',
     siteName: 'Dona Theresa Restaurant',
     images: [
       {
-        url: 'https://donatheresa.com/og-pinner.jpg',
+        url: 'https://donatheresa.co.uk/og-pinner.jpg',
         width: 1200,
         height: 630,
         alt: 'Dona Theresa - Best Restaurant in Pinner'
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     type: 'website'
   },
   alternates: {
-    canonical: 'https://donatheresa.com/restaurants-pinner'
+    canonical: 'https://donatheresa.co.uk/restaurants-pinner'
   }
 }
 
@@ -442,7 +442,7 @@ export default function RestaurantsPinnerPage() {
             <div className="bg-white rounded-lg p-6 shadow-sm">
               <h3 className="text-xl font-semibold mb-3">Can I book a table online at Pinner restaurants?</h3>
               <p className="text-slate-700">
-                Yes! Dona Theresa offers easy online booking at donatheresa.com/reserve. You can also call 
+                Yes! Dona Theresa offers easy online booking at donatheresa.co.uk/reserve. You can also call 
                 us on 020 8421 5550. We recommend booking in advance for weekend dinners. Walk-ins are 
                 welcome but subject to availability.
               </p>

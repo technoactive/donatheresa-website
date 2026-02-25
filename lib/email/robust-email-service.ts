@@ -424,7 +424,7 @@ class RobustEmailService {
       restaurantAddress: localeSettings?.restaurant_address || '451 Uxbridge Road, Pinner HA5 4JR',
       brandColor: settings.brand_color || '#1e3a8a',
       customFooter,
-      websiteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://www.donatheresa.com',
+      websiteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://www.donatheresa.co.uk',
       guestText: (Number(data.partySize) === 1) ? 'guest' : 'guests',
       createdAt: new Date().toLocaleString('en-GB'),
       ...data
@@ -554,7 +554,7 @@ export const robustEmailService = new RobustEmailService();
 export const RobustEmailUtils = {
   async sendBookingConfirmation(booking: any, customer: any): Promise<EmailResult> {
     // Build cancellation link using the booking's cancellation token
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com';
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.co.uk';
     const cancellationLink = booking.cancellation_token 
       ? `${baseUrl}/cancel-booking?token=${booking.cancellation_token}`
       : null;
@@ -703,7 +703,7 @@ export const RobustEmailUtils = {
       .single();
 
     const senderName = settings?.sender_name || 'Dona Theresa Restaurant';
-    const senderEmail = settings?.sender_email || 'reservations@donatheresa.com';
+    const senderEmail = settings?.sender_email || 'reservations@donatheresa.co.uk';
     const apiKey = settings?.api_key_encrypted;
 
     if (!apiKey) {
@@ -903,7 +903,7 @@ export const RobustEmailUtils = {
 
     const staffEmail = settings?.restaurant_email;
     const senderName = settings?.sender_name || 'Dona Theresa Restaurant';
-    const senderEmail = settings?.sender_email || 'reservations@donatheresa.com';
+    const senderEmail = settings?.sender_email || 'reservations@donatheresa.co.uk';
     const apiKey = settings?.api_key_encrypted;
     
     if (!staffEmail) {
@@ -1047,7 +1047,7 @@ export const RobustEmailUtils = {
 
     const staffEmail = settings?.restaurant_email;
     const senderName = settings?.sender_name || 'Dona Theresa Restaurant';
-    const senderEmail = settings?.sender_email || 'reservations@donatheresa.com';
+    const senderEmail = settings?.sender_email || 'reservations@donatheresa.co.uk';
     const apiKey = settings?.api_key_encrypted;
     
     if (!staffEmail) {
@@ -1175,7 +1175,7 @@ export const RobustEmailUtils = {
     <div style="background: #f8f9fa; padding: 15px 25px; border-top: 1px solid #e5e7eb;">
       <p style="margin: 0; font-size: 12px; color: #666; text-align: center;">
         This is an automated notification from your Dona Theresa booking system.<br>
-        <a href="https://donatheresa.com/dashboard/bookings" style="color: #2563eb;">View all bookings in dashboard</a>
+        <a href="https://donatheresa.co.uk/dashboard/bookings" style="color: #2563eb;">View all bookings in dashboard</a>
       </p>
     </div>
   </div>

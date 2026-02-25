@@ -89,8 +89,8 @@ const nextConfig = {
       // === WWW to non-WWW redirect ===
       {
         source: '/:path*',
-        has: [{ type: 'host', value: 'www.donatheresa.com' }],
-        destination: 'https://donatheresa.com/:path*',
+        has: [{ type: 'host', value: 'www.donatheresa.co.uk' }],
+        destination: 'https://donatheresa.co.uk/:path*',
         permanent: true,
       },
       

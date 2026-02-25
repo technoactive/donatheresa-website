@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: {
-    canonical: 'https://donatheresa.com/cookie-policy'
+    canonical: 'https://donatheresa.co.uk/cookie-policy'
   }
 }
 
@@ -141,7 +141,7 @@ export default function CookiePolicyPage() {
                 <strong>Phone:</strong> <a href="tel:+442084215550" className="text-amber-600 hover:text-amber-700">020 8421 5550</a>
               </p>
               <p>
-                <strong>Email:</strong> <a href="mailto:info@donatheresa.com" className="text-amber-600 hover:text-amber-700">info@donatheresa.com</a>
+                <strong>Email:</strong> <a href="mailto:info@donatheresa.co.uk" className="text-amber-600 hover:text-amber-700">info@donatheresa.co.uk</a>
               </p>
             </div>
           </section>

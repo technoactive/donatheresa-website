@@ -19,10 +19,10 @@ export const metadata: Metadata = {
     title: "Mother's Day 2026 | Dona Theresa Italian Restaurant",
     description: "Celebrate Mum with a delicious 3-course Italian feast. £32.95 per person + 10% service. Book now!",
     type: "website",
-    images: ["https://donatheresa.com/hero-main.png"]
+    images: ["https://donatheresa.co.uk/hero-main.png"]
   },
   alternates: {
-    canonical: "https://donatheresa.com/menu/mothers-day"
+    canonical: "https://donatheresa.co.uk/menu/mothers-day"
   }
 }
 

@@ -95,7 +95,7 @@ export const metadata: Metadata = {
   description: "⭐ Award-winning Italian in Hatch End! Fresh pasta • Steaks • Lunch £19.95 • FREE parking • 4.8★ TripAdvisor. Book ☎️ 020 8421 5550",
   keywords: "italian restaurant pinner, italian restaurant hatch end, best restaurants pinner, restaurants hatch end, italian near me, dona theresa, donna teresa, lunch pinner, italian food, hatch end restaurants, pinner restaurants",
   alternates: {
-    canonical: 'https://donatheresa.com',
+    canonical: 'https://donatheresa.co.uk',
   },
 }
 

@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
 
     // Send reconfirmation emails using the robust email service
     const { RobustEmailUtils } = await import('@/lib/email/robust-email-service')
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.com'
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://donatheresa.co.uk'
     
     const results = {
       sent: 0,

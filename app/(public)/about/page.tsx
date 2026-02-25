@@ -13,11 +13,11 @@ export const metadata: Metadata = {
     description: "Family-owned Italian restaurant at 451 Uxbridge Road, Hatch End, Pinner HA5 4JR. Authentic cuisine, award-winning service in Northwest London.",
     type: "website",
     locale: "en_GB",
-    url: "https://donatheresa.com/about",
+    url: "https://donatheresa.co.uk/about",
     siteName: "Dona Theresa",
     images: [
       {
-        url: "https://donatheresa.com/og-about.jpg",
+        url: "https://donatheresa.co.uk/og-about.jpg",
         width: 1200,
         height: 630,
         alt: "Dona Theresa Italian Restaurant"
@@ -28,10 +28,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "About Dona Theresa | Authentic Italian Restaurant",
     description: "Experience authentic Italian cuisine with Portuguese hospitality in Hatch End since 2011.",
-    images: ["https://donatheresa.com/og-about.jpg"]
+    images: ["https://donatheresa.co.uk/og-about.jpg"]
   },
   alternates: {
-    canonical: "https://donatheresa.com/about"
+    canonical: "https://donatheresa.co.uk/about"
   }
 }
 
@@ -56,10 +56,10 @@ export default function AboutPage() {
       "latitude": 51.6097,
       "longitude": -0.3683
     },
-    "url": "https://donatheresa.com",
+    "url": "https://donatheresa.co.uk",
     "telephone": "+44-20-8428-1234",
     "priceRange": "££",
-    "image": "https://donatheresa.com/restaurant-image.jpg",
+    "image": "https://donatheresa.co.uk/restaurant-image.jpg",
     "paymentAccepted": "Cash, Credit Card, Debit Card",
     "openingHoursSpecification": [
       {

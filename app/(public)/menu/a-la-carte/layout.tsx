@@ -8,10 +8,10 @@ export const metadata: Metadata = {
     title: "À La Carte Menu | Dona Theresa Italian Restaurant",
     description: "Explore our signature À La Carte menu featuring authentic Italian dishes. Fresh pasta, premium meats, seafood and more.",
     type: "website",
-    images: ["https://donatheresa.com/dish-filleto-rossini.png"]
+    images: ["https://donatheresa.co.uk/dish-filleto-rossini.png"]
   },
   alternates: {
-    canonical: "https://donatheresa.com/menu/a-la-carte"
+    canonical: "https://donatheresa.co.uk/menu/a-la-carte"
   }
 }
 

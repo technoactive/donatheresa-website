@@ -23,11 +23,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Hatch End Restaurants | Dona Theresa Italian Restaurant',
     description: 'Discover the best Italian restaurant in Hatch End. Authentic cuisine, romantic atmosphere, convenient location on Uxbridge Road.',
-    url: 'https://donatheresa.com/restaurants-hatch-end',
+    url: 'https://donatheresa.co.uk/restaurants-hatch-end',
     siteName: 'Dona Theresa Restaurant',
     images: [
       {
-        url: 'https://donatheresa.com/og-hatch-end.jpg',
+        url: 'https://donatheresa.co.uk/og-hatch-end.jpg',
         width: 1200,
         height: 630,
         alt: 'Dona Theresa - Best Restaurant in Hatch End'
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     type: 'website'
   },
   alternates: {
-    canonical: 'https://donatheresa.com/restaurants-hatch-end'
+    canonical: 'https://donatheresa.co.uk/restaurants-hatch-end'
   }
 }
 
@@ -324,7 +324,7 @@ export default function RestaurantsHatchEndPage() {
               <h3 className="text-xl font-semibold mb-3">Do I need to book a table at Hatch End restaurants?</h3>
               <p className="text-slate-700">
                 We recommend booking in advance, especially for Friday and Saturday evenings. You can 
-                book online at donatheresa.com/reserve or call us on 020 8421 5550. Walk-ins are welcome 
+                book online at donatheresa.co.uk/reserve or call us on 020 8421 5550. Walk-ins are welcome 
                 but subject to availability.
               </p>
             </div>
@@ -401,7 +401,7 @@ export default function RestaurantsHatchEndPage() {
                 "name": "Do I need to book a table at Hatch End restaurants?",
                 "acceptedAnswer": {
                   "@type": "Answer",
-                  "text": "We recommend booking in advance, especially for Friday and Saturday evenings. You can book online at donatheresa.com/reserve or call us on 020 8421 5550."
+                  "text": "We recommend booking in advance, especially for Friday and Saturday evenings. You can book online at donatheresa.co.uk/reserve or call us on 020 8421 5550."
                 }
               }
             ]

@@ -10,14 +10,14 @@ export async function GET() {
 Contact: mailto:info@technoactive.co.uk
 Expires: 2027-01-28T00:00:00.000Z
 Preferred-Languages: en
-Canonical: https://donatheresa.com/.well-known/security.txt
+Canonical: https://donatheresa.co.uk/.well-known/security.txt
 
 # Security Policy
 # We take security seriously. If you discover a vulnerability, 
 # please report it to us responsibly.
 
 # Scope
-# This policy applies to the donatheresa.com website.
+# This policy applies to the donatheresa.co.uk website.
 
 # Out of Scope
 # - Third-party services and integrations
