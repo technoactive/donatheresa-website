@@ -1,12 +1,6 @@
 {
-  "regions": ["lhr1"],
-  "redirects": [
-    {
-      "source": "/:path(.*)",
-      "has": [{ "type": "host", "value": "www.donatheresa.co.uk" }],
-      "destination": "https://donatheresa.co.uk/:path",
-      "permanent": true
-    }
+  "regions": [
+    "lhr1"
   ],
   "functions": {
     "app/api/**/route.ts": {

@@ -86,14 +86,6 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      // === WWW to non-WWW redirect ===
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.donatheresa.co.uk' }],
-        destination: 'https://donatheresa.co.uk/:path*',
-        permanent: true,
-      },
-      
       // === Homepage variations ===
       {
         source: '/home',
@@ -125,7 +117,6 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
-      
       // === Booking/Reserve variations ===
       {
         source: '/booking',
@@ -167,7 +158,6 @@ const nextConfig = {
         destination: '/reserve',
         permanent: true,
       },
-      
       // === Menu variations ===
       {
         source: '/our-menus.html',
@@ -294,7 +284,6 @@ const nextConfig = {
         destination: '/menu/a-la-carte',
         permanent: true,
       },
-      
       // === Old seasonal menus to main menu ===
       {
         source: '/menu/december-christmas-menu',
@@ -331,7 +320,6 @@ const nextConfig = {
         destination: '/menu',
         permanent: true,
       },
-      
       // === Contact variations ===
       {
         source: '/contact-us',
@@ -358,7 +346,6 @@ const nextConfig = {
         destination: '/contact',
         permanent: true,
       },
-      
       // === About variations ===
       {
         source: '/about-us',
@@ -375,7 +362,6 @@ const nextConfig = {
         destination: '/about',
         permanent: true,
       },
-      
       // === Location pages variations ===
       {
         source: '/hatch-end',
@@ -407,7 +393,6 @@ const nextConfig = {
         destination: '/restaurants-ruislip',
         permanent: true,
       },
-      
       // === Gallery/Images redirects ===
       {
         source: '/gallery',
@@ -424,7 +409,6 @@ const nextConfig = {
         destination: '/#gallery',
         permanent: true,
       },
-      
       // === Common typos and variations ===
       {
         source: '/dona-theresa',
@@ -441,7 +425,6 @@ const nextConfig = {
         destination: '/best-italian-restaurant-near-me',
         permanent: true,
       },
-      
       // === Old WordPress URLs (server errors) ===
       {
         source: '/wp-json/:path*',
@@ -458,7 +441,6 @@ const nextConfig = {
         destination: '/',
         permanent: true,
       },
-      
       // === Privacy/Legal pages ===
       {
         source: '/privacy',
