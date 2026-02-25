@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { GoogleAnalytics } from "@/components/google-analytics"
-import { GoogleAnalyticsStatic } from "@/components/google-analytics-static"
+import { GoogleAnalyticsScript } from "@/components/google-analytics-script"
 import { Suspense } from "react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
@@ -201,8 +201,8 @@ export default function RootLayout({
         <FAQSchema />
         <BreadcrumbSchema />
         
-        {/* Google Analytics Static - Loads GA script immediately */}
-        <GoogleAnalyticsStatic />
+        {/* Google Analytics - uses Measurement ID from dashboard settings */}
+        <GoogleAnalyticsScript />
         
         {/* Last updated: October 12, 2025 */}
       </head>
