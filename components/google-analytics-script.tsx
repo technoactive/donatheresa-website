@@ -12,7 +12,7 @@ export async function GoogleAnalyticsScript() {
   const measurementId =
     settings.enabled && settings.measurement_id?.trim()
       ? settings.measurement_id.trim()
-      : process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim() || null
+      : (process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID?.trim()) || 'G-2YPPZBV8SV'
 
   if (!measurementId) return null
 

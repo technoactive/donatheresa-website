@@ -13,59 +13,61 @@ declare global {
 
 export function GoogleAnalytics() {
   const [hasConsent, setHasConsent] = useState(false)
+  const [preferencesLoaded, setPreferencesLoaded] = useState(false)
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  // Check for cookie consent
+  // Check for cookie consent (don't overwrite gtag consent until we've read preferences)
   useEffect(() => {
     const checkConsent = () => {
       const preferences = localStorage.getItem('dona-theresa-cookie-preferences')
       if (preferences) {
-        const parsed = JSON.parse(preferences)
-        setHasConsent(parsed.analytics === true)
+        try {
+          const parsed = JSON.parse(preferences)
+          setHasConsent(parsed.analytics === true)
+        } catch {
+          setHasConsent(false)
+        }
       }
+      setPreferencesLoaded(true)
     }
 
     checkConsent()
-    
-    // Listen for storage changes (when user updates consent)
+
     const handleStorageChange = () => {
-      checkConsent()
+      const preferences = localStorage.getItem('dona-theresa-cookie-preferences')
+      if (preferences) {
+        try {
+          const parsed = JSON.parse(preferences)
+          setHasConsent(parsed.analytics === true)
+        } catch {
+          setHasConsent(false)
+        }
+      }
     }
-    
+
     window.addEventListener('storage', handleStorageChange)
     return () => window.removeEventListener('storage', handleStorageChange)
   }, [])
 
-  // Set initial consent mode and update when it changes
+  // Only update consent after we've read preferences, so we don't overwrite server default before first hit
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.gtag) {
-      // First, set default consent mode (on initial load)
-      window.gtag('consent', 'default', {
-        'analytics_storage': hasConsent ? 'granted' : 'denied',
-        'functionality_storage': hasConsent ? 'granted' : 'denied',
-        'personalization_storage': hasConsent ? 'granted' : 'denied',
-        'ad_storage': 'denied'
+    if (!preferencesLoaded || typeof window === 'undefined' || !window.gtag) return
+
+    if (hasConsent) {
+      window.gtag('consent', 'update', {
+        analytics_storage: 'granted',
+        functionality_storage: 'granted',
+        personalization_storage: 'granted',
       })
-      
-      // Then update if consent changes
-      if (hasConsent) {
-        window.gtag('consent', 'update', {
-          'analytics_storage': 'granted',
-          'functionality_storage': 'granted', 
-          'personalization_storage': 'granted'
-        })
-        console.log('Google Analytics consent granted')
-      } else {
-        window.gtag('consent', 'update', {
-          'analytics_storage': 'denied',
-          'functionality_storage': 'denied',
-          'personalization_storage': 'denied'
-        })
-        console.log('Google Analytics consent denied')
-      }
+    } else {
+      window.gtag('consent', 'update', {
+        analytics_storage: 'denied',
+        functionality_storage: 'denied',
+        personalization_storage: 'denied',
+      })
     }
-  }, [hasConsent])
+  }, [hasConsent, preferencesLoaded])
 
   // Track page views when route changes (only if consent given)
   useEffect(() => {
