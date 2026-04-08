@@ -101,7 +101,8 @@ const MobileBookingCard = React.memo(({
           <span className="text-xs text-slate-600">
             {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
               hour: '2-digit', 
-              minute: '2-digit'
+              minute: '2-digit',
+              timeZone: 'UTC'
             })}
           </span>
           <span className="text-xs text-slate-600">• {booking.partySize} guests</span>
@@ -110,7 +111,8 @@ const MobileBookingCard = React.memo(({
           <span className="text-xs text-slate-500">
             {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
               day: 'numeric', 
-              month: 'short'
+              month: 'short',
+              timeZone: 'UTC'
             })}
           </span>
           <StatusBadge status={booking.status} />
@@ -494,13 +496,15 @@ export const BookingsTable = React.memo(function BookingsTable({ bookings, isRea
                           {new Date(booking.bookingTime).toLocaleDateString('en-GB', { 
                             day: 'numeric', 
                             month: 'short',
-                            year: 'numeric'
+                            year: 'numeric',
+                            timeZone: 'UTC'
                           })}
                         </div>
                         <div className="text-xs text-slate-600">
                           {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
                             hour: '2-digit', 
-                            minute: '2-digit'
+                            minute: '2-digit',
+                            timeZone: 'UTC'
                           })}
                         </div>
                       </div>

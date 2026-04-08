@@ -162,7 +162,7 @@ class EmailService {
       guestText: (Number(data.partySize) === 1) ? 'guest' : 'guests',
       
       // Dates
-      createdAt: new Date().toLocaleString('en-GB'),
+      createdAt: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }),
       
       // Merge all provided data
       ...data
@@ -681,7 +681,7 @@ export const EmailUtils = {
       data: {
         customerName: customer.name,
         bookingId: booking.booking_reference || booking.id,
-        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB'),
+        bookingDate: new Date(booking.booking_date + 'T12:00:00Z').toLocaleDateString('en-GB', { timeZone: 'Europe/London' }),
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
         specialRequests: booking.special_requests,
@@ -715,7 +715,7 @@ END:VCALENDAR`
       scheduledFor: reminderDate,
       data: {
         customerName: customer.name,
-        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB'),
+        bookingDate: new Date(booking.booking_date + 'T12:00:00Z').toLocaleDateString('en-GB', { timeZone: 'Europe/London' }),
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
         bookingId: booking.booking_reference || booking.id,
@@ -741,7 +741,7 @@ END:VCALENDAR`
       bookingId: booking.id,
       data: {
         customerName: customer.name,
-        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB'),
+        bookingDate: new Date(booking.booking_date + 'T12:00:00Z').toLocaleDateString('en-GB', { timeZone: 'Europe/London' }),
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
         bookingId: booking.booking_reference || booking.id,
@@ -772,7 +772,7 @@ END:VCALENDAR`
         customerName: customer.name,
         customerEmail: customer.email,
         customerPhone: customer.phone,
-        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB'),
+        bookingDate: new Date(booking.booking_date + 'T12:00:00Z').toLocaleDateString('en-GB', { timeZone: 'Europe/London' }),
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
         specialRequests: booking.special_requests,
@@ -809,7 +809,7 @@ END:VCALENDAR`
         customerPhone: contact.phone,
         subject: contact.subject,
         message: contact.message,
-        submittedAt: new Date(contact.created_at).toLocaleString('en-GB'),
+        submittedAt: new Date(contact.created_at).toLocaleString('en-GB', { timeZone: 'Europe/London' }),
       }
     });
   },

@@ -426,7 +426,7 @@ class RobustEmailService {
       customFooter,
       websiteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://www.donatheresa.co.uk',
       guestText: (Number(data.partySize) === 1) ? 'guest' : 'guests',
-      createdAt: new Date().toLocaleString('en-GB'),
+      createdAt: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }),
       ...data
     };
   }
@@ -567,7 +567,7 @@ export const RobustEmailUtils = {
       data: {
         customerName: customer.name,
         bookingId: booking.booking_reference || booking.id,
-        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB'),
+        bookingDate: new Date(booking.booking_date + 'T12:00:00Z').toLocaleDateString('en-GB', { timeZone: 'Europe/London' }),
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
         specialRequests: booking.special_requests || '',
@@ -587,7 +587,7 @@ export const RobustEmailUtils = {
         customerName: customer.name,
         customerEmail: customer.email,
         customerPhone: customer.phone || '',
-        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB'),
+        bookingDate: new Date(booking.booking_date + 'T12:00:00Z').toLocaleDateString('en-GB', { timeZone: 'Europe/London' }),
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
         specialRequests: booking.special_requests || '',
@@ -596,7 +596,7 @@ export const RobustEmailUtils = {
         isVipCustomer: customer.customer_segment === 'vip',
         totalBookings: customer.total_bookings || 0,
         bookingSource: booking.source || 'website',
-        createdAt: new Date().toLocaleString('en-GB'),
+        createdAt: new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' }),
         guestText: (Number(booking.party_size) === 1) ? 'guest' : 'guests',
       }
     });
@@ -620,7 +620,7 @@ export const RobustEmailUtils = {
       bookingId: booking.id,
       data: {
         customerName: customer.name,
-        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB'),
+        bookingDate: new Date(booking.booking_date + 'T12:00:00Z').toLocaleDateString('en-GB', { timeZone: 'Europe/London' }),
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
         bookingId: booking.booking_reference || booking.id,
@@ -645,11 +645,12 @@ export const RobustEmailUtils = {
       bookingId: booking.id,
       data: {
         customerName: customer.name,
-        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB', {
+        bookingDate: new Date(booking.booking_date + 'T12:00:00Z').toLocaleDateString('en-GB', {
           weekday: 'long',
           day: 'numeric',
           month: 'long',
-          year: 'numeric'
+          year: 'numeric',
+          timeZone: 'Europe/London'
         }),
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
@@ -675,11 +676,12 @@ export const RobustEmailUtils = {
       bookingId: booking.id,
       data: {
         customerName: customer.name,
-        bookingDate: new Date(booking.booking_date).toLocaleDateString('en-GB', {
+        bookingDate: new Date(booking.booking_date + 'T12:00:00Z').toLocaleDateString('en-GB', {
           weekday: 'long',
           day: 'numeric',
           month: 'long',
-          year: 'numeric'
+          year: 'numeric',
+          timeZone: 'Europe/London'
         }),
         bookingTime: booking.booking_time,
         partySize: booking.party_size,
@@ -711,11 +713,12 @@ export const RobustEmailUtils = {
       return { success: false, error: 'No API key configured' };
     }
 
-    const bookingDate = new Date(booking.booking_date).toLocaleDateString('en-GB', {
+    const bookingDate = new Date(booking.booking_date + 'T12:00:00Z').toLocaleDateString('en-GB', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
+      timeZone: 'Europe/London'
     });
 
     const subject = `✅ Booking Confirmed - ${bookingDate} at ${booking.booking_time}`;
@@ -855,7 +858,7 @@ export const RobustEmailUtils = {
         customerPhone: contact.phone,
         subject: contact.subject,
         message: contact.message,
-        submittedAt: new Date(contact.created_at).toLocaleString('en-GB'),
+        submittedAt: new Date(contact.created_at).toLocaleString('en-GB', { timeZone: 'Europe/London' }),
       }
     });
   },
@@ -884,7 +887,7 @@ export const RobustEmailUtils = {
         customerName: contact.name,
         subject: contact.subject,
         message: contact.message,
-        sentAt: new Date(contact.created_at).toLocaleString('en-GB'),
+        sentAt: new Date(contact.created_at).toLocaleString('en-GB', { timeZone: 'Europe/London' }),
       }
     });
   },
@@ -921,11 +924,12 @@ export const RobustEmailUtils = {
       ? `🚨 BOOKING AUTO-CANCELLED - ${booking.customer_name} (${booking.party_size} guests)`
       : `⚠️ ACTION REQUIRED - No Reconfirmation from ${booking.customer_name}`;
 
-    const bookingDate = new Date(booking.booking_date).toLocaleDateString('en-GB', {
+    const bookingDate = new Date(booking.booking_date + 'T12:00:00Z').toLocaleDateString('en-GB', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
+      timeZone: 'Europe/London'
     });
 
     const htmlContent = `
@@ -1061,11 +1065,12 @@ export const RobustEmailUtils = {
     }
 
     const isConfirmed = action === 'confirmed';
-    const bookingDate = new Date(booking.booking_date).toLocaleDateString('en-GB', {
+    const bookingDate = new Date(booking.booking_date + 'T12:00:00Z').toLocaleDateString('en-GB', {
       weekday: 'long',
       day: 'numeric',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
+      timeZone: 'Europe/London'
     });
 
     const subject = isConfirmed

@@ -760,12 +760,13 @@ export async function createBookingWithCustomer(bookingData: {
     const priority = isVipBooking ? 'critical' : 'high'
     
     // Format booking details for the notification
-    const bookingDateTime = new Date(`${bookingData.booking.booking_date}T${bookingData.booking.booking_time}:00`)
-    const formattedDate = bookingDateTime.toLocaleDateString('en-GB')
+    const bookingDateTime = new Date(`${bookingData.booking.booking_date}T${bookingData.booking.booking_time}:00Z`)
+    const formattedDate = bookingDateTime.toLocaleDateString('en-GB', { timeZone: 'UTC' })
     const formattedTime = bookingDateTime.toLocaleTimeString('en-GB', { 
       hour: '2-digit', 
       minute: '2-digit',
-      hour12: false 
+      hour12: false,
+      timeZone: 'UTC'
     })
     
     const notificationTitle = isVipBooking 
