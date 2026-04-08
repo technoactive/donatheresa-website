@@ -252,7 +252,8 @@ function UpcomingBookingsList({ bookings }: { bookings: Booking[] }) {
                           <span className="font-medium text-black">
                             🕐 {new Date(booking.bookingTime).toLocaleTimeString('en-GB', { 
                               hour: '2-digit', 
-                              minute: '2-digit' 
+                              minute: '2-digit',
+                              timeZone: 'UTC'
                             })}
                           </span>
                           <span>👥 {booking.partySize} guests</span>
@@ -390,8 +391,8 @@ function exportBookingsToCSV(bookings: Booking[], filename: string = 'bookings')
       booking.customerName,
       booking.customerEmail,
       booking.customerPhone || '',
-      bookingDate.toLocaleDateString('en-GB'),
-      bookingDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }),
+      bookingDate.toLocaleDateString('en-GB', { timeZone: 'UTC' }),
+      bookingDate.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' }),
       booking.partySize.toString(),
       booking.status,
       booking.source,

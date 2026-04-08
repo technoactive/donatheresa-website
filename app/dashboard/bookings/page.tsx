@@ -36,7 +36,7 @@ export default async function BookingsPage() {
       customerEmail: booking.customer.email,
       customerPhone: booking.customer.phone,
       partySize: booking.party_size,
-      bookingTime: new Date(`${booking.booking_date}T${booking.booking_time}:00+00:00`),
+      bookingTime: new Date(`${booking.booking_date}T${booking.booking_time.substring(0, 5)}:00Z`),
       status: booking.status as "pending" | "confirmed" | "cancelled" | "completed",
       source: booking.source as "website" | "dashboard",
       notes: booking.special_requests || "",
