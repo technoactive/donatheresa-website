@@ -1,5 +1,3 @@
-"use client"
-
 import { 
   whiteWines, roseWines, redWines, sparklingWines,
   softDrinks, beerAndCider, bottledWater,
@@ -9,14 +7,34 @@ import {
 import { Wine, Grape, Sparkles, Beer, GlassWater, Martini, Coffee, Phone, Calendar, MapPin, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { useState } from "react"
 
-type TabType = "wines" | "drinks" | "cocktails"
+const menuSchema = {
+  "@context": "https://schema.org",
+  "@type": "Menu",
+  name: "Wine List",
+  url: "https://donatheresa.co.uk/menu/wine-drinks",
+  inLanguage: "en-GB",
+  provider: {
+    "@type": "Restaurant",
+    name: "Dona Theresa",
+    url: "https://donatheresa.co.uk",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "451 Uxbridge Road",
+      addressLocality: "Hatch End",
+      postalCode: "HA5 4JR",
+      addressCountry: "GB",
+    },
+  },
+}
 
 export default function WineDrinksMenuPage() {
-  const [activeTab, setActiveTab] = useState<TabType>("wines")
-
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(menuSchema) }}
+    />
     <div className="bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900 min-h-screen">
       {/* Hero Section */}
       <section className="relative pt-36 sm:pt-32 md:pt-36 lg:pt-40 pb-16 md:pb-20 overflow-hidden">
@@ -42,65 +60,38 @@ export default function WineDrinksMenuPage() {
           </div>
 
           {/* Main heading */}
-          <h1 aria-label="Wine and Drinks" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6">
-            <span className="text-white">Wine &amp; </span>
-            <span className="block mt-1 sm:mt-2 bg-gradient-to-r from-purple-400 via-rose-400 to-purple-400 bg-clip-text text-transparent">
-              Drinks
-            </span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6">
+            <span className="text-white">Wine List</span>
           </h1>
           
           <p className="text-base sm:text-xl md:text-2xl text-white/70 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed px-2">
-            From fine Italian wines to handcrafted cocktails, discover the perfect accompaniment for your meal
+            The wine list at Dona Theresa in Hatch End. Italian reds and whites, Prosecco, Champagne, cocktails and a full bar to pair with dinner.
           </p>
 
-          {/* Tab Navigation */}
-          <div className="flex justify-center gap-2 sm:gap-4">
-            <button
-              onClick={() => setActiveTab("wines")}
-              className={`px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-medium transition-all duration-300 ${
-                activeTab === "wines"
-                  ? "bg-white text-slate-900 shadow-lg"
-                  : "bg-white/10 text-white/80 hover:bg-white/20"
-              }`}
-            >
+          <nav className="flex justify-center gap-2 sm:gap-4" aria-label="Wine list sections">
+            <a href="#wines" className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-medium bg-white text-slate-900 shadow-lg">
               <span className="flex items-center gap-2">
                 <Grape className="w-4 h-4" />
                 Wines
               </span>
-            </button>
-            <button
-              onClick={() => setActiveTab("drinks")}
-              className={`px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-medium transition-all duration-300 ${
-                activeTab === "drinks"
-                  ? "bg-white text-slate-900 shadow-lg"
-                  : "bg-white/10 text-white/80 hover:bg-white/20"
-              }`}
-            >
+            </a>
+            <a href="#bar" className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-medium bg-white/10 text-white/80 hover:bg-white/20">
               <span className="flex items-center gap-2">
                 <Beer className="w-4 h-4" />
-                Drinks
+                Bar
               </span>
-            </button>
-            <button
-              onClick={() => setActiveTab("cocktails")}
-              className={`px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-medium transition-all duration-300 ${
-                activeTab === "cocktails"
-                  ? "bg-white text-slate-900 shadow-lg"
-                  : "bg-white/10 text-white/80 hover:bg-white/20"
-              }`}
-            >
+            </a>
+            <a href="#cocktails" className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-medium bg-white/10 text-white/80 hover:bg-white/20">
               <span className="flex items-center gap-2">
                 <Martini className="w-4 h-4" />
                 Cocktails
               </span>
-            </button>
-          </div>
+            </a>
+          </nav>
         </div>
       </section>
 
-      {/* Wines Tab Content */}
-      {activeTab === "wines" && (
-        <section className="py-12 sm:py-20">
+      <section id="wines" className="py-12 sm:py-20">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             
             {/* White Wines */}
@@ -261,11 +252,8 @@ export default function WineDrinksMenuPage() {
 
           </div>
         </section>
-      )}
 
-      {/* Drinks Tab Content */}
-      {activeTab === "drinks" && (
-        <section className="py-12 sm:py-20">
+      <section id="bar" className="py-12 sm:py-20 bg-slate-50/80">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             
             {/* Soft Drinks */}
@@ -413,11 +401,8 @@ export default function WineDrinksMenuPage() {
 
           </div>
         </section>
-      )}
 
-      {/* Cocktails Tab Content */}
-      {activeTab === "cocktails" && (
-        <section className="py-12 sm:py-20">
+      <section id="cocktails" className="py-12 sm:py-20">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             
             {/* Special Cocktails */}
@@ -515,7 +500,6 @@ export default function WineDrinksMenuPage() {
 
           </div>
         </section>
-      )}
 
       {/* CTA Section */}
       <section className="py-16 sm:py-24 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
@@ -573,5 +557,6 @@ export default function WineDrinksMenuPage() {
         </div>
       </section>
     </div>
+    </>
   )
 }

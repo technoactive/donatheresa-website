@@ -1,25 +1,13 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Wine & Drinks Menu",
-  description: "Italian, French and New World wines, Prosecco, Champagne, cocktails and soft drinks at Dona Theresa in Hatch End. Book: 020 8421 5550",
-  keywords: [
-    "wine menu Hatch End",
-    "Italian wine list",
-    "Prosecco",
-    "Champagne",
-    "cocktails Hatch End",
-    "drinks menu",
-    "Italian restaurant wine",
-    "Chianti",
-    "Barolo",
-    "Amarone",
-    "Prosecco cocktails"
-  ],
+  title: "Wine List",
+  description: "Wine list at Dona Theresa in Hatch End. Italian reds and whites, Prosecco, Champagne and cocktails to pair with dinner. 451 Uxbridge Road. Book: 020 8421 5550",
   openGraph: {
-    title: "Wine & Drinks Menu | Dona Theresa",
-    description: "Extensive wine list with Italian classics, French champagnes, premium cocktails and more",
+    title: "Wine List | Dona Theresa Hatch End",
+    description: "Italian reds and whites, Prosecco, Champagne and cocktails at Dona Theresa in Hatch End.",
     type: "website",
+    url: "https://donatheresa.co.uk/menu/wine-drinks",
   },
   alternates: {
     canonical: "https://donatheresa.co.uk/menu/wine-drinks"
