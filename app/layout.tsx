@@ -197,6 +197,11 @@ export default function RootLayout({
         
         {/* Google Analytics - uses Measurement ID from dashboard settings */}
         <GoogleAnalyticsScript />
+        <script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="1dsr1JEjOd85oVnhF3c7Sg"
+          async
+        />
         
         {/* Last updated: October 12, 2025 */}
       </head>
