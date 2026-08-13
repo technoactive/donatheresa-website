@@ -1,37 +1,10 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { LocaleSettings } from '@/lib/types'
-
 export function DynamicSchema() {
-  const [localeSettings, setLocaleSettings] = useState<LocaleSettings | null>(null)
-
-  useEffect(() => {
-    const fetchLocaleSettings = async () => {
-      try {
-        const response = await fetch('/api/locale-settings')
-        if (response.ok) {
-          const data = await response.json()
-          setLocaleSettings(data)
-        }
-      } catch (error) {
-        console.error('Failed to fetch locale settings:', error)
-      }
-    }
-
-    fetchLocaleSettings()
-  }, [])
-
-  if (!localeSettings) {
-    return null // Don't render anything until we have the data
-  }
-
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Restaurant",
-    "name": localeSettings.restaurant_name || "Dona Theresa",
+    "name": "Dona Theresa",
     "alternateName": ["Donna Teresa", "Dona Teresa", "Donna Theresa", "Dona Theresa Italian Restaurant"],
-    "description": "Best Italian restaurant Pinner & Hatch End. Award-winning authentic Italian cuisine, lunch specials £19.95, steaks. Top restaurants in Pinner on Uxbridge Road. Book now!",
+    "description": "Award-winning Italian restaurant in Hatch End and Pinner. Authentic Italian cuisine, lunch specials from £19.95, steaks. 451 Uxbridge Road, HA5 4JR.",
     "url": "https://donatheresa.co.uk",
     "logo": "https://donatheresa.co.uk/placeholder-logo.png",
     "image": [
@@ -39,68 +12,22 @@ export function DynamicSchema() {
       "https://donatheresa.co.uk/gallery-interior.png",
       "https://donatheresa.co.uk/gallery-dining.png"
     ],
-    "telephone": localeSettings.restaurant_phone || "+442084215550",
+    "telephone": "+442084215550",
     "email": "info@donatheresa.co.uk",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": localeSettings.restaurant_address || "451 Uxbridge Road",
-      "addressLocality": "Pinner, Hatch End",
-      "postalCode": localeSettings.restaurant_postal_code || "HA5 4JR",
-      "addressCountry": localeSettings.country_code || "GB",
-      "addressRegion": "London"
+      "streetAddress": "451 Uxbridge Road",
+      "addressLocality": "Hatch End",
+      "addressRegion": "Greater London",
+      "postalCode": "HA5 4JR",
+      "addressCountry": "GB"
     },
     "geo": {
       "@type": "GeoCoordinates",
       "latitude": "51.5941",
       "longitude": "-0.3840"
     },
-    "areaServed": [
-      {
-        "@type": "City",
-        "name": "Pinner",
-        "address": {
-          "@type": "PostalAddress",
-          "addressRegion": "London",
-          "addressCountry": "GB"
-        }
-      },
-      {
-        "@type": "City", 
-        "name": "Hatch End",
-        "address": {
-          "@type": "PostalAddress",
-          "addressRegion": "London",
-          "addressCountry": "GB"
-        }
-      },
-      {
-        "@type": "City",
-        "name": "Harrow",
-        "address": {
-          "@type": "PostalAddress",
-          "addressRegion": "London",
-          "addressCountry": "GB"
-        }
-      },
-      {
-        "@type": "City",
-        "name": "Northwood",
-        "address": {
-          "@type": "PostalAddress",
-          "addressRegion": "London",
-          "addressCountry": "GB"
-        }
-      },
-      {
-        "@type": "City",
-        "name": "Ruislip",
-        "address": {
-          "@type": "PostalAddress",
-          "addressRegion": "London",
-          "addressCountry": "GB"
-        }
-      }
-    ],
+    "areaServed": ["Pinner", "Hatch End", "Harrow", "Watford", "Northwood", "Ruislip"],
     "openingHoursSpecification": [
       {
         "@type": "OpeningHoursSpecification",
@@ -109,7 +36,7 @@ export function DynamicSchema() {
         "closes": "15:00"
       },
       {
-        "@type": "OpeningHoursSpecification", 
+        "@type": "OpeningHoursSpecification",
         "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
         "opens": "18:00",
         "closes": "23:00"
@@ -127,64 +54,13 @@ export function DynamicSchema() {
       "ratingCount": "247"
     },
     "paymentAccepted": ["Cash", "Credit Card", "Debit Card"],
-    "currenciesAccepted": localeSettings.currency_code || "GBP",
-    "amenityFeature": [
-      {
-        "@type": "LocationFeatureSpecification",
-        "name": "Intimate Dining",
-        "value": true
-      },
-      {
-        "@type": "LocationFeatureSpecification", 
-        "name": "Wine Selection",
-        "value": true
-      },
-      {
-        "@type": "LocationFeatureSpecification",
-        "name": "Private Events",
-        "value": true
-      }
-    ],
+    "currenciesAccepted": "GBP",
     "hasMenu": "https://donatheresa.co.uk/menu",
     "sameAs": [
       "https://www.facebook.com/donatheresa",
-      "https://www.instagram.com/donatheresa", 
+      "https://www.instagram.com/donatheresa",
       "https://twitter.com/dona_theresa"
     ],
-    "knowsAbout": [
-      "Italian Cuisine",
-      "Fine Dining",
-      "Wine Pairing",
-      "Authentic Italian Recipes",
-      "Italian Steaks",
-      "Lunch Specials"
-    ],
-    "hasOfferCatalog": {
-      "@type": "OfferCatalog",
-      "name": "Menu Options",
-      "itemListElement": [
-        {
-          "@type": "Offer",
-          "name": "Lunch Menu",
-          "price": "19.95",
-          "priceCurrency": localeSettings.currency_code || "GBP",
-          "description": "2 course lunch menu available Tuesday-Sunday"
-        },
-        {
-          "@type": "Offer",
-          "name": "Early Bird Menu",
-          "price": "19.95",
-          "priceCurrency": localeSettings.currency_code || "GBP",
-          "description": "2 course early dinner menu"
-        },
-        {
-          "@type": "Offer",
-          "name": "À La Carte",
-          "priceRange": "£££",
-          "description": "Full à la carte menu with premium dishes"
-        }
-      ]
-    },
     "potentialAction": {
       "@type": "ReserveAction",
       "target": {
@@ -192,8 +68,8 @@ export function DynamicSchema() {
         "urlTemplate": "https://donatheresa.co.uk/reserve",
         "inLanguage": "en-GB",
         "actionPlatform": [
-          "http://schema.org/DesktopWebPlatform",
-          "http://schema.org/MobileWebPlatform"
+          "https://schema.org/DesktopWebPlatform",
+          "https://schema.org/MobileWebPlatform"
         ]
       },
       "result": {
@@ -211,4 +87,4 @@ export function DynamicSchema() {
       }}
     />
   )
-} 
+}

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
-  title: 'Restaurants in Hatch End | Best Italian Restaurant | Dona Theresa',
+  title: 'Hatch End Restaurants',
   description: '⭐ #1 rated restaurant in Hatch End! Authentic Italian • Lunch £19.95 • FREE parking • Open Tue-Sun. Book now ☎️ 020 8421 5550',
   keywords: [
     'hatch end restaurants',

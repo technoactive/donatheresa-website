@@ -5,7 +5,7 @@ import ContactPageClient from "@/components/public/contact-page-client"
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: "Contact | Dona Theresa Italian Restaurant Pinner",
+  title: "Contact & Location",
   description: "Contact Dona Theresa - best Italian restaurant near me in Pinner & Hatch End. 📍451 Uxbridge Road HA5 4JR 📞020 8421 5550. Top restaurants Pinner.",
   keywords: [
     "restaurants near me contact",

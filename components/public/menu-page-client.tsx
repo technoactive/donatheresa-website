@@ -160,8 +160,9 @@ export default function MenuPageClient() {
           </div>
 
           {/* Main heading */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6">
+          <h1 aria-label="Our Menus" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6">
             <span className="text-white">Our</span>
+            <span className="sr-only"> </span>
             <span className="block mt-1 sm:mt-2 bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 bg-clip-text text-transparent">
               Menus
             </span>

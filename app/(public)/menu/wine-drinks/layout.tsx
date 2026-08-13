@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Wine & Drinks Menu | Dona Theresa Italian Restaurant Hatch End",
-  description: "Explore our extensive wine list featuring Italian, French, Spanish and New World wines. Premium cocktails, Prosecco, Champagne, spirits and soft drinks at Dona Theresa.",
+  title: "Wine & Drinks Menu",
+  description: "Italian, French and New World wines, Prosecco, Champagne, cocktails and soft drinks at Dona Theresa in Hatch End. Book: 020 8421 5550",
   keywords: [
     "wine menu Hatch End",
     "Italian wine list",

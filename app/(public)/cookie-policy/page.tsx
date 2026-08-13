@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Cookie Policy | Dona Theresa Italian Restaurant",
+  title: "Cookie Policy",
   description: "Learn about how Dona Theresa uses cookies to improve your browsing experience and provide personalized service.",
   robots: {
     index: true,

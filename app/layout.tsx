@@ -11,7 +11,6 @@ import { Suspense } from "react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
 import { DynamicSchema } from "@/components/locale/dynamic-schema"
-import { FAQSchema } from "@/components/locale/faq-schema"
 import { BreadcrumbSchema } from "@/components/locale/breadcrumb-schema"
 import { CookieConsent } from "@/components/cookie-consent"
 
@@ -46,8 +45,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://donatheresa.co.uk'),
   title: {
-    default: "Dona Theresa | Best Italian Restaurant Pinner & Hatch End",
-    template: "%s | Dona Theresa Italian Restaurant"
+    default: "Dona Theresa | Italian Restaurant Hatch End & Pinner",
+    template: "%s | Dona Theresa"
   },
   description: "Award-winning Italian restaurant in Pinner & Hatch End. Authentic cuisine, lunch £19.95, steaks. 451 Uxbridge Road. Book now! 📍020 8421 5550",
   keywords: [
@@ -117,8 +116,8 @@ export const metadata: Metadata = {
     locale: 'en_GB',
     url: 'https://donatheresa.co.uk',
     siteName: 'Dona Theresa Restaurant',
-    title: 'Dona Theresa Italian Restaurant Pinner & Hatch End | Best Italian Food Near Me',
-    description: 'Best Italian restaurant Pinner & Hatch End. Award-winning authentic Italian cuisine, lunch £19.95, steaks. Top restaurants Uxbridge Road. Book now! 📍451 Uxbridge Road HA5 4JR 📞020 8421 5550',
+    title: 'Dona Theresa | Italian Restaurant Hatch End & Pinner',
+    description: 'Award-winning Italian restaurant in Hatch End & Pinner. Lunch from £19.95, steaks, free parking. 451 Uxbridge Road. Book: 020 8421 5550',
     images: [
       {
         url: '/hero-main.png',
@@ -140,7 +139,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@dona_theresa',
     creator: '@dona_theresa',
-    title: 'Dona Theresa Italian Restaurant | Hatch End Pinner | Northwest London',
+    title: 'Dona Theresa | Italian Restaurant Hatch End & Pinner',
     description: 'Italian fine dining in Hatch End, Pinner. 451 Uxbridge Road, HA5 4JR. Authentic cuisine, romantic atmosphere. Open Tue-Sun. Book: 020 8421 5550.',
     images: ['/hero-main.png'],
   },
@@ -196,9 +195,8 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         
-        {/* Dynamic Schema.org structured data */}
+        {/* Server-rendered Schema.org structured data */}
         <DynamicSchema />
-        <FAQSchema />
         <BreadcrumbSchema />
         
         {/* Google Analytics - uses Measurement ID from dashboard settings */}

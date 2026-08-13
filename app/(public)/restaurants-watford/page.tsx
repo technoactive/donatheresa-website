@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button'
 import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
-  title: 'Italian Restaurant Watford | Best Restaurants Near You | Dona Theresa',
-  description: 'Award-winning Italian restaurant near Watford. Dona Theresa offers authentic Italian cuisine, lunch £19.95, premium steaks. Free parking. 451 Uxbridge Road. Book: 020 8421 5550',
+  title: 'Italian Restaurant Watford',
+  description: 'Award-winning Italian restaurant near Watford. Authentic cuisine, lunch from £19.95, steaks and free parking. 451 Uxbridge Road. Book: 020 8421 5550',
   keywords: [
     'italian restaurant watford',
     'restaurants watford',

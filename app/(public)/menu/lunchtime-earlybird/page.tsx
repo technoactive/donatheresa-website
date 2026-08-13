@@ -57,7 +57,7 @@ export default function LunchtimeEarlybirdMenuPage() {
             
             {/* Simple Title */}
             <div className="space-y-6">
-              <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
+              <h1 aria-label="Lunchtime and Early Bird Special" className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight">
                 <span className="block text-slate-900">
                   Lunchtime &
                 </span>

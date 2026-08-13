@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
-  title: 'Lunch in Pinner | Dona Theresa £19.95 Special',
+  title: 'Lunch in Pinner | £19.95',
   description: 'Best lunch in Pinner at £19.95. Authentic Italian cuisine, served Tuesday-Sunday. 451 Uxbridge Road. Book now: 020 8421 5550',
   keywords: [
     'lunch in pinner',

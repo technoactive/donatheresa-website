@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Mother's Day Menu 2026 | £32.95 | Dona Theresa Italian Restaurant",
+  title: "Mother's Day Menu 2026",
   description: "💐 Mother's Day at Dona Theresa! £32.95pp + 10% service • 3-course Italian feast • Book now ☎️ 020 8421 5550 • Pinner & Hatch End",
   keywords: [
     "mothers day dinner pinner",

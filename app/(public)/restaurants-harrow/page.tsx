@@ -6,8 +6,8 @@ import { Button } from '@/components/ui/button'
 import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
-  title: 'Italian Restaurant Harrow | Best Restaurants Near You | Dona Theresa',
-  description: 'Top-rated Italian restaurant near Harrow. Dona Theresa serves authentic Italian cuisine, lunch £19.95, premium steaks. Free parking. 451 Uxbridge Road, Pinner. Book: 020 8421 5550',
+  title: 'Italian Restaurant Harrow',
+  description: 'Top-rated Italian restaurant near Harrow. Authentic cuisine, lunch from £19.95, steaks and free parking. 451 Uxbridge Road. Book: 020 8421 5550',
   keywords: [
     'italian restaurant harrow',
     'restaurants harrow',

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
-  title: 'Restaurants in Pinner | Best Italian Restaurant Near Me | Dona Theresa',
+  title: 'Pinner Restaurants',
   description: '⭐ Top-rated Pinner restaurant! Authentic Italian • Lunch £19.95 • FREE parking • 4.8★ reviews. Book now ☎️ 020 8421 5550',
   keywords: [
     'pinner restaurants',

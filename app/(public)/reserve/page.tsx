@@ -12,7 +12,7 @@ export const revalidate = 0
 export const fetchCache = 'force-no-store'
 
 export const metadata: Metadata = {
-  title: "Book Table | Dona Theresa Italian Restaurant Pinner",
+  title: "Book a Table",
   description: "📅 Book your table now! Lunch £19.95 • Dinner Tue-Sun • FREE parking • Instant confirmation. ☎️ 020 8421 5550",
   keywords: [
     "restaurants near me booking",
@@ -114,7 +114,7 @@ export default async function ReservePage() {
               <Sparkles className="w-4 md:w-5 h-4 md:h-5 mr-2" />
               Reserve Your Experience
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 md:mb-6">
+            <h1 aria-label="Book Your Table at Dona Theresa" className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 md:mb-6">
               Book Your Table at
               <span className="block bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent mt-2">
                 Dona Theresa

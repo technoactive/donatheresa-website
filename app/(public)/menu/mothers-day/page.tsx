@@ -104,7 +104,7 @@ export default function MothersDayMenuPage() {
           </div>
 
           {/* Main title */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-none">
+          <h1 aria-label="Mother's Day Menu" className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-none">
             <span className="block text-slate-800">Mother's</span>
             <span className="block mt-2 bg-gradient-to-r from-pink-500 via-fuchsia-500 to-pink-500 bg-clip-text text-transparent animate-shimmer">
               Day Menu

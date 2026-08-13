@@ -63,8 +63,9 @@ export default function MenuPage() {
             
             {/* Main Title */}
             <div className="space-y-6">
-              <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-tight tracking-tight">
+              <h1 aria-label="Dona Theresa À La Carte Menu" className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black leading-tight tracking-tight">
                 <span className="block text-slate-900">DONA</span>
+                <span className="sr-only"> </span>
                 <span className="block bg-gradient-to-r from-amber-600 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
                   THERESA
                 </span>

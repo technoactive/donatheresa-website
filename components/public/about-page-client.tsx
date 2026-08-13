@@ -123,8 +123,9 @@ export default function AboutPageClient() {
                   </span>
                 </motion.div>
                 
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight tracking-tight">
+                <h1 aria-label="About Dona Theresa" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight tracking-tight">
                   <span className="block text-slate-900">About</span>
+                  <span className="sr-only"> </span>
                   <span className="block bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 bg-clip-text text-transparent">
                     Dona Theresa
                   </span>

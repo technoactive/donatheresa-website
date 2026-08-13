@@ -1,7 +1,3 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-
 interface FAQItem {
   question: string
   answer: string
@@ -51,17 +47,6 @@ const restaurantFAQs: FAQItem[] = [
 ]
 
 export function FAQSchema() {
-  const [currentPath, setCurrentPath] = useState('')
-
-  useEffect(() => {
-    setCurrentPath(window.location.pathname)
-  }, [])
-
-  // Only show FAQ schema on relevant pages
-  const showFAQ = ['/', '/about', '/contact', '/reserve'].includes(currentPath)
-
-  if (!showFAQ) return null
-
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -76,24 +61,11 @@ export function FAQSchema() {
   }
 
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(faqSchema)
-        }}
-      />
-      {/* Also render the FAQ content for SEO */}
-      <div className="hidden" itemScope itemType="https://schema.org/FAQPage">
-        {restaurantFAQs.map((faq, index) => (
-          <div key={index} itemScope itemProp="mainEntity" itemType="https://schema.org/Question">
-            <h3 itemProp="name">{faq.question}</h3>
-            <div itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-              <p itemProp="text">{faq.answer}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(faqSchema)
+      }}
+    />
   )
 }

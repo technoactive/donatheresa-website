@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "À La Carte Menu | Fine Italian Dining | Dona Theresa",
+  title: "À La Carte Menu",
   description: "Explore our signature À La Carte menu featuring authentic Italian dishes. Fresh pasta, premium meats, seafood and more at Dona Theresa Restaurant.",
   keywords: "italian menu, a la carte, fine dining pinner, italian food hatch end, pasta menu, steak menu",
   openGraph: {

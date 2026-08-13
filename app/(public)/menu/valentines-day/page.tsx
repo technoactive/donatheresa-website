@@ -105,7 +105,7 @@ export default function ValentinesDayMenuPage() {
           </div>
 
           {/* Main title */}
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-none">
+          <h1 aria-label="Valentine's Day Menu" className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-6 leading-none">
             <span className="block text-slate-800">Valentine's</span>
             <span className="block mt-2 bg-gradient-to-r from-rose-500 via-pink-500 to-rose-500 bg-clip-text text-transparent animate-shimmer">
               Day Menu

@@ -5,7 +5,7 @@ import MenuPageClient from "@/components/public/menu-page-client"
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: "Menu | Dona Theresa Italian Restaurant | £19.95 Lunch",
+  title: "Italian Menu & £19.95 Lunch",
   description: "🍝 View our Italian menu! Lunch 2 courses £19.95 • Fresh pasta • Premium steaks • 50+ wines. Book ☎️ 020 8421 5550",
   keywords: [
     "restaurants pinner menu",

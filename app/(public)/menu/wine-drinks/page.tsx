@@ -42,8 +42,8 @@ export default function WineDrinksMenuPage() {
           </div>
 
           {/* Main heading */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6">
-            <span className="text-white">Wine &</span>
+          <h1 aria-label="Wine and Drinks" className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6">
+            <span className="text-white">Wine &amp; </span>
             <span className="block mt-1 sm:mt-2 bg-gradient-to-r from-purple-400 via-rose-400 to-purple-400 bg-clip-text text-transparent">
               Drinks
             </span>

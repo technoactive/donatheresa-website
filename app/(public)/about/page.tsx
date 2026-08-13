@@ -5,7 +5,7 @@ import AboutPageClient from "@/components/public/about-page-client"
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: "About | Dona Theresa Italian Restaurant Since 2011",
+  title: "About Us",
   description: "Family-owned Italian restaurant in Pinner & Hatch End since 2011. Award-winning cuisine, lunch specials, steaks. 451 Uxbridge Road.",
   keywords: "best restaurants in pinner, best restaurants in hatch end, italian restaurant pinner, italian restaurant hatch end, restaurants near me, dona theresa, donna teresa, best italian pinner, best italian hatch end, restaurants pinner, restaurants hatch end",
   openGraph: {

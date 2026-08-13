@@ -91,7 +91,9 @@ const customerReviews = [
 ]
 
 export const metadata: Metadata = {
-  title: "Dona Theresa | Best Italian Restaurant Hatch End & Pinner | Book Now",
+  title: {
+    absolute: "Dona Theresa | Italian Restaurant Hatch End & Pinner",
+  },
   description: "⭐ Award-winning Italian in Hatch End! Fresh pasta • Steaks • Lunch £19.95 • FREE parking • 4.8★ TripAdvisor. Book ☎️ 020 8421 5550",
   keywords: "italian restaurant pinner, italian restaurant hatch end, best restaurants pinner, restaurants hatch end, italian near me, dona theresa, donna teresa, lunch pinner, italian food, hatch end restaurants, pinner restaurants",
   alternates: {
@@ -150,8 +152,9 @@ export default function HomePage() {
                   </span>
                 </div>
                 
-                <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none tracking-tight">
+                <h1 aria-label="Dona Theresa" className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-none tracking-tight">
                   <span className="block text-white">DONA</span>
+                  <span className="sr-only"> </span>
                   <span className="block bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-400 bg-clip-text text-transparent">
                     THERESA
                   </span>
