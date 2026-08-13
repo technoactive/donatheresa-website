@@ -1,19 +1,57 @@
 import { MetadataRoute } from 'next'
 
+const privatePaths = [
+  '/dashboard/',
+  '/admin/',
+  '/api/',
+  '/auth/',
+  '/login',
+  '/search',
+  '/cancel-booking',
+  '/reconfirm-booking',
+  '/_next/',
+  '/private/',
+  '/internal/',
+]
+
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = 'https://donatheresa.co.uk'
-  
+
   return {
     rules: [
-      // Block bad bots entirely
+      // Ahrefs and AI assistants — explicit allow so they can cite the restaurant
       {
-        userAgent: 'AhrefsBot',
-        disallow: '/',
+        userAgent: [
+          'AhrefsBot',
+          'AhrefsSiteAudit',
+          'GPTBot',
+          'ChatGPT-User',
+          'OAI-SearchBot',
+          'ClaudeBot',
+          'Claude-Web',
+          'Claude-User',
+          'Claude-SearchBot',
+          'anthropic-ai',
+          'PerplexityBot',
+          'Perplexity-User',
+          'Google-Extended',
+          'Google-CloudVertexBot',
+          'GoogleOther',
+          'Applebot',
+          'Applebot-Extended',
+          'Amazonbot',
+          'meta-externalagent',
+          'FacebookBot',
+          'Bytespider',
+          'CCBot',
+          'YouBot',
+          'cohere-ai',
+          'DuckAssistBot',
+        ],
+        allow: '/',
+        disallow: privatePaths,
       },
-      {
-        userAgent: 'SemrushBot',
-        disallow: '/',
-      },
+      // Aggressive scrapers that do not help search or AI answers
       {
         userAgent: 'MJ12bot',
         disallow: '/',
@@ -30,26 +68,13 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'DataForSeoBot',
         disallow: '/',
       },
-      // Rules for all good bots (including Googlebot, Bingbot, etc.)
       {
         userAgent: '*',
         allow: '/',
-        disallow: [
-          '/dashboard/',
-          '/admin/',
-          '/api/',
-          '/auth/',
-          '/login',
-          '/search',
-          '/cancel-booking',
-          '/reconfirm-booking',
-          '/_next/',
-          '/private/',
-          '/internal/',
-        ],
+        disallow: privatePaths,
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
     host: baseUrl,
   }
-} 
+}
