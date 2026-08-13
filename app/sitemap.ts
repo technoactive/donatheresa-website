@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next'
 
+export const revalidate = 86400
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://donatheresa.co.uk'
   const lastModified = new Date()

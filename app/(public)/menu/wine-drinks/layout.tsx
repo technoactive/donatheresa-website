@@ -21,6 +21,9 @@ export const metadata: Metadata = {
     description: "Extensive wine list with Italian classics, French champagnes, premium cocktails and more",
     type: "website",
   },
+  alternates: {
+    canonical: "https://donatheresa.co.uk/menu/wine-drinks"
+  }
 }
 
 export default function WineDrinksLayout({

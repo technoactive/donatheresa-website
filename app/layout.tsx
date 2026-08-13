@@ -10,7 +10,6 @@ import { GoogleAnalyticsScript } from "@/components/google-analytics-script"
 import { Suspense } from "react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Analytics } from "@vercel/analytics/react"
-import { DynamicSchema } from "@/components/locale/dynamic-schema"
 import { BreadcrumbSchema } from "@/components/locale/breadcrumb-schema"
 import { CookieConsent } from "@/components/cookie-consent"
 
@@ -143,9 +142,8 @@ export const metadata: Metadata = {
     description: 'Italian fine dining in Hatch End, Pinner. 451 Uxbridge Road, HA5 4JR. Authentic cuisine, romantic atmosphere. Open Tue-Sun. Book: 020 8421 5550.',
     images: ['/hero-main.png'],
   },
-  alternates: {
-    canonical: 'https://donatheresa.co.uk',
-  },
+  // Canonical is set per-page. A sitewide canonical here made /search,
+  // /cancel-booking and other pages claim to be the homepage.
   category: 'restaurant',
   classification: 'Fine Dining Restaurant',
   generator: 'Next.js',
@@ -195,8 +193,6 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         
-        {/* Server-rendered Schema.org structured data */}
-        <DynamicSchema />
         <BreadcrumbSchema />
         
         {/* Google Analytics - uses Measurement ID from dashboard settings */}

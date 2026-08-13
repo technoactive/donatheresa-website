@@ -3,7 +3,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, Clock, Phone, Star, Award, Utensils, Wine, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
   title: 'Italian Restaurant Ruislip',
@@ -67,8 +66,6 @@ export default function RestaurantsRuislipPage() {
 
   return (
     <>
-      <DynamicSchema />
-      
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 bg-gradient-to-b from-slate-50 to-white">
         <div className="max-w-7xl mx-auto px-6">

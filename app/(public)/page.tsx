@@ -5,6 +5,7 @@ import { HorizontalGallery } from "@/components/public/horizontal-gallery"
 import { Star, ArrowRight, Play, Sparkles, Zap, Crown, Utensils, Quote } from "lucide-react"
 import { FormattedCurrency } from "@/components/locale/formatted-date"
 import { FAQSchema } from "@/components/locale/faq-schema"
+import { DynamicSchema } from "@/components/locale/dynamic-schema"
 import type { Metadata } from "next"
 
 // Force dynamic rendering to avoid static generation issues
@@ -104,6 +105,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
+      <DynamicSchema />
       <FAQSchema />
       <div className="bg-white text-slate-900 overflow-x-hidden min-h-screen">
       {/* Hero Section */}

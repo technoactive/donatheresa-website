@@ -3,7 +3,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Clock, MapPin, Phone, Utensils, Calendar, TrendingUp, Users, Briefcase } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
   title: 'Lunch in Pinner | £19.95',
@@ -52,8 +51,6 @@ export default function LunchPinnerPage() {
 
   return (
     <>
-      <DynamicSchema />
-      
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 bg-gradient-to-b from-amber-50 via-white to-amber-50">
         <div className="max-w-7xl mx-auto px-6">
