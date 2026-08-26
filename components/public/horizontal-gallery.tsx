@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 
 const galleryImages = [
   { 
-    src: "https://images.unsplash.com/photo-1551218808-94e220e084d2?w=1200&h=800&fit=crop&crop=center", 
+    src: "/gallery-table-setting.jpg", 
     alt: "Elegant table setting with wine glasses",
     title: "Intimate Dining",
     subtitle: "Romantic Experience",
@@ -17,7 +17,7 @@ const galleryImages = [
     location: "Private Dining"
   },
   { 
-    src: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&h=800&fit=crop&crop=center", 
+    src: "/gallery-exterior.jpg", 
     alt: "Restaurant exterior at golden hour",
     title: "Welcoming Atmosphere",
     subtitle: "First Impressions",
@@ -26,7 +26,7 @@ const galleryImages = [
     location: "Main Entrance"
   },
   { 
-    src: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&h=800&fit=crop&crop=center", 
+    src: "/gallery-ambiance.jpg", 
     alt: "Fine dining table setup with candles",
     title: "Romantic Ambiance",
     subtitle: "Special Moments",

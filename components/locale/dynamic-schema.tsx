@@ -8,9 +8,10 @@ export function DynamicSchema() {
     "url": "https://donatheresa.co.uk",
     "logo": "https://donatheresa.co.uk/placeholder-logo.png",
     "image": [
-      "https://donatheresa.co.uk/hero-main.png",
-      "https://donatheresa.co.uk/gallery-interior.png",
-      "https://donatheresa.co.uk/gallery-dining.png"
+      "https://donatheresa.co.uk/og-home.jpg",
+      "https://donatheresa.co.uk/restaurant-image.jpg",
+      "https://donatheresa.co.uk/gallery-interior.jpg",
+      "https://donatheresa.co.uk/gallery-dining.jpg"
     ],
     "telephone": "+442084215550",
     "email": "info@donatheresa.co.uk",

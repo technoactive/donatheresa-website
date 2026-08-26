@@ -1,18 +1,9 @@
 import { MetadataRoute } from 'next'
-
-const privatePaths = [
-  '/dashboard/',
-  '/admin/',
-  '/api/',
-  '/auth/',
-  '/login',
-  '/search',
-  '/cancel-booking',
-  '/reconfirm-booking',
-  '/_next/',
-  '/private/',
-  '/internal/',
-]
+import {
+  DISALLOWED_CRAWLERS,
+  EXPLICITLY_ALLOWED_CRAWLERS,
+  PRIVATE_PATHS,
+} from '@/lib/crawlers'
 
 export default function robots(): MetadataRoute.Robots {
   const baseUrl = 'https://donatheresa.co.uk'
@@ -21,57 +12,19 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       // Ahrefs and AI assistants — explicit allow so they can cite the restaurant
       {
-        userAgent: [
-          'AhrefsBot',
-          'AhrefsSiteAudit',
-          'GPTBot',
-          'ChatGPT-User',
-          'OAI-SearchBot',
-          'ClaudeBot',
-          'Claude-Web',
-          'Claude-User',
-          'Claude-SearchBot',
-          'anthropic-ai',
-          'PerplexityBot',
-          'Perplexity-User',
-          'Google-Extended',
-          'Google-CloudVertexBot',
-          'GoogleOther',
-          'Applebot',
-          'Applebot-Extended',
-          'Amazonbot',
-          'meta-externalagent',
-          'FacebookBot',
-          'Bytespider',
-          'CCBot',
-          'YouBot',
-          'cohere-ai',
-          'DuckAssistBot',
-        ],
+        userAgent: EXPLICITLY_ALLOWED_CRAWLERS,
         allow: '/',
-        disallow: privatePaths,
+        disallow: PRIVATE_PATHS,
       },
       // Aggressive scrapers that do not help search or AI answers
-      {
-        userAgent: 'MJ12bot',
+      ...DISALLOWED_CRAWLERS.map((userAgent) => ({
+        userAgent,
         disallow: '/',
-      },
-      {
-        userAgent: 'DotBot',
-        disallow: '/',
-      },
-      {
-        userAgent: 'BLEXBot',
-        disallow: '/',
-      },
-      {
-        userAgent: 'DataForSeoBot',
-        disallow: '/',
-      },
+      })),
       {
         userAgent: '*',
         allow: '/',
-        disallow: privatePaths,
+        disallow: PRIVATE_PATHS,
       },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,

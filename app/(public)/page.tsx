@@ -17,14 +17,14 @@ const featuredDishes = [
     category: "SIGNATURE",
     description: "Pan fried steak with chicken pâté and brandy sauce",
     price: "32.40",
-    image: "/dish-filleto-rossini.png",
+    image: "/dish-filleto-rossini.jpg",
   },
   {
     name: "Spaghetti Pescatora", 
     category: "FRESH",
     description: "Authentic Italian seafood spaghetti",
     price: "24.95",
-    image: "/dish-spaghetti-pescatora.png",
+    image: "/dish-spaghetti-pescatora.jpg",
   },
   {
     name: "Pera al Forno",
@@ -128,16 +128,20 @@ export default function HomePage() {
               loop
               playsInline
               preload="metadata"
+              poster="/video/hero-poster.jpg"
               className="w-full h-full object-cover"
               style={{ 
                 transform: 'scale(1.05)', 
                 filter: 'brightness(1.0) contrast(1.2) saturate(1.0)'
               }}
-              aria-label="Restaurant ambiance video background"
+              aria-hidden="true"
+              tabIndex={-1}
             >
-              <source src="/video/4253147-uhd_4096_2160_25fps.mp4" type="video/mp4" />
-              <track kind="captions" src="/video/captions.vtt" srcLang="en" label="English captions" />
-              Your browser does not support the video tag.
+              {/* 720p first: browsers that ignore `media` fall back to the
+                  smaller file, which is the safer default for a background
+                  video that sits behind a darkening gradient. */}
+              <source src="/video/hero-ambiance-720p.mp4" type="video/mp4" media="(max-width: 1024px)" />
+              <source src="/video/hero-ambiance-1080p.mp4" type="video/mp4" />
             </video>
           </div>
         </div>
@@ -241,7 +245,7 @@ export default function HomePage() {
             <div className="relative order-2 lg:order-1">
               <div className="relative group">
                 <Image
-                  src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&h=700&fit=crop&crop=center"
+                  src="/gallery-plating.jpg"
                   alt="Modern Italian cuisine artfully plated with precision and creativity"
                   width={600}
                   height={400}

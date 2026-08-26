@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: "Valentine's Day 2026 | Dona Theresa Italian Restaurant",
     description: "Celebrate love with a romantic 3-course Italian dinner. £39.95 per person in a beautiful candlelit atmosphere.",
     type: "website",
-    images: ["https://donatheresa.co.uk/hero-main.png"]
+    images: ["https://donatheresa.co.uk/og-valentines.jpg"]
   },
   alternates: {
     canonical: "https://donatheresa.co.uk/menu/valentines-day"

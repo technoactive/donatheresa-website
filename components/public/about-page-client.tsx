@@ -158,7 +158,7 @@ export default function AboutPageClient() {
                 <div className="absolute -inset-4 md:-inset-8 bg-gradient-to-r from-amber-200/30 to-yellow-200/20 rounded-full blur-3xl group-hover:blur-[4rem] transition-all duration-500" />
                 <div className="relative bg-white rounded-2xl md:rounded-3xl p-4 md:p-8 shadow-2xl border border-slate-200/50">
                   <Image
-                    src="/gallery-interior.png"
+                    src="/gallery-interior.jpg"
                     alt="Dona Theresa Restaurant Interior - Elegant dining atmosphere"
                     width={500}
                     height={600}
@@ -292,7 +292,7 @@ export default function AboutPageClient() {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <Image
-                src="/gallery-dining.png"
+                src="/gallery-dining.jpg"
                 alt="Dona Theresa dining room - Elegant atmosphere for Italian cuisine"
                 width={1200}
                 height={600}
@@ -480,7 +480,7 @@ export default function AboutPageClient() {
             >
               <div className="relative rounded-3xl overflow-hidden shadow-2xl">
                 <Image
-                  src="/gallery-exterior.png"
+                  src="/gallery-exterior.jpg"
                   alt="Dona Theresa restaurant exterior on Uxbridge Road, Hatch End"
                   width={600}
                   height={400}

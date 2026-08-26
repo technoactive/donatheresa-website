@@ -119,18 +119,18 @@ export const metadata: Metadata = {
     description: 'Award-winning Italian restaurant in Hatch End & Pinner. Lunch from £19.95, steaks, free parking. 451 Uxbridge Road. Book: 020 8421 5550',
     images: [
       {
-        url: '/hero-main.png',
+        url: '/og-home.jpg',
         width: 1200,
         height: 630,
         alt: 'Dona Theresa Restaurant - Fine Italian Dining in Pinner',
-        type: 'image/png',
+        type: 'image/jpeg',
       },
       {
-        url: '/gallery-interior.png',
-        width: 800,
-        height: 600,
+        url: '/gallery-interior.jpg',
+        width: 1000,
+        height: 1200,
         alt: 'Elegant interior of Dona Theresa Restaurant',
-        type: 'image/png',
+        type: 'image/jpeg',
       }
     ],
   },
@@ -140,7 +140,7 @@ export const metadata: Metadata = {
     creator: '@dona_theresa',
     title: 'Dona Theresa | Italian Restaurant Hatch End & Pinner',
     description: 'Italian fine dining in Hatch End, Pinner. 451 Uxbridge Road, HA5 4JR. Authentic cuisine, romantic atmosphere. Open Tue-Sun. Book: 020 8421 5550.',
-    images: ['/hero-main.png'],
+    images: ['/og-home.jpg'],
   },
   // Canonical is set per-page. A sitewide canonical here made /search,
   // /cancel-booking and other pages claim to be the homepage.

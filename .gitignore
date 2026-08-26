@@ -69,3 +69,7 @@ logs
 *.mkv
 *.webm
 *.flv
+
+# Python
+__pycache__/
+*.pyc

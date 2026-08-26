@@ -1,5 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { isAllowedCrawler, isBlockedAgent } from '@/lib/crawlers'
 
 // ============================================
 // SECURITY CONFIGURATION - Industry Standards
@@ -35,31 +36,6 @@ const BLOCKED_EXTENSIONS = [
   '.sh', '.bash', '.exe', '.dll', '.bat', '.cmd',
   '.sql', '.bak', '.backup', '.old', '.orig',
   '.log', '.ini', '.conf', '.cfg',
-]
-
-// Suspicious user agents (vulnerability scanners & bad bots)
-const BLOCKED_USER_AGENTS = [
-  // Vulnerability scanners
-  'sqlmap', 'nikto', 'nessus', 'openvas', 'nmap', 'masscan',
-  'zgrab', 'censys', 'shodan', 'nuclei', 'wpscan', 'dirbuster',
-  'gobuster', 'ffuf', 'burp', 'zap', 'acunetix', 'netsparker',
-  'qualys', 'rapid7', 'tenable', 'w3af', 'skipfish', 'arachni',
-  // Bad bots
-  'semrushbot', 'ahrefsbot', 'dotbot', 'rogerbot', 'seznambot',
-  'mj12bot', 'blexbot', 'dataforseo', 'serpstatbot',
-  // Scrapers
-  'scrapy', 'wget', 'curl/', 'httpx', 'httpclient',
-  'python-requests', 'python-urllib', 'go-http-client', 'java/',
-  // Headless browsers (potential bots)
-  'phantomjs', 'headlesschrome',
-]
-
-// Allowed good bots (don't block these)
-const ALLOWED_BOTS = [
-  'googlebot', 'bingbot', 'yandexbot', 'duckduckbot',
-  'slurp', 'baiduspider', 'facebookexternalhit', 'twitterbot',
-  'linkedinbot', 'whatsapp', 'telegrambot', 'applebot',
-  'pinterest', 'discordbot',
 ]
 
 // Content Security Policy
@@ -101,11 +77,12 @@ export async function middleware(request: NextRequest) {
     return new NextResponse(null, { status: 404 })
   }
 
-  // 3. Check if it's an allowed good bot first
-  const isGoodBot = ALLOWED_BOTS.some(bot => userAgent.includes(bot))
+  // 3. Search engines, AI assistants and Ahrefs are always served, even if
+  //    their user agent happens to match a block-list substring.
+  const isGoodBot = isAllowedCrawler(userAgent)
 
-  // 4. Block known vulnerability scanners (unless it's a good bot spoofing)
-  if (!isGoodBot && BLOCKED_USER_AGENTS.some(agent => userAgent.includes(agent))) {
+  // 4. Block vulnerability scanners and the crawlers robots.txt disallows
+  if (!isGoodBot && isBlockedAgent(userAgent)) {
     console.warn(`🚫 Blocked scanner/bad bot: ${userAgent.substring(0, 50)} from ${ip}`)
     return new NextResponse(null, { status: 403 })
   }
@@ -238,6 +215,6 @@ export const config = {
      * - api (API routes)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|mp4|webm|vtt|txt|xml)$).*)',
   ],
 } 
