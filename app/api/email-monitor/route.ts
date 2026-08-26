@@ -5,9 +5,13 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { RobustEmailUtils } from '@/lib/email/robust-email-service';
+import { requireDashboardUserOrCron } from '@/lib/api-auth';
 
 export async function GET(request: NextRequest) {
   try {
+    const denied = await requireDashboardUserOrCron(request);
+    if (denied) return denied;
+
     const url = new URL(request.url);
     const action = url.searchParams.get('action');
     
@@ -178,6 +182,9 @@ async function autoProcessEmails() {
 }
 
 export async function POST(request: NextRequest) {
+  const denied = await requireDashboardUserOrCron(request);
+  if (denied) return denied;
+
   // Force process emails immediately
   return await autoProcessEmails();
 } 

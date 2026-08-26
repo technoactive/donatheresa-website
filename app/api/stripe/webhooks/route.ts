@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     // Dynamically import Stripe
     const Stripe = (await import('stripe')).default
     const stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2024-12-18.acacia'
+      apiVersion: '2025-02-24.acacia'
     })
 
     let event: any
@@ -43,10 +43,17 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         )
       }
+    } else if (process.env.NODE_ENV === 'production') {
+      // Without the secret we cannot tell a real Stripe event from a forged
+      // one, and these events move deposits to captured/refunded. Refuse
+      // rather than trust the body.
+      console.error('❌ STRIPE_WEBHOOK_SECRET is not set; rejecting webhook')
+      return NextResponse.json(
+        { error: 'Webhook signature verification is not configured' },
+        { status: 503 }
+      )
     } else {
-      // DEVELOPMENT ONLY - should never happen in production
-      console.warn('⚠️ SECURITY WARNING: Webhook secret not configured - signature not verified')
-      console.warn('⚠️ Set STRIPE_WEBHOOK_SECRET in production!')
+      console.warn('⚠️ STRIPE_WEBHOOK_SECRET not set - skipping signature check (development only)')
       try {
         event = JSON.parse(body)
       } catch (parseError) {

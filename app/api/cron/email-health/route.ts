@@ -5,9 +5,13 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { requireCronSecret } from '@/lib/api-auth';
 
 export async function GET(request: NextRequest) {
   try {
+    const denied = requireCronSecret(request);
+    if (denied) return denied;
+
     console.log('🔄 Starting scheduled email health check...');
     
     const { createClient } = await import('@/lib/supabase/server');

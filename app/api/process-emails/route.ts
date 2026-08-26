@@ -5,9 +5,13 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { RobustEmailUtils } from '@/lib/email/robust-email-service';
+import { requireDashboardUserOrCron } from '@/lib/api-auth';
 
 export async function POST(request: NextRequest) {
   try {
+    const denied = await requireDashboardUserOrCron(request);
+    if (denied) return denied;
+
     console.log('🚀 Starting email queue processing...');
     
     // Process all stuck emails
@@ -40,6 +44,9 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
+    const denied = await requireDashboardUserOrCron(request);
+    if (denied) return denied;
+
     // Get email queue status for monitoring
     const { createClient } = await import('@/lib/supabase/server');
     const supabase = await createClient();

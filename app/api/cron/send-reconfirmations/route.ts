@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
+import { requireCronSecret } from "@/lib/api-auth"
 
 /**
  * Cron job to send reconfirmation emails to upcoming large party bookings
@@ -11,16 +12,8 @@ import { createClient } from "@/lib/supabase/server"
  */
 export async function GET(request: NextRequest) {
   try {
-    // Verify cron secret for security (optional but recommended)
-    const authHeader = request.headers.get("authorization")
-    const cronSecret = process.env.CRON_SECRET
-    
-    if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-      // Allow requests without auth in development or if no secret is set
-      if (process.env.NODE_ENV === 'production' && cronSecret) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-      }
-    }
+    const denied = requireCronSecret(request)
+    if (denied) return denied
 
     const supabase = await createClient()
 

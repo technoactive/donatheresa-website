@@ -185,7 +185,7 @@ export async function POST(request: NextRequest) {
       
       if (stripeSecretKey) {
         const Stripe = (await import('stripe')).default
-        const stripe = new Stripe(stripeSecretKey, { apiVersion: '2024-12-18.acacia' })
+        const stripe = new Stripe(stripeSecretKey, { apiVersion: '2025-02-24.acacia' })
         
         try {
           if (!isLateCancellation || lateCancelPercent === 0) {

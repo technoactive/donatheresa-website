@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { requireDashboardUser } from '@/lib/api-auth'
 
 export async function GET(request: NextRequest) {
   try {
+    // topCustomers below contains customer names and email addresses.
+    const denied = await requireDashboardUser()
+    if (denied) return denied
+
     const supabase = await createClient()
     const searchParams = request.nextUrl.searchParams
     const days = parseInt(searchParams.get('days') || '30')

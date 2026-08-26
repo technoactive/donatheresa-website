@@ -17,12 +17,12 @@ const STRIPE_MAXIMUM_AMOUNT = 50000
 
 export async function POST(request: NextRequest) {
   try {
-    const { bookingId, amount, customerEmail, customerName, partySize, bookingDate, bookingTime } = await request.json()
+    const { bookingId, customerEmail, customerName, partySize, bookingDate, bookingTime } = await request.json()
 
     // Validate required fields
-    if (!bookingId || !amount || !partySize) {
+    if (!bookingId || !partySize) {
       return NextResponse.json(
-        { error: 'Missing required fields: bookingId, amount, and partySize are required' },
+        { error: 'Missing required fields: bookingId and partySize are required' },
         { status: 400 }
       )
     }
@@ -31,28 +31,6 @@ export async function POST(request: NextRequest) {
     if (!isValidUUID(bookingId)) {
       return NextResponse.json(
         { error: 'Invalid booking ID format' },
-        { status: 400 }
-      )
-    }
-
-    // Validate amount
-    if (typeof amount !== 'number' || !Number.isInteger(amount)) {
-      return NextResponse.json(
-        { error: 'Amount must be a whole number (in pence)' },
-        { status: 400 }
-      )
-    }
-
-    if (amount < STRIPE_MINIMUM_AMOUNT) {
-      return NextResponse.json(
-        { error: `Minimum deposit amount is £${(STRIPE_MINIMUM_AMOUNT / 100).toFixed(2)}` },
-        { status: 400 }
-      )
-    }
-
-    if (amount > STRIPE_MAXIMUM_AMOUNT) {
-      return NextResponse.json(
-        { error: `Maximum deposit amount is £${(STRIPE_MAXIMUM_AMOUNT / 100).toFixed(2)}` },
         { status: 400 }
       )
     }
@@ -76,6 +54,48 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient()
 
+    // The deposit is derived from booking_config, never from the request body.
+    // Taking it from the caller would let a guest pick their own deposit.
+    const { data: depositConfig, error: depositConfigError } = await supabase
+      .from('booking_config')
+      .select('deposit_enabled, deposit_min_party_size, deposit_amount_per_person')
+      .eq('id', 1)
+      .single()
+
+    if (depositConfigError || !depositConfig) {
+      return NextResponse.json(
+        { error: 'Deposit settings are unavailable. Please contact the restaurant directly.' },
+        { status: 503 }
+      )
+    }
+
+    if (!depositConfig.deposit_enabled) {
+      return NextResponse.json(
+        { error: 'Deposits are not currently being collected' },
+        { status: 400 }
+      )
+    }
+
+    const minPartySize = depositConfig.deposit_min_party_size ?? 6
+    if (partySize < minPartySize) {
+      return NextResponse.json(
+        { error: `Deposits only apply to parties of ${minPartySize} or more` },
+        { status: 400 }
+      )
+    }
+
+    const amount = (depositConfig.deposit_amount_per_person ?? 0) * partySize
+
+    if (amount < STRIPE_MINIMUM_AMOUNT || amount > STRIPE_MAXIMUM_AMOUNT) {
+      console.error(
+        `Deposit settings resolve to ${amount}p for ${partySize} guests, outside the accepted range`
+      )
+      return NextResponse.json(
+        { error: 'Deposit settings are misconfigured. Please contact the restaurant directly.' },
+        { status: 503 }
+      )
+    }
+
     // Verify the booking exists and doesn't already have a payment intent
     const { data: existingBooking, error: bookingError } = await supabase
       .from('bookings')
@@ -95,7 +115,7 @@ export async function POST(request: NextRequest) {
       // If already authorized or pending, return existing client secret
       if (existingBooking.deposit_status === 'authorized' || existingBooking.deposit_status === 'pending') {
         const Stripe = (await import('stripe')).default
-        const stripe = new Stripe(stripeSecretKey, { apiVersion: '2024-12-18.acacia' })
+        const stripe = new Stripe(stripeSecretKey, { apiVersion: '2025-02-24.acacia' })
         
         try {
           const existingPI = await stripe.paymentIntents.retrieve(existingBooking.stripe_payment_intent_id)
@@ -116,7 +136,7 @@ export async function POST(request: NextRequest) {
     // Dynamically import Stripe (only if keys are available)
     const Stripe = (await import('stripe')).default
     const stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2024-12-18.acacia'
+      apiVersion: '2025-02-24.acacia'
     })
 
     // Generate idempotency key based on booking ID to prevent duplicates

@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
     // Dynamically import Stripe
     const Stripe = (await import('stripe')).default
     const stripe = new Stripe(stripeSecretKey, {
-      apiVersion: '2024-12-18.acacia'
+      apiVersion: '2025-02-24.acacia'
     })
 
     // Generate idempotency key
