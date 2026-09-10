@@ -1,29 +1,24 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
-import { MapPin, Clock, Phone, Star, Award, Utensils, Calendar, Wine } from 'lucide-react'
+import { MapPin, Clock, Phone, Star, Car, Train } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
   title: 'Pinner Restaurants',
-  description: '⭐ Top-rated Pinner restaurant! Authentic Italian • Lunch £19.95 • FREE parking • 4.8★ reviews. Book now ☎️ 020 8421 5550',
+  description: 'Looking for restaurants in Pinner? Dona Theresa is the family-run Italian a mile up Uxbridge Road in Hatch End, with free parking and a £19.95 two-course lunch. 020 8421 5550.',
   keywords: [
     'pinner restaurants',
     'restaurants in pinner',
     'restaurants pinner',
-    'best restaurants pinner',
-    'best restaurants in pinner',
     'italian restaurant pinner',
     'italian restaurants pinner',
     'restaurant in pinner',
-    'restaurant pinner',
-    'pinner italian restaurants',
-    'places to eat in pinner',
-    'pinner high street restaurants'
+    'places to eat in pinner'
   ],
   openGraph: {
     title: 'Pinner Restaurants | Dona Theresa Italian Restaurant',
-    description: 'Discover the best Italian restaurant in Pinner. Award-winning cuisine, convenient location, free parking. Your perfect dining destination.',
+    description: 'The family-run Italian between Pinner and Hatch End. Proper trattoria menu, free parking, two courses for £19.95 at lunch and early evening.',
     url: 'https://donatheresa.co.uk/restaurants-pinner',
     siteName: 'Dona Theresa Restaurant',
     images: [
@@ -31,7 +26,7 @@ export const metadata: Metadata = {
         url: 'https://donatheresa.co.uk/og-pinner.jpg',
         width: 1200,
         height: 630,
-        alt: 'Dona Theresa - Best Restaurant in Pinner'
+        alt: 'Dona Theresa Italian restaurant near Pinner'
       }
     ],
     locale: 'en_GB',
@@ -42,347 +37,281 @@ export const metadata: Metadata = {
   }
 }
 
-export default function RestaurantsPinnerPage() {
-  const features = [
-    {
-      icon: Award,
-      title: "Award-Winning",
-      description: "Voted best Italian among all Pinner restaurants by locals"
-    },
-    {
-      icon: Utensils,
-      title: "Authentic Cuisine",
-      description: "Traditional Italian recipes with modern presentation"
-    },
-    {
-      icon: Wine,
-      title: "Extensive Wine List",
-      description: "Carefully curated selection of Italian wines"
-    },
-    {
-      icon: Calendar,
-      title: "Open 6 Days",
-      description: "Tuesday to Sunday, lunch and dinner service"
-    }
-  ]
+const reviews = [
+  {
+    text: 'From the moment we stepped into Dona Theresa, we knew we had chosen the perfect place to celebrate our anniversary. This isn\'t just a restaurant; it\'s a slice of Italy right here in Pinner.',
+    name: 'theguruyt',
+    source: 'Local Guide · Google Review'
+  },
+  {
+    text: 'The best place ever for Italian food. We love this place so much that we like to celebrate our special occasions with them. All pastas are good and dessert too!',
+    name: 'Sonali Kosrabe',
+    source: 'Local Guide · Google Review'
+  },
+  {
+    text: 'Authentic romantic cosy place, fantastic food fresh and cooked as you like, service was really good and welcoming. Highly recommend this place.',
+    name: 'Dilyana Milenkova',
+    source: 'Local Guide · Google Review'
+  }
+]
 
+const faqs = [
+  {
+    q: 'Is Dona Theresa actually in Pinner?',
+    a: 'Our postal address is Pinner, HA5 4JR, but we are on Uxbridge Road in Hatch End, about a mile north-east of Pinner village. Ten minutes by car from the High Street, twenty on foot, or a few stops on the H12 bus.'
+  },
+  {
+    q: 'Which Pinner restaurants have parking?',
+    a: 'Very few in the village itself — the car parks fill by seven. We have free parking for guests at the restaurant, which is the main reason a lot of Pinner regulars come up the road to us on a Friday or Saturday.'
+  },
+  {
+    q: 'What is the £19.95 menu?',
+    a: 'Two courses, starter and main, from a shorter version of our menu. Served at lunch, 12 till 3, and as an early bird at dinner with orders in by 6.45pm. On Fridays and Saturdays early-bird tables finish by 8pm. Not available for parties over twelve.'
+  },
+  {
+    q: 'Can I book online?',
+    a: 'Yes, at donatheresa.co.uk/reserve, or call 020 8421 5550. Book ahead for Friday and Saturday evenings and Sunday lunch. Midweek you can usually walk in.'
+  }
+]
+
+export default function RestaurantsPinnerPage() {
   return (
     <>
-      {/* Hero Section */}
+      <DynamicSchema />
+
+      {/* Hero */}
       <section className="relative pt-32 pb-20 bg-gradient-to-b from-slate-50 to-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-4xl mx-auto space-y-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-              <span className="text-slate-900">Best </span>
-              <span className="text-amber-600">Pinner Restaurants</span>
+              <span className="text-slate-900">Restaurants in </span>
+              <span className="text-amber-600">Pinner</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-700 max-w-3xl mx-auto">
-              Experience why Dona Theresa is the most beloved Italian restaurant among all 
-              restaurants in Pinner. Located in nearby Hatch End with free parking.
+              If you live in Pinner and want a proper Italian dinner without the parking headache, come a mile up
+              Uxbridge Road to Hatch End. Dona Theresa has been here since 2011 — family-run, old-school menu,
+              free parking at the door.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button asChild size="lg" className="text-lg bg-amber-600 hover:bg-amber-700">
-                <Link href="/reserve">Reserve Your Table</Link>
+                <Link href="/reserve">Book a table</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="text-lg">
-                <Link href="/menu">Explore Our Menu</Link>
+                <Link href="/menu">See the menu</Link>
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
+      {/* Facts */}
       <section className="py-16 bg-white border-y">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-3xl md:text-4xl font-bold text-amber-600 mb-2">4.8★</div>
-              <p className="text-slate-600">Average Rating</p>
+              <div className="text-3xl md:text-4xl font-bold text-amber-600 mb-2">2011</div>
+              <p className="text-slate-600">Open since</p>
             </div>
             <div>
-              <div className="text-3xl md:text-4xl font-bold text-amber-600 mb-2">13+</div>
-              <p className="text-slate-600">Years in Pinner</p>
+              <div className="text-3xl md:text-4xl font-bold text-amber-600 mb-2">1 mile</div>
+              <p className="text-slate-600">From Pinner High Street</p>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold text-amber-600 mb-2">£19.95</div>
-              <p className="text-slate-600">Lunch Special</p>
+              <p className="text-slate-600">Two courses, lunch &amp; early bird</p>
             </div>
             <div>
-              <div className="text-3xl md:text-4xl font-bold text-amber-600 mb-2">6</div>
-              <p className="text-slate-600">Days Open</p>
+              <div className="text-3xl md:text-4xl font-bold text-amber-600 mb-2">Free</div>
+              <p className="text-slate-600">Parking for guests</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why Choose Us */}
+      {/* Guide */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold mb-8">
+              Eating out in Pinner, from someone who lives here
+            </h2>
+
+            <div className="prose prose-lg max-w-none">
+              <p>
+                Pinner has more restaurants than a village its size deserves, and most of them are good. The
+                High Street and Bridge Street have Indian, Turkish, Japanese, a couple of Italians, the pubs
+                and the cafés round the Memorial Park. What Pinner does not have is anywhere to park after
+                about seven o&apos;clock on a Friday.
+              </p>
+
+              <h3>Where we come in</h3>
+              <p>
+                We are a mile up the road in Hatch End, at 451 Uxbridge Road, with our own free parking. The
+                menu is the kind of Italian you may remember from before everything became small plates: prawn
+                cocktail and minestrone, grilled sardines, Pera al Forno with fried camembert; then saltimbocca
+                di vitello, calf&apos;s liver with sage, spaghetti alla pescatora, an 11oz Filleto Rossini, duck in
+                honey and pepper sauce, grilled Dover sole. Pasta is cooked to order. Portions are not small.
+              </p>
+              <p>
+                No pizza — we have never made it and we are not going to start. Plenty of vegetarian dishes,
+                marked (V) on the menu: parmigiana di melanzane, ravioli di funghi porcini, penne giardiniera,
+                crespoline alla fiorentina.
+              </p>
+
+              <h3>The wine</h3>
+              <p>
+                Around thirty bottles, mostly Italian: a Barolo and a Brunello for occasions, Primitivo and
+                Montepulciano for Tuesdays, a Sancerre and a Gavi for fish, a house Prosecco and a couple of
+                Champagnes. Nothing on the list is there because a rep talked us into it.
+              </p>
+
+              <h3>When it suits</h3>
+              <ul>
+                <li><strong>Lunch during the week:</strong> the £19.95 menu, quiet room, walk in.</li>
+                <li><strong>Early dinner:</strong> same £19.95 menu with orders in by 6.45pm — good with children.</li>
+                <li><strong>Friday and Saturday night:</strong> full menu, book ahead.</li>
+                <li><strong>Sunday lunch:</strong> big family tables. Come after two if you want a slow one.</li>
+                <li><strong>Groups:</strong> up to twelve on the set menu, more on à la carte with a bit of notice.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Reviews */}
+      <section className="py-20 bg-gradient-to-b from-amber-50 to-white">
+        <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-            Why We Stand Out Among Pinner Restaurants
+            What people from Pinner say
           </h2>
-          <p className="text-xl text-slate-600 text-center mb-12 max-w-3xl mx-auto">
-            While Pinner offers various dining options, Dona Theresa brings authentic 
-            Italian excellence to Northwest London
+          <p className="text-center text-slate-600 mb-12">
+            Taken from our Google reviews. There are a lot more on{' '}
+            <a
+              href="https://www.tripadvisor.co.uk/Restaurant_Review-g7380842-d3226259-Reviews-Dona_Theresa-Pinner_Greater_London_England.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-amber-600 hover:underline"
+            >
+              TripAdvisor
+            </a>
+            , the good and the not-so-good.
           </p>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, idx) => (
-              <div key={idx} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-                <feature.icon className="w-12 h-12 text-amber-600 mb-4" />
-                <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-                <p className="text-slate-600">{feature.description}</p>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {reviews.map((r) => (
+              <div key={r.name} className="bg-white rounded-xl p-8 shadow-lg">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-amber-500 fill-current" />
+                  ))}
+                </div>
+                <p className="text-slate-700 mb-4">&ldquo;{r.text}&rdquo;</p>
+                <p className="font-semibold">{r.name}</p>
+                <p className="text-sm text-slate-600">{r.source}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Menu Highlights */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            What Makes Our Menu Special
-          </h2>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <div className="text-center">
-              <div className="bg-amber-50 rounded-2xl p-8 mb-4">
-                <span className="text-4xl">🍝</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Fresh Pasta Daily</h3>
-              <p className="text-slate-600">
-                Handmade pasta prepared fresh every morning by our Italian chefs
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-amber-50 rounded-2xl p-8 mb-4">
-                <span className="text-4xl">🥩</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Premium Steaks</h3>
-              <p className="text-slate-600">
-                28-day aged beef cooked to perfection on our charcoal grill
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-amber-50 rounded-2xl p-8 mb-4">
-                <span className="text-4xl">🍷</span>
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Italian Wine Selection</h3>
-              <p className="text-slate-600">
-                Over 50 wines from Italy's finest vineyards
-              </p>
-            </div>
-          </div>
-          
-          <div className="text-center mt-12">
-            <Button asChild size="lg" variant="outline">
-              <Link href="/menu">View Full Menu</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Reviews Section */}
-      <section className="py-20 bg-gradient-to-b from-amber-50 to-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            What Pinner Locals Say About Us
-          </h2>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl p-8 shadow-lg">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-amber-500 fill-current" />
-                ))}
-              </div>
-              <p className="text-slate-700 mb-4">
-                "From the moment we stepped into Dona Theresa, we knew we had chosen the perfect place 
-                to celebrate our anniversary. This isn't just a restaurant; it's a slice of Italy right here in Pinner."
-              </p>
-              <p className="font-semibold">theguruyt</p>
-              <p className="text-sm text-slate-600">Local Guide · Google Review</p>
-            </div>
-            
-            <div className="bg-white rounded-xl p-8 shadow-lg">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-amber-500 fill-current" />
-                ))}
-              </div>
-              <p className="text-slate-700 mb-4">
-                "The best place ever for Italian food. We love this place so much that we like to 
-                celebrate our special occasions with them. All pastas are good and dessert too!"
-              </p>
-              <p className="font-semibold">Sonali Kosrabe</p>
-              <p className="text-sm text-slate-600">Local Guide · Google Review</p>
-            </div>
-            
-            <div className="bg-white rounded-xl p-8 shadow-lg">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-amber-500 fill-current" />
-                ))}
-              </div>
-              <p className="text-slate-700 mb-4">
-                "Authentic romantic cosy place, fantastic food fresh and cooked as you like, 
-                service was really good and welcoming. Highly recommend this place."
-              </p>
-              <p className="font-semibold">Dilyana Milenkova</p>
-              <p className="text-sm text-slate-600">Local Guide · Google Review</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Local Area Info */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8">
-              Your Complete Guide to Dining in Pinner
-            </h2>
-            
-            <div className="prose prose-lg max-w-none">
-              <h3>Finding the Best Restaurants in Pinner</h3>
-              <p>
-                Pinner offers a diverse selection of restaurants, from traditional British pubs 
-                to international cuisine. Located on Uxbridge Road, just off the high street, 
-                Dona Theresa has become the destination of choice for those seeking authentic 
-                Italian dining in a warm, sophisticated atmosphere.
-              </p>
-              
-              <h3>What Sets Dona Theresa Apart</h3>
-              <p>
-                While many Pinner restaurants offer Italian dishes, we specialise exclusively in 
-                authentic Italian cuisine. Our head chef, trained in Rome, brings traditional 
-                techniques and family recipes that have been perfected over generations. From 
-                our signature homemade pasta to our wood-fired pizzas, every dish tells a story 
-                of Italian culinary heritage.
-              </p>
-              
-              <h3>Perfect Location in Pinner</h3>
-              <p>
-                Situated at 451 Uxbridge Road, we're conveniently located between Pinner and 
-                Hatch End, making us easily accessible from anywhere in Northwest London. Unlike 
-                many restaurants in Pinner town centre, we offer free on-site parking - a 
-                significant advantage for our guests.
-              </p>
-              
-              <h3>Ideal for Every Dining Occasion</h3>
-              <ul>
-                <li><strong>Business Lunches:</strong> Our £19.95 lunch special is popular with local professionals</li>
-                <li><strong>Date Nights:</strong> Intimate atmosphere with candlelit tables</li>
-                <li><strong>Family Celebrations:</strong> Spacious dining area accommodating large groups</li>
-                <li><strong>Special Events:</strong> Private dining room available for up to 40 guests</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Special Offers */}
+      {/* Set menu + a la carte */}
       <section className="py-20 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             <div className="bg-white rounded-2xl p-8 shadow-lg">
               <h3 className="text-2xl font-bold mb-4 text-amber-600">
-                Lunch Special £19.95
+                Two courses, £19.95
               </h3>
               <p className="text-slate-700 mb-6">
-                Best value lunch among all Pinner restaurants. Choose from our specially 
-                curated menu featuring classic Italian dishes.
+                Starter and main from a shorter menu: minestrone, calamari, prosciutto e melone or whitebait to
+                start; then sea bass, salmon in prosecco sauce, veal Milanese, calf&apos;s liver, lasagne or penne
+                arrabiata. Coffee and puddings are extra.
               </p>
               <ul className="space-y-2 text-slate-700 mb-6">
-                <li>• Available Tuesday - Sunday</li>
-                <li>• 12:00 PM - 3:00 PM</li>
-                <li>• Includes starter & main course</li>
+                <li>• Tuesday to Sunday</li>
+                <li>• Lunch 12:00–15:00, early bird with orders by 18:45</li>
+                <li>• Friday &amp; Saturday early-bird tables finish by 20:00</li>
+                <li>• Not for parties over twelve · 10% service</li>
               </ul>
               <Button asChild className="w-full">
-                <Link href="/menu/lunchtime-earlybird">View Lunch Menu</Link>
+                <Link href="/menu/lunchtime-earlybird">See the set menu</Link>
               </Button>
             </div>
-            
+
             <div className="bg-white rounded-2xl p-8 shadow-lg">
               <h3 className="text-2xl font-bold mb-4 text-amber-600">
-                À La Carte Dining
+                À la carte
               </h3>
               <p className="text-slate-700 mb-6">
-                Experience authentic Italian cuisine at one of Pinner's finest restaurants. 
-                Our à la carte menu features traditional recipes with fresh, quality ingredients.
+                The full menu, every evening. Starters from £5.95, pasta from £10.90, mains from about £17,
+                fillet steaks around £29 and the Dover sole at £33. Specials depend on what the fish supplier
+                turns up with.
               </p>
               <ul className="space-y-2 text-slate-700 mb-6">
-                <li>• Authentic Italian dishes</li>
-                <li>• Fresh pasta made daily</li>
-                <li>• Extensive wine selection</li>
+                <li>• Pasta cooked to order</li>
+                <li>• Veal, liver, duck, lamb and 11oz fillet steaks</li>
+                <li>• Vegetarian dishes marked (V)</li>
               </ul>
               <Button asChild className="w-full">
-                <Link href="/menu/a-la-carte">View Full Menu</Link>
+                <Link href="/menu/a-la-carte">See the full menu</Link>
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Contact & Location */}
+      {/* Getting here */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Visit Us in Pinner
+            Getting here from Pinner
           </h2>
-          
+
           <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
             <div>
-              <h3 className="text-2xl font-semibold mb-6">Location & Parking</h3>
+              <h3 className="text-2xl font-semibold mb-6">Address and hours</h3>
               <div className="space-y-4">
                 <p className="flex items-start gap-3">
-                  <MapPin className="w-6 h-6 text-amber-600 mt-1" />
+                  <MapPin className="w-6 h-6 text-amber-600 mt-1 flex-shrink-0" />
                   <span className="text-slate-700">
                     451 Uxbridge Road, Pinner HA5 4JR<br />
-                    Between Pinner and Hatch End stations
+                    On the Hatch End stretch of Uxbridge Road, near the station
                   </span>
                 </p>
                 <p className="flex items-start gap-3">
-                  <Clock className="w-6 h-6 text-amber-600 mt-1" />
+                  <Clock className="w-6 h-6 text-amber-600 mt-1 flex-shrink-0" />
                   <span className="text-slate-700">
-                    Tuesday - Sunday<br />
-                    Lunch: 12:00 - 15:00<br />
-                    Dinner: 18:00 - 23:00<br />
+                    Tuesday to Sunday<br />
+                    Lunch 12:00–15:00 · Dinner 18:00–23:00<br />
                     Closed Mondays
                   </span>
                 </p>
                 <p className="flex items-start gap-3">
-                  <Phone className="w-6 h-6 text-amber-600 mt-1" />
-                  <span className="text-slate-700">
-                    <a href="tel:02084215550" className="font-semibold hover:text-amber-600">
-                      020 8421 5550
-                    </a>
-                  </span>
+                  <Phone className="w-6 h-6 text-amber-600 mt-1 flex-shrink-0" />
+                  <a href="tel:02084215550" className="font-semibold text-slate-700 hover:text-amber-600">
+                    020 8421 5550
+                  </a>
                 </p>
               </div>
             </div>
-            
+
             <div>
-              <h3 className="text-2xl font-semibold mb-6">Getting Here</h3>
+              <h3 className="text-2xl font-semibold mb-6">How to get here</h3>
               <div className="space-y-4 text-slate-700">
                 <div>
-                  <p className="font-semibold mb-2">By Underground:</p>
+                  <p className="font-semibold mb-2 flex items-center gap-2"><Car className="w-5 h-5 text-amber-600" /> Driving</p>
                   <ul className="space-y-1 ml-4">
-                    <li>• Pinner Station - 10 minute walk</li>
-                    <li>• Hatch End Station - 5 minute walk</li>
-                    <li>• Metropolitan Line direct from Central London</li>
+                    <li>• About 10 minutes from Pinner High Street along Uxbridge Road</li>
+                    <li>• Free parking for guests on site</li>
+                    <li>• Satnav: HA5 4JR</li>
                   </ul>
                 </div>
                 <div>
-                  <p className="font-semibold mb-2">By Car:</p>
+                  <p className="font-semibold mb-2 flex items-center gap-2"><Train className="w-5 h-5 text-amber-600" /> Public transport</p>
                   <ul className="space-y-1 ml-4">
-                    <li>• FREE customer parking on-site</li>
-                    <li>• Easy access from A40 & M25</li>
-                    <li>• Satnav: HA5 4JR</li>
+                    <li>• H12 bus along Uxbridge Road from Pinner — a few stops</li>
+                    <li>• Hatch End station (Overground, Euston–Watford line) is five minutes&apos; walk from us</li>
+                    <li>• Pinner Metropolitan line station is about a 20-minute walk</li>
                   </ul>
                 </div>
               </div>
@@ -391,76 +320,35 @@ export default function RestaurantsPinnerPage() {
         </div>
       </section>
 
-      {/* FAQ Section for Rich Snippets */}
+      {/* FAQ */}
       <section className="py-16 bg-slate-50">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-12">
-            Frequently Asked Questions About Pinner Restaurants
+            Questions people from Pinner ask us
           </h2>
-          
           <div className="space-y-6">
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">What is the best Italian restaurant in Pinner?</h3>
-              <p className="text-slate-700">
-                Dona Theresa is rated the best Italian restaurant in Pinner, with over 13 years serving 
-                authentic Italian cuisine. We have a 4.8-star rating and are known for fresh pasta made daily, 
-                premium steaks, and our popular £19.95 lunch special. Located at 451 Uxbridge Road with free parking.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Where can I find restaurants in Pinner with parking?</h3>
-              <p className="text-slate-700">
-                Dona Theresa offers FREE customer parking on-site, making it one of the most convenient 
-                restaurants in Pinner. We're located on Uxbridge Road between Pinner and Hatch End, 
-                with easy access from the A40 and M25. Most Pinner high street restaurants have limited parking.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">What are the best places to eat in Pinner?</h3>
-              <p className="text-slate-700">
-                For authentic Italian dining, Dona Theresa is the top choice among places to eat in Pinner. 
-                We offer an exceptional lunch menu for £19.95, an extensive à la carte selection, and a 
-                romantic atmosphere perfect for date nights and celebrations. Other options in Pinner include 
-                various cafes and international restaurants on the high street.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Is Dona Theresa open for lunch in Pinner?</h3>
-              <p className="text-slate-700">
-                Yes! We serve lunch Tuesday to Sunday from 12:00-15:00. Our Lunchtime & Early Bird menu 
-                at £19.95 for 2 courses is the best lunch deal among Pinner restaurants. The menu features 
-                classic Italian starters and mains including fresh pasta, risotto, and grilled dishes.
-              </p>
-            </div>
-            
-            <div className="bg-white rounded-lg p-6 shadow-sm">
-              <h3 className="text-xl font-semibold mb-3">Can I book a table online at Pinner restaurants?</h3>
-              <p className="text-slate-700">
-                Yes! Dona Theresa offers easy online booking at donatheresa.co.uk/reserve. You can also call 
-                us on 020 8421 5550. We recommend booking in advance for weekend dinners. Walk-ins are 
-                welcome but subject to availability.
-              </p>
-            </div>
+            {faqs.map((f) => (
+              <div key={f.q} className="bg-white rounded-lg p-6 shadow-sm">
+                <h3 className="text-xl font-semibold mb-3">{f.q}</h3>
+                <p className="text-slate-700">{f.a}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
+      {/* CTA */}
       <section className="py-20 bg-gradient-to-b from-amber-50 to-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold mb-6">
-            Ready to Experience Pinner's Finest Italian Restaurant?
+            Book a table
           </h2>
           <p className="text-xl text-slate-700 mb-8">
-            Join the thousands who've made Dona Theresa their favourite among all 
-            restaurants in Pinner. Book your table today.
+            Online for any day, or ring us if it is for tonight and we will see what we can do.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="text-lg bg-amber-600 hover:bg-amber-700">
-              <Link href="/reserve">Book Online Now</Link>
+              <Link href="/reserve">Book online</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="text-lg">
               <a href="tel:02084215550">
@@ -471,48 +359,18 @@ export default function RestaurantsPinnerPage() {
           </div>
         </div>
       </section>
-      
-      {/* FAQ Schema */}
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "FAQPage",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "What is the best Italian restaurant in Pinner?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Dona Theresa is rated the best Italian restaurant in Pinner, with over 13 years serving authentic Italian cuisine. We have a 4.8-star rating and are known for fresh pasta made daily, premium steaks, and our popular £19.95 lunch special."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Where can I find restaurants in Pinner with parking?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Dona Theresa offers FREE customer parking on-site, making it one of the most convenient restaurants in Pinner. We're located on Uxbridge Road between Pinner and Hatch End."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "What are the best places to eat in Pinner?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "For authentic Italian dining, Dona Theresa is the top choice among places to eat in Pinner. We offer an exceptional lunch menu for £19.95, an extensive à la carte selection, and a romantic atmosphere."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Is Dona Theresa open for lunch in Pinner?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Yes! We serve lunch Tuesday to Sunday from 12:00-15:00. Our Lunchtime & Early Bird menu at £19.95 for 2 courses is the best lunch deal among Pinner restaurants."
-                }
-              }
-            ]
+            "mainEntity": faqs.map((f) => ({
+              "@type": "Question",
+              "name": f.q,
+              "acceptedAnswer": { "@type": "Answer", "text": f.a }
+            }))
           })
         }}
       />

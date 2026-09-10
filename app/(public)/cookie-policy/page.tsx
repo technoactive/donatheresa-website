@@ -2,7 +2,7 @@ import { Metadata } from "next"
 
 export const metadata: Metadata = {
   title: "Cookie Policy",
-  description: "Learn about how Dona Theresa uses cookies to improve your browsing experience and provide personalized service.",
+  description: "What cookies and similar storage donatheresa.co.uk actually uses, what for, and how to switch them off.",
   robots: {
     index: true,
     follow: true,
@@ -17,101 +17,97 @@ export default function CookiePolicyPage() {
     <div className="min-h-screen bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-sm p-8 md:p-12">
         <h1 className="text-4xl font-bold text-gray-900 mb-8">Cookie Policy</h1>
-        
+
         <div className="prose prose-lg max-w-none text-gray-600">
-          <p className="text-sm text-gray-500 mb-6">Last updated: {new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
-          
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">What Are Cookies?</h2>
-            <p>
-              Cookies are small text files that are placed on your device when you visit our website. They help us provide you with a better experience by remembering your preferences and understanding how you use our site.
-            </p>
-          </section>
+          <p className="text-sm text-gray-500 mb-6">Last updated: 10 September 2026</p>
+
+          <p>
+            This is a restaurant website. It exists so you can look at the menu and book a table, and we have
+            tried to keep the tracking to match. Below is a plain list of what the site stores on your device,
+            why, and how to turn it off. If anything here is unclear, ring us on 020 8421 5550 and ask for
+            whoever looks after the website.
+          </p>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">How We Use Cookies</h2>
-            <p>Dona Theresa uses cookies for the following purposes:</p>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">The short version</h2>
             <ul className="list-disc pl-6 space-y-2">
-              <li><strong>Essential Cookies:</strong> Required for the website to function properly (e.g., remembering your booking details during a session)</li>
-              <li><strong>Analytics Cookies:</strong> Help us understand how visitors interact with our website through Google Analytics</li>
-              <li><strong>Preference Cookies:</strong> Remember your choices and preferences for future visits</li>
-              <li><strong>Marketing Cookies:</strong> May be used to show you relevant advertisements about our restaurant</li>
+              <li>No advertising cookies. We do not run ads and we do not sell or share your data with advertisers.</li>
+              <li>Google Analytics only runs if you accept it in the banner. If you decline, it is switched off.</li>
+              <li>Your booking is stored on our own booking system, not in a cookie.</li>
+              <li>Staff who log in to manage bookings get a login cookie. Nobody else does.</li>
             </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Types of Cookies We Use</h2>
-            
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">What we store, item by item</h2>
+
             <div className="bg-gray-50 rounded-lg p-6 mb-4">
-              <h3 className="font-semibold text-gray-900 mb-2">Strictly Necessary Cookies</h3>
-              <p className="text-sm mb-2">These cookies are essential for the website to function and cannot be switched off.</p>
-              <ul className="text-sm list-disc pl-5">
-                <li>Session cookies for maintaining your booking process</li>
-                <li>Cookie consent preference storage</li>
-                <li>Security cookies for protecting against fraud</li>
-              </ul>
+              <h3 className="font-semibold text-gray-900 mb-2">Your cookie choice</h3>
+              <p className="text-sm mb-2">
+                When you click Accept or Decline on the banner we save that answer in your browser&apos;s local
+                storage under the name <code>dona-theresa-cookie-preferences</code>, so we do not ask you again
+                every visit. It contains only your yes/no answers and the date. It is strictly necessary in the
+                sense that without it the banner would come back on every page.
+              </p>
             </div>
 
             <div className="bg-gray-50 rounded-lg p-6 mb-4">
-              <h3 className="font-semibold text-gray-900 mb-2">Performance & Analytics Cookies</h3>
-              <p className="text-sm mb-2">These cookies help us understand how our website is being used.</p>
-              <ul className="text-sm list-disc pl-5">
-                <li>Google Analytics (_ga, _gid, _gat) - Tracks website usage and visitor behavior</li>
-                <li>Performance monitoring cookies - Help us identify and fix website issues</li>
-              </ul>
+              <h3 className="font-semibold text-gray-900 mb-2">Google Analytics 4 — only with your consent</h3>
+              <p className="text-sm mb-2">
+                If you accept analytics, Google Analytics sets its usual cookies (<code>_ga</code> and{' '}
+                <code>_ga_*</code>) so we can see roughly how many people visit, which pages they read and
+                whether the booking form is working. If you decline, we tell Google&apos;s script that consent
+                is denied and it does not set them. We do not use Google Signals, advertising features or
+                remarketing.
+              </p>
             </div>
 
             <div className="bg-gray-50 rounded-lg p-6 mb-4">
-              <h3 className="font-semibold text-gray-900 mb-2">Functionality Cookies</h3>
-              <p className="text-sm mb-2">These cookies enable enhanced functionality and personalization.</p>
-              <ul className="text-sm list-disc pl-5">
-                <li>Language preference cookies</li>
-                <li>Location-based service cookies</li>
-                <li>User preference cookies</li>
-              </ul>
+              <h3 className="font-semibold text-gray-900 mb-2">Ahrefs and Vercel analytics — no cookies</h3>
+              <p className="text-sm mb-2">
+                We also use two lightweight page-view counters, one from Ahrefs and one from Vercel (who host
+                the site). Neither sets a cookie or stores anything on your device; they count visits in
+                aggregate and do not identify you.
+              </p>
+            </div>
+
+            <div className="bg-gray-50 rounded-lg p-6 mb-4">
+              <h3 className="font-semibold text-gray-900 mb-2">Booking a table</h3>
+              <p className="text-sm mb-2">
+                When you book, the details you type (name, phone, email, party size, time) go to our booking
+                database so the restaurant can see the reservation and send you a confirmation. Nothing about
+                your booking is kept in a cookie. If a deposit is required for your booking, payment is taken
+                by Stripe on their secure page; Stripe sets its own cookies during that payment for fraud
+                prevention, and only then.
+              </p>
             </div>
 
             <div className="bg-gray-50 rounded-lg p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">Targeting/Marketing Cookies</h3>
-              <p className="text-sm mb-2">These cookies may be set through our site by advertising partners.</p>
-              <ul className="text-sm list-disc pl-5">
-                <li>Social media cookies (Facebook, Instagram)</li>
-                <li>Advertising effectiveness tracking</li>
-              </ul>
+              <h3 className="font-semibold text-gray-900 mb-2">Staff login</h3>
+              <p className="text-sm mb-2">
+                The restaurant team signs in to a private area to manage bookings. That login uses secure
+                session cookies set by Supabase, our database provider. They are only ever set for someone who
+                has actually logged in as staff; ordinary visitors never receive them.
+              </p>
             </div>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Third-Party Cookies</h2>
-            <p>
-              We use services from third parties that may also set cookies on your device:
-            </p>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">What we don&apos;t do</h2>
             <ul className="list-disc pl-6 space-y-2">
-              <li><strong>Google Analytics:</strong> For website analytics and performance monitoring</li>
-              <li><strong>Social Media Platforms:</strong> If you interact with social media buttons on our site</li>
-              <li><strong>Booking System:</strong> To manage table reservations and availability</li>
+              <li>No Facebook, Instagram or other social media tracking pixels. The social icons in the footer are plain links.</li>
+              <li>No advertising or retargeting cookies of any kind.</li>
+              <li>No selling or sharing of visitor data with third parties.</li>
+              <li>No location tracking beyond the country-level information Google Analytics derives from your IP address, if you have accepted analytics.</li>
             </ul>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Managing Your Cookie Preferences</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Changing your mind</h2>
             <p>
-              You have the right to decide whether to accept or reject cookies. You can:
-            </p>
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Set your browser to refuse all or some browser cookies</li>
-              <li>Use your browser settings to delete cookies that have already been set</li>
-              <li>Visit websites in "incognito" or "private browsing" mode</li>
-            </ul>
-            <p className="mt-4">
-              Please note that blocking some types of cookies may impact your experience on our website and limit the services we can offer.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Browser Cookie Settings</h2>
-            <p>
-              You can manage cookies through your browser settings. Here's how:
+              To withdraw analytics consent, clear this site&apos;s data in your browser (that removes the saved
+              preference and any Google cookies) and the banner will reappear on your next visit so you can
+              decline. You can also block or delete cookies for any site in your browser settings:
             </p>
             <ul className="list-disc pl-6 space-y-2">
               <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:text-amber-700">Google Chrome</a></li>
@@ -119,20 +115,22 @@ export default function CookiePolicyPage() {
               <li><a href="https://support.apple.com/guide/safari/manage-cookies-and-website-data-sfri11471/mac" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:text-amber-700">Safari</a></li>
               <li><a href="https://support.microsoft.com/en-us/help/4027947" target="_blank" rel="noopener noreferrer" className="text-amber-600 hover:text-amber-700">Microsoft Edge</a></li>
             </ul>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Changes to This Cookie Policy</h2>
-            <p>
-              We may update our Cookie Policy from time to time. We will notify you of any changes by posting the new Cookie Policy on this page and updating the "Last updated" date.
+            <p className="mt-4">
+              Blocking everything will not stop you reading the menu or booking a table. It will only mean the
+              banner asks you again each visit.
             </p>
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Contact Us</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Changes to this page</h2>
             <p>
-              If you have any questions about our Cookie Policy, please contact us:
+              If we add or remove a tool that stores anything on your device we will update this page and the
+              date at the top. We do not expect that to happen often.
             </p>
+          </section>
+
+          <section className="mb-8">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Contact</h2>
             <div className="bg-gray-50 rounded-lg p-6 mt-4">
               <p className="font-semibold text-gray-900">Dona Theresa Italian Restaurant</p>
               <p>451 Uxbridge Road, Hatch End</p>

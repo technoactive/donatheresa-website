@@ -16,6 +16,7 @@ const menuSchema = {
   inLanguage: "en-GB",
   provider: {
     "@type": "Restaurant",
+    "@id": "https://donatheresa.co.uk/#restaurant",
     name: "Dona Theresa",
     url: "https://donatheresa.co.uk",
     address: {

@@ -1,7 +1,11 @@
+// Canonical Restaurant entity for the whole site. The @id lets every page
+// reference the same entity instead of declaring conflicting duplicates
+// (which previously caused schema.org validation errors in Ahrefs/GSC).
 export function DynamicSchema() {
   const schemaData = {
     "@context": "https://schema.org",
     "@type": "Restaurant",
+    "@id": "https://donatheresa.co.uk/#restaurant",
     "name": "Dona Theresa",
     "alternateName": ["Donna Teresa", "Dona Teresa", "Donna Theresa", "Dona Theresa Italian Restaurant"],
     "description": "Award-winning Italian restaurant in Hatch End and Pinner. Authentic Italian cuisine, lunch specials from £19.95, steaks. 451 Uxbridge Road, HA5 4JR.",

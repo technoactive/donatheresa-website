@@ -1,27 +1,24 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
-import { MapPin, Clock, Phone, Star, ChefHat, Users, Car, Train } from 'lucide-react'
+import { MapPin, Clock, Phone, Car, Train, Utensils, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
   title: 'Hatch End Restaurants',
-  description: '⭐ #1 rated restaurant in Hatch End! Authentic Italian • Lunch £19.95 • FREE parking • Open Tue-Sun. Book now ☎️ 020 8421 5550',
+  description: 'Dona Theresa is the family-run Italian restaurant on Uxbridge Road, Hatch End. Two-course lunch and early bird £19.95, free parking, open Tue–Sun. 020 8421 5550.',
   keywords: [
     'hatch end restaurants',
     'restaurants in hatch end',
     'restaurants hatch end',
-    'best restaurants in hatch end',
     'hatch end italian restaurants',
     'italian restaurant hatch end',
     'restaurant in hatch end',
-    'hatch end restaurant',
-    'places to eat hatch end',
-    'hatch end high street restaurants'
+    'places to eat hatch end'
   ],
   openGraph: {
     title: 'Hatch End Restaurants | Dona Theresa Italian Restaurant',
-    description: 'Discover the best Italian restaurant in Hatch End. Authentic cuisine, romantic atmosphere, convenient location on Uxbridge Road.',
+    description: 'The family-run Italian on Uxbridge Road, Hatch End, since 2011. Free parking, £19.95 two-course lunch, open Tuesday to Sunday.',
     url: 'https://donatheresa.co.uk/restaurants-hatch-end',
     siteName: 'Dona Theresa Restaurant',
     images: [
@@ -29,7 +26,7 @@ export const metadata: Metadata = {
         url: 'https://donatheresa.co.uk/og-hatch-end.jpg',
         width: 1200,
         height: 630,
-        alt: 'Dona Theresa - Best Restaurant in Hatch End'
+        alt: 'Dona Theresa Italian restaurant, Uxbridge Road, Hatch End'
       }
     ],
     locale: 'en_GB',
@@ -40,29 +37,35 @@ export const metadata: Metadata = {
   }
 }
 
-export default function RestaurantsHatchEndPage() {
-  const restaurantComparison = [
-    {
-      name: "Dona Theresa",
-      cuisine: "Authentic Italian",
-      priceRange: "££",
-      rating: 4.8,
-      highlights: ["Award-winning", "Lunch £19.95", "Free parking", "Late opening"],
-      recommended: true
-    },
-    {
-      name: "Other local restaurant",
-      cuisine: "Mixed",
-      priceRange: "££",
-      rating: 4.2,
-      highlights: ["Good service", "Limited parking"],
-      recommended: false
-    }
-  ]
+const faqs = [
+  {
+    q: 'Where exactly is Dona Theresa in Hatch End?',
+    a: 'We are at 451 Uxbridge Road, Pinner HA5 4JR — on the main road through Hatch End, about five minutes on foot from Hatch End Overground station and a short walk from the Broadway shops.'
+  },
+  {
+    q: 'Is there parking?',
+    a: 'Yes, free parking for guests on site. That is rare on this stretch of Uxbridge Road, and it is the reason a lot of people from Pinner and Harrow choose us for a night out rather than somewhere in the village.'
+  },
+  {
+    q: 'What is the £19.95 menu?',
+    a: 'Two courses — a starter and a main — from a shorter version of our menu. It runs at lunch (12 till 3) and as an early-bird at dinner, with orders in by 6.45pm. On Fridays and Saturdays early-bird tables need to be finished by 8pm. Not available for parties of more than twelve.'
+  },
+  {
+    q: 'Do I need to book?',
+    a: 'Midweek lunch, usually not. Friday and Saturday evenings and Sunday lunch, yes — book online or call 020 8421 5550. Walk-ins are welcome whenever there is a free table.'
+  },
+  {
+    q: 'What are your opening hours?',
+    a: 'Tuesday to Sunday, lunch 12:00–15:00 and dinner 18:00–23:00. We are closed on Mondays. The kitchen takes last food orders around half an hour before closing.'
+  }
+]
 
+export default function RestaurantsHatchEndPage() {
   return (
     <>
-      {/* Hero Section */}
+      <DynamicSchema />
+
+      {/* Hero */}
       <section className="relative pt-32 pb-20 bg-gradient-to-b from-amber-50 to-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center max-w-4xl mx-auto space-y-6">
@@ -71,167 +74,129 @@ export default function RestaurantsHatchEndPage() {
               <span className="text-amber-600">Hatch End</span>
             </h1>
             <p className="text-lg md:text-xl text-slate-700 max-w-3xl mx-auto">
-              Discover why Dona Theresa is consistently voted the best Italian restaurant 
-              among all Hatch End restaurants. Located on Uxbridge Road with free parking.
+              Dona Theresa is the Italian restaurant on Uxbridge Road, a few minutes from Hatch End station.
+              Family-run since 2011, with a proper trattoria menu, a two-course lunch for £19.95 and free parking
+              at the door.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Button asChild size="lg" className="text-lg">
-                <Link href="/reserve">Book Your Table</Link>
+                <Link href="/reserve">Book a table</Link>
               </Button>
               <Button asChild size="lg" variant="outline" className="text-lg">
-                <Link href="/menu">View Our Menu</Link>
+                <Link href="/menu">See the menu</Link>
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why Choose Section */}
+      {/* Three things */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Why We're Hatch End's Favourite Restaurant
+            Why people in Hatch End eat here
           </h2>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-8 h-8 text-amber-600" />
+                <Utensils className="w-8 h-8 text-amber-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Prime Location</h3>
+              <h3 className="text-xl font-semibold mb-2">The menu hasn&apos;t chased fashion</h3>
               <p className="text-slate-600">
-                451 Uxbridge Road, just 5 minutes from Hatch End station with free customer parking
+                Saltimbocca, calf&apos;s liver with sage, spaghetti alla pescatora, an 11oz fillet Rossini,
+                Dover sole on the bone. The kind of Italian cooking that is getting hard to find in London.
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <ChefHat className="w-8 h-8 text-amber-600" />
+                <Car className="w-8 h-8 text-amber-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Authentic Italian</h3>
+              <h3 className="text-xl font-semibold mb-2">You can park</h3>
               <p className="text-slate-600">
-                Traditional recipes passed down through generations, made with fresh daily ingredients
+                Free parking for guests on site. Anyone who has tried to park on the Broadway on a Saturday
+                night will know why that matters.
               </p>
             </div>
-            
+
             <div className="text-center">
               <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="w-8 h-8 text-amber-600" />
+                <Users className="w-8 h-8 text-amber-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Award-Winning</h3>
+              <h3 className="text-xl font-semibold mb-2">It&apos;s the same people</h3>
               <p className="text-slate-600">
-                Voted "Best Italian Restaurant" by Hatch End locals on TripAdvisor
+                Same family running it since 2011, and a dining room where the staff know a good share of
+                the tables by name. Birthdays get a fuss made of them.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Restaurant Comparison */}
-      <section className="py-16 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
-            Compare Hatch End Restaurants
-          </h2>
-          <p className="text-xl text-slate-600 text-center mb-12 max-w-3xl mx-auto">
-            See why locals consistently choose Dona Theresa for special occasions, 
-            business lunches, and family dinners
-          </p>
-          
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {restaurantComparison.map((restaurant) => (
-              <div 
-                key={restaurant.name}
-                className={`bg-white rounded-lg shadow-lg p-8 ${
-                  restaurant.recommended ? 'ring-2 ring-amber-500' : ''
-                }`}
-              >
-                {restaurant.recommended && (
-                  <div className="bg-amber-500 text-white text-sm font-semibold px-4 py-1 rounded-full inline-block mb-4">
-                    RECOMMENDED
-                  </div>
-                )}
-                <h3 className="text-2xl font-bold mb-2">{restaurant.name}</h3>
-                <p className="text-slate-600 mb-4">{restaurant.cuisine} • {restaurant.priceRange}</p>
-                <div className="flex items-center gap-2 mb-4">
-                  <Star className="w-5 h-5 text-amber-500 fill-current" />
-                  <span className="font-semibold">{restaurant.rating}</span>
-                  <span className="text-slate-600">/ 5.0</span>
-                </div>
-                <ul className="space-y-2">
-                  {restaurant.highlights.map((highlight, idx) => (
-                    <li key={idx} className="flex items-start gap-2">
-                      <span className="text-green-500 mt-1">✓</span>
-                      <span className="text-slate-700">{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-                {restaurant.recommended && (
-                  <Button asChild className="w-full mt-6" size="lg">
-                    <Link href="/reserve">Reserve Now</Link>
-                  </Button>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Special Offers */}
+      {/* Lunch / early bird */}
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="bg-gradient-to-r from-amber-600 to-orange-600 rounded-3xl p-12 text-white text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Lunch Special - Best Value in Hatch End
+              Two courses for £19.95
             </h2>
-            <p className="text-xl mb-8 max-w-2xl mx-auto">
-              Enjoy our famous lunch menu for just £19.95 per person. 
-              Available Tuesday to Sunday, 12:00 - 15:00
+            <p className="text-xl mb-3 max-w-2xl mx-auto">
+              Lunch from 12 till 3, and early bird at dinner with orders in by 6.45pm, Tuesday to Sunday.
+            </p>
+            <p className="text-base mb-8 max-w-2xl mx-auto text-amber-50">
+              Friday and Saturday early-bird tables finish by 8pm. Not for parties over twelve. 10% service.
             </p>
             <Button asChild size="lg" variant="secondary" className="text-lg">
-              <Link href="/menu/lunchtime-earlybird">View Lunch Menu</Link>
+              <Link href="/menu/lunchtime-earlybird">See what&apos;s on it</Link>
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Local SEO Content */}
+      {/* Guide copy */}
       <section className="py-16 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold mb-8">
-              Your Guide to Dining at Hatch End's Best Italian Restaurant
+              Eating out in Hatch End — an honest local&apos;s guide
             </h2>
-            
+
             <div className="prose prose-lg max-w-none">
-              <h3>Finding the Perfect Restaurant in Hatch End</h3>
+              <h3>What Hatch End has</h3>
               <p>
-                When searching for restaurants in Hatch End, you'll find various options along 
-                Uxbridge Road and the high street. However, for those seeking authentic Italian 
-                cuisine with a warm, welcoming atmosphere, Dona Theresa stands out as the clear choice.
+                Hatch End is small. Most of what there is to eat sits along Uxbridge Road between the station and
+                the Broadway: a couple of Indian restaurants, a Turkish grill, a Japanese place, the pubs, and the
+                Italians. Pinner village, a mile down the road, has more choice and far worse parking. Harrow has
+                everything and you will not want to drive there on a Friday.
               </p>
-              
-              <h3>What Makes Us Different</h3>
+
+              <h3>Where we fit</h3>
               <p>
-                Unlike other Hatch End restaurants, we combine traditional Italian recipes with 
-                modern presentation. Our chefs use only the freshest ingredients, delivered daily 
-                from trusted suppliers. From handmade pasta to wood-fired pizzas, every dish is 
-                crafted with passion.
+                Of the Italians, we are the one with the old-fashioned menu and the car park. Not a pizza place
+                — we don&apos;t make pizza at all — but a trattoria in the older sense: starters like prawn cocktail, minestrone and grilled sardines; pasta made to order in
+                the pan; veal, liver, duck and steaks; fish that changes with what the supplier has. Portions are
+                generous. Nobody has ever left hungry and complained about it.
               </p>
-              
-              <h3>Perfect for Every Occasion</h3>
+              <p>
+                The name is Portuguese, and so is the way we look after people. You will not be turned over in
+                ninety minutes unless you are on the Friday early bird, in which case we will tell you up front.
+              </p>
+
+              <h3>When to come</h3>
               <ul>
-                <li><strong>Business Lunches:</strong> Quick service, professional atmosphere</li>
-                <li><strong>Romantic Dinners:</strong> Intimate candlelit tables available</li>
-                <li><strong>Family Gatherings:</strong> Children's menu and high chairs provided</li>
-                <li><strong>Special Celebrations:</strong> Private dining area for up to 40 guests</li>
+                <li><strong>Weekday lunch:</strong> quiet, the £19.95 menu, and you can usually walk in.</li>
+                <li><strong>Early evening:</strong> the same £19.95 menu until 6.45pm — popular with families and with people coming off the Overground.</li>
+                <li><strong>Friday and Saturday night:</strong> full à la carte, and you will need to book.</li>
+                <li><strong>Sunday lunch:</strong> big family tables from half twelve. Come after two if you want a slower one.</li>
               </ul>
-              
-              <h3>Easy to Find, Easy to Park</h3>
+
+              <h3>Groups and occasions</h3>
               <p>
-                Located at 451 Uxbridge Road, we're one of the most accessible restaurants in 
-                Hatch End. Just a 5-minute walk from Hatch End station, with free customer 
-                parking available on-site - a rarity among Hatch End restaurants.
+                We take tables of up to twelve on the set menu and larger groups on à la carte with a bit of
+                notice. If there is a cake, tell us and we will keep it in the fridge and bring it out with candles.
+                We would rather know about allergies when you book than when the plate arrives, but either way the
+                kitchen will give you a straight answer.
               </p>
             </div>
           </div>
@@ -242,114 +207,73 @@ export default function RestaurantsHatchEndPage() {
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-12">
-            How to Find Us in Hatch End
+            Getting to us
           </h2>
-          
+
           <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
             <div>
               <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                 <Train className="w-6 h-6 text-amber-600" />
-                By Public Transport
+                Train and bus
               </h3>
               <ul className="space-y-3 text-slate-700">
-                <li>• 5 minutes walk from Hatch End station (Metropolitan line)</li>
-                <li>• 10 minutes from Pinner station</li>
-                <li>• Bus routes H12 and H13 stop nearby</li>
-                <li>• Direct trains from Baker Street (25 minutes)</li>
+                <li>• Hatch End station is about five minutes&apos; walk. It is on the London Overground line between Euston and Watford Junction — roughly half an hour from Euston, ten minutes from Watford Junction.</li>
+                <li>• Harrow &amp; Wealdstone is two stops down the same line.</li>
+                <li>• Pinner (Metropolitan line) is about a 20-minute walk, or a few minutes on the H12 bus, which runs along Uxbridge Road.</li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                 <Car className="w-6 h-6 text-amber-600" />
-                By Car
+                Driving
               </h3>
               <ul className="space-y-3 text-slate-700">
-                <li>• FREE customer parking on-site</li>
-                <li>• Located on A4180 Uxbridge Road</li>
-                <li>• 2 minutes from Pinner town centre</li>
-                <li>• Easy access from A40 and M25</li>
+                <li>• Free parking for guests at the restaurant.</li>
+                <li>• We are on the A4180 Uxbridge Road — put HA5 4JR in the satnav.</li>
+                <li>• About 10 minutes from Pinner village, Harrow Weald and Northwood; 15–20 from Watford, Ruislip and Stanmore.</li>
               </ul>
             </div>
           </div>
-          
+
           <div className="text-center mt-12 text-slate-600">
             <p className="font-semibold">Dona Theresa Italian Restaurant</p>
             <p>451 Uxbridge Road, Pinner HA5 4JR</p>
-            <p>Tel: 020 8421 5550</p>
+            <p>Tel: <a href="tel:02084215550" className="hover:text-amber-600">020 8421 5550</a></p>
           </div>
         </div>
       </section>
 
-      {/* FAQ Section for Rich Snippets */}
-      <section className="py-16 bg-white">
+      {/* FAQ */}
+      <section className="py-16 bg-slate-50">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold text-center mb-12">
-            Frequently Asked Questions About Hatch End Restaurants
+            Questions we get asked
           </h2>
-          
+
           <div className="space-y-6">
-            <div className="border-b pb-6">
-              <h3 className="text-xl font-semibold mb-3">What is the best restaurant in Hatch End?</h3>
-              <p className="text-slate-700">
-                Dona Theresa is consistently rated the best restaurant in Hatch End, with a 4.8-star rating 
-                on TripAdvisor and Google. We specialise in authentic Italian cuisine with fresh pasta made 
-                daily, premium steaks, and an extensive wine list. Located at 451 Uxbridge Road with free parking.
-              </p>
-            </div>
-            
-            <div className="border-b pb-6">
-              <h3 className="text-xl font-semibold mb-3">Is there free parking at restaurants in Hatch End?</h3>
-              <p className="text-slate-700">
-                Yes! Dona Theresa offers FREE customer parking on-site, which is rare among Hatch End restaurants. 
-                We're located on Uxbridge Road with easy access from the A40 and M25, making us one of the most 
-                convenient dining options in the area.
-              </p>
-            </div>
-            
-            <div className="border-b pb-6">
-              <h3 className="text-xl font-semibold mb-3">What are the best lunch deals in Hatch End?</h3>
-              <p className="text-slate-700">
-                Our Lunchtime & Early Bird menu offers exceptional value at just £19.95 for 2 courses. 
-                Available Tuesday to Sunday, 12:00-15:00, this is widely considered the best lunch deal 
-                among all Hatch End restaurants. The menu includes Italian classics like fresh pasta, 
-                risotto, and grilled dishes.
-              </p>
-            </div>
-            
-            <div className="border-b pb-6">
-              <h3 className="text-xl font-semibold mb-3">Do I need to book a table at Hatch End restaurants?</h3>
-              <p className="text-slate-700">
-                We recommend booking in advance, especially for Friday and Saturday evenings. You can 
-                book online at donatheresa.co.uk/reserve or call us on 020 8421 5550. Walk-ins are welcome 
-                but subject to availability.
-              </p>
-            </div>
-            
-            <div className="pb-6">
-              <h3 className="text-xl font-semibold mb-3">What time do Hatch End restaurants close?</h3>
-              <p className="text-slate-700">
-                Dona Theresa is open Tuesday to Sunday. Lunch service: 12:00-15:00, Dinner service: 18:00-23:00. 
-                We're closed on Mondays. Last orders for food are typically 30 minutes before closing.
-              </p>
-            </div>
+            {faqs.map((f, i) => (
+              <div key={f.q} className={i < faqs.length - 1 ? 'border-b pb-6' : 'pb-6'}>
+                <h3 className="text-xl font-semibold mb-3">{f.q}</h3>
+                <p className="text-slate-700">{f.a}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA */}
       <section className="py-20 bg-gradient-to-b from-amber-50 to-white">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold mb-6">
-            Experience Hatch End's Finest Italian Dining
+            Book a table in Hatch End
           </h2>
           <p className="text-xl text-slate-700 mb-8">
-            Join thousands of satisfied diners who've made Dona Theresa their 
-            favourite among all Hatch End restaurants
+            Online for any day, or ring us if it is for tonight.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="text-lg">
-              <Link href="/reserve">Book Your Table Now</Link>
+              <Link href="/reserve">Book online</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="text-lg">
               <a href="tel:02084215550">
@@ -360,48 +284,18 @@ export default function RestaurantsHatchEndPage() {
           </div>
         </div>
       </section>
-      
-      {/* FAQ Schema */}
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "FAQPage",
-            "mainEntity": [
-              {
-                "@type": "Question",
-                "name": "What is the best restaurant in Hatch End?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Dona Theresa is consistently rated the best restaurant in Hatch End, with a 4.8-star rating on TripAdvisor and Google. We specialise in authentic Italian cuisine with fresh pasta made daily, premium steaks, and an extensive wine list."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Is there free parking at restaurants in Hatch End?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Yes! Dona Theresa offers FREE customer parking on-site, which is rare among Hatch End restaurants. We're located on Uxbridge Road with easy access from the A40 and M25."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "What are the best lunch deals in Hatch End?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "Our Lunchtime & Early Bird menu offers exceptional value at just £19.95 for 2 courses. Available Tuesday to Sunday, 12:00-15:00."
-                }
-              },
-              {
-                "@type": "Question",
-                "name": "Do I need to book a table at Hatch End restaurants?",
-                "acceptedAnswer": {
-                  "@type": "Answer",
-                  "text": "We recommend booking in advance, especially for Friday and Saturday evenings. You can book online at donatheresa.co.uk/reserve or call us on 020 8421 5550."
-                }
-              }
-            ]
+            "mainEntity": faqs.map((f) => ({
+              "@type": "Question",
+              "name": f.q,
+              "acceptedAnswer": { "@type": "Answer", "text": f.a }
+            }))
           })
         }}
       />

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, Clock, Phone, Star, Award, Utensils, Check, X, Heart, Users } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { DynamicSchema } from '@/components/locale/dynamic-schema'
 
 export const metadata: Metadata = {
   title: 'Italian Restaurant Near Me',
@@ -61,6 +62,7 @@ export default function BestItalianRestaurantNearMePage() {
 
   return (
     <>
+      <DynamicSchema />
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 bg-gradient-to-b from-amber-50 to-white overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-amber-100/20 to-transparent"></div>
