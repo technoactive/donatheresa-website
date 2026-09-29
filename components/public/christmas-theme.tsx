@@ -45,6 +45,13 @@ export function ChristmasStyles() {
         background-size: 200% auto;
         -webkit-background-clip: text; background-clip: text; color: transparent;
         animation: xmas-shimmer 6s linear infinite;
+        /* Script glyphs (esp. the capital C) rise well above the em box; with
+           background-clip:text anything outside the box is clipped, so pad it. */
+        line-height: 1.35;
+        padding: 0.18em 0.2em 0.12em;
+        margin: -0.1em -0.2em -0.05em;
+        display: inline-block;
+        max-width: 100%;
       }
       .xmas-sway { transform-origin: top center; animation: xmas-sway 4s ease-in-out infinite; }
       .xmas-glow { animation: xmas-glow 3s ease-in-out infinite; }

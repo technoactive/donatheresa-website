@@ -17,7 +17,7 @@ function CourseHeading({ title, note }: { title: string; note?: string }) {
   return (
     <div className="text-center mb-8 sm:mb-10 relative">
       <Holly size={44} className="mx-auto -mb-3 opacity-90" />
-      <h3 className={`${christmasScript.className} text-5xl sm:text-6xl leading-none`} style={{ color: XMAS.burgundy }}>
+      <h3 className={`${christmasScript.className} text-5xl sm:text-6xl leading-[1.3]`} style={{ color: XMAS.burgundy }}>
         {title}
       </h3>
       {note && <p className="text-sm text-stone-500 mt-2 italic">{note}</p>}
@@ -72,7 +72,7 @@ function PriceTag({
                 <Icon className="w-5 h-5" />
               </div>
               <div>
-                <div className={`${christmasScript.className} text-4xl leading-none xmas-gold-text`}>{label}</div>
+                <div className={`${christmasScript.className} text-4xl xmas-gold-text`}>{label}</div>
                 <div className="text-[11px] uppercase tracking-[0.25em] text-[#f6dfa4]/70 mt-1">{times}</div>
               </div>
             </div>
@@ -119,8 +119,8 @@ export default function ChristmasMenuPage() {
             <span className="text-[#f6dfa4] font-medium tracking-[0.25em] text-xs sm:text-sm uppercase">{christmasMenuDetails.dates}</span>
           </div>
 
-          <h1 aria-label="Christmas Carte" className="leading-none mb-6">
-            <span className={`${christmasScript.className} block text-7xl sm:text-8xl md:text-9xl xmas-gold-text pb-4`}>Christmas</span>
+          <h1 aria-label="Christmas Carte" className="mb-6">
+            <span className={`${christmasScript.className} !block text-7xl sm:text-8xl md:text-9xl xmas-gold-text mx-auto`}>Christmas</span>
             <span className="block font-playfair text-3xl sm:text-4xl md:text-5xl font-light tracking-[0.3em] uppercase" style={{ color: XMAS.cream }}>Carte</span>
           </h1>
 
@@ -169,12 +169,12 @@ export default function ChristmasMenuPage() {
             <Snowfall count={20} className="opacity-70" />
             <Holly size={72} className="absolute top-3 left-3 drop-shadow" />
             <div className="absolute bottom-6 left-6 right-6 text-white">
-              <p className={`${christmasScript.className} text-4xl sm:text-5xl xmas-gold-text`}>The table is set</p>
+              <p className={`${christmasScript.className} text-4xl sm:text-5xl xmas-gold-text !block`}>The table is set</p>
               <p className="text-white/85 text-sm mt-1">451 Uxbridge Road, Hatch End — free parking for guests</p>
             </div>
           </div>
           <div className="lg:col-span-2 space-y-6">
-            <h2 className={`${christmasScript.className} text-6xl leading-none`} style={{ color: XMAS.green }}>Made for a party</h2>
+            <h2 className={`${christmasScript.className} text-6xl leading-[1.3]`} style={{ color: XMAS.green }}>Made for a party</h2>
             <p className="text-stone-600 leading-relaxed">{christmasMenuDetails.note}</p>
             <ul className="space-y-3 text-stone-700">
               <li className="flex items-start gap-3"><Users className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: XMAS.burgundy }} /><span>Office lunches, family Sundays, friends who only manage to meet once a year.</span></li>
@@ -195,7 +195,7 @@ export default function ChristmasMenuPage() {
         <div className="relative max-w-6xl mx-auto px-6">
           <div className="text-center mb-16 sm:mb-20">
             <GoldDivider className="mb-6" />
-            <h2 className={`${christmasScript.className} text-7xl sm:text-8xl leading-none`} style={{ color: XMAS.burgundy }}>The Menu</h2>
+            <h2 className={`${christmasScript.className} text-7xl sm:text-8xl leading-[1.3]`} style={{ color: XMAS.burgundy }}>The Menu</h2>
             <p className="text-stone-600 mt-3">Choose a starter and a main, or add a dessert for three courses</p>
           </div>
 
@@ -240,7 +240,7 @@ export default function ChristmasMenuPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(227,180,88,0.15)_0%,transparent_55%)]" aria-hidden />
         <div className="relative z-10 max-w-3xl mx-auto px-6 text-center pt-8">
           <Holly size={72} className="mx-auto mb-4" />
-          <h2 className={`${christmasScript.className} text-6xl sm:text-7xl md:text-8xl xmas-gold-text leading-none pb-4`}>Book your Christmas table</h2>
+          <h2 className={`${christmasScript.className} text-6xl sm:text-7xl md:text-8xl xmas-gold-text !block mx-auto`}>Book your Christmas table</h2>
           <p className="text-lg mb-3 max-w-xl mx-auto" style={{ color: "rgba(247,237,216,0.85)" }}>
             December fills up quickly, especially Friday and Saturday evenings and the week before Christmas.
             Groups of eight or more, please ring us so we can seat you together.

@@ -45,13 +45,13 @@ export function ChristmasPopup() {
         >
           <div className="grid md:grid-cols-5 rounded-[22px] overflow-hidden xmas-glow max-h-[calc(100vh-2rem-4px)] overflow-y-auto" style={{ backgroundColor: XMAS.cream }}>
             {/* Festive panel */}
-            <div className="relative md:col-span-2 h-48 md:h-auto min-h-[12rem] overflow-hidden" style={{ backgroundColor: XMAS.burgundyDeep }}>
+            <div className="relative md:col-span-2 h-72 md:h-auto md:min-h-[24rem] overflow-hidden" style={{ backgroundColor: XMAS.burgundyDeep }}>
               <Image src="/christmas-dinner.jpg" alt="" fill sizes="(max-width: 768px) 100vw, 320px" className="object-cover opacity-60" priority />
               <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(63,10,18,0.2), ${XMAS.burgundyDeep})` }} />
               <Snowfall count={26} />
               <FairyLights count={7} className="h-12 md:h-16" />
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 pt-12">
-                <p className={`${christmasScript.className} text-6xl md:text-7xl leading-none xmas-gold-text pb-2`}>Christmas</p>
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 pt-14">
+                <p className={`${christmasScript.className} text-6xl md:text-7xl xmas-gold-text`}>Christmas</p>
                 <p className="font-playfair tracking-[0.35em] uppercase text-sm md:text-base mt-1" style={{ color: XMAS.cream }}>Carte</p>
                 <Holly size={44} className="mt-3" />
                 <p className="text-xs mt-3 tracking-[0.2em] uppercase" style={{ color: "rgba(246,223,164,0.8)" }}>{christmasMenuDetails.dates}</p>
