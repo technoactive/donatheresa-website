@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Heart, Flower2, X, Sparkles, ArrowRight, Calendar } from "lucide-react"
+import { Heart, Flower2, X, Sparkles, ArrowRight, Calendar, Snowflake } from "lucide-react"
+import { christmasMenuDetails, christmasMenuPricing } from "@/lib/christmas-menu-data"
 
-type PromoType = "valentines" | "mothers" | null
+type PromoType = "valentines" | "mothers" | "christmas" | null
 
 export function PromoBanner() {
   const [dismissed, setDismissed] = useState(true) // Start hidden to prevent flash
@@ -52,6 +53,9 @@ export function PromoBanner() {
         } else {
           setTimeLeft("Last chance!")
         }
+      } else if (now <= christmasMenuDetails.showUntil) {
+        setPromoType("christmas")
+        setTimeLeft(now.getMonth() === 11 ? "Book while tables last" : "Now taking bookings")
       } else {
         setPromoType(null)
       }
@@ -74,6 +78,7 @@ export function PromoBanner() {
   if (!mounted || dismissed || !promoType) return null
 
   const isValentines = promoType === "valentines"
+  const isChristmas = promoType === "christmas"
 
   return (
     <>
@@ -105,7 +110,9 @@ export function PromoBanner() {
 
       <div 
         className={`relative overflow-hidden ${
-          isValentines 
+          isChristmas
+            ? "bg-gradient-to-r from-[#5c0f1a] via-[#0f3b2e] to-[#5c0f1a]"
+            : isValentines 
             ? "bg-gradient-to-r from-rose-600 via-pink-500 to-rose-600" 
             : "bg-gradient-to-r from-pink-500 via-fuchsia-500 to-pink-500"
         } animate-shimmer-bg`}
@@ -122,7 +129,9 @@ export function PromoBanner() {
                 animationDelay: `${i * 0.3}s`,
               }}
             >
-              {isValentines ? (
+              {isChristmas ? (
+                <Snowflake className="w-4 h-4 text-amber-200" />
+              ) : isValentines ? (
                 <Heart className="w-4 h-4 text-white fill-white" />
               ) : (
                 <Flower2 className="w-4 h-4 text-white" />
@@ -144,7 +153,9 @@ export function PromoBanner() {
           <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 sm:gap-4">
             {/* Icon */}
             <div className="flex-shrink-0 animate-pulse-scale">
-              {isValentines ? (
+              {isChristmas ? (
+                <Snowflake className="w-5 h-5 sm:w-6 sm:h-6 text-amber-200" />
+              ) : isValentines ? (
                 <Heart className="w-5 h-5 sm:w-6 sm:h-6 text-white fill-white/80" />
               ) : (
                 <Flower2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
@@ -155,18 +166,22 @@ export function PromoBanner() {
             <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white text-center">
               {/* Mobile: Compact text */}
               <span className="font-bold text-sm sm:text-base sm:hidden">
-                {isValentines ? "Valentine's Day" : "Mother's Day"} Menu
+                {isChristmas ? "Christmas Menu" : isValentines ? "Valentine's Day Menu" : "Mother's Day Menu"}
               </span>
               
               {/* Desktop: Full text */}
               <span className="font-bold text-sm sm:text-base hidden sm:inline">
-                {isValentines 
+                {isChristmas
+                  ? "Christmas Carte"
+                  : isValentines 
                   ? "Valentine's Day Special Menu" 
                   : "Mother's Day Special Menu"}
               </span>
               
               <span className="text-white/90 text-xs sm:text-sm hidden xs:inline">
-                {isValentines 
+                {isChristmas
+                  ? `— two courses from £${christmasMenuPricing.lunch.twoCourse}. Book your party table`
+                  : isValentines 
                   ? "— Book your romantic dinner!" 
                   : "— Treat Mum to something special!"}
               </span>
@@ -180,9 +195,9 @@ export function PromoBanner() {
 
             {/* CTA Button */}
             <Link 
-              href={isValentines ? "/menu/valentines-day" : "/menu/mothers-day"}
+              href={isChristmas ? "/menu/christmas" : isValentines ? "/menu/valentines-day" : "/menu/mothers-day"}
               className="flex-shrink-0 group flex items-center gap-1 bg-white text-sm font-semibold px-3 py-1.5 sm:px-4 sm:py-2 rounded-full hover:scale-105 transition-all duration-300 shadow-lg"
-              style={{ color: isValentines ? "#e11d48" : "#d946ef" }}
+              style={{ color: isChristmas ? "#7f1d1d" : isValentines ? "#e11d48" : "#d946ef" }}
             >
               <span className="hidden xs:inline">View Menu</span>
               <span className="xs:hidden">Book</span>

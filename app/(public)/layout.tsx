@@ -3,6 +3,7 @@
 import type React from "react"
 import { PublicHeader } from "@/components/public/public-header"
 import { PublicFooter } from "@/components/public/public-footer"
+import { ChristmasPopup } from "@/components/public/christmas-popup"
 import { LocaleProvider } from "@/lib/locale-provider"
 
 export default function PublicLayout({
@@ -18,6 +19,7 @@ export default function PublicLayout({
           {children}
         </main>
         <PublicFooter />
+        <ChristmasPopup />
       </div>
     </LocaleProvider>
   )

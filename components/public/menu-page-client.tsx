@@ -2,12 +2,35 @@
 
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Crown, Clock, ArrowRight, Utensils, Heart, Flower2, Sparkles, Star, Phone, Calendar, Wine, ChefHat, Grape } from "lucide-react"
+import { Crown, Clock, ArrowRight, Utensils, Heart, Flower2, Sparkles, Star, Phone, Calendar, Wine, ChefHat, Grape, Snowflake } from "lucide-react"
+import { christmasMenuDetails, christmasMenuPricing } from "@/lib/christmas-menu-data"
 import { useEffect, useState } from "react"
 
 // All menus with beautiful gradient designs
 // showUntil: date-based visibility for seasonal menus (card hidden after this date, page stays accessible)
 const allMenus = [
+  {
+    id: "christmas",
+    title: "Christmas Carte",
+    subtitle: christmasMenuDetails.dates,
+    description: "Norfolk roast turkey with all the trimmings alongside our Italian classics. Two or three courses, lunch or dinner, for parties large and small",
+    price: `£${christmasMenuPricing.lunch.twoCourse}`,
+    priceNote: "2 courses at lunch · dinner from £" + christmasMenuPricing.dinner.twoCourse,
+    serviceCharge: "+ 10% service",
+    icon: Snowflake,
+    link: "/menu/christmas",
+    gradient: "from-[#5c0f1a] to-[#0f3b2e]",
+    bgGradient: "from-red-50 via-green-50/60 to-amber-50",
+    iconBg: "bg-gradient-to-br from-[#5c0f1a] to-[#0f3b2e]",
+    accentColor: "red",
+    textColor: "text-red-800",
+    borderColor: "border-red-200",
+    hoverShadow: "hover:shadow-red-200/50",
+    features: ["Norfolk Turkey", "Lunch & Dinner", "2 or 3 Courses", "Christmas Pudding"],
+    badge: "Festive Season",
+    badgeColor: "bg-[#5c0f1a]",
+    showUntil: christmasMenuDetails.showUntil,
+  },
   {
     id: "valentines-day",
     title: "Valentine's Day",
@@ -242,7 +265,7 @@ export default function MenuPageClient() {
 
                     {/* Subtitle */}
                     <div className={`${menu.textColor} font-medium text-xs sm:text-sm mb-1 sm:mb-2 flex items-center gap-1 sm:gap-2`}>
-                      {(menu.id === 'mothers-day' || menu.id === 'valentines-day') && (
+                      {(menu.id === 'mothers-day' || menu.id === 'valentines-day' || menu.id === 'christmas') && (
                         <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
                       )}
                       {menu.subtitle}
