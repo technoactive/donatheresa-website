@@ -2,8 +2,9 @@
 
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Crown, Clock, ArrowRight, Utensils, Heart, Flower2, Sparkles, Star, Phone, Calendar, Wine, ChefHat, Grape, Snowflake } from "lucide-react"
+import { Crown, Clock, ArrowRight, Utensils, Heart, Flower2, Sparkles, Star, Phone, Calendar, Wine, ChefHat, Grape, Snowflake, TreePine, PartyPopper } from "lucide-react"
 import { christmasMenuDetails, christmasMenuPricing } from "@/lib/christmas-menu-data"
+import { christmasDayMenu, newYearMenu } from "@/lib/festive-menus-data"
 import { useEffect, useState } from "react"
 
 // All menus with beautiful gradient designs
@@ -30,6 +31,50 @@ const allMenus = [
     badge: "Festive Season",
     badgeColor: "bg-[#5c0f1a]",
     showUntil: christmasMenuDetails.showUntil,
+  },
+  {
+    id: "christmas-day",
+    title: "Christmas Day",
+    subtitle: christmasDayMenu.date,
+    description: "Three courses on the day itself. Norfolk roast turkey with all the trimmings, or lamb shank, sea bass and fillet steak al Barolo, then Christmas pudding",
+    price: `£${christmasDayMenu.price}`,
+    priceNote: "per person · 3 courses",
+    serviceCharge: "+ 10% service",
+    icon: TreePine,
+    link: "/menu/christmas-day",
+    gradient: "from-[#5c0f1a] to-[#c1121f]",
+    bgGradient: "from-red-50 via-amber-50/70 to-red-50",
+    iconBg: "bg-gradient-to-br from-[#5c0f1a] to-[#c1121f]",
+    accentColor: "red",
+    textColor: "text-red-800",
+    borderColor: "border-red-200",
+    hoverShadow: "hover:shadow-red-200/50",
+    features: ["Norfolk Turkey", "3 Courses", "12 Starters", "Christmas Pudding"],
+    badge: "25th December",
+    badgeColor: "bg-[#c1121f]",
+    showUntil: christmasDayMenu.showUntil,
+  },
+  {
+    id: "new-year",
+    title: "New Year's Eve",
+    subtitle: newYearMenu.date,
+    description: "See the year out with three courses: half duck in orange sauce, fillet steak with gorgonzola, king prawns in Cointreau and Sicilian arancini",
+    price: `£${newYearMenu.price}`,
+    priceNote: "per person · 3 courses",
+    serviceCharge: "+ 10% service",
+    icon: PartyPopper,
+    link: "/menu/new-year",
+    gradient: "from-[#0f3b2e] to-[#e3b458]",
+    bgGradient: "from-emerald-50 via-amber-50/70 to-emerald-50",
+    iconBg: "bg-gradient-to-br from-[#0f3b2e] to-[#1f6b45]",
+    accentColor: "emerald",
+    textColor: "text-emerald-800",
+    borderColor: "border-emerald-200",
+    hoverShadow: "hover:shadow-emerald-200/50",
+    features: ["3 Courses", "Half Duck", "Fillet Steak", "Late Night"],
+    badge: "31st December",
+    badgeColor: "bg-[#0f3b2e]",
+    showUntil: newYearMenu.showUntil,
   },
   {
     id: "valentines-day",
@@ -265,7 +310,7 @@ export default function MenuPageClient() {
 
                     {/* Subtitle */}
                     <div className={`${menu.textColor} font-medium text-xs sm:text-sm mb-1 sm:mb-2 flex items-center gap-1 sm:gap-2`}>
-                      {(menu.id === 'mothers-day' || menu.id === 'valentines-day' || menu.id === 'christmas') && (
+                      {(menu.id === 'mothers-day' || menu.id === 'valentines-day' || menu.id === 'christmas' || menu.id === 'christmas-day' || menu.id === 'new-year') && (
                         <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
                       )}
                       {menu.subtitle}

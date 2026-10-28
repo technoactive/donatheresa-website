@@ -7,10 +7,11 @@ import { usePathname } from "next/navigation"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X, Calendar, ArrowRight, Phone, Gift } from "lucide-react"
 import { christmasMenuDetails, christmasMenuPricing } from "@/lib/christmas-menu-data"
+import { christmasDayMenu } from "@/lib/festive-menus-data"
 import { ChristmasStyles, Snowfall, FairyLights, Holly, GoldDivider, christmasScript, XMAS } from "@/components/public/christmas-theme"
 
 const STORAGE_KEY = "christmas-popup-2026-dismissed"
-const HIDDEN_ON = ["/menu/christmas", "/reserve", "/cancel-booking", "/reconfirm-booking"]
+const HIDDEN_ON = ["/menu/christmas", "/menu/christmas-day", "/menu/new-year", "/reserve", "/cancel-booking", "/reconfirm-booking"]
 
 export function ChristmasPopup() {
   const pathname = usePathname()
@@ -122,6 +123,14 @@ export function ChristmasPopup() {
               <a href="tel:02084215550" className="inline-flex items-center gap-2 text-sm text-stone-600 hover:text-stone-900 mt-5">
                 <Phone className="w-4 h-4" /> or call 020 8421 5550
               </a>
+
+              <p className="text-xs text-stone-500 mt-4 pt-4 border-t border-[#e3b458]/40">
+                Also:{" "}
+                <Link href="/menu/christmas-day" onClick={dismiss} className="font-medium underline-offset-2 hover:underline" style={{ color: XMAS.burgundy }}>Christmas Day</Link>
+                {" "}and{" "}
+                <Link href="/menu/new-year" onClick={dismiss} className="font-medium underline-offset-2 hover:underline" style={{ color: XMAS.green }}>New Year&apos;s Eve</Link>
+                {" "}menus — three courses £{christmasDayMenu.price}.
+              </p>
             </div>
           </div>
         </DialogPrimitive.Content>

@@ -218,17 +218,17 @@ const nextConfig = {
       },
       {
         source: '/december-menu',
-        destination: '/menu',
+        destination: '/menu/christmas',
         permanent: true,
       },
       {
         source: '/christmas-day-menu',
-        destination: '/menu',
+        destination: '/menu/christmas-day',
         permanent: true,
       },
       {
         source: '/new-years-eve-menu',
-        destination: '/menu',
+        destination: '/menu/new-year',
         permanent: true,
       },
       {
@@ -276,40 +276,30 @@ const nextConfig = {
         destination: '/menu/a-la-carte',
         permanent: true,
       },
-      // === Old seasonal menus to main menu ===
+      // === Old seasonal menu URLs → current festive pages ===
       {
         source: '/menu/december-christmas-menu',
-        destination: '/menu',
-        permanent: true,
-      },
-      {
-        source: '/menu/christmas-day',
-        destination: '/menu',
-        permanent: true,
-      },
-      {
-        source: '/menu/new-year',
-        destination: '/menu',
+        destination: '/menu/christmas',
         permanent: true,
       },
       {
         source: '/christmas-menu',
-        destination: '/menu',
+        destination: '/menu/christmas',
         permanent: true,
       },
       {
         source: '/christmas',
-        destination: '/menu',
+        destination: '/menu/christmas',
         permanent: true,
       },
       {
         source: '/new-years-eve',
-        destination: '/menu',
+        destination: '/menu/new-year',
         permanent: true,
       },
       {
         source: '/new-year-menu',
-        destination: '/menu',
+        destination: '/menu/new-year',
         permanent: true,
       },
       // === Contact variations ===
@@ -425,7 +415,7 @@ const nextConfig = {
       },
       {
         source: '/christmas-2',
-        destination: '/menu',
+        destination: '/menu/christmas',
         permanent: true,
       },
       {

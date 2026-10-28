@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Phone, Calendar, Clock, MapPin, Users, Gift, Wine, UtensilsCrossed, Star, TreePine } from "lucide-react"
+import { Phone, Calendar, Clock, MapPin, Users, Gift, Wine, UtensilsCrossed, Star, TreePine, ArrowRight } from "lucide-react"
 import {
   christmasMenuData,
   christmasMenuDetails,
@@ -11,6 +11,7 @@ import {
   christmasMenuPricing,
   type ChristmasMenuItem,
 } from "@/lib/christmas-menu-data"
+import { christmasDayMenu, newYearMenu } from "@/lib/festive-menus-data"
 import { ChristmasStyles, Snowfall, FairyLights, Holly, Bauble, GoldDivider, christmasScript, XMAS } from "@/components/public/christmas-theme"
 
 function CourseHeading({ title, note }: { title: string; note?: string }) {
@@ -229,6 +230,29 @@ export default function ChristmasMenuPage() {
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-stone-600">
               {christmasMenuNotes.map((note) => <span key={note}>{note}</span>)}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Christmas Day & New Year's Eve */}
+      <section className="py-16 md:py-20">
+        <div className="max-w-4xl mx-auto px-6">
+          <p className="text-center text-xs uppercase tracking-[0.3em] text-stone-500 mb-6">The big days</p>
+          <div className="grid sm:grid-cols-2 gap-4">
+            <Link href="/menu/christmas-day" className="group flex items-center justify-between gap-4 rounded-2xl border border-[#e3b458]/50 bg-white px-5 py-4 hover:border-[#e3b458] hover:shadow-lg hover:shadow-amber-200/40 transition-all">
+              <div>
+                <div className="font-playfair text-lg font-semibold" style={{ color: XMAS.burgundy }}>Christmas Day</div>
+                <div className="text-sm text-stone-500">{christmasDayMenu.date} · three courses £{christmasDayMenu.price}</div>
+              </div>
+              <ArrowRight className="w-5 h-5 text-[#e3b458] group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <Link href="/menu/new-year" className="group flex items-center justify-between gap-4 rounded-2xl border border-[#e3b458]/50 bg-white px-5 py-4 hover:border-[#e3b458] hover:shadow-lg hover:shadow-amber-200/40 transition-all">
+              <div>
+                <div className="font-playfair text-lg font-semibold" style={{ color: XMAS.green }}>New Year&apos;s Eve</div>
+                <div className="text-sm text-stone-500">{newYearMenu.date} · three courses £{newYearMenu.price}</div>
+              </div>
+              <ArrowRight className="w-5 h-5 text-[#e3b458] group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </div>
       </section>
